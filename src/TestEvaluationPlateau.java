@@ -13,12 +13,12 @@ public class TestEvaluationPlateau {
     static double resFou = 0;
     static double resCouronne = 0;
     
-    static int positionGardeGauche = 1;
-    static int positionGardeDroit = 3;
-    static int positionRoi = 2;
-    static int positionFou = -1;
-    static int positionSorcier = -5;
-    static int positionCouronne = 2;
+    static int positionGardeGauche = -8;
+    static int positionGardeDroit = 8;
+    static int positionRoi = 6;
+    static int positionFou = 7;
+    static int positionSorcier = 7;
+    static int positionCouronne = 5;
     // 
 
     public static void main(String[] args) throws Exception {
@@ -225,17 +225,18 @@ public class TestEvaluationPlateau {
                     resCouronne = resCouronne - positionCouronne + 1;
                 }
                 else{
-                    resCouronne = resCouronne + positionCouronne + 1;
+                    resCouronne = resCouronne - positionCouronne - 1;
                 }
             }
         }
         if (joueurCourant) {
-            if( (positionCouronne == 6) && (resNbPiècesChateau >= 2) ){
+            if( ((positionCouronne == 6) && (resNbPiècesChateau >= 4)) || ((positionCouronne == 5) && (resNbPiècesChateau >= 6)) ){
                 resCouronne = resCouronne + 6;
             }
         }
         else{
-            if( (positionCouronne == -6) && (resNbPiècesChateau >= 2) ){
+            if( ((positionCouronne == -6) && (resNbPiècesChateau >= 4)) || ((positionCouronne == -5) && (resNbPiècesChateau >= 6))) {
+                System.out.println(resCouronne);
                 resCouronne = resCouronne + 6;
             }
         }
