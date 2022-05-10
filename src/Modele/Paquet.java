@@ -7,7 +7,6 @@ import Structures.Sequence;
 
 import java.util.Random;
 
-import Global.*;
 import Structures.Couple;
 import Structures.FAP;
 import Structures.FAPListe;
@@ -64,11 +63,11 @@ public class Paquet {
         defausse = Configuration.instance().nouvelleSequence();
         mainJoueurs = new Object[NOMBRE_JOUEUR][NOMBRE_CARTE_EN_MAIN];
         creerPaquet();
-        afficherPioche();
+        //afficherPioche();
         melanger();
-        afficherPioche();
+        //afficherPioche();
         distribuer();
-        afficherPioche();
+        //afficherPioche();
         trier();
     }
 
@@ -82,6 +81,7 @@ public class Paquet {
             System.out.println(carte.toString());
             pioche.insereTete(carte);
         }
+        System.out.println("Fin de l'affiche ============================================================");
     }
 
     public void melanger() {

@@ -1,4 +1,5 @@
 // import Controleur.ControleurMediateur;
+import Global.Element;
 import Modele.Plateau;
 // import Vue.CollecteurEvenements;
 // import Vue.InterfaceGraphique;
@@ -9,7 +10,9 @@ public class VisiteRoyale {
         try {
             Plateau plateau = new Plateau();
 
-            plateau.choixPremierJoueur(0);
+            plateau.choixPremierJoueur(1);
+            plateau.afficherPlateau();
+            plateau.deplacerElement(Element.ROI, 1);
             plateau.afficherPlateau();
 
             // CollecteurEvenements controleurMediateur = new ControleurMediateur(plateau);

@@ -82,7 +82,7 @@ public class Plateau extends Observable {
         return partieEnCours;
     }
 
-    void deplacerElement(Element element, int deplacementElement) {
+    public void deplacerElement(Element element, int deplacementElement) {
         if (!estPartieTerminee()) {
             if (estPartieEnCours()) {
                 switch (element) {
@@ -220,6 +220,8 @@ public class Plateau extends Observable {
 
     public void afficherPlateau() {
         System.out.println("");
+
+        // CHIFFRES
         System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         String ligneChiffre = "";
         for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
@@ -233,20 +235,58 @@ public class Plateau extends Observable {
         ligneChiffre = ligneChiffre + "|";
         System.out.println(ligneChiffre);
 
+        // COUR
         System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
-        System.out.println("|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |");
-        System.out.println("|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |");
-        System.out.println("|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |");
-        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
+        String ligneElement = "";
+        for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
+            if (i == gardeGauche.positionPersonnage()) {
+                ligneElement = ligneElement + "| Gg";
+            } else if (i == gardeDroit.positionPersonnage()) {
+                ligneElement = ligneElement + "| Gd";
+            } else if (i == roi.positionPersonnage()) {
+                ligneElement = ligneElement + "| R ";
+            } else {
+                ligneElement = ligneElement + "|   ";
+            }
+        }
+        ligneElement = ligneElement + "|";
+        System.out.println(ligneElement);
+
+        // FOU
+        String ligneFou = "";
+        for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
+            if (i == fou.positionPersonnage()) {
+                ligneFou = ligneFou + "| F ";
+            } else {
+                ligneFou = ligneFou + "|   ";
+            }
+        }
+        ligneFou = ligneFou + "|";
+        System.out.println(ligneFou);
         
+        // SORCIER
+        String ligneSorcier = "";
+        for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
+            if (i == sorcier.positionPersonnage()) {
+                ligneSorcier = ligneSorcier + "| S ";
+            } else {
+                ligneSorcier = ligneSorcier + "|   ";
+            }
+        }
+        ligneSorcier = ligneSorcier + "|";
+        System.out.println(ligneSorcier);
+
+        // COURONNE
+        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         String ligneCouronne = "";
-        for (int i = EXTREMITE_GAUCHE_DU_PLATEAU - 1; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
+        for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
             if (i == couronne.positionCouronne()) {
                 ligneCouronne = ligneCouronne + "| C ";
             } else {
                 ligneCouronne = ligneCouronne + "|   ";
             }
         }
+        ligneCouronne = ligneCouronne + "|";
         System.out.println(ligneCouronne);
         System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         System.out.println("");
