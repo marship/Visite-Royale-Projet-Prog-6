@@ -15,4 +15,6 @@ public interface Sequence<Toto>{
     boolean estVide();
 
     Iterateur<Toto> iterateur();
+    
+    int taille();
 }
