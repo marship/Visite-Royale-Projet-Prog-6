@@ -276,3 +276,4 @@ public class Plateau extends Observable {
         // TO DO - cf. IA
     }
 }
+
