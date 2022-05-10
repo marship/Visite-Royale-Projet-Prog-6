@@ -11,7 +11,7 @@ public class Carte { // A REVOIR PAS SUR DU TRUC
     Carte(Element perso, Deplacement deplace){
         personnage = perso;
         deplacement = deplace;
-        //estGarde = (perso == 0);
+        estGarde = (perso == Element.GARDE_GAUCHE);
     }
 
     public Element personnage(){
@@ -28,6 +28,10 @@ public class Carte { // A REVOIR PAS SUR DU TRUC
 
     public boolean estIdentique(Carte comparaison){
         return (personnage == comparaison.personnage()) && (deplacement == comparaison.deplacement());
+    }
+
+    public String toString(){
+        return "" + personnage.name() + deplacement.name();
     }
 
 }
