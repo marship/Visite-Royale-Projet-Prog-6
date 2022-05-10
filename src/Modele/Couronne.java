@@ -4,28 +4,32 @@ public class Couronne {
     int positionCouronne;
     boolean etatCouronne;
 
-    Couronne(){
-        initCouronne();
+    Couronne() {
+        initialiserCouronne();
     }
 
-    public void initCouronne(){
+    public void initialiserCouronne() {
         positionCouronne = 0;
         etatCouronne = true;
     }
 
-    public void deplacerCouronne(int d){
-        positionCouronne = positionCouronne + d;
+    public void deplacerCouronne(int deplacement) {
+        positionCouronne = positionCouronne + deplacement;
     }
 
-    public void changerEtatCouronne(){
+    public void changerEtatCouronne() {
         etatCouronne = !etatCouronne;
     }
 
-    public int positionCouronne(){
+    public int positionCouronne() {
         return positionCouronne;
     }
 
-    public boolean etatCouronne(){
+    public void positionnerCouronne(int nouvellePositionCouronne) {
+        positionCouronne = nouvellePositionCouronne;
+    }
+
+    public boolean etatCouronne() {
         return etatCouronne;
     }
 }

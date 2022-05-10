@@ -1,29 +1,35 @@
 package Modele;
 
+import Global.Element;
+
 public class Personnage {
-    int nomPersonnage;
+    Element typePersonnage;
     int positionPersonnage;
     boolean capaciteSpecial;
-    
-    Personnage(int nom, int position, boolean capacite){
-        nomPersonnage = nom;
-        positionPersonnage = position;
-        capaciteSpecial = capacite;
+
+    Personnage(Element tPersonnage, int pPersonnage, boolean cSpecial) {
+        typePersonnage = tPersonnage;
+        positionPersonnage = pPersonnage;
+        capaciteSpecial = cSpecial;
     }
 
-    public void deplacerPersonnage(int d){
-        positionPersonnage = positionPersonnage + d;
+    public void deplacerPersonnage(int deplacement) {
+        positionPersonnage = positionPersonnage + deplacement;
     }
 
-    public int nomPersonnage(){
-        return nomPersonnage;
+    public Element typePersonnage() {
+        return typePersonnage;
     }
 
-    public int positionPersonnage(){
+    public int positionPersonnage() {
         return positionPersonnage;
     }
 
-    public boolean capaciteSpecial(){
+    public void positionnerPersonnage(int nouvellePositionCouronne) {
+        positionPersonnage = nouvellePositionCouronne;
+    }
+
+    public boolean capaciteSpecial() {
         return capaciteSpecial;
     }
 }
