@@ -3,33 +3,33 @@ package Modele;
 import Global.Element;
 
 public class Personnage {
-    Element typePersonnage;
+    Element nomPersonnage;
     int positionPersonnage;
     boolean capaciteSpecial;
-
-    Personnage(Element tPersonnage, int pPersonnage, boolean cSpecial) {
-        typePersonnage = tPersonnage;
-        positionPersonnage = pPersonnage;
-        capaciteSpecial = cSpecial;
+    
+    Personnage(Element nom, int position, boolean capacite){
+        nomPersonnage = nom;
+        positionPersonnage = position;
+        capaciteSpecial = capacite;
     }
 
-    public void deplacerPersonnage(int deplacement) {
-        positionPersonnage = positionPersonnage + deplacement;
+    public void deplacerPersonnage(int d){
+        positionPersonnage = positionPersonnage + d;
     }
 
-    public Element typePersonnage() {
-        return typePersonnage;
+    public Element typePersonnage(){
+        return nomPersonnage;
     }
 
-    public int positionPersonnage() {
+    public int positionPersonnage(){
         return positionPersonnage;
     }
 
-    public void positionnerPersonnage(int nouvellePositionCouronne) {
-        positionPersonnage = nouvellePositionCouronne;
+    public boolean capaciteSpecial(){
+        return capaciteSpecial;
     }
 
-    public boolean capaciteSpecial() {
-        return capaciteSpecial;
+    public String toString(){
+        return "" + nomPersonnage.name() + " : " + positionPersonnage; 
     }
 }
