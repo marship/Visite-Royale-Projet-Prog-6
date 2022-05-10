@@ -1,7 +1,13 @@
 package Modele;
 
 import Structures.Sequence;
+
+import java.util.Random;
+
 import Global.*;
+import Structures.Couple;
+import Structures.FAP;
+import Structures.FAPListe;
 
 public class Paquet {
     Sequence<Carte> pioche, defausse;
@@ -50,14 +56,40 @@ public class Paquet {
     static final Deplacement MILIEU = Deplacement.MILIEU;
     static final Deplacement UN_PLUS_UN = Deplacement.UN_PLUS_UN;
 
-    Paquet(){
+    public Paquet(){
         pioche = Configuration.instance().nouvelleSequence();
         defausse = Configuration.instance().nouvelleSequence();
         mainJoueurs = new Object[NOMBRE_JOUEUR][NOMBRE_CARTE_EN_MAIN];
         creerPaquet();
-        pioche.melanger();
+        afficherPioche();
+        melanger();
+        afficherPioche();
         distribuer();
+        afficherPioche();
         trier();
+    }
+
+    public void afficherPioche(){
+        Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
+        while(!pioche.estVide()){
+            tmp.insereTete(pioche.extraitTete());
+        }
+        while(!tmp.estVide()){
+            Carte carte = tmp.extraitTete();
+            System.out.println(carte.toString());
+            pioche.insereTete(carte);
+        }
+    }
+
+    public void melanger() {
+        FAP<Couple<Carte, Integer>> fap = new FAPListe<>();
+        Random r = new Random();
+        while(!pioche.estVide()){
+            fap.insere(new Couple<Carte, Integer>(pioche.extraitTete(), r.nextInt(10000)));
+        }
+        while(!fap.estVide()){
+            pioche.insereTete(fap.extrait().e());
+        }
     }
 
     public void trier(){
@@ -121,7 +153,7 @@ public class Paquet {
         while(!defausse.estVide()){
             pioche.insereTete(defausse.extraitTete());
         }
-        pioche.melanger();
+        melanger();
     }
 
     public void distribuer(){
