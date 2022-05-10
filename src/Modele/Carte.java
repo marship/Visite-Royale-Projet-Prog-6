@@ -1,21 +1,24 @@
 package Modele;
 
+import Global.Deplacement;
+import Global.Element;
+
 public class Carte { // A REVOIR PAS SUR DU TRUC
-    int personnage;
-    int deplacement;
+    Element personnage;
+    Deplacement deplacement;
     boolean estGarde;
 
-    Carte(int perso, int deplace){
+    Carte(Element perso, Deplacement deplace){
         personnage = perso;
         deplacement = deplace;
-        estGarde = (perso == 1);
+        //estGarde = (perso == 0);
     }
 
-    public int personnage(){
+    public Element personnage(){
         return personnage;
     }
 
-    public int deplacement(){
+    public Deplacement deplacement(){
         return deplacement;
     }
 
