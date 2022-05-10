@@ -1,11 +1,11 @@
 package Modele;
 
 public class Personnage {
-    String nomPersonnage;
+    int nomPersonnage;
     int positionPersonnage;
     boolean capaciteSpecial;
     
-    Personnage(String nom, int position, boolean capacite){
+    Personnage(int nom, int position, boolean capacite){
         nomPersonnage = nom;
         positionPersonnage = position;
         capaciteSpecial = capacite;
@@ -15,7 +15,7 @@ public class Personnage {
         positionPersonnage = positionPersonnage + d;
     }
 
-    public String nomPersonnage(){
+    public int nomPersonnage(){
         return nomPersonnage;
     }
 
