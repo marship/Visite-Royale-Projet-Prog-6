@@ -150,14 +150,17 @@ public class Paquet {
     }
 
         private void trierTableau(Object[] objects, int nombreCarte){
-        for(int i = 1 ; i < nombreCarte ; i++) {
-            int x = objects[i].deplacement.getValeurDeplacement;   //recupere la valeur de la carte de deplacement à l'indice i et la met dans x                      
-            int j = i;
-            while(j > 0 && objects[j - 1].deplacement.getValeurDeplacement > x){ // décaler les cartes qui ont un plus grand deplacement que la carte stockées dans x, en partant de j = i-1
-                objects[j] = objects[j - 1];
-                j = j - 1;
-            }                                             
-            objects[j].deplacement.getValeurDeplacement = x; // placer la carte stockée dans x dans le "trou" laissé par le décalage
+            for(int i = 1 ; i < nombreCarte ; i++) {
+                int x = objects[i].deplacement.getValeurDeplacement;   //recupere la valeur de la carte de deplacement à l'indice i et la met dans x                      
+                int j = i;
+                while(j > 0 && objects[j - 1].deplacement.getValeurDeplacement > x){ // décaler les cartes qui ont un plus grand deplacement que la carte stockées dans x, en partant de j = i-1
+                    objects[j] = objects[j - 1];
+                    j = j - 1;
+                }                                             
+                objects[j].deplacement.getValeurDeplacement = x; // placer la carte stockée dans x dans le "trou" laissé par le décalage
+            }
+        }
+       
     
 
     public void melangerDefausse() {
