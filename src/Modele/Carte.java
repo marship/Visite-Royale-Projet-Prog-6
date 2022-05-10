@@ -8,7 +8,7 @@ public class Carte { // A REVOIR PAS SUR DU TRUC
     Carte(int perso, int deplace){
         personnage = perso;
         deplacement = deplace;
-        estGarde = (perso == 0);
+        estGarde = (perso == 1);
     }
 
     public int personnage(){
