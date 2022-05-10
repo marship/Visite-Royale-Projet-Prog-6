@@ -1,26 +1,30 @@
 package Modele;
 
 public class Carte { // A REVOIR PAS SUR DU TRUC
-    String personnage;
-    String deplacement;
+    int personnage;
+    int deplacement;
     boolean estGarde;
 
-    Carte(String perso, String deplace){
+    Carte(int perso, int deplace){
         personnage = perso;
         deplacement = deplace;
-        estGarde = perso.equals("garde");
+        estGarde = (perso == 0);
     }
 
-    public String personnage(){
+    public int personnage(){
         return personnage;
     }
 
-    public String deplacement(){
+    public int deplacement(){
         return deplacement;
     }
 
     public boolean estGarde(){
         return estGarde;
+    }
+
+    public boolean estIdentique(Carte comparaison){
+        return (personnage == comparaison.personnage()) && (deplacement == comparaison.deplacement());
     }
 
 }
