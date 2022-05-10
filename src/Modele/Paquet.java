@@ -136,7 +136,7 @@ public class Paquet {
             tableauTrier[type][position] = (Carte) carte;
         }
         for (int i = 0; i < NOMBRE_TYPE_CARTE; i++) {
-            trierTableau(tableauTrier[i]);
+            trierTableau(tableauTrier[i],nbChaqueType[i][0]);
         }
 
         position = 0;
