@@ -19,7 +19,10 @@ public class PlateauGraphique extends JComponent implements Observateur {
     @Override
     public void paintComponent(Graphics g) {
 
+        /*
         Graphics2D dessinable = (Graphics2D) g;
+
+        
 
         int lignes = plateau.hauteur();
         int colonnes = plateau.largeur();
@@ -51,6 +54,7 @@ public class PlateauGraphique extends JComponent implements Observateur {
                         dessinable.drawLine(j * largeurCase, (i + 1) * hauteurCase, (j + 1) * largeurCase, i * hauteurCase);
                         break;
                 }
+                */
     }
 
     int largeur() {

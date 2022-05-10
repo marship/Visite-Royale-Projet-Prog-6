@@ -17,11 +17,13 @@ public class Observable {
     }
 
     public void metAJour() {
+        /*
         Iterateur<Observateur> iterateur;
         iterateur = observateurs.iterateur();
         while (iterateur.aProchain()) {
             ((Observateur) iterateur.prochain()).miseAJour();
         }
+        */
     }
 
 }

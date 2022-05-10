@@ -1,7 +1,9 @@
 package Modele;
 
+import Global.Configuration;
+import Global.Deplacement;
+import Global.Element;
 import Structures.Sequence;
-import Global.*;
 
 public class Paquet {
     Sequence<Carte> pioche, defausse;
@@ -50,30 +52,30 @@ public class Paquet {
     static final Deplacement MILIEU = Deplacement.MILIEU;
     static final Deplacement UN_PLUS_UN = Deplacement.UN_PLUS_UN;
 
-    Paquet(){
+    Paquet() {
         pioche = Configuration.instance().nouvelleSequence();
         defausse = Configuration.instance().nouvelleSequence();
         mainJoueurs = new Object[NOMBRE_JOUEUR][NOMBRE_CARTE_EN_MAIN];
         creerPaquet();
-        pioche.melanger();
+        // pioche.melanger();
         distribuer();
         trier();
     }
 
-    public void trier(){
-        for(int i = 0; i < NOMBRE_JOUEUR ; i++){
+    public void trier() {
+        for (int i = 0; i < NOMBRE_JOUEUR; i++) {
             trierJoueur(i);
         }
     }
 
-    public void trierJoueur(int joueur){
+    public void trierJoueur(int joueur) {
         Object[][] tableauTrier = new Object[NOMBRE_TYPE_CARTE][NOMBRE_CARTE_EN_MAIN];
         int[][] nbChaqueType = new int[NOMBRE_TYPE_CARTE][1];
         int type = 0;
         int position = 0;
-        for(int i = 0 ; i < NOMBRE_CARTE_EN_MAIN ; i++){
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
             Carte carte = (Carte) mainJoueurs[joueur][i];
-            switch (carte.personnage()){
+            switch (carte.personnage()) {
                 case FOU:
                     position = nbChaqueType[0][0] = nbChaqueType[0][0] + 1;
                     type = 0;
@@ -96,18 +98,18 @@ public class Paquet {
 
                 default:
                     break;
-                
+
             }
             tableauTrier[type][position] = (Carte) carte;
         }
-        for(int i = 0 ; i < NOMBRE_TYPE_CARTE ; i++){
+        for (int i = 0; i < NOMBRE_TYPE_CARTE; i++) {
             trierTableau(tableauTrier[i]);
         }
 
         position = 0;
-        for(int i = 0 ; i < NOMBRE_TYPE_CARTE ; i ++){
+        for (int i = 0; i < NOMBRE_TYPE_CARTE; i++) {
             int t = nbChaqueType[i][0];
-            for(int j = 0 ; j < t ; j++){
+            for (int j = 0; j < t; j++) {
                 mainJoueurs[joueur][position] = (Carte) tableauTrier[i][j];
                 position++;
             }
@@ -117,24 +119,24 @@ public class Paquet {
     private void trierTableau(Object[] objects) {
     }
 
-    public void melangerDefausse(){
-        while(!defausse.estVide()){
+    public void melangerDefausse() {
+        while (!defausse.estVide()) {
             pioche.insereTete(defausse.extraitTete());
         }
-        pioche.melanger();
+        // pioche.melanger();
     }
 
-    public void distribuer(){
-        for(int i = 0 ; i < NOMBRE_CARTE_EN_MAIN ; i++){
+    public void distribuer() {
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
             mainJoueurs[0][i] = pioche.extraitTete();
             mainJoueurs[1][i] = pioche.extraitTete();
         }
     }
 
-    public void enleverCarte(int joueur, Carte carte){
+    public void enleverCarte(int joueur, Carte carte) {
         int i = 0;
         Carte main = (Carte) mainJoueurs[joueur][i];
-        while( (i+1 != NOMBRE_CARTE_EN_MAIN) && !main.estIdentique(carte)){
+        while ((i + 1 != NOMBRE_CARTE_EN_MAIN) && !main.estIdentique(carte)) {
             i++;
             main = (Carte) mainJoueurs[joueur][i];
         }
@@ -143,44 +145,44 @@ public class Paquet {
         mainJoueurs[joueur][i] = main;
     }
 
-    public int nombreCarteManquante(int joueur){
+    public int nombreCarteManquante(int joueur) {
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
         int nbVide = 0;
-        for(int i = 0 ; i < NOMBRE_CARTE_EN_MAIN ; i++){
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
             Carte main = (Carte) mainJoueurs[joueur][i];
-            if(main.estIdentique(vide)){
+            if (main.estIdentique(vide)) {
                 nbVide++;
             }
         }
         return NOMBRE_CARTE_EN_MAIN - nbVide;
     }
 
-    public boolean resteAssezCarteDansPioche(int i){
+    public boolean resteAssezCarteDansPioche(int i) {
         return pioche.taille() >= i;
     }
 
-    public void remplirMain(int joueur){
+    public void remplirMain(int joueur) {
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
-        for(int i = 0 ; i < NOMBRE_CARTE_EN_MAIN ; i++){
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
             Carte main = (Carte) mainJoueurs[joueur][i];
-            if(main.estIdentique(vide)){
+            if (main.estIdentique(vide)) {
                 main = pioche.extraitTete();
                 mainJoueurs[joueur][i] = main;
             }
         }
     }
 
-    public void creerPaquet(){
+    public void creerPaquet() {
         creerCartesRoi();
         creerCartesGarde();
         creerCartesFou();
         creerCartesSorcier();
     }
 
-    void creerCartesRoi(){
+    void creerCartesRoi() {
         Deplacement type = null;
         int nb = 0;
-        for(int i = 0 ; i < NOMBRE_TYPE_CARTE_ROI ; i++){
+        for (int i = 0; i < NOMBRE_TYPE_CARTE_ROI; i++) {
             switch (i) {
                 case 0:
                     type = UN;
@@ -190,17 +192,17 @@ public class Paquet {
                 default:
                     break;
             }
-            for(int j = 0; j < nb; j++){
+            for (int j = 0; j < nb; j++) {
                 Carte carte = new Carte(ROI, type);
                 pioche.insereTete(carte);
             }
         }
     }
 
-    void creerCartesGarde(){
+    void creerCartesGarde() {
         Deplacement type = null;
         int nb = 0;
-        for(int i = 0 ; i < NOMBRE_TYPE_CARTE_GARDES ; i++){
+        for (int i = 0; i < NOMBRE_TYPE_CARTE_GARDES; i++) {
             switch (i) {
                 case 0:
                     type = RAPPROCHE;
@@ -216,21 +218,21 @@ public class Paquet {
                     type = UN_PLUS_UN;
                     nb = NOMBRE_CARTE_GARDES_1_PLUS_1;
                     break;
-            
+
                 default:
                     break;
             }
-            for(int j = 0; j < nb; j++){
+            for (int j = 0; j < nb; j++) {
                 Carte carte = new Carte(GARDE_GAUCHE, type);
                 pioche.insereTete(carte);
             }
         }
     }
 
-    void creerCartesFou(){
+    void creerCartesFou() {
         Deplacement type = null;
         int nb = 0;
-        for(int i = 0 ; i < NOMBRE_TYPE_CARTE_FOU ; i++){
+        for (int i = 0; i < NOMBRE_TYPE_CARTE_FOU; i++) {
             switch (i) {
                 case 0:
                     type = MILIEU;
@@ -261,22 +263,22 @@ public class Paquet {
                     type = CINQ;
                     nb = NOMBRE_CARTE_FOU_5;
                     break;
-            
+
                 default:
                     break;
             }
 
-            for(int j = 0; j < nb; j++){
+            for (int j = 0; j < nb; j++) {
                 Carte carte = new Carte(FOU, type);
                 pioche.insereTete(carte);
             }
         }
     }
 
-    void creerCartesSorcier(){
+    void creerCartesSorcier() {
         Deplacement type = null;
         int nb = 0;
-        for(int i = 0 ; i < NOMBRE_TYPE_CARTE_SORCIER ; i++){
+        for (int i = 0; i < NOMBRE_TYPE_CARTE_SORCIER; i++) {
             switch (i) {
                 case 0:
                     type = UN;
@@ -291,11 +293,11 @@ public class Paquet {
                     type = TROIS;
                     nb = NOMBRE_CARTE_SORCIER_3;
                     break;
-            
+
                 default:
                     break;
             }
-            for(int j = 0; j < nb; j++){
+            for (int j = 0; j < nb; j++) {
                 Carte carte = new Carte(SORCIER, type);
                 pioche.insereTete(carte);
             }

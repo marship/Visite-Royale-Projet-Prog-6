@@ -15,6 +15,7 @@ class JoueurIA extends Joueur {
 	@Override
 	boolean tempsEcoule() {
 		// Pour cette IA, on selectionne aléatoirement une case libre
+        /*
 		int coupX, coupY;
 
 		coupX = random.nextInt(plateau.hauteur());
@@ -24,6 +25,7 @@ class JoueurIA extends Joueur {
 			coupY = random.nextInt(plateau.largeur());
 		}
 		plateau.jouer(coupX, coupY);
+        */
 		return true;
 	}
 }
