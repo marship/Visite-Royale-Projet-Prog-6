@@ -4,7 +4,7 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
 
     Maillon<Titi> tete, queue;
 
-    // Insere element en debut de sequence (en premiere position)
+    // Insère élément en début de séquence (en première position)
     public void insereTete(Titi element) {
 
         Maillon<Titi> nouveau = new Maillon<>();
@@ -19,7 +19,7 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
         }
     }
 
-    // Insere element en fin de sequence (en derniere position)
+    // Insère element en fin de séquence (en dernière position)
     public void insereQueue(Titi element) {
 
         Maillon<Titi> nouveau = new Maillon<>();
@@ -35,8 +35,7 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
         }
     }
 
-    // Extrait + Renvoie la valeur de l'element situe en debut de sequence (en
-    // première position)
+    // Extrait + Renvoie la valeur de l'élement situé en début de séquence (en première position)
     public Titi extraitTete() {
 
         if (tete == null) {
@@ -44,11 +43,10 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
         }
         Titi resultat = tete.element;
         tete = tete.suivant;
-        // Bug non critique, pas grave
         return resultat;
     }
 
-    // Renvoie vrai ssi la sequence est vide
+    // Renvoie vrai ssi la séquence est vide
     public boolean estVide() {
         return tete == null;
     }

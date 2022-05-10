@@ -3,7 +3,6 @@ public class TestEvaluationPlateau {
 
     // Vrai = JoueurDroite
     // Faux = JoueurGauche
-    static boolean joueurCourant = true;
 
     static double resSorcier = 0;
     static double resNbPièces = 0;
@@ -13,13 +12,14 @@ public class TestEvaluationPlateau {
     static double resFou = 0;
     static double resCouronne = 0;
     
-    static int positionGardeGauche = -8;
-    static int positionGardeDroit = 8;
-    static int positionRoi = 6;
-    static int positionFou = 7;
+    static int positionGardeGauche = -5;
+    static int positionGardeDroit = 5;
+    static int positionRoi = 3;
+    static int positionFou = -2;
     static int positionSorcier = 7;
-    static int positionCouronne = 5;
-    // 
+    static int positionCouronne = -3;
+
+    static boolean joueurCourant = true;
 
     public static void main(String[] args) throws Exception {
 
