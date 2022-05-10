@@ -12,6 +12,7 @@ public class VisiteRoyale {
 
             plateau.choixPremierJoueur(1);
             plateau.afficherPlateau();
+            
             plateau.deplacerElement(Element.ROI, 1);
             plateau.afficherPlateau();
 
