@@ -16,6 +16,7 @@ public class InterfaceGraphique implements Runnable {
 	CardLayout layout; 
 
     JPanel panelCourant, panelMenuPrincipal, panelOption, panelPlateau;
+	ArrierePlan panelOptions;
 
 	InterfaceGraphique(Plateau p, CollecteurEvenements cEvenements) {
 		plateau = p;
@@ -53,6 +54,8 @@ public class InterfaceGraphique implements Runnable {
     	panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
 		creerPlateauJeu();
 		panelCourant.add(panelPlateau, "Jouer");
+		creerOptions();
+		panelCourant.add(panelOptions, "Options");
 
 		Timer chrono = new Timer( 16, new AdaptateurTemps(collecteurEvenements));
 		chrono.start();
@@ -126,7 +129,59 @@ public class InterfaceGraphique implements Runnable {
 	//Crée le JPanel des options
 	//TODO Faire l'affichage des options
 	public void creerOptions(){
-
+		ArrierePlan backgroundBoutons = new ArrierePlan("res/Images/texture_fond.jpg");
+		backgroundBoutons.setLayout(null);
+		backgroundBoutons.setBounds(110, 200, 500, 300);
+		
+	
+		panelOptions = new ArrierePlan("res/Images/ratos.jpg");
+		panelOptions.setLayout(new GridLayout(0, 1, 0, 30));
+		panelOptions.setBorder(new EmptyBorder(240,640/4,50,640/4));
+		panelOptions.setBounds(320, 320, 640, 640);
+	
+		panelOptions.add(backgroundBoutons);
+		
+		JLabel txtMusique = new JLabel("Musique");
+		JSlider musique = new JSlider(0, 100, 100);
+		musique.setMajorTickSpacing(25);
+		musique.setMinorTickSpacing(5);
+		musique.setPaintTicks(true);
+		musique.setPaintLabels(true);
+	
+		
+		Container musiqueBox = Box.createHorizontalBox();
+		musiqueBox.add(musique);
+		musiqueBox.add(Box.createHorizontalGlue());
+		musiqueBox.add(txtMusique);
+	
+		panelOptions.add(musiqueBox);
+	
+		JLabel txtSon = new JLabel("Vol son");
+		JSlider son = new JSlider(0, 100, 100);
+		son.setMajorTickSpacing(25);
+		son.setMinorTickSpacing(5);
+		son.setPaintTicks(true);
+		son.setPaintLabels(true);
+		son.setMinimumSize(new Dimension(100,10));
+	
+		Container sonBox = Box.createHorizontalBox();
+		sonBox.add(son);
+		sonBox.add(Box.createHorizontalGlue());
+		sonBox.add(txtSon);
+	
+		panelOptions.add(sonBox);
+	
+		String[] labelsBoutons = {
+			"Crédits",
+			"Confirmer les options",
+			"Retour à l'accueil",
+		};
+	
+		DesignBoutons b = null;
+		for (int i = 0; i < labelsBoutons.length; i++) {
+			b = new DesignBoutons(labelsBoutons[i], "res/Images/textureBouton.jpg");
+			panelOptions.add(b);
+		}	
 	}
 
 }

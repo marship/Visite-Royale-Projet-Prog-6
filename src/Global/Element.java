@@ -8,7 +8,8 @@ public enum Element {
     GARDE_DROIT (2),
     ROI (3),
     FOU (4),
-    SORCIER (5);
+    SORCIER (5),
+    GARDES (6);
 
     int valeurElement;
 

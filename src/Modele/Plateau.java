@@ -1,6 +1,7 @@
 package Modele;
 
 import Global.Configuration;
+import Global.Deplacement;
 import Global.Element;
 import Pattern.Observable;
 
@@ -43,6 +44,8 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     Personnage sorcier;
     Couronne couronne;
     Paquet paquet;
+    Element dernierPersoJouer;
+    Personnage queDeplaceFou;
 
     // ============================
     // ===== VALEURS ELEMENTS =====
@@ -52,6 +55,9 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     static final Element ROI = Element.ROI;
     static final Element FOU = Element.FOU;
     static final Element SORCIER = Element.SORCIER;
+    static final Element VIDE = Element.VIDE;
+
+    static final Deplacement UN = Deplacement.UN;
 
     Plateau() {
         initialisation();
@@ -66,6 +72,9 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         fou = new Personnage(FOU, POSITION_BASE_FOU, true);
         sorcier = new Personnage(SORCIER, POSITION_BASE_SORCIER, true);
         couronne = new Couronne();
+        dernierPersoJouer = VIDE;
+        queDeplaceFou = fou;
+
         paquet = new Paquet();
     }
 
@@ -212,6 +221,218 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         paquet = p.paquet;
     }
 
+    public void majDeplaceFou(Element element){
+        switch (element) {
+            case FOU:
+                queDeplaceFou = fou;
+                break;
+            case ROI:
+                queDeplaceFou = roi;
+                break;
+            case GARDES:
+                queDeplaceFou = gardeGauche;
+                break;
+
+            case SORCIER:
+                queDeplaceFou = sorcier;
+        
+            default:
+                break;
+        }
+    }
+
+    public int[] listeCarteJouable() {
+        int nbCartes = paquet.nombreCartesEnMain();
+        int i = 0;
+        int[] res;
+        if (dernierPersoJouer == VIDE) {
+            res = initTableau(nbCartes, 1);
+        } else {
+            res = new int[nbCartes];
+            while (i < nbCartes) {
+                Carte carte = paquet.mainJoueur(joueurCourant)[i];
+                if (carte.personnage() == dernierPersoJouer) {
+                    res[i] = 1;
+                } else {
+                    res[i] = 0;
+                }
+                i++;
+            }
+        }
+        return res;
+    }
+
+    public int[] initTableau(int taille, int defaut) {
+        int[] res = new int[taille];
+        int i = 0;
+        while (i < taille) {
+            res[i] = defaut;
+            i++;
+        }
+        return res;
+    }
+
+    public void jouerCarte(int position) {
+        dernierPersoJouer = paquet.mainJoueur(joueurCourant)[position].personnage();
+        paquet.enleverCarte(joueurCourant, position);
+    }
+
+    public int positionSelon16(int perso){
+        if(perso < 0){
+            return 8 - perso;
+        }
+        if(perso == 0){
+            return 8;
+        }
+        else{
+            return 8 + perso;
+        }
+    }
+
+    public int[] listeDeplacementPossiblesDepuisCarte(int position){
+        int[] res = initTableau(TAILLE_DU_PLATEAU, 0);
+        Carte carte = paquet.mainJoueur(joueurCourant)[position];
+        switch (carte.personnage()) {
+            case GARDE_GAUCHE:
+                switch (carte.deplacement()) {
+                    case UN:
+                        if(validationDeplacement(GARDE_GAUCHE, carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) + carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        if(validationDeplacement(GARDE_GAUCHE, -carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) - carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        if(validationDeplacement(GARDE_DROIT, carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeDroit.positionPersonnage()) + carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        if(validationDeplacement(GARDE_DROIT, -carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeDroit.positionPersonnage()) - carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        break;
+                
+                    case UN_PLUS_UN:
+                        if(validationDeplacement(GARDE_GAUCHE, 1) && validationDeplacement(GARDE_DROIT, 1)){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) + 1] = 1;
+                            res[positionSelon16(gardeDroit.positionPersonnage()) + 1] = 1;
+                        }
+                        if(validationDeplacement(GARDE_GAUCHE, -1) && validationDeplacement(GARDE_DROIT, -1)){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) - 1] = 1;
+                            res[positionSelon16(gardeDroit.positionPersonnage()) - 1] = 1;
+                        }
+                        if(validationDeplacement(GARDE_GAUCHE, 2)){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) + 2] = 1;
+                        }
+                        if(validationDeplacement(GARDE_GAUCHE, -2)){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) - 2] = 1;
+                        }
+                        if(validationDeplacement(GARDE_DROIT, 2)){
+                            res[positionSelon16(gardeDroit.positionPersonnage()) + 2] = 1;
+                        }
+                        if(validationDeplacement(GARDE_DROIT, -2)){
+                            res[positionSelon16(gardeDroit.positionPersonnage()) - 2] = 1;
+                        }
+                        break;
+
+                    case RAPPROCHE:
+                        res[positionSelon16(roi.positionPersonnage()) - 1] = 1;
+                        res[positionSelon16(roi.positionPersonnage()) + 1] = 1;
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+                
+            case ROI:
+                if(validationDeplacement(ROI, carte.deplacement().getValeurDeplacement())){
+                    res[positionSelon16(roi.positionPersonnage()) + carte.deplacement().getValeurDeplacement()] = 1;
+                }
+                if(validationDeplacement(ROI, -carte.deplacement().getValeurDeplacement())){
+                    res[positionSelon16(roi.positionPersonnage()) - carte.deplacement().getValeurDeplacement()] = 1;
+                }
+                break;
+
+            case FOU:
+                if(queDeplaceFou == gardeGauche){
+                    if(carte.deplacement() == Deplacement.MILIEU){
+                        if(gardeGauche.positionPersonnage() < 0){
+                            if(validationDeplacement(GARDE_GAUCHE, Math.abs(gardeGauche.positionPersonnage()))){
+                                res[8] = 1;
+                            }
+                        }
+                        else{
+                            if(validationDeplacement(GARDE_GAUCHE, -gardeGauche.positionPersonnage())){
+                                res[8] = 1;
+                            }
+                        }
+                        if(gardeDroit.positionPersonnage() < 0){
+                            if(validationDeplacement(GARDE_DROIT, Math.abs(gardeDroit.positionPersonnage()))){
+                                res[8] = 1;
+                            }
+                        }
+                        else{
+                            if(validationDeplacement(GARDE_DROIT, -gardeDroit.positionPersonnage())){
+                                res[8] = 1;
+                            }
+                        }
+                    }
+                    else{
+                        if(validationDeplacement(GARDE_GAUCHE, carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) + carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        if(validationDeplacement(GARDE_GAUCHE, -carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeGauche.positionPersonnage()) - carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        if(validationDeplacement(GARDE_DROIT, carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeDroit.positionPersonnage()) + carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        if(validationDeplacement(GARDE_DROIT, -carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(gardeDroit.positionPersonnage()) - carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                    }
+                }
+                else{
+                    if(carte.deplacement() == Deplacement.MILIEU){
+                        if(queDeplaceFou.positionPersonnage() < 0){
+                            if(validationDeplacement(queDeplaceFou.typePersonnage(), Math.abs(queDeplaceFou.positionPersonnage()))){
+                                res[8] = 1;
+                            }
+                        }
+                        else{
+                            if(validationDeplacement(queDeplaceFou.typePersonnage(), -queDeplaceFou.positionPersonnage())){
+                                res[8] = 1;
+                            }
+                        }
+                    }
+                    else{
+                        if(validationDeplacement(queDeplaceFou.typePersonnage(), carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(queDeplaceFou.positionPersonnage()) + carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                        if(validationDeplacement(queDeplaceFou.typePersonnage(), -carte.deplacement().getValeurDeplacement())){
+                            res[positionSelon16(queDeplaceFou.positionPersonnage()) - carte.deplacement().getValeurDeplacement()] = 1;
+                        }
+                    }
+                }
+                break;
+
+            case SORCIER:
+                if(validationDeplacement(SORCIER, carte.deplacement().getValeurDeplacement())){
+                    res[sorcier.positionPersonnage() + carte.deplacement().getValeurDeplacement()] = 1;
+                }
+                if(validationDeplacement(SORCIER, -carte.deplacement().getValeurDeplacement())){
+                    res[sorcier.positionPersonnage() - carte.deplacement().getValeurDeplacement()] = 1;
+                }
+                break;
+            default:
+                break;
+        }
+        return res;
+    }
+
+    public int[] listeDeplacementPossiblesDepuisPerso(int position) {
+        return null;
+    }
+
     public void deplacerElement(Element element, int deplacementElement) {
         if (!estPartieTerminee()) {
             if (estPartieEnCours()) {
@@ -326,6 +547,89 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     void jouerCarte(Element element) {
         // TODO Méthode jouer carte !!!
         Configuration.instance().logger().info("La carte " + element.name() + " a ete joue !!");
+        metAJour();
+    }
+
+    public void activerPouvoirFou(Element element) {
+        if (!estPartieTerminee()) {
+            if (estPartieEnCours()) {
+                int positionFou = fou.positionPersonnage();
+                int positionRoi = roi.positionPersonnage();
+                if (joueurCourant == JOUEUR_DROIT) {
+                    if (positionFou > positionRoi) {
+                        jouerCarte(element);
+                    } else {
+                        Configuration.instance().logger()
+                                .info("Pouvoir du Fou inutilisable pour le joueur de droite !!");
+                    }
+                } else {
+                    if (positionFou < positionRoi) {
+                        jouerCarte(element);
+                    } else {
+                        Configuration.instance().logger()
+                                .info("Pouvoir du Fou inutilisable pour le joueur de gauche !!");
+                    }
+                }
+            }
+        }
+        metAJour();
+    }
+
+    public void activerPouvoirSorcier(Element element) {
+        if (!estPartieTerminee()) {
+            if (estPartieEnCours()) {
+                int teleporter = 0;
+                int positionSorcier = sorcier.positionPersonnage();
+                switch (element) {
+                    case GARDE_GAUCHE:
+                        int positionGardeGauche = gardeGauche.positionPersonnage();
+                        if (joueurCourant == JOUEUR_DROIT) {
+                            teleporter = positionSorcier - positionGardeGauche;
+                        } else {
+                            teleporter = positionGardeGauche - positionSorcier;
+                        }
+                        if (validationDeplacement(element, teleporter)) {
+                            gardeGauche.deplacerPersonnage(teleporter);
+                        } else {
+                            Configuration.instance().logger()
+                                    .info("Teleportation " + element.name() + " impossible !!");
+                        }
+                        break;
+                    case GARDE_DROIT:
+                        int positionGardeDroit = gardeDroit.positionPersonnage();
+                        if (joueurCourant == JOUEUR_DROIT) {
+                            teleporter = positionSorcier - positionGardeDroit;
+                        } else {
+                            teleporter = positionGardeDroit - positionSorcier;
+                        }
+                        if (validationDeplacement(element, teleporter)) {
+                            gardeDroit.deplacerPersonnage(teleporter);
+                        } else {
+                            Configuration.instance().logger()
+                                    .info("Teleportation " + element.name() + " impossible !!");
+                        }
+                        break;
+                    case ROI:
+                        int positionRoi = roi.positionPersonnage();
+                        if (joueurCourant == JOUEUR_DROIT) {
+                            teleporter = positionSorcier - positionRoi;
+                        } else {
+                            teleporter = positionRoi - positionSorcier;
+                        }
+                        if (validationDeplacement(element, teleporter)) {
+                            roi.deplacerPersonnage(teleporter);
+                        } else {
+                            Configuration.instance().logger()
+                                    .info("Teleportation " + element.name() + " impossible !!");
+                        }
+                        break;
+                    default:
+                        Configuration.instance().logger()
+                                .info("Teleportation " + element.name() + " sur le sorcier non autorise !!");
+                        break;
+                }
+            }
+        }
         metAJour();
     }
 

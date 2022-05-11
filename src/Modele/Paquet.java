@@ -12,7 +12,7 @@ import Structures.FAP;
 import Structures.FAPListe;
 
 public class Paquet {
-    Sequence<Carte> pioche, defausse;
+    Sequence<Carte> pioche, defausse, tourActuel;
     Object[][] mainJoueurs;
 
     static final int NOMBRE_TYPE_CARTE = 4;
@@ -59,6 +59,7 @@ public class Paquet {
     static final Deplacement UN_PLUS_UN = Deplacement.UN_PLUS_UN;
 
     public Paquet() {
+        tourActuel = Configuration.instance().nouvelleSequence();
         creerPaquet();
         melanger();
         distribuer();
@@ -92,7 +93,7 @@ public class Paquet {
             System.out.println(carte.toString());
             defausse.insereTete(carte);
         }
-        Configuration.instance().logger().info("Début de l'affichage de la defausse !");
+        Configuration.instance().logger().info("Fin de l'affichage de la defausse !");
     }
 
     public void afficherMain(int joueur) {
@@ -105,6 +106,32 @@ public class Paquet {
         }
         System.out.println();
         Configuration.instance().logger().info("Fin de l'affichage de la main du joueur" + joueur + " !");
+    }
+
+    public void afficherTour() {
+        Configuration.instance().logger().info("Début de l'affichage du tour !");
+        Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
+        while (!defausse.estVide()) {
+            tmp.insereTete(defausse.extraitTete());
+        }
+        while (!tmp.estVide()) {
+            Carte carte = tmp.extraitTete();
+            System.out.println(carte.toString());
+            defausse.insereTete(carte);
+        }
+        Configuration.instance().logger().info("Fin de l'affichage du tour !");
+    }
+
+    public void recupererCartes(int joueur){
+        int i = 0;
+        Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
+        while(i < NOMBRE_CARTE_EN_MAIN){
+            Carte carte = (Carte) mainJoueurs[joueur][i];
+            if(carte.estIdentique(vide)){
+                mainJoueurs[joueur][i] = tourActuel.extraitTete();
+            }
+        }
+        trierJoueur(joueur);
     }
 
     public void melanger() {
@@ -223,7 +250,13 @@ public class Paquet {
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
         Carte main = (Carte) mainJoueurs[joueur][carte];
         mainJoueurs[joueur][carte] = vide;
-        defausse.insereTete(main);
+        tourActuel.insereTete(main);
+    }
+
+    public void changerTour(){
+        while(!tourActuel.estVide()){
+            defausse.insereTete(tourActuel.extraitTete());
+        }
     }
 
     public int nombreCarteManquante(int joueur) {
@@ -398,5 +431,9 @@ public class Paquet {
 
     public Carte[] mainJoueur(int joueur) {
         return (Carte[]) mainJoueurs[joueur];
+    }
+
+    public int nombreCartesEnMain(){
+        return NOMBRE_CARTE_EN_MAIN;
     }
 }
