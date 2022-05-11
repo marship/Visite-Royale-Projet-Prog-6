@@ -17,10 +17,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	int decompteTimer;
 
-    public ControleurMediateur() {
-
-	}
-
 	public ControleurMediateur(Plateau p) {
 
 	}
@@ -50,7 +46,11 @@ public class ControleurMediateur implements CollecteurEvenements {
     public boolean commande(String commande) {
         switch (commande) {
             case "Jouer":
+                interfaceGraphique.afficher_panel("Jouer");
                 break;
+            case "MenuPrincipal":
+                interfaceGraphique.afficher_panel("MenuPrincipal");
+            break;
             case "Charger":
                 break;
             case "Regles":
@@ -67,7 +67,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void fixerInterfaceGraphique(InterfaceGraphique interfaceGraphique) {
-
+    public void getInterfaceGraphique(InterfaceGraphique interfaceG) {
+        interfaceGraphique = interfaceG;
     }
 }

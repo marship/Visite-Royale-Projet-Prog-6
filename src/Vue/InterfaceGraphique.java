@@ -13,6 +13,9 @@ public class InterfaceGraphique implements Runnable {
 	CollecteurEvenements collecteurEvenements;
 
 	JButton bouton_jouer, bouton_charger, bouton_regles, bouton_options, bouton_quitter;
+	CardLayout layout; 
+
+    JPanel panelCourant, panelMenuPrincipal, panelOption, panelPlateau;
 
 	InterfaceGraphique(Plateau p, CollecteurEvenements cEvenements) {
 		plateau = p;
@@ -41,39 +44,72 @@ public class InterfaceGraphique implements Runnable {
 		}
         barre.add(Box.createGlue());
 		fenetre.add(barre, BorderLayout.LINE_END); */
+		layout = new CardLayout();
+		panelCourant = new JPanel(layout);
 
-		JPanel panelBoutons = new JPanel(new GridLayout(0,1,0,30));
-    panelBoutons.setBorder(new EmptyBorder(240,640/4,50,640/4));
-
-    bouton_jouer = new JButton("Jouer");
-    bouton_jouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
-    panelBoutons.add(bouton_jouer);
-
-    bouton_charger = new JButton("Charger une partie");
-    bouton_charger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
-    panelBoutons.add(bouton_charger);
-
-    bouton_regles = new JButton("Règles du jeu");
-    bouton_regles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
-    panelBoutons.add(bouton_regles);
-
-    bouton_options = new JButton("Options");
-    bouton_options.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
-    panelBoutons.add(bouton_options);
-
-    bouton_quitter = new JButton("Quitter");
-    bouton_quitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
-    panelBoutons.add(bouton_quitter);
-    
-
-
-    fenetre.add(panelBoutons);
+		creerMenuPrincipal();
+    	panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
+		creerPlateauJeu();
+		panelCourant.add(panelPlateau, "Jouer");
 
 		Timer chrono = new Timer( 16, new AdaptateurTemps(collecteurEvenements));
 		chrono.start();
 
+		fenetre.add(panelCourant);
+
+		// Garde à jour l'interface graphique du controleur
+        collecteurEvenements.getInterfaceGraphique(this);
+
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		fenetre.setSize(500, 500);
+		fenetre.setSize(1280, 720);
 		fenetre.setVisible(true);
 	}
+
+	public void afficher_panel(String nomPanel){
+
+		layout.show(panelCourant, nomPanel);
+    } 
+
+	public void creerMenuPrincipal(){
+
+		panelMenuPrincipal = new JPanel(new GridLayout(0,1,0,30));
+		panelMenuPrincipal.setBorder(new EmptyBorder(240,640/4,50,640/4));
+
+        bouton_jouer = new JButton("Jouer");
+        bouton_jouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
+        panelMenuPrincipal.add(bouton_jouer);
+
+        bouton_charger = new JButton("Charger une partie");
+        bouton_charger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
+        panelMenuPrincipal.add(bouton_charger);
+
+        bouton_regles = new JButton("Règles du jeu");
+        bouton_regles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
+        panelMenuPrincipal.add(bouton_regles);
+
+        bouton_options = new JButton("Options");
+        bouton_options.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
+        panelMenuPrincipal.add(bouton_options);
+
+        bouton_quitter = new JButton("Quitter");
+        bouton_quitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
+        panelMenuPrincipal.add(bouton_quitter);
+    } 
+
+	public void creerPlateauJeu(){
+
+		panelPlateau = new JPanel(new GridLayout(0,1,0,30));
+		panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
+        panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
+
+		bouton_options = new JButton("Retour");
+        bouton_options.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        panelPlateau.add(bouton_options);
+
+        bouton_quitter = new JButton("Quitter");
+        bouton_quitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
+        panelPlateau.add(bouton_quitter);
+
+    } 
+
 }

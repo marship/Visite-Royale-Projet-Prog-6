@@ -6,5 +6,5 @@ public interface CollecteurEvenements {
     void tictac();
 	void changerJoueurCourant(int numeroJoueur, int typeJoueur);
 	boolean commande(String com);
-    void fixerInterfaceGraphique(InterfaceGraphique interfaceGraphique);
+    void getInterfaceGraphique(InterfaceGraphique interfaceGraphique);
 }
