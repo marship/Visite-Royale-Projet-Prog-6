@@ -12,7 +12,8 @@ public class VisiteRoyale {
 
             System.out.println("========== Cas Fou ==========");
             System.out.println("");
-            plateau.deplacerElement(Element.FOU, 9);
+            plateau.changerJoueurCourant(0);
+            plateau.activerPouvoirFou(Element.GARDE_GAUCHE);
             plateau.afficherPlateau();
             
 

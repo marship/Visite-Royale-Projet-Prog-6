@@ -11,7 +11,7 @@ LAMBERT Mathis
 
 ## Visite Royale
 
-TO DO - Descriptif du jeu
+TODO - Descriptif du jeu
 
 ### Structure de l'espace de travail
 

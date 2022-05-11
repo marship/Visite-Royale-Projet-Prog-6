@@ -5,12 +5,4 @@ import org.junit.rules.ExpectedException;
 
 public class TestPlateau {
 
-    @Before
-    // TO DO
-
-    @Test
-    // TO DO
-
-    @Rule
-    // TO DO
 }

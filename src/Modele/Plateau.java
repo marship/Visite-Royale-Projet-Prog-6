@@ -22,6 +22,12 @@ public class Plateau extends Observable {
     static final int POSITION_BASE_FOU = -1;
     static final int POSITION_BASE_SORCIER = 1;
 
+    // ==================
+    // ===== JOUEUR =====
+    // ==================
+    static final int JOUEUR_GAUCHE = 0;
+    static final int JOUEUR_DROIT = 1;
+
     // ==============================
     // ===== INFORMATION PARTIE =====
     // ==============================
@@ -29,7 +35,7 @@ public class Plateau extends Observable {
     boolean partieTerminee = false;
     boolean tourJoueurGauche = false;
     boolean tourJoueurDroit = false;
-    int joueurCourant = 1; // 0 : Joueur Gauche | 1 : Joueur Droit
+    int joueurCourant = JOUEUR_DROIT;
 
     // ====================
     // ===== ELEMENTS =====
@@ -51,7 +57,7 @@ public class Plateau extends Observable {
     static final Element FOU = Element.FOU;
     static final Element SORCIER = Element.SORCIER;
 
-    // @TO DO JEU ???
+    // @TODO JEU ???
 
     public Plateau() {
         reset();
@@ -213,8 +219,86 @@ public class Plateau extends Observable {
         metAJour();
     }
 
-    void jouerCarte() {
-        // TO DO !!!
+    void jouerCarte(Element element) {
+        // TODO Méthode jouer carte !!!
+        Configuration.instance().logger().info("La carte " + element.name() + " a ete joue !!");
+        metAJour();
+    }
+
+    public void activerPouvoirFou(Element element) {
+        if (!estPartieTerminee()) {
+            if (estPartieEnCours()) {
+                int positionFou = fou.positionPersonnage();
+                int positionRoi = roi.positionPersonnage();
+                if (joueurCourant == JOUEUR_DROIT) {
+                    if (positionFou > positionRoi) {
+                        jouerCarte(element);
+                    } else {
+                        Configuration.instance().logger().info("Pouvoir du Fou inutilisable pour le joueur de droite !!");
+                    }
+                } else {
+                    if (positionFou < positionRoi) {
+                        jouerCarte(element);
+                    } else {
+                        Configuration.instance().logger().info("Pouvoir du Fou inutilisable pour le joueur de gauche !!");
+                    }
+                }
+            }
+        }
+        metAJour();
+    }
+
+    public void activerPouvoirSorcier(Element element) {
+        if (!estPartieTerminee()) {
+            if (estPartieEnCours()) {
+                int teleporter = 0;
+                int positionSorcier = sorcier.positionPersonnage();
+                switch (element) {
+                    case GARDE_GAUCHE:
+                        int positionGardeGauche = gardeGauche.positionPersonnage();
+                        if (joueurCourant == JOUEUR_DROIT) {
+                            teleporter = positionSorcier - positionGardeGauche;
+                        } else {
+                            teleporter = positionGardeGauche - positionSorcier;
+                        }
+                        if (validationDeplacement(element, teleporter)) {
+                            gardeGauche.deplacerPersonnage(teleporter);
+                        } else {
+                            Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
+                        }
+                        break;
+                    case GARDE_DROIT:
+                        int positionGardeDroit = gardeDroit.positionPersonnage();
+                        if (joueurCourant == JOUEUR_DROIT) {
+                            teleporter = positionSorcier - positionGardeDroit;
+                        } else {
+                            teleporter = positionGardeDroit - positionSorcier;
+                        }
+                        if (validationDeplacement(element, teleporter)) {
+                            gardeDroit.deplacerPersonnage(teleporter);
+                        } else {
+                            Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
+                        }
+                        break;
+                    case ROI:
+                        int positionRoi = roi.positionPersonnage();
+                        if (joueurCourant == JOUEUR_DROIT) {
+                            teleporter = positionSorcier - positionRoi;
+                        } else {
+                            teleporter = positionRoi - positionSorcier;
+                        }
+                        if (validationDeplacement(element, teleporter)) {
+                            roi.deplacerPersonnage(teleporter);
+                        } else {
+                            Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
+                        }
+                        break;
+                    default:
+                        Configuration.instance().logger().info("Teleportation " + element.name() + " sur le sorcier non autorise !!");
+                        break;
+                }
+            }
+        }
         metAJour();
     }
 
@@ -230,7 +314,7 @@ public class Plateau extends Observable {
             } else {
                 ligneChiffre = ligneChiffre + "| " + i + " ";
             }
-            
+
         }
         ligneChiffre = ligneChiffre + "|";
         System.out.println(ligneChiffre);
@@ -263,7 +347,7 @@ public class Plateau extends Observable {
         }
         ligneFou = ligneFou + "|";
         System.out.println(ligneFou);
-        
+
         // SORCIER
         String ligneSorcier = "";
         for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
@@ -292,7 +376,6 @@ public class Plateau extends Observable {
         System.out.println("");
     }
 
-    // 0 : Joueur Gauche | 1 : Joueur Droit
     public void choixPremierJoueur(int premierJoueur) {
         if (premierJoueur != joueurCourant) {
             echangerFouSorcier();
@@ -305,15 +388,19 @@ public class Plateau extends Observable {
         sorcier.positionnerPersonnage(POSITION_BASE_FOU);
     }
 
-    // 0 : Joueur Gauche | 1 : Joueur Droit
     public void changerJoueurCourant(int numeroJoueur) {
-        joueurCourant = numeroJoueur;
+        if (numeroJoueur == JOUEUR_DROIT) {
+            joueurCourant = JOUEUR_DROIT;
+        } else if (numeroJoueur == JOUEUR_GAUCHE) {
+            joueurCourant = JOUEUR_GAUCHE;
+        } else {
+            Configuration.instance().logger().info("Numero de joueur inconnu !! Changement de joueur non realise !!");
+        }
     }
 
     // Numero : 0 = Joueur Gauche | 1 = Joueur Droit
     // Type : 0 = Joueur Humain | 1 = Joueur IA
     public void changerJoueurCourant(int numeroJoueur, int typeJoueur) {
-        // TO DO - cf. IA
+        // TODO Méthode changerJoueurCourant IA - cf. IA
     }
 }
-
