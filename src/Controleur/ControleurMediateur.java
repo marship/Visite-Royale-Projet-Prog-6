@@ -56,6 +56,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "Regles":
                 break;
             case "Options":
+                interfaceGraphique.afficher_panel("Options");
                 break;
             case "Quitter":
                 System.exit(0);
