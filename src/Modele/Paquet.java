@@ -58,20 +58,22 @@ public class Paquet {
     static final Deplacement MILIEU = Deplacement.MILIEU;
     static final Deplacement UN_PLUS_UN = Deplacement.UN_PLUS_UN;
 
-    public Paquet(){
+    public Paquet() {
         creerPaquet();
         melanger();
         distribuer();
-        //trier();
+        afficherMain(0);
+        trier();
+        afficherMain(0);
     }
 
-    public void afficherPioche(){
+    public void afficherPioche() {
         Configuration.instance().logger().info("Début de l'affichage de la pioche !");
         Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
-        while(!pioche.estVide()){
+        while (!pioche.estVide()) {
             tmp.insereTete(pioche.extraitTete());
         }
-        while(!tmp.estVide()){
+        while (!tmp.estVide()) {
             Carte carte = tmp.extraitTete();
             System.out.println(carte.toString());
             pioche.insereTete(carte);
@@ -79,13 +81,13 @@ public class Paquet {
         Configuration.instance().logger().info("Fin de l'affichage de la pioche !");
     }
 
-    public void afficherDefausse(){
+    public void afficherDefausse() {
         Configuration.instance().logger().info("Début de l'affichage de la defausse !");
         Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
-        while(!defausse.estVide()){
+        while (!defausse.estVide()) {
             tmp.insereTete(defausse.extraitTete());
         }
-        while(!tmp.estVide()){
+        while (!tmp.estVide()) {
             Carte carte = tmp.extraitTete();
             System.out.println(carte.toString());
             defausse.insereTete(carte);
@@ -93,12 +95,12 @@ public class Paquet {
         Configuration.instance().logger().info("Début de l'affichage de la defausse !");
     }
 
-    public void afficherMain(int joueur){
+    public void afficherMain(int joueur) {
         Configuration.instance().logger().info("Début de l'affichage de la main du joueur" + joueur + " !");
         int i = 0;
-        while(i < NOMBRE_CARTE_EN_MAIN){
+        while (i < NOMBRE_CARTE_EN_MAIN) {
             Carte carte = (Carte) mainJoueurs[joueur][i];
-            System.out.print("|" + carte.toString()+ "|");
+            System.out.print("|" + carte.toString() + "|");
             i++;
         }
         System.out.println();
@@ -108,16 +110,16 @@ public class Paquet {
     public void melanger() {
         FAP<Couple<Carte, Integer>> fap = new FAPListe<>();
         Random r = new Random();
-        while(!pioche.estVide()){
+        while (!pioche.estVide()) {
             fap.insere(new Couple<Carte, Integer>(pioche.extraitTete(), r.nextInt(10000)));
         }
-        while(!fap.estVide()){
+        while (!fap.estVide()) {
             pioche.insereTete(fap.extrait().e());
         }
     }
 
-    public void trier(){
-        for(int i = 0; i < NOMBRE_JOUEUR ; i++){
+    public void trier() {
+        for (int i = 0; i < NOMBRE_JOUEUR; i++) {
             trierJoueur(i);
         }
     }
@@ -131,22 +133,26 @@ public class Paquet {
             Carte carte = (Carte) mainJoueurs[joueur][i];
             switch (carte.personnage()) {
                 case FOU:
-                    position = nbChaqueType[0][0] = nbChaqueType[0][0] + 1;
+                    position = nbChaqueType[0][0];
+                    nbChaqueType[0][0] = nbChaqueType[0][0] + 1;
                     type = 0;
                     break;
 
                 case SORCIER:
-                    position = nbChaqueType[1][0] = nbChaqueType[1][0] + 1;
+                    position = nbChaqueType[1][0];
+                    nbChaqueType[1][0] = nbChaqueType[1][0] + 1;
                     type = 1;
                     break;
 
                 case GARDE_GAUCHE:
-                    position = nbChaqueType[2][0] = nbChaqueType[2][0] + 1;
+                    position = nbChaqueType[2][0];
+                    nbChaqueType[2][0] = nbChaqueType[2][0] + 1;
                     type = 2;
                     break;
 
                 case ROI:
-                    position = nbChaqueType[3][0] = nbChaqueType[3][0] + 1;
+                    position = nbChaqueType[3][0];
+                    nbChaqueType[3][0] = nbChaqueType[3][0] + 1;
                     type = 3;
                     break;
 
@@ -157,7 +163,7 @@ public class Paquet {
             tableauTrier[type][position] = (Carte) carte;
         }
         for (int i = 0; i < NOMBRE_TYPE_CARTE; i++) {
-            // trierTableau(tableauTrier[i],nbChaqueType[i][0]);
+            trierTableau(tableauTrier[i], 0, nbChaqueType[i][0] - 1);
         }
 
         position = 0;
@@ -170,22 +176,34 @@ public class Paquet {
         }
     }
 
-        private void trierTableau(Object[] objects, int nombreCarte){
-            /*
-            for(int i = 1 ; i < nombreCarte ; i++) {
-                Carte carte1 = (Carte) objects[i];   //recupere la valeur de la carte de deplacement à l'indice i et la met dans x 
-                int valeur1 = carte1.deplacement().getValeurDeplacement();                     
-                int j = i;
-                Carte carte2 = (Carte) objects [j - 1];
-                int valeur2 = carte2.deplacement().getValeurDeplacement(); 
-                while(j > 0 && valeur2 > valeur1){  // décaler les cartes qui ont un plus grand deplacement que la carte stockées dans x, en partant de j = i-1
-                    objects[j] = objects[j - 1];
-                    j = j - 1;
-                }                                         
-                objects[j] = carte1; // placer la carte stockée dans x dans le "trou" laissé par le décalage
+    int partition(Object[] objects, int start, int end) {
+        Carte carte = (Carte) objects[end];
+        int pivot = carte.deplacement().getValeurDeplacement(); 
+        int i = (start - 1);
+
+        for (int j = start; j <= end - 1; j++) {
+            Carte carte2 = (Carte) objects[j];
+            int pivote = carte2.deplacement().getValeurDeplacement(); 
+            if (pivote < pivot) {
+                i++;
+                Carte cartei = (Carte) objects[i];
+                objects[i] = objects[j];
+                objects[j] = cartei;
             }
-            */
         }
+        Carte carteencore = (Carte) objects[i + 1];
+        objects[i + 1] = objects[end];
+        objects[end] = carteencore;
+        return (i + 1);
+    }
+
+    void trierTableau(Object[] objects, int start, int end){
+        if (start < end) {
+            int p = partition(objects, start, end); 
+            trierTableau(objects, start, p - 1);
+            trierTableau(objects, p + 1, end);
+        }
+    }
 
     public void melangerDefausse() {
         while (!defausse.estVide()) {
@@ -370,15 +388,15 @@ public class Paquet {
         }
     }
 
-    public Sequence<Carte> pioche(){
+    public Sequence<Carte> pioche() {
         return pioche;
     }
 
-    public Sequence<Carte> defausse(){
+    public Sequence<Carte> defausse() {
         return defausse;
     }
 
-    public Carte[] mainJoueur(int joueur){
+    public Carte[] mainJoueur(int joueur) {
         return (Carte[]) mainJoueurs[joueur];
     }
 }
