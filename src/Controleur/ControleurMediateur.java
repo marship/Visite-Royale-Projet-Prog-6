@@ -9,12 +9,17 @@ public class ControleurMediateur implements CollecteurEvenements {
     static final int TEMPS_ATTENTE = 50;
 
     Plateau plateau;
+    InterfaceGraphique interfaceGraphique;
 
 	// Joueur[][] joueurs;
 	int [] typeJoueur;
 	int joueurCourant;
 
 	int decompteTimer;
+
+    public ControleurMediateur() {
+
+	}
 
 	public ControleurMediateur(Plateau p) {
 
@@ -43,7 +48,22 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public boolean commande(String commande) {
-        return false;
+        switch (commande) {
+            case "Jouer":
+                break;
+            case "Charger":
+                break;
+            case "Regles":
+                break;
+            case "Options":
+                break;
+            case "Quitter":
+                System.exit(0);
+                break;
+            default:
+                return false;
+        }
+        return true;
     }
 
     @Override
