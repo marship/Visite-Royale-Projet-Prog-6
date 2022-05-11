@@ -59,19 +59,14 @@ public class Paquet {
     static final Deplacement UN_PLUS_UN = Deplacement.UN_PLUS_UN;
 
     public Paquet(){
-        pioche = Configuration.instance().nouvelleSequence();
-        defausse = Configuration.instance().nouvelleSequence();
-        mainJoueurs = new Object[NOMBRE_JOUEUR][NOMBRE_CARTE_EN_MAIN];
         creerPaquet();
-        //afficherPioche();
         melanger();
-        //afficherPioche();
         distribuer();
-        //afficherPioche();
-        trier();
+        //trier();
     }
 
     public void afficherPioche(){
+        Configuration.instance().logger().info("Début de l'affichage de la pioche !");
         Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
         while(!pioche.estVide()){
             tmp.insereTete(pioche.extraitTete());
@@ -81,7 +76,33 @@ public class Paquet {
             System.out.println(carte.toString());
             pioche.insereTete(carte);
         }
-        System.out.println("Fin de l'affiche ============================================================");
+        Configuration.instance().logger().info("Fin de l'affichage de la pioche !");
+    }
+
+    public void afficherDefausse(){
+        Configuration.instance().logger().info("Début de l'affichage de la defausse !");
+        Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
+        while(!defausse.estVide()){
+            tmp.insereTete(defausse.extraitTete());
+        }
+        while(!tmp.estVide()){
+            Carte carte = tmp.extraitTete();
+            System.out.println(carte.toString());
+            defausse.insereTete(carte);
+        }
+        Configuration.instance().logger().info("Début de l'affichage de la defausse !");
+    }
+
+    public void afficherMain(int joueur){
+        Configuration.instance().logger().info("Début de l'affichage de la main du joueur" + joueur + " !");
+        int i = 0;
+        while(i < NOMBRE_CARTE_EN_MAIN){
+            Carte carte = (Carte) mainJoueurs[joueur][i];
+            System.out.print("|" + carte.toString()+ "|");
+            i++;
+        }
+        System.out.println();
+        Configuration.instance().logger().info("Fin de l'affichage de la main du joueur" + joueur + " !");
     }
 
     public void melanger() {
@@ -177,16 +198,11 @@ public class Paquet {
         }
     }
 
-    public void enleverCarte(int joueur, Carte carte) {
-        int i = 0;
-        Carte main = (Carte) mainJoueurs[joueur][i];
-        while ((i + 1 != NOMBRE_CARTE_EN_MAIN) && !main.estIdentique(carte)) {
-            i++;
-            main = (Carte) mainJoueurs[joueur][i];
-        }
+    public void enleverCarte(int joueur, int carte) {
+        Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
+        Carte main = (Carte) mainJoueurs[joueur][carte];
+        mainJoueurs[joueur][carte] = vide;
         defausse.insereTete(main);
-        main = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
-        mainJoueurs[joueur][i] = main;
     }
 
     public int nombreCarteManquante(int joueur) {
@@ -217,6 +233,9 @@ public class Paquet {
     }
 
     public void creerPaquet() {
+        pioche = Configuration.instance().nouvelleSequence();
+        defausse = Configuration.instance().nouvelleSequence();
+        mainJoueurs = new Object[NOMBRE_JOUEUR][NOMBRE_CARTE_EN_MAIN];
         creerCartesRoi();
         creerCartesGarde();
         creerCartesFou();
@@ -346,5 +365,17 @@ public class Paquet {
                 pioche.insereTete(carte);
             }
         }
+    }
+
+    public Sequence<Carte> pioche(){
+        return pioche;
+    }
+
+    public Sequence<Carte> defausse(){
+        return defausse;
+    }
+
+    public Carte[] mainJoueur(int joueur){
+        return (Carte[]) mainJoueurs[joueur];
     }
 }
