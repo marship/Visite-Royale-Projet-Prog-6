@@ -12,10 +12,9 @@ public class VisiteRoyale {
 
             System.out.println("========== Cas Fou ==========");
             System.out.println("");
-            plateau.changerJoueurCourant(0);
-            plateau.activerPouvoirFou(Element.GARDE_GAUCHE);
+            plateau.reset();
+            plateau.deplacerElement(Element.SORCIER, 1);
             plateau.afficherPlateau();
-            
 
             // CollecteurEvenements controleurMediateur = new ControleurMediateur(plateau);
             // InterfaceGraphique.demarrer(plateau, controleurMediateur);

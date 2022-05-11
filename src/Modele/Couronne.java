@@ -32,4 +32,8 @@ public class Couronne {
     public boolean etatCouronne() {
         return etatCouronne;
     }
+
+    public void definirEtatCouronne(Boolean nouvelleEtatCouronne) {
+        etatCouronne = nouvelleEtatCouronne;
+    }
 }
