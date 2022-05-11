@@ -26,6 +26,8 @@ public class InterfaceGraphique implements Runnable {
 		SwingUtilities.invokeLater(new InterfaceGraphique(plateau, cEvenements));
 	}
 
+
+	//TODO Rajouter dans panel courant: panelOption, panelRegles
 	@Override
 	public void run() {
 
@@ -65,11 +67,13 @@ public class InterfaceGraphique implements Runnable {
 		fenetre.setVisible(true);
 	}
 
+	//affiche le panel passé en paramètre
 	public void afficher_panel(String nomPanel){
 
 		layout.show(panelCourant, nomPanel);
     } 
 
+	//Crée le JPanel du menu principal
 	public void creerMenuPrincipal(){
 
 		panelMenuPrincipal = new JPanel(new GridLayout(0,1,0,30));
@@ -96,6 +100,8 @@ public class InterfaceGraphique implements Runnable {
         panelMenuPrincipal.add(bouton_quitter);
     } 
 
+	//Crée le JPanel du plateau de jeu
+	//TODO Faire l'affichage du plateau de jeu
 	public void creerPlateauJeu(){
 
 		panelPlateau = new JPanel(new GridLayout(0,1,0,30));
@@ -111,5 +117,16 @@ public class InterfaceGraphique implements Runnable {
         panelPlateau.add(bouton_quitter);
 
     } 
+	//Crée le JPanel des regles
+	//TODO Faire l'affichage des regles
+	public void creerRegles(){
+
+	}
+
+	//Crée le JPanel des options
+	//TODO Faire l'affichage des options
+	public void creerOptions(){
+
+	}
 
 }
