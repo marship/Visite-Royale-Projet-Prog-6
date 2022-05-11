@@ -10,11 +10,11 @@ public class VisiteRoyale {
         try {
             Plateau plateau = new Plateau();
 
-            plateau.choixPremierJoueur(1);
+            System.out.println("========== Cas Fou ==========");
+            System.out.println("");
+            plateau.deplacerElement(Element.FOU, 9);
             plateau.afficherPlateau();
             
-            plateau.deplacerElement(Element.ROI, 1);
-            plateau.afficherPlateau();
 
             // CollecteurEvenements controleurMediateur = new ControleurMediateur(plateau);
             // InterfaceGraphique.demarrer(plateau, controleurMediateur);
