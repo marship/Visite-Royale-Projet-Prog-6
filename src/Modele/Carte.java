@@ -32,7 +32,7 @@ public class Carte {
     }
 
     public String toString(){
-        return "" + personnage.name() + deplacement.name();
+        return "" + personnage.name() + " " + deplacement.name();
     }
 
 }
