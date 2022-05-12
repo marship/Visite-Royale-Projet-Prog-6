@@ -362,10 +362,11 @@ public class Jeu extends Observable {
         return positionElement + EXTREMITE_DROITE_DU_PLATEAU;
     }
 
-    public int[] listeDeplacementPossiblesAvecCarte(int position) {
+       public int[] listeDeplacementPossiblesAvecCarte(int position) {
         int[] positionAccessibleAvecCarte = initialiserTableau(TAILLE_DU_PLATEAU, 0);
         Carte carte = recupererMainJoueur(joueurCourant)[position];
         int deplacementCarte = carte.deplacement().getValeurDeplacement();
+        System.out.println(deplacementCarte);
 
         switch (carte.personnage()) {
             case GARDE_GAUCHE:
@@ -424,10 +425,10 @@ public class Jeu extends Observable {
                 break;
             case SORCIER:
                 if (validationDeplacement(SORCIER, deplacementCarte)) {
-                    positionAccessibleAvecCarte[obtenirPositionElement(SORCIER) + deplacementCarte] = 1;
+                    positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(SORCIER)) + deplacementCarte] = 1;
                 }
                 if (validationDeplacement(SORCIER, -deplacementCarte)) {
-                    positionAccessibleAvecCarte[obtenirPositionElement(SORCIER) - deplacementCarte] = 1;
+                    positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(SORCIER)) - deplacementCarte] = 1;
                 }
                 break;
             case FOU:
@@ -484,9 +485,9 @@ public class Jeu extends Observable {
     // =======================
     // ===== POUVOIR FOU =====
     // =======================
-    public void personnageManipulerParLeFou(Personnage personnage) {
+    public void personnageManipulerParLeFou(Element personnage) {
         if (actionAutoriser()) {
-            personnageManipulerParLeFou = personnage;
+            personnageManipulerParLeFou = obtenirPersonnageElement(personnage);
         }
         metAJour();
     }
