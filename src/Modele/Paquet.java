@@ -67,7 +67,7 @@ public class Paquet {
     }
 
     public void afficherPioche() {
-        Configuration.instance().logger().info("Début de l'affichage de la pioche !");
+        Configuration.instance().logger().info("Debut de l'affichage de la pioche !\n");
         Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
         while (!pioche.estVide()) {
             tmp.insereTete(pioche.extraitTete());
@@ -77,11 +77,11 @@ public class Paquet {
             System.out.println(carte.toString());
             pioche.insereTete(carte);
         }
-        Configuration.instance().logger().info("Fin de l'affichage de la pioche !");
+        Configuration.instance().logger().info("Fin de l'affichage de la pioche !\n");
     }
 
     public void afficherDefausse() {
-        Configuration.instance().logger().info("Début de l'affichage de la defausse !");
+        Configuration.instance().logger().info("Debut de l'affichage de la defausse !\n");
         Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
         while (!defausse.estVide()) {
             tmp.insereTete(defausse.extraitTete());
@@ -91,23 +91,23 @@ public class Paquet {
             System.out.println(carte.toString());
             defausse.insereTete(carte);
         }
-        Configuration.instance().logger().info("Fin de l'affichage de la defausse !");
+        Configuration.instance().logger().info("Fin de l'affichage de la defausse !\n");
     }
 
     public void afficherMain(int joueur) {
-        Configuration.instance().logger().info("Début de l'affichage de la main du joueur" + joueur + " !");
+        Configuration.instance().logger().info("Debut de l'affichage de la main du joueur" + joueur + " !\n");
         int i = 0;
         while (i < NOMBRE_CARTE_EN_MAIN) {
             Carte carte = (Carte) mainJoueurs[joueur][i];
             System.out.print("|" + carte.toString() + "|");
             i++;
         }
-        System.out.println();
-        Configuration.instance().logger().info("Fin de l'affichage de la main du joueur" + joueur + " !");
+        System.out.println("");
+        Configuration.instance().logger().info("Fin de l'affichage de la main du joueur" + joueur + " !\n");
     }
 
     public void afficherTour() {
-        Configuration.instance().logger().info("Début de l'affichage du tour !");
+        Configuration.instance().logger().info("Debut de l'affichage du tour !\n");
         Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
         while (!defausse.estVide()) {
             tmp.insereTete(defausse.extraitTete());
@@ -117,7 +117,7 @@ public class Paquet {
             System.out.println(carte.toString());
             defausse.insereTete(carte);
         }
-        Configuration.instance().logger().info("Fin de l'affichage du tour !");
+        Configuration.instance().logger().info("Fin de l'affichage du tour !\n");
     }
 
     public void completerCartesEnMain(int joueur) {

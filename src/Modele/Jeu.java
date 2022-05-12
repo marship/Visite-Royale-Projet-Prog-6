@@ -9,9 +9,9 @@ import Structures.Sequence;
 public class Jeu extends Observable {
 
     static Plateau plateau;
-    int joueurGagnant = 0; // TODO
+    int joueurGagnant = 0;
     int joueurCourant;
-    int nombreTour; // TODO
+    int nombreTour; // TODO nombre Tour de jeu
     boolean partieEnCours = false;
     boolean partieTerminee = false;
     Element dernierTypeDePersonnageJouer;
@@ -233,9 +233,15 @@ public class Jeu extends Observable {
     public void traiterGagnant() {
         switch (plateau.estGagnant()) {
             case COURONNE_GAGNANTE:
+                partieTerminee = true;
+                partieEnCours = false;
+                joueurGagnant = joueurCourant;
                 Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec la couronne !!");
                 break;
             case ROI_GAGNANT:
+                partieTerminee = true;
+                partieEnCours = false;
+                joueurGagnant = joueurCourant;
                 Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec le roi !!");
                 break;
             default:
@@ -254,8 +260,30 @@ public class Jeu extends Observable {
             traiterGagnant();
         } else {
             plateau.paquet.viderCartePoser();
-            plateau.paquet.completerCartesEnMain(joueurCourant);
-            changerJoueurCourant();
+            if(plateau.paquet.resteAssezCarteDansPioche(plateau.paquet.nombreCarteManquante(joueurCourant))){
+                plateau.paquet.completerCartesEnMain(joueurCourant);
+                changerJoueurCourant();
+            } else {
+                if(getEtatCouronne()) {
+                    plateau.paquet.melangerDefausse();
+                    plateau.paquet.completerCartesEnMain(joueurCourant);
+                    changerEtatCouronne();
+                    changerJoueurCourant();
+                } else {
+                    if(obtenirPositionElement(ROI) == 0) {
+                        plateau.paquet.melangerDefausse();
+                        plateau.paquet.completerCartesEnMain(joueurCourant);
+                        changerJoueurCourant();
+                    } else {
+                        if(obtenirPositionElement(ROI) > 0) {
+                            joueurGagnant = JOUEUR_DROIT;
+                        } else {
+                            joueurGagnant = JOUEUR_GAUCHE;
+                        }
+                        traiterGagnant();
+                    }
+                }
+            }
         }
         metAJour();
     }
@@ -362,12 +390,11 @@ public class Jeu extends Observable {
         return positionElement + EXTREMITE_DROITE_DU_PLATEAU;
     }
 
-       public int[] listeDeplacementPossiblesAvecCarte(int position) {
+    public int[] listeDeplacementPossiblesAvecCarte(int position) {
         int[] positionAccessibleAvecCarte = initialiserTableau(TAILLE_DU_PLATEAU, 0);
         Carte carte = recupererMainJoueur(joueurCourant)[position];
         int deplacementCarte = carte.deplacement().getValeurDeplacement();
         System.out.println(deplacementCarte);
-
         switch (carte.personnage()) {
             case GARDE_GAUCHE:
                 switch (carte.deplacement()) {
