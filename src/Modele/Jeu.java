@@ -9,9 +9,9 @@ import Structures.Sequence;
 public class Jeu extends Observable {
 
     Plateau plateau;
-    int joueurGagnant = 0;
+    int joueurGagnant = 0; // TODO
     int joueurCourant;
-    int nombreTour;
+    int nombreTour; // TODO
     boolean partieEnCours = false;
     boolean partieTerminee = false;
     Element dernierTypeDePersonnageJouer;
@@ -57,6 +57,7 @@ public class Jeu extends Observable {
     // ========================
     public Jeu() {
         plateau = new Plateau();
+        changerEtatPartie();
         metAJour();
     }
 
@@ -73,6 +74,10 @@ public class Jeu extends Observable {
 
     public boolean estPartieEnCours() {
         return partieEnCours;
+    }
+
+    public void changerEtatPartie() {
+        partieEnCours = !partieEnCours;
     }
 
     public boolean actionAutoriser() {

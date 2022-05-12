@@ -13,7 +13,7 @@ public class PlateauGraphique extends JComponent implements Observateur {
 
     public PlateauGraphique(Plateau j) {
         plateau = j;
-        plateau.ajouteObservateur(this);
+        // plateau.ajouteObservateur(this);
     }
 
     @Override

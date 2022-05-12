@@ -1,9 +1,7 @@
 package Modele;
 
 import Pattern.Commande;
-import Structures.Iterateur;
 import Structures.Sequence;
-import java.awt.Point;
 import Global.Configuration;
 
 public class Coup extends Commande {
@@ -20,7 +18,7 @@ public class Coup extends Commande {
     }
 
     void ajouterEtatPlateau(Plateau p) {
-        sequenceEtatPlateau.insereQueue(new Plateau(p));
+        sequenceEtatPlateau.insereQueue(p.clone());
     }
 
     Sequence<Plateau> sequenceEtatPlateau() {

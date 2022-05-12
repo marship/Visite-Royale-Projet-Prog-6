@@ -8,35 +8,36 @@ import org.junit.Test;
 //import org.junit.rules.ExpectedException;
 
 import Global.Deplacement;
+import Global.Element;
+import Modele.Jeu;
 import Modele.Plateau;
 
 public class TestPlateau {
 
-    Plateau plateau;
+    Jeu jeu;
     
     @Before
     public void init() {
-		plateau = new Plateau(); 
-        plateau.reset();
+		jeu = new Jeu(); 
 	}
 
     @Test
     public void testReset() {   
-        assertEquals(-2,plateau.gardeGauche.positionPersonnage());
-        assertEquals(1,plateau.sorcier.positionPersonnage());
-        assertEquals(0,plateau.roi.positionPersonnage());
-        assertEquals(-1,plateau.fou.positionPersonnage());
-        assertEquals(2,plateau.gardeDroit.positionPersonnage());
+        assertEquals(-2, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(1, jeu.obtenirPositionElement(Element.SORCIER));
+        assertEquals(0, jeu.obtenirPositionElement(Element.ROI));
+        assertEquals(-1, jeu.obtenirPositionElement(Element.FOU));
+        assertEquals(2, jeu.obtenirPositionElement(Element.GARDE_DROIT));
     }
 
     @Test
     public void testEstPartieTerminee() {   
-        assertFalse(plateau.estPartieTerminee());
+        assertFalse(jeu.estPartieTerminee());
     }
 
     @Test
     public void testEstPartieEnCours() {  
-        assertTrue(plateau.estPartieEnCours());
+        assertTrue(jeu.estPartieEnCours());
     }
 /*
     @Test
