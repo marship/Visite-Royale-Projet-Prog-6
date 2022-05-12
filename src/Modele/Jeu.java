@@ -579,6 +579,10 @@ public class Jeu extends Observable {
         return plateau().couronne.positionCouronne();
     }
 
+    public static boolean getEtatCouronne() {
+        return plateau().couronne.etatCouronne();
+    }
+
     public static int getPositionGardeGauche() {
         return plateau().gardeGauche.positionPersonnage();
     }
