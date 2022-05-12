@@ -63,9 +63,7 @@ public class Paquet {
         creerPaquet();
         melanger();
         distribuer();
-        afficherMain(0);
         trier();
-        afficherMain(0);
     }
 
     public void afficherPioche() {
@@ -284,6 +282,7 @@ public class Paquet {
                 mainJoueurs[joueur][i] = main;
             }
         }
+        trierJoueur(joueur);
     }
 
     public void creerPaquet() {
@@ -430,7 +429,7 @@ public class Paquet {
     }
 
     public Carte[] mainJoueur(int joueur) {
-        return (Carte[]) mainJoueurs[joueur];
+        return copieTableau(joueur);
     }
 
     public int nombreCartesEnMain() {

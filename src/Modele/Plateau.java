@@ -44,7 +44,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     Personnage fou;
     Personnage sorcier;
     Couronne couronne;
-    Paquet paquet;
+    public Paquet paquet;
 
     // ============================
     // ===== VALEURS ELEMENTS =====

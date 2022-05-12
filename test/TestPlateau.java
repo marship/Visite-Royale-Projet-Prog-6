@@ -68,7 +68,7 @@ public class TestPlateau {
         assertFalse(plateau.validationDeplacement(plateau.roi.typePersonnage(),2));
         assertFalse(plateau.validationDeplacement(plateau.fou.typePersonnage(),-8));
     }
-*/
+
     @Test
     public void testDeplacerCouronne() { 
         plateau.deplacerCouronne(Deplacement.DEUX);
@@ -105,4 +105,5 @@ public class TestPlateau {
         assertEquals(1,plateau.fou.positionPersonnage());
     }
 
+    */
 }

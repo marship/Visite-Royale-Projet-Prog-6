@@ -8,7 +8,7 @@ import Structures.Sequence;
 
 public class Jeu extends Observable {
 
-    Plateau plateau;
+    static Plateau plateau;
     int joueurGagnant = 0; // TODO
     int joueurCourant;
     int nombreTour; // TODO
@@ -61,7 +61,7 @@ public class Jeu extends Observable {
         metAJour();
     }
 
-    public Plateau plateau() {
+    public static Plateau plateau() {
         return plateau;
     }
 
@@ -282,7 +282,7 @@ public class Jeu extends Observable {
         if (actionAutoriser()) {
             poserCarte(carteJouer);
             int deplacementElement = obtenirPositionElement(element) - positionArriveeElement;
-            deplacerElement(element, deplacementElement);
+            deplacerElement(element, -deplacementElement);
         }
         metAJour();
     }
@@ -570,5 +570,32 @@ public class Jeu extends Observable {
             teleporter = positionElement - positionSorcier;
         }
         return teleporter;
+    }
+
+    // ================
+    // ===== TEST =====
+    // ================
+    public static int getPositionCouronne() {
+        return plateau().couronne.positionCouronne();
+    }
+
+    public static int getPositionGardeGauche() {
+        return plateau().gardeGauche.positionPersonnage();
+    }
+
+    public static int getPositionGardeDroit() {
+        return plateau().gardeDroit.positionPersonnage();
+    }
+
+    public static int getPositionRoi() {
+        return plateau().roi.positionPersonnage();
+    }
+
+    public static int getPositionFou() {
+        return plateau().fou.positionPersonnage();
+    }
+
+    public static int getPositionSorcier() {
+        return plateau().sorcier.positionPersonnage();
     }
 }
