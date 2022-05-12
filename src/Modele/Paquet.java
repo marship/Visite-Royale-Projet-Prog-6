@@ -122,12 +122,12 @@ public class Paquet {
         Configuration.instance().logger().info("Fin de l'affichage du tour !");
     }
 
-    public void recupererCartes(int joueur){
+    public void completerCartesEnMain(int joueur) {
         int i = 0;
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
-        while(i < NOMBRE_CARTE_EN_MAIN){
+        while (i < NOMBRE_CARTE_EN_MAIN) {
             Carte carte = (Carte) mainJoueurs[joueur][i];
-            if(carte.estIdentique(vide)){
+            if (carte.estIdentique(vide)) {
                 mainJoueurs[joueur][i] = tourActuel.extraitTete();
             }
         }
@@ -205,12 +205,12 @@ public class Paquet {
 
     int partition(Object[] objects, int start, int end) {
         Carte carte = (Carte) objects[end];
-        int pivot = carte.deplacement().getValeurDeplacement(); 
+        int pivot = carte.deplacement().getValeurDeplacement();
         int i = (start - 1);
 
         for (int j = start; j <= end - 1; j++) {
             Carte carte2 = (Carte) objects[j];
-            int pivote = carte2.deplacement().getValeurDeplacement(); 
+            int pivote = carte2.deplacement().getValeurDeplacement();
             if (pivote < pivot) {
                 i++;
                 Carte cartei = (Carte) objects[i];
@@ -224,9 +224,9 @@ public class Paquet {
         return (i + 1);
     }
 
-    void trierTableau(Object[] objects, int start, int end){
+    void trierTableau(Object[] objects, int start, int end) {
         if (start < end) {
-            int p = partition(objects, start, end); 
+            int p = partition(objects, start, end);
             trierTableau(objects, start, p - 1);
             trierTableau(objects, p + 1, end);
         }
@@ -253,8 +253,8 @@ public class Paquet {
         tourActuel.insereTete(main);
     }
 
-    public void changerTour(){
-        while(!tourActuel.estVide()){
+    public void viderCartePoser() {
+        while (!tourActuel.estVide()) {
             defausse.insereTete(tourActuel.extraitTete());
         }
     }
@@ -433,7 +433,48 @@ public class Paquet {
         return (Carte[]) mainJoueurs[joueur];
     }
 
-    public int nombreCartesEnMain(){
+    public int nombreCartesEnMain() {
         return NOMBRE_CARTE_EN_MAIN;
+    }
+
+    public Sequence<Carte> copieSequence(Sequence<Carte> copie) {
+        Sequence<Carte> res = Configuration.instance().nouvelleSequence();
+        Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
+        Carte carte;
+        while (!copie.estVide()) {
+            carte = copie.extraitTete();
+            res.insereQueue(carte);
+            tmp.insereQueue(carte);
+        }
+        while (!tmp.estVide()) {
+            copie.insereQueue(tmp.extraitTete());
+        }
+        return res;
+    }
+
+    public Carte[] copieTableau(int joueur) {
+        int i = 0;
+        Carte[] res = new Carte[NOMBRE_CARTE_EN_MAIN];
+        while (i < NOMBRE_CARTE_EN_MAIN) {
+            res[i] = (Carte) mainJoueurs[joueur][i];
+            i++;
+        }
+        return res;
+    }
+
+    @Override
+    public Paquet clone() {
+        Paquet res = null;
+        try {
+            res = (Paquet) super.clone();
+            res.pioche = copieSequence(pioche);
+            res.defausse = copieSequence(defausse);
+            res.mainJoueurs[0] = copieTableau(0);
+            res.mainJoueurs[1] = copieTableau(1);
+            return res;
+        } catch (Exception e) {
+            Configuration.instance().logger().severe("Echec du clone du paquet !!!!!!!!");
+        }
+        return res;
     }
 }
