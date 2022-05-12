@@ -8,7 +8,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ===============================
     // ===== INFORMATION PLATEAU =====
     // ===============================
-    static final int TAILLE_DU_PLATEAU = 16;
+    static final int TAILLE_DU_PLATEAU = 17;
     static final int CENTRE_DU_PLATEAU = 0;
     static final int EXTREMITE_GAUCHE_DU_PLATEAU = -8;
     static final int EXTREMITE_DROITE_DU_PLATEAU = 8;
@@ -33,7 +33,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ==============================
     // ===== INFORMATION PARTIE =====
     // ==============================
-    int joueurCourant = JOUEUR_DROIT;
+    public int joueurCourant = JOUEUR_DROIT;
 
     // ====================
     // ===== ELEMENTS =====
@@ -204,7 +204,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         }
     }
 
-    void changerJoueurCourant() {
+    public void changerJoueurCourant() {
         if (joueurCourant == JOUEUR_DROIT) {
             joueurCourant = JOUEUR_GAUCHE;
         } else {

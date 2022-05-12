@@ -95,7 +95,6 @@ public class Paquet {
     }
 
     public void afficherMain(int joueur) {
-        Configuration.instance().logger().info("Debut de l'affichage de la main du joueur" + joueur + " !\n");
         int i = 0;
         while (i < NOMBRE_CARTE_EN_MAIN) {
             Carte carte = (Carte) mainJoueurs[joueur][i];
@@ -103,7 +102,6 @@ public class Paquet {
             i++;
         }
         System.out.println("");
-        Configuration.instance().logger().info("Fin de l'affichage de la main du joueur" + joueur + " !\n");
     }
 
     public void afficherTour() {
@@ -128,6 +126,7 @@ public class Paquet {
             if (carte.estIdentique(vide)) {
                 mainJoueurs[joueur][i] = tourActuel.extraitTete();
             }
+            i++;
         }
         trierJoueur(joueur);
     }

@@ -9,18 +9,18 @@ import Structures.Sequence;
 public class Jeu extends Observable {
 
     static Plateau plateau;
-    int joueurGagnant = 0;
-    int joueurCourant;
+    static int joueurGagnant = 0;
+    public static int joueurCourant;
     int nombreTour; // TODO nombre Tour de jeu
-    boolean partieEnCours = false;
-    boolean partieTerminee = false;
-    Element dernierTypeDePersonnageJouer;
-    Personnage personnageManipulerParLeFou;
+    static boolean partieEnCours = false;
+    static boolean partieTerminee = false;
+    static Element dernierTypeDePersonnageJouer;
+    public static Element personnageManipulerParLeFou;
 
     // ===============================
     // ===== INFORMATION PLATEAU =====
     // ===============================
-    static final int TAILLE_DU_PLATEAU = 16;
+    static final int TAILLE_DU_PLATEAU = 17;
     static final int CENTRE_DU_PLATEAU = 0;
     static final int EXTREMITE_GAUCHE_DU_PLATEAU = -8;
     static final int EXTREMITE_DROITE_DU_PLATEAU = 8;
@@ -58,6 +58,7 @@ public class Jeu extends Observable {
     public Jeu() {
         plateau = new Plateau();
         changerEtatPartie();
+        personnageManipulerParLeFou(FOU);
         metAJour();
     }
 
@@ -68,11 +69,11 @@ public class Jeu extends Observable {
     // ========================
     // ===== INFOS PARTIE =====
     // ========================
-    public boolean estPartieTerminee() {
+    public static boolean estPartieTerminee() {
         return partieTerminee;
     }
 
-    public boolean estPartieEnCours() {
+    public static boolean estPartieEnCours() {
         return partieEnCours;
     }
 
@@ -80,7 +81,7 @@ public class Jeu extends Observable {
         partieEnCours = !partieEnCours;
     }
 
-    public boolean actionAutoriser() {
+    public static boolean actionAutoriser() {
         if (!estPartieTerminee() && estPartieEnCours()) {
             return true;
         } else {
@@ -91,7 +92,7 @@ public class Jeu extends Observable {
     // ====================
     // ===== ELEMENTS =====
     // ====================
-    public void deplacerElement(Element element, int deplacementElement) {
+    public static void deplacerElement(Element element, int deplacementElement) {
         if (actionAutoriser()) {
             if (element == Element.COURONNE) {
                 deplacerCouronne(deplacementElement);
@@ -104,7 +105,7 @@ public class Jeu extends Observable {
         metAJour();
     }
 
-    public boolean validationDeplacement(Element element, int deplacementElement) {
+    public static boolean validationDeplacement(Element element, int deplacementElement) {
         if (actionAutoriser()) {
             int nouvellePositionElement = obtenirPositionElement(element) + deplacementElement;
             switch (element) {
@@ -154,7 +155,7 @@ public class Jeu extends Observable {
         }
     }
 
-    public int obtenirPositionElement(Element element) {
+    public static int obtenirPositionElement(Element element) {
         switch (element) {
             case ROI:
                 return plateau.roi.positionPersonnage();
@@ -171,7 +172,7 @@ public class Jeu extends Observable {
         }
     }
 
-    public Personnage obtenirPersonnageElement(Element element) {
+    public static Personnage obtenirPersonnageElement(Element element) {
         switch (element) {
             case ROI:
                 return plateau.roi;
@@ -197,7 +198,7 @@ public class Jeu extends Observable {
     // ==================
     public void choixPremierJoueur(int premierJoueur) {
         if (numeroJoueurValide(premierJoueur)) {
-            if (premierJoueur != joueurCourant) {
+            if (premierJoueur != plateau().joueurCourant) {
                 echangerFouSorcier();
                 changerJoueurCourant();
             }
@@ -205,11 +206,11 @@ public class Jeu extends Observable {
         metAJour();
     }
 
-    public boolean numeroJoueurValide(int numeroJoueurVoulu) {
+    public static boolean numeroJoueurValide(int numeroJoueurVoulu) {
         return plateau.numeroJoueurValide(numeroJoueurVoulu);
     }
 
-    public void changerJoueurCourant() {
+    public static void changerJoueurCourant() {
         if (actionAutoriser()) {
             plateau.changerJoueurCourant();
         }
@@ -226,22 +227,22 @@ public class Jeu extends Observable {
     // ===================
     // ===== GAGNANT =====
     // ===================
-    public boolean estGagnant() {
+    public static boolean estGagnant() {
         return plateau.estGagnant() != AUCUN_GAGNANT;
     }
 
-    public void traiterGagnant() {
+    public static void traiterGagnant() {
         switch (plateau.estGagnant()) {
             case COURONNE_GAGNANTE:
                 partieTerminee = true;
                 partieEnCours = false;
-                joueurGagnant = joueurCourant;
+                joueurGagnant = plateau().joueurCourant;
                 Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec la couronne !!");
                 break;
             case ROI_GAGNANT:
                 partieTerminee = true;
                 partieEnCours = false;
-                joueurGagnant = joueurCourant;
+                joueurGagnant = plateau().joueurCourant;
                 Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec le roi !!");
                 break;
             default:
@@ -254,25 +255,25 @@ public class Jeu extends Observable {
     // =======================
     // ===== FIN DE TOUR =====
     // =======================
-    public void finDeTour() {
+    public static void finDeTour() {
         deplacerCouronne(plateau.valeurDeplacementCouronne());
         if (estGagnant()) {
             traiterGagnant();
         } else {
             plateau.paquet.viderCartePoser();
-            if(plateau.paquet.resteAssezCarteDansPioche(plateau.paquet.nombreCarteManquante(joueurCourant))){
-                plateau.paquet.completerCartesEnMain(joueurCourant);
+            if(plateau.paquet.resteAssezCarteDansPioche(plateau.paquet.nombreCarteManquante(plateau().joueurCourant))){
+                plateau.paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
             } else {
                 if(getEtatCouronne()) {
                     plateau.paquet.melangerDefausse();
-                    plateau.paquet.completerCartesEnMain(joueurCourant);
+                    plateau.paquet.remplirMain(plateau().joueurCourant);
                     changerEtatCouronne();
                     changerJoueurCourant();
                 } else {
                     if(obtenirPositionElement(ROI) == 0) {
                         plateau.paquet.melangerDefausse();
-                        plateau.paquet.completerCartesEnMain(joueurCourant);
+                        plateau.paquet.remplirMain(plateau().joueurCourant);
                         changerJoueurCourant();
                     } else {
                         if(obtenirPositionElement(ROI) > 0) {
@@ -285,18 +286,19 @@ public class Jeu extends Observable {
                 }
             }
         }
+        personnageManipulerParLeFou(FOU);
         metAJour();
     }
 
     // ====================
     // ===== COURONNE =====
     // ====================
-    public void deplacerCouronne(int deplacementCouronne) {
+    public static void deplacerCouronne(int deplacementCouronne) {
         plateau.deplacerCouronne(deplacementCouronne);
         metAJour();
     }
 
-    public void changerEtatCouronne() {
+    public static void changerEtatCouronne() {
         if (actionAutoriser()) {
             plateau.changerEtatCouronne();
         }
@@ -306,7 +308,7 @@ public class Jeu extends Observable {
     // =======================
     // ===== JOUER CARTE =====
     // =======================
-    public void jouerCarte(Element element, int positionArriveeElement, int carteJouer) {
+    public static void jouerCarte(Element element, int positionArriveeElement, int carteJouer) {
         if (actionAutoriser()) {
             poserCarte(carteJouer);
             int deplacementElement = obtenirPositionElement(element) - positionArriveeElement;
@@ -330,12 +332,12 @@ public class Jeu extends Observable {
         metAJour();
     }
 
-    public void poserCarte(int positionCarteDansLaMain) {
+    public static void poserCarte(int positionCarteDansLaMain) {
         majDernierTypeDePersonnageJouer(positionCarteDansLaMain);
-        plateau.paquet.enleverCarte(joueurCourant, positionCarteDansLaMain);
+        plateau.paquet.enleverCarte(plateau().joueurCourant, positionCarteDansLaMain);
     }
 
-    public Carte[] recupererMainJoueur(int joueur) {
+    public static Carte[] recupererMainJoueur(int joueur) {
         if (actionAutoriser()) {
             if (numeroJoueurValide(joueur)) {
                 return plateau.paquet.mainJoueur(joueur);
@@ -353,8 +355,8 @@ public class Jeu extends Observable {
         dernierTypeDePersonnageJouer = VIDE;
     }
 
-    public void majDernierTypeDePersonnageJouer(int positionCarteDansLaMain) {
-        dernierTypeDePersonnageJouer = recupererMainJoueur(joueurCourant)[positionCarteDansLaMain].personnage();
+    public static void majDernierTypeDePersonnageJouer(int positionCarteDansLaMain) {
+        dernierTypeDePersonnageJouer = recupererMainJoueur(plateau().joueurCourant)[positionCarteDansLaMain].personnage();
     }
 
     public int[] listeCarteJouable() {
@@ -366,7 +368,7 @@ public class Jeu extends Observable {
         } else {
             resultat = new int[nombreCartes];
             while (indice < nombreCartes) {
-                Carte carte = plateau.paquet.mainJoueur(joueurCourant)[indice];
+                Carte carte = plateau.paquet.mainJoueur(plateau().joueurCourant)[indice];
                 if (carte.personnage() == dernierTypeDePersonnageJouer) {
                     resultat[indice] = 1;
                 }
@@ -376,7 +378,7 @@ public class Jeu extends Observable {
         return resultat;
     }
 
-    public int[] initialiserTableau(int taille, int valeurDefaut) {
+    public static int[] initialiserTableau(int taille, int valeurDefaut) {
         int[] tableau = new int[taille];
         int i = 0;
         while (i < taille) {
@@ -386,13 +388,13 @@ public class Jeu extends Observable {
         return tableau;
     }
 
-    public int positionPlus8(int positionElement) {
+    public static int positionPlus8(int positionElement) {
         return positionElement + EXTREMITE_DROITE_DU_PLATEAU;
     }
 
-    public int[] listeDeplacementPossiblesAvecCarte(int position) {
+    public static int[] listeDeplacementPossiblesAvecCarte(int position) {
         int[] positionAccessibleAvecCarte = initialiserTableau(TAILLE_DU_PLATEAU, 0);
-        Carte carte = recupererMainJoueur(joueurCourant)[position];
+        Carte carte = recupererMainJoueur(plateau().joueurCourant)[position];
         int deplacementCarte = carte.deplacement().getValeurDeplacement();
         System.out.println(deplacementCarte);
         switch (carte.personnage()) {
@@ -459,7 +461,7 @@ public class Jeu extends Observable {
                 }
                 break;
             case FOU:
-                switch (personnageManipulerParLeFou.typePersonnage()) {
+                switch (personnageManipulerParLeFou) {
                     case GARDE_GAUCHE:
                         if (carte.deplacement() == Deplacement.MILIEU) {
                             if (validationDeplacement(GARDE_GAUCHE, -obtenirPositionElement(GARDE_GAUCHE))) {
@@ -487,15 +489,15 @@ public class Jeu extends Observable {
                     case FOU:
                     case SORCIER:
                         if (carte.deplacement() == Deplacement.MILIEU) {
-                            if (validationDeplacement(personnageManipulerParLeFou.typePersonnage(), -obtenirPositionElement(personnageManipulerParLeFou.typePersonnage()))) {
+                            if (validationDeplacement(personnageManipulerParLeFou, -obtenirPositionElement(personnageManipulerParLeFou))) {
                                 positionAccessibleAvecCarte[EXTREMITE_DROITE_DU_PLATEAU] = 1;
                             }
                         } else {
-                            if (validationDeplacement(personnageManipulerParLeFou.typePersonnage(), deplacementCarte)) {
-                                positionAccessibleAvecCarte[positionPlus8(personnageManipulerParLeFou.positionPersonnage()) + deplacementCarte] = 1;
+                            if (validationDeplacement(personnageManipulerParLeFou, deplacementCarte)) {
+                                positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(personnageManipulerParLeFou)) + deplacementCarte] = 1;
                             }
-                            if (validationDeplacement(personnageManipulerParLeFou.typePersonnage(), deplacementCarte)) {
-                                positionAccessibleAvecCarte[positionPlus8(personnageManipulerParLeFou.positionPersonnage()) - deplacementCarte] = 1;
+                            if (validationDeplacement(personnageManipulerParLeFou, deplacementCarte)) {
+                                positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(personnageManipulerParLeFou)) - deplacementCarte] = 1;
                             }
                         }
                         break;
@@ -512,19 +514,19 @@ public class Jeu extends Observable {
     // =======================
     // ===== POUVOIR FOU =====
     // =======================
-    public void personnageManipulerParLeFou(Element personnage) {
+    public static void personnageManipulerParLeFou(Element personnage) {
         if (actionAutoriser()) {
-            personnageManipulerParLeFou = obtenirPersonnageElement(personnage);
+            personnageManipulerParLeFou = personnage;
         }
         metAJour();
     }
 
-    public boolean estPouvoirFouActivable() {
+    public static boolean estPouvoirFouActivable() {
         if (actionAutoriser()) {
             int positionFou = obtenirPositionElement(FOU);
             int positionRoi = obtenirPositionElement(ROI);
 
-            if (joueurCourant == JOUEUR_DROIT) {
+            if (plateau().joueurCourant == JOUEUR_DROIT) {
                 if (positionFou > positionRoi) {
                     metAJour();
                     return true;
@@ -561,17 +563,32 @@ public class Jeu extends Observable {
         }
     }
 
-    public void teleportationPouvoirSorcier(Element element) {
+    public static void teleportationPouvoirSorcier(Element element) {
         int distanceTeleportation = calculerTeleportation(element);
         if (estTeleportationValide(element, distanceTeleportation)) {
-            plateau.gardeGauche.deplacerPersonnage(distanceTeleportation);
+            switch (element) {
+                case ROI:
+                    plateau.roi.deplacerPersonnage(distanceTeleportation);
+                    break;
+
+                case GARDE_GAUCHE:
+                    plateau.gardeGauche.deplacerPersonnage(distanceTeleportation);
+                    break;
+
+                case GARDE_DROIT:
+                    plateau.gardeDroit.deplacerPersonnage(distanceTeleportation);
+                    break;
+            
+                default:
+                    break;
+            }
         } else {
             Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
         }
         metAJour();
     }
 
-    public boolean estPouvoirSorcierActivable(Element element) {
+    public static boolean estPouvoirSorcierActivable(Element element) {
         int distanceTeleportation = calculerTeleportation(element);
         if (estTeleportationValide(element, distanceTeleportation)) {
             metAJour();
@@ -583,16 +600,16 @@ public class Jeu extends Observable {
         }
     }
 
-    public boolean estTeleportationValide(Element element, int teleporter) {
+    public static boolean estTeleportationValide(Element element, int teleporter) {
         return validationDeplacement(element, teleporter);
     }
 
-    public int calculerTeleportation(Element element) {
+    public static int calculerTeleportation(Element element) {
         int teleporter = 0;
         int positionSorcier = obtenirPositionElement(SORCIER);
         int positionElement = obtenirPositionElement(element);
 
-        if (joueurCourant == JOUEUR_DROIT) {
+        if (plateau().joueurCourant == JOUEUR_DROIT) {
             teleporter = positionSorcier - positionElement;
         } else {
             teleporter = positionElement - positionSorcier;

@@ -16,7 +16,7 @@ public class Observable {
         observateurs.insereQueue(observateur);
     }
 
-    public void metAJour() {
+    public static void metAJour() {
         /*
         Iterateur<Observateur> iterateur;
         iterateur = observateurs.iterateur();
