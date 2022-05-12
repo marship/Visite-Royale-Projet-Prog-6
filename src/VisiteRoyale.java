@@ -90,29 +90,42 @@ public class VisiteRoyale {
                     }
                 }
                 else{
-                    int i = -8;
-                    int[] a = Jeu.listeDeplacementPossiblesAvecCarte(carte);
-                    while(i <= 8){
-                        if(i >= 0){
-                            System.out.print(" ");
+                    int jouer = 0;
+                    while(carte != 10){
+                        int i = -8;
+                        int[] a = Jeu.listeDeplacementPossiblesAvecCarte(carte);
+                        while(i <= 8){
+                            if(i >= 0){
+                                System.out.print(" ");
+                            }
+                            System.out.print(i + " ");
+                            i++;
                         }
-                        System.out.print(i + " ");
-                        i++;
-                    }
-                    System.out.println(" ");
-                    i = 0;
-                    while(i != 17){
-                        System.out.print(" " + a[i] + " ");
-                        i++;
-                    }
-                    System.out.println("Que jouez vous ?");
-                    int jouer = sc.nextInt();
-                    Element el = Jeu.plateau().paquet.mainJoueur(Jeu.plateau().joueurCourant)[carte].personnage();
-                    if(el == Element.FOU){
-                        Jeu.jouerCarte(Jeu.personnageManipulerParLeFou, jouer, carte);
-                    }
-                    else{
-                        Jeu.jouerCarte(el, jouer, carte);
+                        System.out.println(" ");
+                        i = 0;
+                        while(i != 17){
+                            System.out.print(" " + a[i] + " ");
+                            i++;
+                        }
+                        System.out.println("Que jouez vous ?");
+                        jouer = sc.nextInt();
+                        if(Jeu.listeCarteJouable()[carte] == 0){
+                            System.out.println("Carte non identique");
+                        }
+                        else{
+                            Jeu.majDernierTypeDePersonnageJouer(carte);
+                            Element el = Jeu.plateau().paquet.mainJoueur(Jeu.plateau().joueurCourant)[carte].personnage();
+                            if(el == Element.FOU){
+                                Jeu.jouerCarte(Jeu.personnageManipulerParLeFou, jouer, carte);
+                            }
+                            else{
+                                Jeu.jouerCarte(el, jouer, carte);
+                            }
+                        }
+                        Jeu.plateau().afficherPlateau();
+                        Jeu.plateau().paquet.afficherMain(Jeu.plateau().joueurCourant);
+                        System.out.println("10 pour mettre fin");
+                        carte = sc.nextInt();
                     }
                     Jeu.finDeTour();
                 }

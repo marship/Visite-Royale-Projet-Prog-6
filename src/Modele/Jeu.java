@@ -59,6 +59,7 @@ public class Jeu extends Observable {
         plateau = new Plateau();
         changerEtatPartie();
         personnageManipulerParLeFou(FOU);
+        initialiserDernierTypeDePersonnageJouer();
         metAJour();
     }
 
@@ -287,6 +288,7 @@ public class Jeu extends Observable {
             }
         }
         personnageManipulerParLeFou(FOU);
+        initialiserDernierTypeDePersonnageJouer();
         metAJour();
     }
 
@@ -351,7 +353,7 @@ public class Jeu extends Observable {
         }
     }
 
-    public void initialiserDernierTypeDePersonnageJouer() {
+    public static void initialiserDernierTypeDePersonnageJouer() {
         dernierTypeDePersonnageJouer = VIDE;
     }
 
@@ -359,7 +361,7 @@ public class Jeu extends Observable {
         dernierTypeDePersonnageJouer = recupererMainJoueur(plateau().joueurCourant)[positionCarteDansLaMain].personnage();
     }
 
-    public int[] listeCarteJouable() {
+    public static int[] listeCarteJouable() {
         int nombreCartes = plateau.paquet.nombreCartesEnMain();
         int indice = 0;
         int[] resultat;
