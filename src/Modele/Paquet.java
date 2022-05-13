@@ -44,7 +44,7 @@ public class Paquet {
 
     static final Element VIDE_ELEMENT = Element.VIDE;
     static final Element ROI = Element.ROI;
-    static final Element GARDE_GAUCHE = Element.GARDE_GAUCHE;
+    static final Element GARDES = Element.GARDES;
     static final Element FOU = Element.FOU;
     static final Element SORCIER = Element.SORCIER;
 
@@ -168,7 +168,7 @@ public class Paquet {
                     type = 1;
                     break;
 
-                case GARDE_GAUCHE:
+                case GARDES:
                     position = nbChaqueType[2][0];
                     nbChaqueType[2][0] = nbChaqueType[2][0] + 1;
                     type = 2;
@@ -365,7 +365,7 @@ public class Paquet {
                     break;
             }
             for (int j = 0; j < nb; j++) {
-                Carte carte = new Carte(GARDE_GAUCHE, type);
+                Carte carte = new Carte(GARDES, type);
                 pioche.insereTete(carte);
             }
         }
