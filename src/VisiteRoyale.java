@@ -1,12 +1,12 @@
 
-// import Controleur.ControleurMediateur;
+import Controleur.ControleurMediateur;
 import java.util.Scanner;
 
 import Global.Configuration;
 import Global.Element;
 import Modele.Jeu;
-// import Vue.CollecteurEvenements;
-// import Vue.InterfaceGraphique;
+import Vue.CollecteurEvenements;
+import Vue.InterfaceGraphique;
 import Structures.Sequence;
 
 public class VisiteRoyale {
@@ -191,8 +191,8 @@ public class VisiteRoyale {
 
             test(jeu);
 
-            // CollecteurEvenements controleurMediateur = new ControleurMediateur(plateau);
-            // InterfaceGraphique.demarrer(plateau, controleurMediateur);
+            // CollecteurEvenements controleurMediateur = new ControleurMediateur(jeu);
+            // InterfaceGraphique.demarrer(jeu, controleurMediateur);
 
         } catch (Exception e) {
             e.printStackTrace();

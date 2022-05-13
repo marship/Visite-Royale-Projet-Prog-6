@@ -1,6 +1,6 @@
 package Vue;
 
-import Modele.Plateau;
+import Modele.Jeu;
 import Pattern.Observateur;
 
 import javax.swing.*;
@@ -8,11 +8,11 @@ import java.awt.*;
 
 public class PlateauGraphique extends JComponent implements Observateur {
 
-    Plateau plateau;
+    Jeu jeu;
     int largeurCase, hauteurCase;
 
-    public PlateauGraphique(Plateau j) {
-        plateau = j;
+    public PlateauGraphique(Jeu j) {
+        jeu = j;
         // plateau.ajouteObservateur(this);
     }
 

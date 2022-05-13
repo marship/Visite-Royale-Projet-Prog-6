@@ -1,6 +1,6 @@
 package Vue;
 
-import Modele.Plateau;
+import Modele.Jeu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 public class InterfaceGraphique implements Runnable {
 	
-    Plateau plateau;
+    Jeu jeu;
 	CollecteurEvenements collecteurEvenements;
 
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
@@ -20,13 +20,13 @@ public class InterfaceGraphique implements Runnable {
 	ArrierePlan panelOptions;
     JFrame fenetre;
 
-	InterfaceGraphique(Plateau p, CollecteurEvenements cEvenements) {
-		plateau = p;
+	InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
+		jeu = j;
 		collecteurEvenements = cEvenements;
 	}
 
-	public static void demarrer(Plateau plateau, CollecteurEvenements cEvenements) {
-		SwingUtilities.invokeLater(new InterfaceGraphique(plateau, cEvenements));
+	public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
+		SwingUtilities.invokeLater(new InterfaceGraphique(jeu, cEvenements));
 	}
 
 
@@ -36,7 +36,7 @@ public class InterfaceGraphique implements Runnable {
 
 		fenetre = new JFrame("Visite Royale");
 
-		PlateauGraphique plateauGraphique = new PlateauGraphique(plateau);
+		PlateauGraphique plateauGraphique = new PlateauGraphique(jeu);
 		plateauGraphique.addMouseListener(new AdaptateurSouris(plateauGraphique, collecteurEvenements));
 		fenetre.add(plateauGraphique);
 		

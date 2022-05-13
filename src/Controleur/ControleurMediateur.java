@@ -1,6 +1,6 @@
 package Controleur;
 
-import Modele.Plateau;
+import Modele.Jeu;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceGraphique;
 
@@ -8,7 +8,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 	
     static final int TEMPS_ATTENTE = 50;
 
-    Plateau plateau;
+    Jeu jeu;
     InterfaceGraphique interfaceGraphique;
 
 	// Joueur[][] joueurs;
@@ -17,7 +17,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	int decompteTimer;
 
-	public ControleurMediateur(Plateau p) {
+	public ControleurMediateur(Jeu j) {
 
 	}
 
