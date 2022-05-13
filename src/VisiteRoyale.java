@@ -1,24 +1,30 @@
+
 // import Controleur.ControleurMediateur;
 import java.util.Scanner;
 
+import Global.Configuration;
 import Global.Element;
 import Modele.Jeu;
 // import Vue.CollecteurEvenements;
 // import Vue.InterfaceGraphique;
+import Structures.Sequence;
 
 public class VisiteRoyale {
 
-    static void test(Jeu jeu){
+    static void test(Jeu jeu) {
         Scanner sc = new Scanner(System.in);
-        while(!Jeu.estGagnant()){
+        while (!Jeu.estGagnant()) {
             System.out.println("Au tour de : " + Jeu.plateau().joueurCourant);
             Jeu.plateau().afficherPlateau();
             Jeu.plateau().paquet.afficherMain(Jeu.plateau().joueurCourant);
             System.out.println("0/7 : La carte à jouer");
             System.out.println("8 : Le pouvoir du fou");
             System.out.println("9 : Le pouvoir du sorcier");
+            if (Jeu.plateau().paquet.nombreCartesRoi(Jeu.plateau().joueurCourant) >= 2) {
+                System.out.println("11 : Jouer deux cartes Roi");
+            }
             int carte = sc.nextInt();
-            if(carte == 9){
+            if (carte == 9) {
                 System.out.println("Vous pouvez TP :");
                 System.out.println("1 : ROI : " + Jeu.estPouvoirSorcierActivable(Element.ROI));
                 System.out.println("2 : GARDE GAUCHE : " + Jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE));
@@ -26,34 +32,33 @@ public class VisiteRoyale {
                 int tp = sc.nextInt();
                 switch (tp) {
                     case 1:
-                        if(Jeu.estPouvoirSorcierActivable(Element.ROI)){
+                        if (Jeu.estPouvoirSorcierActivable(Element.ROI)) {
                             Jeu.teleportationPouvoirSorcier(Element.ROI);
                             Jeu.finDeTour();
                         }
                         break;
 
                     case 2:
-                        if(Jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)){
+                        if (Jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
                             Jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
                             Jeu.finDeTour();
                         }
                         break;
 
                     case 3:
-                        if(Jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)){
+                        if (Jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
                             Jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
                             Jeu.finDeTour();
                         }
                         break;
-                
+
                     default:
                         break;
                 }
-            }
-            else{
-                if(carte == 8){
-                    if(Jeu.estPouvoirFouActivable()){
-                        System.out.println("Que doivet bouger les carte fou ?");
+            } else {
+                if (carte == 8) {
+                    if (Jeu.estPouvoirFouActivable()) {
+                        System.out.println("Que doit bouger les carte fou ?");
                         System.out.println("1 : ROI");
                         System.out.println("2 : GARDE GAUCHE");
                         System.out.println("3 : GARDE DROIT");
@@ -80,46 +85,91 @@ public class VisiteRoyale {
                             case 5:
                                 Jeu.personnageManipulerParLeFou(Element.FOU);
                                 break;
-                        
+
                             default:
                                 break;
                         }
-                    }
-                    else{
+                    } else {
                         System.out.println("Pouvoir du fou impossible à utiliser !");
                     }
-                }
-                else{
+                } else {
                     int jouer = 0;
-                    while(carte != 10){
-                        int i = -8;
-                        int[] a = Jeu.listeDeplacementPossiblesAvecCarte(carte);
-                        while(i <= 8){
-                            if(i >= 0){
-                                System.out.print(" ");
+                    while (carte != 10) {
+                        if(Jeu.plateau().paquet.nombreCartesRoi(Jeu.plateau().joueurCourant) >= 2 && carte == 11){
+                            System.out.println("De quel côté voulez vous bouger la cour ?");
+                            switch (Jeu.positionsPourCour()) {
+                                case 1:
+                                    System.out.println("1 : Gauche");
+                                    break;
+                                case 2 :
+                                    System.out.println("2 : Droite");
+                                    break;
+                                default:
+                                    System.out.println("1 : Gauche");
+                                    System.out.println("2 : Droite");
+                                    break;
                             }
-                            System.out.print(i + " ");
-                            i++;
-                        }
-                        System.out.println(" ");
-                        i = 0;
-                        while(i != 17){
-                            System.out.print(" " + a[i] + " ");
-                            i++;
-                        }
-                        System.out.println("Que jouez vous ?");
-                        jouer = sc.nextInt();
-                        if(Jeu.listeCarteJouable()[carte] == 0){
-                            System.out.println("Carte non identique");
-                        }
-                        else{
-                            Jeu.majDernierTypeDePersonnageJouer(carte);
-                            Element el = Jeu.plateau().paquet.mainJoueur(Jeu.plateau().joueurCourant)[carte].personnage();
-                            if(el == Element.FOU){
-                                Jeu.jouerCarte(Jeu.personnageManipulerParLeFou, jouer, carte);
+                            jouer = sc.nextInt();
+                            if(jouer == 1 && (Jeu.positionsPourCour() == 1 || Jeu.positionsPourCour() == 0)){
+                                Sequence<Element> elements = Configuration.instance().nouvelleSequence();
+                                elements.insereQueue(Element.GARDE_DROIT);
+                                elements.insereQueue(Element.ROI);
+                                elements.insereQueue(Element.GARDE_GAUCHE);
+                                int[] positions = new int[3];
+                                positions[0] = Jeu.obtenirPositionElement(Element.GARDE_DROIT) + 1;
+                                positions[1] = Jeu.obtenirPositionElement(Element.ROI) + 1;
+                                positions[2] = Jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1;
+                                int[] cartes = new int[2];
+                                cartes[0] = Jeu.plateau().paquet.trouverRoi(Jeu.plateau().joueurCourant, 0);
+                                cartes[1] = Jeu.plateau().paquet.trouverRoi(Jeu.plateau().joueurCourant, 1);
+                                Jeu.jouerSequenceCarte(elements, positions, cartes);
                             }
                             else{
-                                Jeu.jouerCarte(el, jouer, carte);
+                                if(jouer == 2 && (Jeu.positionsPourCour() == 2 || Jeu.positionsPourCour() == 0)){
+                                    Sequence<Element> elements = Configuration.instance().nouvelleSequence();
+                                    elements.insereQueue(Element.GARDE_GAUCHE);
+                                    elements.insereQueue(Element.ROI);
+                                    elements.insereQueue(Element.GARDE_DROIT);
+                                    int[] positions = new int[3];
+                                    positions[0] = Jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1;
+                                    positions[1] = Jeu.obtenirPositionElement(Element.ROI) - 1;
+                                    positions[2] = Jeu.obtenirPositionElement(Element.GARDE_DROIT) - 1;
+                                    int[] cartes = new int[2];
+                                    cartes[0] = Jeu.plateau().paquet.trouverRoi(Jeu.plateau().joueurCourant, 0);
+                                    cartes[1] = Jeu.plateau().paquet.trouverRoi(Jeu.plateau().joueurCourant, 1);
+                                    Jeu.jouerSequenceCarte(elements, positions, cartes);
+                                }
+                            }
+                        }
+                        else{
+                            int i = -8;
+                            int[] a = Jeu.listeDeplacementPossiblesAvecCarte(carte);
+                            while (i <= 8) {
+                                if (i >= 0) {
+                                    System.out.print(" ");
+                                }
+                                System.out.print(i + " ");
+                                i++;
+                            }
+                            System.out.println(" ");
+                            i = 0;
+                            while (i != 17) {
+                                System.out.print(" " + a[i] + " ");
+                                i++;
+                            }
+                            System.out.println("Que jouez vous ?");
+                            jouer = sc.nextInt();
+                            if (Jeu.listeCarteJouable()[carte] == 0) {
+                                System.out.println("Carte non identique");
+                            } else {
+                                Jeu.majDernierTypeDePersonnageJouer(carte);
+                                Element el = Jeu.plateau().paquet.mainJoueur(Jeu.plateau().joueurCourant)[carte]
+                                        .personnage();
+                                if (el == Element.FOU) {
+                                    Jeu.jouerCarte(Jeu.personnageManipulerParLeFou, jouer, carte);
+                                } else {
+                                    Jeu.jouerCarte(el, jouer, carte);
+                                }
                             }
                         }
                         Jeu.plateau().afficherPlateau();
@@ -133,13 +183,13 @@ public class VisiteRoyale {
         }
         sc.close();
     }
+
     public static void main(String[] args) throws Exception {
 
         try {
             Jeu jeu = new Jeu();
 
             test(jeu);
-
 
             // CollecteurEvenements controleurMediateur = new ControleurMediateur(plateau);
             // InterfaceGraphique.demarrer(plateau, controleurMediateur);
