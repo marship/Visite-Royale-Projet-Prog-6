@@ -7,10 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 //import org.junit.rules.ExpectedException;
 
-import Global.Deplacement;
+//import Global.Deplacement;
 import Global.Element;
 import Modele.Jeu;
-import Modele.Plateau;
+//import Modele.Plateau;
 
 public class TestPlateau {
 
@@ -21,63 +21,77 @@ public class TestPlateau {
 		jeu = new Jeu(); 
 	}
 
-    /*
     @Test
     public void testInitialisation() {
 
-        assertEquals(-2, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
-        assertEquals(1, jeu.obtenirPositionElement(Element.SORCIER));
-        assertEquals(0, jeu.obtenirPositionElement(Element.ROI));
-        assertEquals(-1, jeu.obtenirPositionElement(Element.FOU));
-        assertEquals(2, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+        assertEquals(-2, Jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(1, Jeu.obtenirPositionElement(Element.SORCIER));
+        assertEquals(0, Jeu.obtenirPositionElement(Element.ROI));
+        assertEquals(-1, Jeu.obtenirPositionElement(Element.FOU));
+        assertEquals(2, Jeu.obtenirPositionElement(Element.GARDE_DROIT));
 
     }
 
     @Test
     public void testEstGagnant() {  
 
-        assertFalse(jeu.estGagnant());
-        jeu.deplacerElement(Element.GARDE_GAUCHE,-8);
-        jeu.deplacerElement(Element.ROI,-7);
-        assertTrue(jeu.estGagnant());
+        assertFalse(Jeu.estGagnant());
+        Jeu.deplacerElement(Element.GARDE_GAUCHE,-8);
+        Jeu.finDeTour();
+        Jeu.deplacerElement(Element.ROI,-7);
+        Jeu.finDeTour();
+        assertTrue(Jeu.estGagnant());
 
         jeu = new Jeu(); 
-        jeu.deplacerElement(Element.GARDE_GAUCHE,-1);
-        assertFalse(jeu.estGagnant());
-        jeu.deplacerCouronne(7);
-        assertTrue(jeu.estGagnant());
+        Jeu.deplacerElement(Element.GARDE_GAUCHE,-1);
+        Jeu.finDeTour();
+        assertFalse(Jeu.estGagnant());
+        Jeu.deplacerCouronne(7);
+        Jeu.finDeTour();
+        assertTrue(Jeu.estGagnant());
 
         jeu = new Jeu(); 
-        jeu.deplacerCouronne(8);
-        assertTrue(jeu.estGagnant());
+        Jeu.deplacerCouronne(8);
+        Jeu.finDeTour();
+        assertTrue(Jeu.estGagnant());
 
         jeu = new Jeu(); 
-        jeu.deplacerCouronne(-5);
-        assertFalse(jeu.estGagnant());
+        Jeu.deplacerCouronne(-5);
+        Jeu.finDeTour();
+        assertFalse(Jeu.estGagnant());
 
     }
 
     @Test
     public void testEstPartieEnCours() {  
 
-        assertTrue(jeu.estPartieEnCours());
-        jeu.deplacerElement(Element.GARDE_GAUCHE,-8);
-        jeu.deplacerElement(Element.ROI,-7);
-        assertFalse(jeu.estPartieEnCours());
+        assertTrue(Jeu.estPartieEnCours());
+        Jeu.deplacerElement(Element.GARDE_GAUCHE,-8);
+        Jeu.finDeTour();
+        Jeu.deplacerElement(Element.ROI,-7);
+        Jeu.finDeTour();
+        assertFalse(Jeu.estPartieEnCours());
 
         jeu = new Jeu();
-        jeu.deplacerElement(Element.GARDE_GAUCHE,-1);
-        assertTrue(jeu.estPartieEnCours());
-        jeu.deplacerCouronne(7);
-        assertFalse(jeu.estPartieEnCours());
+        assertTrue(Jeu.estPartieEnCours());
+        Jeu.deplacerElement(Element.GARDE_GAUCHE,-1);
+        Jeu.finDeTour();
+        assertTrue(Jeu.estPartieEnCours());
+        Jeu.deplacerCouronne(7);
+        Jeu.finDeTour();
+        assertFalse(Jeu.estPartieEnCours());
 
         jeu = new Jeu(); 
-        jeu.deplacerCouronne(8);
-        assertFalse(jeu.estPartieEnCours());
+        assertTrue(Jeu.estPartieEnCours());
+        Jeu.deplacerCouronne(8);
+        Jeu.finDeTour();
+        assertFalse(Jeu.estPartieEnCours());
 
         jeu = new Jeu(); 
-        jeu.deplacerCouronne(-5);
-        assertTrue(jeu.estPartieEnCours());
+        assertTrue(Jeu.estPartieEnCours());
+        Jeu.deplacerCouronne(-5);
+        Jeu.finDeTour();
+        assertTrue(Jeu.estPartieEnCours());
 
     }
 
@@ -85,78 +99,93 @@ public class TestPlateau {
     public void testChangerEtatPartie() {
 
         jeu.changerEtatPartie();
-        assertTrue(jeu.estPartieTerminee());
-        assertFalse(jeu.estPartieEnCours());
+        assertFalse(Jeu.estPartieEnCours());
 
         jeu.changerEtatPartie();
-        assertFalse(jeu.estPartieTerminee());
-        assertTrue(jeu.estPartieEnCours());
+        assertTrue(Jeu.estPartieEnCours());
 
     }
 
     @Test
     public void testActionAutoriser() {
 
-        assertTrue(jeu.actionAutoriser());
+        assertTrue(Jeu.actionAutoriser());
         jeu.changerEtatPartie();
-        assertFalse(jeu.actionAutoriser());
+        assertFalse(Jeu.actionAutoriser());
 
         jeu = new Jeu();
-        jeu.deplacerElement(Element.GARDE_GAUCHE,-8);
-        jeu.deplacerElement(Element.ROI,-7);
-        assertFalse(jeu.actionAutoriser());
+        assertTrue(Jeu.actionAutoriser());
+        Jeu.deplacerElement(Element.GARDE_GAUCHE,-8);
+        Jeu.finDeTour();
+        assertTrue(Jeu.actionAutoriser());
+        Jeu.deplacerElement(Element.ROI,-7);
+        Jeu.finDeTour();
+        assertFalse(Jeu.actionAutoriser());
 
     }
 
     @Test
     public void testDeplacerElement() {
 
-        jeu.deplacerElement(Element.GARDE_DROIT,2);
-        assertEquals(4,jeu.obtenirPositionElement(Element.GARDE_DROIT));
+        Jeu.deplacerElement(Element.GARDE_DROIT,2);
+        Jeu.finDeTour();
+        assertEquals(4,Jeu.obtenirPositionElement(Element.GARDE_DROIT));
 
-        jeu.deplacerElement(Element.GARDE_GAUCHE,-2);
-        assertEquals(-4,jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        Jeu.deplacerElement(Element.GARDE_GAUCHE,-2);
+        Jeu.finDeTour();
+        assertEquals(-4,Jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
 
-        jeu.deplacerElement(Element.SORCIER,1);
-        assertEquals(2,jeu.obtenirPositionElement(Element.SORCIER));
+        Jeu.deplacerElement(Element.SORCIER,1);
+        Jeu.finDeTour();
+        assertEquals(2,Jeu.obtenirPositionElement(Element.SORCIER));
 
-        jeu.deplacerElement(Element.ROI,-1);
-        assertEquals(-1,jeu.obtenirPositionElement(Element.ROI));
+        Jeu.deplacerElement(Element.ROI,-1);
+        Jeu.finDeTour();
+        assertEquals(-1,Jeu.obtenirPositionElement(Element.ROI));
 
-        jeu.deplacerElement(Element.SORCIER,-1);
-        assertEquals(1,jeu.obtenirPositionElement(Element.SORCIER));
+        Jeu.deplacerElement(Element.SORCIER,-1);
+        Jeu.finDeTour();
+        assertEquals(1,Jeu.obtenirPositionElement(Element.SORCIER));
 
-        jeu.deplacerElement(Element.FOU,7);
-        assertEquals(6,jeu.obtenirPositionElement(Element.FOU));      
+        Jeu.deplacerElement(Element.FOU,7);
+        Jeu.finDeTour();
+        assertEquals(6,Jeu.obtenirPositionElement(Element.FOU));      
     }
 
     @Test
     public void testValidationDeplacement() { 
 
-        assertTrue(jeu.validationDeplacement(Element.GARDE_GAUCHE,-2));
-        assertTrue(jeu.validationDeplacement(Element.SORCIER,7));
-        assertFalse(jeu.validationDeplacement(Element.ROI,2));
-        assertFalse(jeu.validationDeplacement(Element.FOU,-8));
+        assertTrue(Jeu.validationDeplacement(Element.GARDE_GAUCHE,-2));
+        assertTrue(Jeu.validationDeplacement(Element.SORCIER,7));
+        assertTrue(Jeu.validationDeplacement(Element.ROI,1));
+        assertFalse(Jeu.validationDeplacement(Element.ROI,2));
+        assertFalse(Jeu.validationDeplacement(Element.FOU,-8));
+        assertFalse(Jeu.validationDeplacement(Element.GARDE_DROIT,7));
 
     }
 
     @Test
     public void testObtenirPositionElement() {   
 
-        jeu.deplacerElement(Element.GARDE_GAUCHE,-1);
-        assertEquals(-3, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        Jeu.deplacerElement(Element.GARDE_GAUCHE,-1);
+        Jeu.finDeTour();
+        assertEquals(-3, Jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
 
-        jeu.deplacerElement(Element.SORCIER,3);
-        assertEquals(4, jeu.obtenirPositionElement(Element.SORCIER));
+        Jeu.deplacerElement(Element.SORCIER,3);
+        Jeu.finDeTour();
+        assertEquals(4, Jeu.obtenirPositionElement(Element.SORCIER));
 
-        jeu.deplacerElement(Element.ROI,-1);
-        assertEquals(-1, jeu.obtenirPositionElement(Element.ROI));
+        Jeu.deplacerElement(Element.ROI,-1);
+        Jeu.finDeTour();
+        assertEquals(-1, Jeu.obtenirPositionElement(Element.ROI));
 
-        jeu.deplacerElement(Element.FOU,-5);
-        assertEquals(-6, jeu.obtenirPositionElement(Element.FOU));
+        Jeu.deplacerElement(Element.FOU,-5);
+        Jeu.finDeTour();
+        assertEquals(-6, Jeu.obtenirPositionElement(Element.FOU));
 
-        jeu.deplacerElement(Element.GARDE_DROIT,2);
-        assertEquals(4, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+        Jeu.deplacerElement(Element.GARDE_DROIT,2);
+        Jeu.finDeTour();
+        assertEquals(4, Jeu.obtenirPositionElement(Element.GARDE_DROIT));
 
     }
 
@@ -169,22 +198,31 @@ public class TestPlateau {
 
     @Test
     public void testEchangerFouSorcier() {
+
         jeu.echangerFouSorcier();
-        assertEquals(-1,jeu.obtenirPositionElement(Element.SORCIER));
-        assertEquals(1,jeu.obtenirPositionElement(Element.FOU));
+        assertEquals(-1,Jeu.obtenirPositionElement(Element.SORCIER));
+        assertEquals(1,Jeu.obtenirPositionElement(Element.FOU));
     }
 
-    /*@Test
+    @Test
     public void testChoixPremierJoueur() {
-        jeu.choixPremierJoueur(jeu.plateau().joueurCourant);
-        assertEquals(1,jeu.plateau.joueurCourant);
+
+        jeu.choixPremierJoueur(Jeu.plateau().joueurCourant);
+        assertEquals(1,Jeu.plateau().joueurCourant);
 
         jeu.choixPremierJoueur(0);
-        assertEquals(0,plateau.joueurCourant);
-        assertEquals(-1,plateau.sorcier.positionPersonnage());
-        assertEquals(1,plateau.fou.positionPersonnage());
+        assertEquals(0,Jeu.plateau().joueurCourant);
+        assertEquals(-1,Jeu.obtenirPositionElement(Element.SORCIER));
+        assertEquals(1,Jeu.obtenirPositionElement(Element.FOU));
     }
 
+    @Test
+    public void testNumeroJoueurValide() {
+        
+        assertEquals(expected, actual);
+
+    }
+/*
     @Test
     public void testFinDeTour() {
 
@@ -208,28 +246,11 @@ public class TestPlateau {
         jeu.changerEtatCouronne();
         assertFalse(Jeu.getEtatCouronne());
     } 
-    */
-
-/*
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     @Test
     public void testChangerJoueurCourant() {
         plateau.changerJoueurCourant(plateau.joueurCourant);
         assertEquals(1,plateau.joueurCourant);        
-    }
-
-    
+    }   
 */
 }
