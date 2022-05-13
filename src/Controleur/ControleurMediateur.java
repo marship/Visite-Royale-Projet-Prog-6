@@ -2,14 +2,14 @@ package Controleur;
 
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
-import Vue.InterfaceGraphique;
+import Vue.InterfaceUtilisateur;
 
 public class ControleurMediateur implements CollecteurEvenements {
 	
     static final int TEMPS_ATTENTE = 50;
 
     Jeu jeu;
-    InterfaceGraphique interfaceGraphique;
+    InterfaceUtilisateur interfaceUtilisateur;
 
 	// Joueur[][] joueurs;
 	int [] typeJoueur;
@@ -46,17 +46,17 @@ public class ControleurMediateur implements CollecteurEvenements {
     public boolean commande(String commande) {
         switch (commande) {
             case "Jouer":
-                interfaceGraphique.afficher_panel("Jouer");
+                interfaceUtilisateur.afficher_panel("Jouer");
                 break;
             case "MenuPrincipal":
-                interfaceGraphique.afficher_panel("MenuPrincipal");
+                interfaceUtilisateur.afficher_panel("MenuPrincipal");
             break;
             case "Charger":
                 break;
             case "Regles":
                 break;
             case "Options":
-                interfaceGraphique.afficher_panel("Options");
+                interfaceUtilisateur.afficher_panel("Options");
                 break;
             case "Quitter":
                 System.exit(0);
@@ -68,7 +68,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void getInterfaceGraphique(InterfaceGraphique interfaceG) {
-        interfaceGraphique = interfaceG;
+    public void ajouteInterfaceUtilisateur(InterfaceUtilisateur interfaceU) {
+        interfaceUtilisateur = interfaceU;
     }
 }

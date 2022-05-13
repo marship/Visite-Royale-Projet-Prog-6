@@ -189,10 +189,10 @@ public class VisiteRoyale {
         try {
             Jeu jeu = new Jeu();
 
-            test(jeu);
+            //test(jeu);
 
-            // CollecteurEvenements controleurMediateur = new ControleurMediateur(jeu);
-            // InterfaceGraphique.demarrer(jeu, controleurMediateur);
+            CollecteurEvenements controleurMediateur = new ControleurMediateur(jeu);
+            InterfaceGraphique.demarrer(jeu, controleurMediateur);
 
         } catch (Exception e) {
             e.printStackTrace();

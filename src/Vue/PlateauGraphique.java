@@ -1,6 +1,7 @@
 package Vue;
 
 import Modele.Jeu;
+import Modele.Plateau;
 import Pattern.Observateur;
 
 import javax.swing.*;
@@ -9,10 +10,12 @@ import java.awt.*;
 public class PlateauGraphique extends JComponent implements Observateur {
 
     Jeu jeu;
+    Plateau plateau;
     int largeurCase, hauteurCase;
 
     public PlateauGraphique(Jeu j) {
         jeu = j;
+        plateau = jeu.plateau();
         // plateau.ajouteObservateur(this);
     }
 
@@ -55,6 +58,9 @@ public class PlateauGraphique extends JComponent implements Observateur {
                         break;
                 }
                 */
+    }
+    public void tracerPlateau(){
+        
     }
 
     int largeur() {

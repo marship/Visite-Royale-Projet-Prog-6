@@ -1,19 +1,21 @@
 package Vue;
 
 import Modele.Jeu;
+import Pattern.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
 
-public class InterfaceGraphique implements Runnable {
+public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
 	
     Jeu jeu;
 	CollecteurEvenements collecteurEvenements;
 
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
                     boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonJoker, boutonMenu;
+                    
 	CardLayout layout; 
 
     JPanel panelCourant, panelMenuPrincipal, panelPlateau, panelSelectionJoueurs;
@@ -26,7 +28,10 @@ public class InterfaceGraphique implements Runnable {
 	}
 
 	public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
-		SwingUtilities.invokeLater(new InterfaceGraphique(jeu, cEvenements));
+        InterfaceGraphique vue = new InterfaceGraphique(jeu, cEvenements);
+		SwingUtilities.invokeLater(vue);
+        // Garde à jour l'interface graphique du controleur
+        cEvenements.ajouteInterfaceUtilisateur(vue);
 	}
 
 
@@ -52,12 +57,12 @@ public class InterfaceGraphique implements Runnable {
 		layout = new CardLayout();
 		panelCourant = new JPanel(layout);
 
+        creerPlateauJeu();
+		panelCourant.add(panelPlateau, "Plateau");
 		creerMenuPrincipal();
     	panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
         creerSelectionJoueurs();
 		panelCourant.add(panelSelectionJoueurs, "Jouer");
-		creerPlateauJeu();
-		panelCourant.add(panelPlateau, "Plateau");
 		creerOptions();
 		panelCourant.add(panelOptions, "Options");
 
@@ -66,8 +71,7 @@ public class InterfaceGraphique implements Runnable {
 
 		fenetre.add(panelCourant);
 
-		// Garde à jour l'interface graphique du controleur
-        collecteurEvenements.getInterfaceGraphique(this);
+		
 
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenetre.setSize(1280, 720);
@@ -207,7 +211,7 @@ public class InterfaceGraphique implements Runnable {
 	public void creerPlateauJeu(){
 
 		//panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
-
+        //plateauGraphique = new PlateauGraphique(j);
 		panelPlateau = new JPanel(new GridBagLayout());
 		GridBagConstraints layoutConstraint = new GridBagConstraints();
 
@@ -300,4 +304,9 @@ public class InterfaceGraphique implements Runnable {
         panelOptions.add(boutonRetourAccueil);
     }
 
+    @Override
+    public void miseAJour() {
+        // TODO Auto-generated method stub
+        
+    }
 }
