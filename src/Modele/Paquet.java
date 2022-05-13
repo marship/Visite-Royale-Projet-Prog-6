@@ -256,6 +256,33 @@ public class Paquet {
         }
     }
 
+    public int trouverRoi(int joueur, int ignore){
+        Carte roi = new Carte(ROI, UN);
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
+            Carte main = (Carte) mainJoueurs[joueur][i];
+            if (main.estIdentique(roi)) {
+                if(ignore == 0){
+                    return i;
+                }else{
+                    ignore = ignore - 1;
+                }
+            }
+        }
+        return 10;
+    }
+
+    public int nombreCartesRoi(int joueur){
+        Carte roi = new Carte(ROI, UN);
+        int nbRoi = 0;
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
+            Carte main = (Carte) mainJoueurs[joueur][i];
+            if (main.estIdentique(roi)) {
+                nbRoi++;
+            }
+        }
+        return nbRoi;
+    }
+
     public int nombreCarteManquante(int joueur) {
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
         int nbVide = 0;
