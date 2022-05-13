@@ -319,16 +319,19 @@ public class Jeu extends Observable {
         metAJour();
     }
 
-    public void jouerSequenceCarte(Sequence<Element> elements, Sequence<Integer> positionsArriveeElements, Sequence<Integer> cartesJouer) {
+    public static void jouerSequenceCarte(Sequence<Element> elements, int[] positionsArriveeElements, int[] cartesJouer) {
         if (actionAutoriser()) {
-            while (!cartesJouer.estVide()) {
-                poserCarte(cartesJouer.extraitTete());
+            int i = 0;
+            while (i != cartesJouer.length) {
+                poserCarte(cartesJouer[i]);
+                i++;
             }
+            i = 0;
             while (!elements.estVide()) {
                 Element elementExtrait = elements.extraitTete();
-                int deplacementElementExtrait = obtenirPositionElement(elementExtrait)
-                        - positionsArriveeElements.extraitTete();
+                int deplacementElementExtrait = obtenirPositionElement(elementExtrait) - positionsArriveeElements[i];
                 deplacerElement(elementExtrait, deplacementElementExtrait);
+                i++;
             }
         }
         metAJour();
@@ -392,6 +395,18 @@ public class Jeu extends Observable {
 
     public static int positionPlus8(int positionElement) {
         return positionElement + EXTREMITE_DROITE_DU_PLATEAU;
+    }
+
+    public static int positionsPourCour(){
+        if(obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU){
+            return 1;
+        }
+        else{
+            if(obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU){
+                return 2;
+            }
+            return 0;
+        }
     }
 
     public static int[] listeDeplacementPossiblesAvecCarte(int position) {
@@ -610,12 +625,7 @@ public class Jeu extends Observable {
         int teleporter = 0;
         int positionSorcier = obtenirPositionElement(SORCIER);
         int positionElement = obtenirPositionElement(element);
-
-        if (plateau().joueurCourant == JOUEUR_DROIT) {
-            teleporter = positionSorcier - positionElement;
-        } else {
-            teleporter = positionElement - positionSorcier;
-        }
+        teleporter = positionSorcier - positionElement;
         return teleporter;
     }
 
