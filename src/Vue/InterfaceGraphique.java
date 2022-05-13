@@ -7,12 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
+import Global.Element;
+
 
 public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
 	
     Jeu jeu;
 	CollecteurEvenements collecteurEvenements;
 
+    PlateauGraphique plateauGraphique;
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
                     boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonJoker, boutonMenu;
                     
@@ -41,24 +44,11 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
 		fenetre = new JFrame("Visite Royale");
 
-		PlateauGraphique plateauGraphique = new PlateauGraphique(jeu);
-		plateauGraphique.addMouseListener(new AdaptateurSouris(plateauGraphique, collecteurEvenements));
-		fenetre.add(plateauGraphique);
-		
-        /*Box barre = Box.createVerticalBox();
-		for (int i=0; i<2; i++) {
-			barre.add(new JLabel("Joueur " + (i+1)));
-			JToggleButton but = new JToggleButton("IA");
-			but.addActionListener(new AdaptateurJoueur(collecteurEvenements, but, i));
-			barre.add(but);
-		}
-        barre.add(Box.createGlue());
-		fenetre.add(barre, BorderLayout.LINE_END); */
 		layout = new CardLayout();
 		panelCourant = new JPanel(layout);
 
         creerPlateauJeu();
-		panelCourant.add(panelPlateau, "Plateau");
+		panelCourant.add(plateauGraphique, "Plateau");
 		creerMenuPrincipal();
     	panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
         creerSelectionJoueurs();
@@ -210,20 +200,22 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 	//TODO Faire l'affichage du plateau de jeu
 	public void creerPlateauJeu(){
 
+		//panelPlateau = new JPanel();
 		//panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
-        //plateauGraphique = new PlateauGraphique(j);
-		panelPlateau = new JPanel(new GridBagLayout());
-		GridBagConstraints layoutConstraint = new GridBagConstraints();
-
-		//plateauGraphique = new PlateauGraphique(plateau);
-		//panelPlateau.add(plateauGraphique);
-		JLabel imglabel = new JLabel(new ImageIcon("res/Images/plateau.png"));
+		//GridBagConstraints layoutConstraint = new GridBagConstraints();
+        plateauGraphique = new PlateauGraphique(jeu);
+		
+		/*JLabel imglabel = new JLabel(new ImageIcon("res/Images/plateau.png"));
 		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
 		layoutConstraint.gridx = 0;
 		layoutConstraint.gridy = 0;
-		panelPlateau.add(imglabel, layoutConstraint);
+		panelPlateau.add(imglabel, layoutConstraint);*/
 
-		boutonJoker = new DesignBoutons("Joker", "res/Images/textureBouton.png");
+        JButton boutonRandom = new JButton("Joker");
+        boutonRandom.addActionListener(new AdaptateurCommande(collecteurEvenements, "Joker"));
+        plateauGraphique.add(boutonRandom);
+
+		/*boutonJoker = new DesignBoutons("Joker", "res/Images/textureBouton.png");
         boutonJoker.addActionListener(new AdaptateurCommande(collecteurEvenements, "Joker"));
         panelPlateau.add(boutonJoker);
 		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
@@ -231,13 +223,19 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 		layoutConstraint.gridy = 1;
         panelPlateau.add(boutonJoker, layoutConstraint);
 
-		boutonMenu = new DesignBoutons("Menu", "res/Images/textureBouton.png");
+		/*boutonMenu = new DesignBoutons("Menu", "res/Images/textureBouton.png");
         boutonMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "Menu"));
         panelPlateau.add(boutonMenu);
 		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
 		layoutConstraint.gridx = 1;
 		layoutConstraint.gridy = 1;
         panelPlateau.add(boutonMenu, layoutConstraint);
+
+        int garde = Jeu.obtenirPositionElement(Element.GARDE_GAUCHE);
+		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
+		layoutConstraint.gridx = 0;
+		layoutConstraint.gridy = 0;
+		panelPlateau.add(imglabel, layoutConstraint); */
     } 
 	//Crée le JPanel des regles
 	//TODO Faire l'affichage des regles

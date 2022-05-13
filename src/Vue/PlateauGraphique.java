@@ -5,70 +5,63 @@ import Modele.Plateau;
 import Pattern.Observateur;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class PlateauGraphique extends JComponent implements Observateur {
+import Global.Configuration;
+import Global.Element;
+import Global.InfoPlateau;
+
+import java.awt.*;
+import java.io.File;
+import java.io.InputStream;
+
+public class PlateauGraphique extends JPanel implements Observateur {
 
     Jeu jeu;
     Plateau plateau;
     int largeurCase, hauteurCase;
+    public static int taillePlateau = 17;
+    Graphics2D dessinable;
+    ImagePlateau imagePlateau;
+    int largeur;
+    int hauteur;
+
 
     public PlateauGraphique(Jeu j) {
+        imagePlateau = chargeImage("plateau");
         jeu = j;
-        plateau = jeu.plateau();
-        // plateau.ajouteObservateur(this);
+        //plateau = jeu.plateau();
     }
 
     @Override
     public void paintComponent(Graphics g) {
 
-        /*
-        Graphics2D dessinable = (Graphics2D) g;
-
+        // Graphics 2D est le vrai type de l'objet passé en paramètre
+        // Le cast permet d'avoir acces a un peu plus de primitives de dessin
+        dessinable = (Graphics2D) g;
         
-
-        int lignes = plateau.hauteur();
-        int colonnes = plateau.largeur();
-
-        largeurCase = largeur() / colonnes;
-        hauteurCase = hauteur() / lignes;
-
-        dessinable.clearRect(0, 0, largeur(), hauteur());
-
-        if (!plateau.enCours()) {
-            dessinable.drawString("Fin", 20, hauteur() / 2);
-        }
-
-        // Grille
-        for (int i = 1; i < lignes; i++) {
-            dessinable.drawLine(0, i * hauteurCase, largeur(), i * hauteurCase);
-            dessinable.drawLine(i * largeurCase, 0, i * largeurCase, hauteur());
-        }
-
-        // Coups
-        for (int i = 0; i < lignes; i++)
-            for (int j = 0; j < colonnes; j++)
-                switch (plateau.valeur(i, j)) {
-                    case 0:
-                        dessinable.drawOval(j * largeurCase, i * hauteurCase, largeurCase, hauteurCase);
-                        break;
-                    case 1:
-                        dessinable.drawLine(j * largeurCase, i * hauteurCase, (j + 1) * largeurCase, (i + 1) * hauteurCase);
-                        dessinable.drawLine(j * largeurCase, (i + 1) * hauteurCase, (j + 1) * largeurCase, i * hauteurCase);
-                        break;
-                }
-                */
+        // On reccupere quelques infos provenant de la partie JComponent
+        largeur = getWidth();
+        hauteur = getHeight();
+        // On efface tout
+        dessinable.clearRect(0, 0, largeur, hauteur);
+        tracerPlateau();
+                
     }
     public void tracerPlateau(){
-        
+
+        tracerImage(imagePlateau, 100, 100, 100, 100);
+        //int Gg = jeu.obtenirPositionElement(Element.GARDE_GAUCHE);
+        //int Gd = jeu.obtenirPositionElement(Element.GARDE_DROIT);
     }
 
-    int largeur() {
-        return getWidth();
+    private ImagePlateau chargeImage(String nomImage) {
+        InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
+        return ImagePlateau.getImage(in);
     }
 
-    int hauteur() {
-        return getHeight();
+    
+    public void tracerImage(ImagePlateau image, int x, int y, int largeurCase, int hauteurCase) {
+        dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
 
     public int largeurCase() {
