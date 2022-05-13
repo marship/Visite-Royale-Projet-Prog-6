@@ -109,48 +109,55 @@ public class Jeu extends Observable {
     public static boolean validationDeplacement(Element element, int deplacementElement) {
         if (actionAutoriser()) {
             int nouvellePositionElement = obtenirPositionElement(element) + deplacementElement;
-            switch (element) {
-                case COURONNE:
-                    return true;
-                case GARDE_GAUCHE:
-                    if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU) && (nouvellePositionElement < obtenirPositionElement(ROI))) {
+            if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU) && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
+                switch (element) {
+                    case COURONNE:
                         return true;
-                    } else {
-                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
+                    case GARDE_GAUCHE:
+                        if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU) && (nouvellePositionElement < obtenirPositionElement(ROI))) {
+                            return true;
+                        } else {
+                            Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
+                            return false;
+                        }
+                    case GARDE_DROIT:
+                        if ((nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU) && (nouvellePositionElement > obtenirPositionElement(ROI))) {
+                            return true;
+                        } else {
+                            Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
+                            return false;
+                        }
+                    case ROI:
+                        if ((nouvellePositionElement > obtenirPositionElement(GARDE_GAUCHE)) && (nouvellePositionElement < obtenirPositionElement(GARDE_DROIT))) {
+                            return true;
+                        } else {
+                            Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
+                            return false;
+                        }
+                    case FOU:
+                        if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU) && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
+                            Configuration.instance().logger().info("Deplacement " + nouvellePositionElement);
+                            return true;
+                        } else {
+                            Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
+                            return false;
+                        }
+                    case SORCIER:
+                        if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU) && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
+                            return true;
+                        } else {
+                            Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
+                            return false;
+                        }
+                    default:
+                        Configuration.instance().logger().warning("Element " + element.name() + " inconnu !!");
                         return false;
-                    }
-                case GARDE_DROIT:
-                    if ((nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU) && (nouvellePositionElement > obtenirPositionElement(ROI))) {
-                        return true;
-                    } else {
-                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
-                        return false;
-                    }
-                case ROI:
-                    if ((nouvellePositionElement > obtenirPositionElement(GARDE_GAUCHE)) && (nouvellePositionElement < obtenirPositionElement(GARDE_DROIT))) {
-                        return true;
-                    } else {
-                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
-                        return false;
-                    }
-                case FOU:
-                    if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU) && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
-                        return true;
-                    } else {
-                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
-                        return false;
-                    }
-                case SORCIER:
-                    if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU) && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
-                        return true;
-                    } else {
-                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
-                        return false;
-                    }
-                default:
-                    Configuration.instance().logger().warning("Element " + element.name() + " inconnu !!");
-                    return false;
+                }
+            } else {
+                Configuration.instance().logger().warning("Valeur impedictible cas hors plateau !!");
+                return false;
             }
+            
         } else {
             return false;
         }

@@ -21,6 +21,7 @@ public class TestPlateau {
 		jeu = new Jeu(); 
 	}
 
+    /*
     @Test
     public void testInitialisation() {
 
@@ -182,7 +183,7 @@ public class TestPlateau {
         assertEquals(0,plateau.joueurCourant);
         assertEquals(-1,plateau.sorcier.positionPersonnage());
         assertEquals(1,plateau.fou.positionPersonnage());
-    }*/
+    }
 
     @Test
     public void testFinDeTour() {
@@ -207,6 +208,7 @@ public class TestPlateau {
         jeu.changerEtatCouronne();
         assertFalse(Jeu.getEtatCouronne());
     } 
+    */
 
 /*
     
