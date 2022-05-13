@@ -188,11 +188,18 @@ public class VisiteRoyale {
 
         try {
             Jeu jeu = new Jeu();
-
-            //test(jeu);
-
             CollecteurEvenements controleurMediateur = new ControleurMediateur(jeu);
-            InterfaceGraphique.demarrer(jeu, controleurMediateur);
+            //test(jeu);
+            switch(Configuration.instance().lis("Interface")){
+                case "Textuelle":
+                    test(jeu);
+                    break;
+                case "Graphique":
+                    InterfaceGraphique.demarrer(jeu, controleurMediateur);
+                    break;
+                default:
+                    Configuration.instance().logger().severe("interface inconnue");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

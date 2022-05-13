@@ -50,7 +50,7 @@ public class Configuration {
     public String lis(String cle) {
         String resultat = properties.getProperty(cle);
         if (resultat == null) {
-            throw new NoSuchElementException("Propriete " + cle + " non definie dans 'configGaufre.cfg'");
+            throw new NoSuchElementException("Propriete " + cle + " non definie dans 'configVisiteRoyale.cfg'");
         }
         return resultat;
     }
