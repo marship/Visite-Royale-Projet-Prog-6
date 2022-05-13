@@ -12,11 +12,13 @@ public class InterfaceGraphique implements Runnable {
     Plateau plateau;
 	CollecteurEvenements collecteurEvenements;
 
-	JButton bouton_jouer, bouton_charger, bouton_regles, bouton_options, bouton_quitter;
+	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
+                    boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonJoker, boutonMenu;
 	CardLayout layout; 
 
-    JPanel panelCourant, panelMenuPrincipal, panelOption, panelPlateau;
+    JPanel panelCourant, panelMenuPrincipal, panelPlateau, panelSelectionJoueurs;
 	ArrierePlan panelOptions;
+    JFrame fenetre;
 
 	InterfaceGraphique(Plateau p, CollecteurEvenements cEvenements) {
 		plateau = p;
@@ -32,7 +34,7 @@ public class InterfaceGraphique implements Runnable {
 	@Override
 	public void run() {
 
-		JFrame fenetre = new JFrame("Visite Royale");
+		fenetre = new JFrame("Visite Royale");
 
 		PlateauGraphique plateauGraphique = new PlateauGraphique(plateau);
 		plateauGraphique.addMouseListener(new AdaptateurSouris(plateauGraphique, collecteurEvenements));
@@ -52,8 +54,10 @@ public class InterfaceGraphique implements Runnable {
 
 		creerMenuPrincipal();
     	panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
+        creerSelectionJoueurs();
+		panelCourant.add(panelSelectionJoueurs, "Jouer");
 		creerPlateauJeu();
-		panelCourant.add(panelPlateau, "Jouer");
+		panelCourant.add(panelPlateau, "Plateau");
 		creerOptions();
 		panelCourant.add(panelOptions, "Options");
 
@@ -79,46 +83,157 @@ public class InterfaceGraphique implements Runnable {
 	//Crée le JPanel du menu principal
 	public void creerMenuPrincipal(){
 
-		panelMenuPrincipal = new JPanel(new GridLayout(0,1,0,30));
+		panelMenuPrincipal = new ArrierePlan("res/Images/backgroundMenu.png");
+		panelMenuPrincipal.setLayout(new GridLayout(0,1,0,30));
 		panelMenuPrincipal.setBorder(new EmptyBorder(240,640/4,50,640/4));
 
-        bouton_jouer = new JButton("Jouer");
-        bouton_jouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
-        panelMenuPrincipal.add(bouton_jouer);
+        boutonJouer = new DesignBoutons("Jouer", "res/Images/textureBouton.png");
+        boutonJouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
+        panelMenuPrincipal.add(boutonJouer);
 
-        bouton_charger = new JButton("Charger une partie");
-        bouton_charger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
-        panelMenuPrincipal.add(bouton_charger);
+        boutonCharger = new DesignBoutons("Charger une partie", "res/Images/textureBouton.png");
+        boutonCharger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
+        panelMenuPrincipal.add(boutonCharger);
 
-        bouton_regles = new JButton("Règles du jeu");
-        bouton_regles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
-        panelMenuPrincipal.add(bouton_regles);
+        boutonRegles = new DesignBoutons("Règles du jeu", "res/Images/textureBouton.png");
+        boutonRegles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
+        panelMenuPrincipal.add(boutonRegles);
 
-        bouton_options = new JButton("Options");
-        bouton_options.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
-        panelMenuPrincipal.add(bouton_options);
+        boutonOptions = new DesignBoutons("Options", "res/Images/textureBouton.png");
+        boutonOptions.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
+        panelMenuPrincipal.add(boutonOptions);
 
-        bouton_quitter = new JButton("Quitter");
-        bouton_quitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
-        panelMenuPrincipal.add(bouton_quitter);
+        boutonQuitter = new DesignBoutons("Quitter", "res/Images/textureBouton.png");
+        boutonQuitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
+        panelMenuPrincipal.add(boutonQuitter);
     } 
 
-	//Crée le JPanel du plateau de jeu
+    public void creerSelectionJoueurs(){
+
+        panelSelectionJoueurs = new ArrierePlan("res/Images/backgroundSelection.png");
+        panelSelectionJoueurs.setLayout(new GridBagLayout());
+
+        int height = 720;
+        int width = 1280;
+
+        int borderTop = height / 2;
+        int borderBottom = height / 3;
+        int borderSides = width / 3;
+
+        panelSelectionJoueurs.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
+        GridBagConstraints test = new GridBagConstraints();
+
+        String[] choixComboBox = {
+            "Humain",
+            "IA Aléatoire",
+            "IA experte"
+        };
+
+        test.fill = GridBagConstraints.HORIZONTAL;
+        test.insets = new Insets(10,0,0,10);  //top padding
+
+        JLabel nomJoueur1 = new JLabel("Nom du Joueur 1");
+        test.weightx = 0.5;
+        test.gridx = 0;
+        test.gridy = 0;  
+        panelSelectionJoueurs.add(nomJoueur1, test);
+
+
+        JTextField valeurNomJoueur1 = new JTextField();
+        test.gridx = 0;
+        test.gridy = 1;  
+        panelSelectionJoueurs.add(valeurNomJoueur1, test);
+
+
+        JComboBox<String> comboBoxJoueur1 = new JComboBox<>();
+        for(int i = 0; i < choixComboBox.length; i++){
+            comboBoxJoueur1.addItem(choixComboBox[i]);
+        }
+        comboBoxJoueur1.setFocusable(false);
+        //comboBox.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        test.ipady = 0;
+        test.gridx = 0;
+        test.gridy = 2;
+        panelSelectionJoueurs.add(comboBoxJoueur1, test);
+       
+        test.insets = new Insets(10,10,0,10);  //top padding
+
+        JLabel nomJoueur2 = new JLabel("Nom du Joueur 2");
+        test.gridx = 1;
+        test.gridy = 0;  
+        panelSelectionJoueurs.add(nomJoueur2, test);
+
+        JTextField valeurNomJoueur2 = new JTextField();
+        test.gridx = 1;
+        test.gridy = 1;  
+        panelSelectionJoueurs.add(valeurNomJoueur2, test);
+
+        JComboBox<String> comboBoxJoueur2 = new JComboBox<>();
+        for(int i = 0; i < choixComboBox.length; i++){
+            comboBoxJoueur2.addItem(choixComboBox[i]);
+        }
+        comboBoxJoueur2.setFocusable(false);
+        //comboBox.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        
+        test.gridx = 1;
+        test.gridy = 2;
+        panelSelectionJoueurs.add(comboBoxJoueur2, test);
+       
+        
+        test.anchor = GridBagConstraints.PAGE_END; //bottom of space
+        test.insets = new Insets(50,20,0,20);  //padding des boutons 
+        test.gridx = 0;
+        test.gridy = 3;
+        test.weightx = 0.5;
+
+        DesignBoutons valider = new DesignBoutons("Valider", "res/Images/textureBouton.png");
+        System.out.println(valider.getBounds());
+        valider.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
+        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSelectionJoueurs.add(valider, test);
+        
+        test.gridx = 1;
+        DesignBoutons annuler = new DesignBoutons("Annuler", "res/Images/textureBouton.png");
+        annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSelectionJoueurs.add(annuler, test);
+
+
+
+    }
+
+//Crée le JPanel du plateau de jeu
 	//TODO Faire l'affichage du plateau de jeu
 	public void creerPlateauJeu(){
 
-		panelPlateau = new JPanel(new GridLayout(0,1,0,30));
-		panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
-        panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
+		//panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
 
-		bouton_options = new JButton("Retour");
-        bouton_options.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
-        panelPlateau.add(bouton_options);
+		panelPlateau = new JPanel(new GridBagLayout());
+		GridBagConstraints layoutConstraint = new GridBagConstraints();
 
-        bouton_quitter = new JButton("Quitter");
-        bouton_quitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
-        panelPlateau.add(bouton_quitter);
+		//plateauGraphique = new PlateauGraphique(plateau);
+		//panelPlateau.add(plateauGraphique);
+		JLabel imglabel = new JLabel(new ImageIcon("res/Images/plateau.png"));
+		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
+		layoutConstraint.gridx = 0;
+		layoutConstraint.gridy = 0;
+		panelPlateau.add(imglabel, layoutConstraint);
 
+		boutonJoker = new DesignBoutons("Joker", "res/Images/textureBouton.png");
+        boutonJoker.addActionListener(new AdaptateurCommande(collecteurEvenements, "Joker"));
+        panelPlateau.add(boutonJoker);
+		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
+		layoutConstraint.gridx = 0;
+		layoutConstraint.gridy = 1;
+        panelPlateau.add(boutonJoker, layoutConstraint);
+
+		boutonMenu = new DesignBoutons("Menu", "res/Images/textureBouton.png");
+        boutonMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "Menu"));
+        panelPlateau.add(boutonMenu);
+		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
+		layoutConstraint.gridx = 1;
+		layoutConstraint.gridy = 1;
+        panelPlateau.add(boutonMenu, layoutConstraint);
     } 
 	//Crée le JPanel des regles
 	//TODO Faire l'affichage des regles
@@ -126,62 +241,63 @@ public class InterfaceGraphique implements Runnable {
 
 	}
 
-	//Crée le JPanel des options
-	//TODO Faire l'affichage des options
-	public void creerOptions(){
-		ArrierePlan backgroundBoutons = new ArrierePlan("res/Images/texture_fond.jpg");
-		backgroundBoutons.setLayout(null);
-		backgroundBoutons.setBounds(110, 200, 500, 300);
-		
-	
-		panelOptions = new ArrierePlan("res/Images/ratos.jpg");
-		panelOptions.setLayout(new GridLayout(0, 1, 0, 30));
-		panelOptions.setBorder(new EmptyBorder(240,640/4,50,640/4));
-		panelOptions.setBounds(320, 320, 640, 640);
-	
-		panelOptions.add(backgroundBoutons);
-		
-		JLabel txtMusique = new JLabel("Musique");
-		JSlider musique = new JSlider(0, 100, 100);
-		musique.setMajorTickSpacing(25);
-		musique.setMinorTickSpacing(5);
-		musique.setPaintTicks(true);
-		musique.setPaintLabels(true);
-	
-		
-		Container musiqueBox = Box.createHorizontalBox();
-		musiqueBox.add(musique);
-		musiqueBox.add(Box.createHorizontalGlue());
-		musiqueBox.add(txtMusique);
-	
-		panelOptions.add(musiqueBox);
-	
-		JLabel txtSon = new JLabel("Vol son");
-		JSlider son = new JSlider(0, 100, 100);
-		son.setMajorTickSpacing(25);
-		son.setMinorTickSpacing(5);
-		son.setPaintTicks(true);
-		son.setPaintLabels(true);
-		son.setMinimumSize(new Dimension(100,10));
-	
-		Container sonBox = Box.createHorizontalBox();
-		sonBox.add(son);
-		sonBox.add(Box.createHorizontalGlue());
-		sonBox.add(txtSon);
-	
-		panelOptions.add(sonBox);
-	
-		String[] labelsBoutons = {
-			"Crédits",
-			"Confirmer les options",
-			"Retour à l'accueil",
-		};
-	
-		DesignBoutons b = null;
-		for (int i = 0; i < labelsBoutons.length; i++) {
-			b = new DesignBoutons(labelsBoutons[i], "res/Images/textureBouton.jpg");
-			panelOptions.add(b);
-		}	
-	}
+	    //Crée le JPanel des options
+    //TODO Faire l'affichage des options
+    public void creerOptions(){
+
+        panelOptions = new ArrierePlan("res/Images/backgroundOptions.png");
+        panelOptions.setLayout(new GridLayout(0, 1, 0, 30));
+
+        int height = 720;
+        int width = 1280;
+
+        int borderTop = height / 4;
+        int borderBottom = height / 10;
+        int borderSides = width / 3;
+
+        System.out.println("top = " + borderTop + " , sides = " + borderSides + " , bottom = " + borderBottom );
+        panelOptions.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
+
+        JLabel txtMusique = new JLabel("Volume musique");
+        JSlider musique = new JSlider(0, 100, 100);
+        musique.setMajorTickSpacing(25);
+        musique.setMinorTickSpacing(5);
+        musique.setOpaque(false);
+        musique.setPaintLabels(true);
+    
+        
+        Container musiqueBox = Box.createHorizontalBox();
+        musiqueBox.add(musique);
+        musiqueBox.add(Box.createHorizontalGlue());
+        musiqueBox.add(txtMusique);
+    
+        panelOptions.add(musiqueBox);
+    
+        JLabel txtSon = new JLabel("Volume son");
+        JSlider son = new JSlider(0, 100, 100);
+        son.setMajorTickSpacing(25);
+        son.setMinorTickSpacing(5);
+        son.setOpaque(false);
+        son.setPaintLabels(true);
+    
+        Container sonBox = Box.createHorizontalBox();
+        sonBox.add(son);
+        sonBox.add(Box.createHorizontalGlue());
+        sonBox.add(txtSon);
+    
+        panelOptions.add(sonBox);
+
+        boutonCredits = new DesignBoutons("Crédits", "res/Images/textureBouton.png");
+        boutonCredits.addActionListener(new AdaptateurCommande(collecteurEvenements, "Credits"));
+        panelOptions.add(boutonCredits);
+
+        boutonConfirmer = new DesignBoutons("Confirmer les Options", "res/Images/textureBouton.png");
+        boutonConfirmer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Confirmation"));
+        panelOptions.add(boutonConfirmer);
+
+        boutonRetourAccueil = new DesignBoutons("Retour à l'accueil", "res/Images/textureBouton.png");
+        boutonRetourAccueil.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        panelOptions.add(boutonRetourAccueil);
+    }
 
 }
