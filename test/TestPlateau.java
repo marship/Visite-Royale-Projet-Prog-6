@@ -173,7 +173,7 @@ public class TestPlateau {
         assertEquals(1,jeu.obtenirPositionElement(Element.FOU));
     }
 
-    @Test
+    /*@Test
     public void testChoixPremierJoueur() {
         jeu.choixPremierJoueur(jeu.plateau().joueurCourant);
         assertEquals(1,jeu.plateau.joueurCourant);
@@ -182,7 +182,7 @@ public class TestPlateau {
         assertEquals(0,plateau.joueurCourant);
         assertEquals(-1,plateau.sorcier.positionPersonnage());
         assertEquals(1,plateau.fou.positionPersonnage());
-    }
+    }*/
 
     @Test
     public void testFinDeTour() {
