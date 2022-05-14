@@ -248,13 +248,13 @@ public class Jeu extends Observable {
             case COURONNE_GAGNANTE:
                 partieTerminee = true;
                 partieEnCours = false;
-                joueurGagnant = plateau().joueurCourant;
+                joueurGagnant = plateau().joueurGagnant;
                 Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec la couronne !!");
                 break;
             case ROI_GAGNANT:
                 partieTerminee = true;
                 partieEnCours = false;
-                joueurGagnant = plateau().joueurCourant;
+                joueurGagnant = plateau().joueurGagnant;
                 Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec le roi !!");
                 break;
             default:

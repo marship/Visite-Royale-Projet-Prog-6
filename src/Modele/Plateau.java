@@ -34,6 +34,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ===== INFORMATION PARTIE =====
     // ==============================
     public int joueurCourant = JOUEUR_DROIT;
+    public int joueurGagnant;
 
     // ====================
     // ===== ELEMENTS =====
@@ -118,15 +119,23 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ===== VICTOIRE =====
     // ====================
     int estGagnant() {
-        if ((couronne.positionCouronne() >= EXTREMITE_DROITE_DU_PLATEAU - 1) || (couronne.positionCouronne() <= EXTREMITE_GAUCHE_DU_PLATEAU + 1)) {
-            Configuration.instance().logger().info("Victoire par couronne !!");
+        if(couronne.positionCouronne() >= EXTREMITE_DROITE_DU_PLATEAU - 1){
+            joueurGagnant = JOUEUR_DROIT;
             return COURONNE_GAGNANTE;
-        } else if ((roi.positionPersonnage() >= EXTREMITE_DROITE_DU_PLATEAU - 1) || (roi.positionPersonnage() <= EXTREMITE_GAUCHE_DU_PLATEAU + 1)) {
-            Configuration.instance().logger().info("Victoire par roi !!");
-            return ROI_GAGNANT;
-        } else {
-            return AUCUN_GAGNANT;
         }
+        if(couronne.positionCouronne() <= EXTREMITE_GAUCHE_DU_PLATEAU + 1){
+            joueurGagnant = JOUEUR_GAUCHE;
+            return COURONNE_GAGNANTE;
+        }
+        if(roi.positionPersonnage() >= EXTREMITE_DROITE_DU_PLATEAU - 1){
+            joueurGagnant = JOUEUR_DROIT;
+            return ROI_GAGNANT;
+        }
+        if(roi.positionPersonnage() <= EXTREMITE_GAUCHE_DU_PLATEAU + 1){
+            joueurGagnant = JOUEUR_GAUCHE;
+            return ROI_GAGNANT;
+        }
+        return AUCUN_GAGNANT;
     }
 
     // ====================

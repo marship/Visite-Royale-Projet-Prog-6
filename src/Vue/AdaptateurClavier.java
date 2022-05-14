@@ -14,17 +14,20 @@ public class AdaptateurClavier extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-                collecteurEvenements.commande("up");
+            case KeyEvent.VK_S:
+                collecteurEvenements.commande("Sorcier");
                 break;
-            case KeyEvent.VK_DOWN:
-                collecteurEvenements.commande("down");
+            case KeyEvent.VK_F:
+                collecteurEvenements.commande("Fou");
                 break;
-            case KeyEvent.VK_RIGHT:
-                collecteurEvenements.commande("right");
+            case KeyEvent.VK_D:
+                collecteurEvenements.commande("Roi");
                 break;
             case KeyEvent.VK_LEFT:
                 collecteurEvenements.commande("left");
+                break;
+            case KeyEvent.VK_RIGHT:
+                collecteurEvenements.commande("right");
                 break;
             case KeyEvent.VK_Q:
                 collecteurEvenements.commande("quit");
@@ -40,6 +43,13 @@ public class AdaptateurClavier extends KeyAdapter {
                 break;
             case KeyEvent.VK_SPACE:
                 collecteurEvenements.commande("ia");
+                break;
+            case KeyEvent.VK_ENTER:
+                collecteurEvenements.commande("Fin");
+                break;
+            case KeyEvent.VK_BACK_SPACE:
+                collecteurEvenements.commande("Retour");
+                break;
             default:
                 break;
         }

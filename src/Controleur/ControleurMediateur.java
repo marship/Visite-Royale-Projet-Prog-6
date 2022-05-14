@@ -1,5 +1,6 @@
 package Controleur;
 
+import Global.InfoJeu;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
@@ -7,6 +8,7 @@ import Vue.InterfaceUtilisateur;
 public class ControleurMediateur implements CollecteurEvenements {
 	
     static final int TEMPS_ATTENTE = 50;
+    static InfoJeu ETAT_JEU = InfoJeu.DEBUT_TOUR;
 
     Jeu jeu;
     InterfaceUtilisateur interfaceUtilisateur;
@@ -16,6 +18,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 	int joueurCourant;
 
 	int decompteTimer;
+
+    @Override
+    public InfoJeu getInfoJeu(){
+        return ETAT_JEU;
+    }
 
 	public ControleurMediateur(Jeu j) {
 
@@ -70,5 +77,11 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void ajouteInterfaceUtilisateur(InterfaceUtilisateur interfaceU) {
         interfaceUtilisateur = interfaceU;
+    }
+
+    @Override
+    public void choix(int choix) {
+        // TODO Auto-generated method stub
+        
     }
 }
