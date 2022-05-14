@@ -103,7 +103,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     }
 
     private static void selonPerso(Element fou) {
-        int[] a = jeu.listeDeplacementPossiblesAvecPerso(Element.FOU);
+        int[] a = jeu.listeDeplacementPossiblesAvecPerso(Element.GARDE_GAUCHE);
         int i = -8;
         while (i <= 8) {
             if (i >= 0) {
