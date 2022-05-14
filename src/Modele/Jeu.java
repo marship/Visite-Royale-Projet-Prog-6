@@ -109,9 +109,7 @@ public class Jeu extends Observable {
     public boolean validationDeplacement(Element element, int deplacementElement) {
         if (actionAutoriser()) {
             int nouvellePositionElement = obtenirPositionElement(element) + deplacementElement;
-            if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU)
-                    && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
-                switch (element) {
+            switch (element) {
                     case COURONNE:
                         return true;
                     case GARDE_GAUCHE:
@@ -159,12 +157,8 @@ public class Jeu extends Observable {
                         Configuration.instance().logger().warning("Element " + element.name() + " inconnu !!");
                         return false;
                 }
-            } else {
-                Configuration.instance().logger().warning("Valeur impedictible cas hors plateau !!");
-                return false;
-            }
-
-        } else {
+        } 
+        else {
             return false;
         }
     }
@@ -348,7 +342,7 @@ public class Jeu extends Observable {
             while (!elements.estVide()) {
                 Element elementExtrait = elements.extraitTete();
                 int deplacementElementExtrait = obtenirPositionElement(elementExtrait) - positionsArriveeElements[i];
-                deplacerElement(elementExtrait, deplacementElementExtrait);
+                deplacerElement(elementExtrait, -deplacementElementExtrait);
                 i++;
             }
         }
@@ -429,7 +423,6 @@ public class Jeu extends Observable {
     public int[] listeDeplacementPossiblesAvecCarte(Element perso, Deplacement deplace) {
         int[] positionAccessibleAvecCarte = initialiserTableau(TAILLE_DU_PLATEAU, 0);
         int deplacementCarte = deplace.getValeurDeplacement();
-        System.out.println(deplacementCarte);
         switch (perso) {
             case GARDE_GAUCHE:
                 switch (deplace) {
@@ -446,11 +439,9 @@ public class Jeu extends Observable {
                     case UN_PLUS_UN:
                         if (validationDeplacement(GARDE_GAUCHE, 1) && validationDeplacement(GARDE_DROIT, 1)) {
                             positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_GAUCHE)) + 1] = 1;
-                            positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_DROIT)) + 1] = 1;
                         }
                         if (validationDeplacement(GARDE_GAUCHE, -1) && validationDeplacement(GARDE_DROIT, -1)) {
                             positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_GAUCHE)) - 1] = 1;
-                            positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_DROIT)) - 1] = 1;
                         }
                         if (validationDeplacement(GARDE_GAUCHE, 2)) {
                             positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_GAUCHE)) + 2] = 1;
@@ -461,7 +452,6 @@ public class Jeu extends Observable {
                         break;
                     case RAPPROCHE:
                         positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(ROI)) - 1] = 1;
-                        positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(ROI)) + 1] = 1;
                         break;
                     default:
                         break;
@@ -481,11 +471,9 @@ public class Jeu extends Observable {
                         break;
                     case UN_PLUS_UN:
                         if (validationDeplacement(GARDE_GAUCHE, 1) && validationDeplacement(GARDE_DROIT, 1)) {
-                            positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_GAUCHE)) + 1] = 1;
                             positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_DROIT)) + 1] = 1;
                         }
                         if (validationDeplacement(GARDE_GAUCHE, -1) && validationDeplacement(GARDE_DROIT, -1)) {
-                            positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_GAUCHE)) - 1] = 1;
                             positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_DROIT)) - 1] = 1;
                         }
                         if (validationDeplacement(GARDE_DROIT, 2)) {
@@ -496,7 +484,6 @@ public class Jeu extends Observable {
                         }
                         break;
                     case RAPPROCHE:
-                        positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(ROI)) - 1] = 1;
                         positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(ROI)) + 1] = 1;
                         break;
                     default:
@@ -578,7 +565,7 @@ public class Jeu extends Observable {
                                 positionAccessibleAvecCarte[positionPlus8(
                                         obtenirPositionElement(personnageManipulerParLeFou)) + deplacementCarte] = 1;
                             }
-                            if (validationDeplacement(personnageManipulerParLeFou, deplacementCarte)) {
+                            if (validationDeplacement(personnageManipulerParLeFou, -deplacementCarte)) {
                                 positionAccessibleAvecCarte[positionPlus8(
                                         obtenirPositionElement(personnageManipulerParLeFou)) - deplacementCarte] = 1;
                             }
