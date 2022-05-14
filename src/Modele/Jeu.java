@@ -1,5 +1,7 @@
 package Modele;
 
+import java.util.Arrays;
+
 import Global.Configuration;
 import Global.Deplacement;
 import Global.Element;
@@ -139,7 +141,6 @@ public class Jeu extends Observable {
                     case FOU:
                         if ((nouvellePositionElement >= EXTREMITE_GAUCHE_DU_PLATEAU)
                                 && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
-                            Configuration.instance().logger().info("Deplacement " + nouvellePositionElement);
                             return true;
                         } else {
                             Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
@@ -403,6 +404,49 @@ public class Jeu extends Observable {
             i++;
         }
         return tableau;
+    }
+
+    public int[] listeDeplacementPossiblesAvecPerso(Element perso){
+        int[] positionAccessibleAvecPerso = initialiserTableau(TAILLE_DU_PLATEAU, 0);
+        Carte[] listeCarte = plateau().paquet.carteSelonPerso(plateau().joueurCourant, perso);
+        int positionDeBase = obtenirPositionElement(perso);
+        return selonLePersoMaisEnRecurcifYay(perso, listeCarte, positionAccessibleAvecPerso, positionDeBase);
+    }
+
+    public int[] selonLePersoMaisEnRecurcifYay(Element perso, Carte[] listeCarte, int[] positions, int positionRelatif){
+        int i = 0;
+        Carte vide = new Carte(VIDE, Deplacement.VIDE);
+        while(i < 8){
+            obtenirPersonnageElement(perso).positionnerPersonnage(positionRelatif);
+            Carte carte = listeCarte[i];
+            Carte[] sansLaCarte = Arrays.copyOf(listeCarte, 8);
+            sansLaCarte[i] = vide;
+            if(!carte.estIdentique(vide)){
+                int[] deplacementRelatif = listeDeplacementPossiblesAvecCarte(perso, carte.deplacement());
+                positions = fustionTableau(positions, deplacementRelatif);
+                int j = 0;
+                while(j < TAILLE_DU_PLATEAU){
+                    if(deplacementRelatif[j] == 1){
+                        positions = selonLePersoMaisEnRecurcifYay(perso, sansLaCarte, positions, j - 8);
+                    }
+                    j++;
+                }
+            }
+            i++;
+        }
+        return positions;
+    }
+
+    public int[] fustionTableau(int[] un, int[] deux){
+        int[] res = initialiserTableau(TAILLE_DU_PLATEAU, 0);
+        int i = 0;
+        while (i < TAILLE_DU_PLATEAU) {
+            if( (un[i] == 1) || (deux[i] == 1) ){
+                res[i] = 1;
+            }
+            i++;
+        }
+        return res;
     }
 
     public int positionPlus8(int positionElement) {

@@ -77,7 +77,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     }
                     break;
                 case 11:
-                    if (jeu.plateau().paquet.nombreCartesRoi(jeu.plateau().joueurCourant) >= 2 && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                    if (jeu.plateau().paquet.nombreCartesElement(jeu.plateau().joueurCourant, Element.ROI, 0) >= 2 && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
                         deplacerCour();
                     }
                     else {
@@ -93,10 +93,30 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                         jeu.finDeTour();
                     }
                     break;
+                case 666:
+                    selonPerso(Element.FOU);
                 default:
                     Configuration.instance().logger().info("Erreur lors du choix des options");
                     break;
             }
+        }
+    }
+
+    private static void selonPerso(Element fou) {
+        int[] a = jeu.listeDeplacementPossiblesAvecPerso(Element.FOU);
+        int i = -8;
+        while (i <= 8) {
+            if (i >= 0) {
+                System.out.print(" ");
+            }
+            System.out.print(i + " ");
+            i++;
+        }
+        System.out.println(" ");
+        i = 0;
+        while (i != 17) {
+            System.out.print(" " + a[i] + " ");
+            i++;
         }
     }
 
@@ -335,7 +355,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
             Configuration.instance().logger().info("0 : Le pouvoir du fou");
             Configuration.instance().logger().info("9 : Le pouvoir du sorcier");
         }
-        if (jeu.plateau().paquet.nombreCartesRoi(jeu.plateau().joueurCourant) >= 2
+        if (jeu.plateau().paquet.nombreCartesElement(jeu.plateau().joueurCourant, Element.ROI, 0) >= 2
                 && (jeu.dernierTypeDePersonnageJouer == Element.ROI
                         || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
             Configuration.instance().logger().info("11 : Jouer deux cartes Roi");

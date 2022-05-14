@@ -271,16 +271,35 @@ public class Paquet {
         return 10;
     }
 
-    public int nombreCartesRoi(int joueur){
-        Carte roi = new Carte(ROI, UN);
-        int nbRoi = 0;
+    public Carte[] carteSelonPerso(int joueur, Element voulu){
+        Carte[] res = new Carte[NOMBRE_CARTE_EN_MAIN];
+        Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
         for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
             Carte main = (Carte) mainJoueurs[joueur][i];
-            if (main.estIdentique(roi)) {
-                nbRoi++;
+            if (main.personnage() == voulu) {
+                res[i] = main;
+            }
+            else{
+                res[i] = vide;
             }
         }
-        return nbRoi;
+        return res;
+    }
+
+    public int nombreCartesElement(int joueur, Element voulu, int ignore){
+        int nbVoulu = 0;
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
+            Carte main = (Carte) mainJoueurs[joueur][i];
+            if (main.personnage() == voulu) {
+                if(ignore != 0){
+                    ignore--;
+                }
+                else{
+                    nbVoulu++;
+                }
+            }
+        }
+        return nbVoulu;
     }
 
     public int nombreCarteManquante(int joueur) {
