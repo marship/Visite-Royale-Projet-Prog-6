@@ -137,33 +137,17 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         }
         int choix = sc.nextInt();
         if (choix == 1 && (direction == 1 || direction == 0)) {
-            Sequence<Element> elements = Configuration.instance().nouvelleSequence();
-            elements.insereQueue(Element.GARDE_DROIT);
-            elements.insereQueue(Element.ROI);
-            elements.insereQueue(Element.GARDE_GAUCHE);
-            int[] positions = new int[3];
-            positions[0] = jeu.obtenirPositionElement(Element.GARDE_DROIT) + 1;
-            positions[1] = jeu.obtenirPositionElement(Element.ROI) + 1;
-            positions[2] = jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1;
             int[] cartes = new int[2];
             cartes[0] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 0);
             cartes[1] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 1);
-            jeu.jouerSequenceCarte(elements, positions, cartes);
+            jeu.deplacerCour(choix, cartes);
             options = 1;
         } else {
             if (choix == 2 && (direction == 2 || direction == 0)) {
-                Sequence<Element> elements = Configuration.instance().nouvelleSequence();
-                elements.insereQueue(Element.GARDE_GAUCHE);
-                elements.insereQueue(Element.ROI);
-                elements.insereQueue(Element.GARDE_DROIT);
-                int[] positions = new int[3];
-                positions[0] = jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1;
-                positions[1] = jeu.obtenirPositionElement(Element.ROI) - 1;
-                positions[2] = jeu.obtenirPositionElement(Element.GARDE_DROIT) - 1;
                 int[] cartes = new int[2];
                 cartes[0] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 0);
                 cartes[1] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 1);
-                jeu.jouerSequenceCarte(elements, positions, cartes);
+                jeu.deplacerCour(choix, cartes);
                 options = 1;
             } else {
                 Configuration.instance().logger().info("Deplacement de la cour impossible dans ce sens !");
