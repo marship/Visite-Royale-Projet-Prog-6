@@ -95,6 +95,12 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     break;
                 case 666:
                     selonPerso(Element.FOU);
+                    break;
+                case 999:
+                    Evaluation eval = new Evaluation(jeu.plateau());
+                    System.out.println(eval.note(jeu.plateau().joueurCourant));
+                    System.out.println(eval.note(0));
+                    break;
                 default:
                     Configuration.instance().logger().info("Erreur lors du choix des options");
                     break;

@@ -370,7 +370,7 @@ public class Jeu extends Observable {
 
     public void unPlusUn(int direction, int carte){
         poserCarte(carte);
-        if(direction == 0){
+        if(direction == 0){ // Gauche
             obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
             obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
         }

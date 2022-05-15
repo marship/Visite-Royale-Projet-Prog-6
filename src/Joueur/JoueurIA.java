@@ -2,6 +2,7 @@ package Joueur;
 
 import java.util.Random;
 
+import Global.Deplacement;
 import Global.Element;
 import Modele.Carte;
 import Modele.Plateau;
@@ -18,9 +19,7 @@ class JoueurIA extends Joueur {
 
 	@Override
 	boolean tempsEcoule() {
-		// Pour cette IA, on selectionne aléatoirement une case libre
-        
-		int coupX, coupY;
+		
 		nbActions = 0;
 
 		do {
@@ -122,12 +121,66 @@ class JoueurIA extends Joueur {
 						el = Element.GARDE_DROIT;
 					}
 				}
-				int[] liste = listeDeplacementPossiblesAvecCarte(el, carte.deplacement());
-				
+				if(carte.deplacement() == Deplacement.RAPPROCHE){
+					rapproche(choix);
+					nbActions++;
+				}
+				if(carte.deplacement() == Deplacement.UN_PLUS_UN){
+					int taille = random.nextInt(2);
+					if(taille == 1){
+						int direction = random.nextInt(2);
+						if(direction == 0){
+							if(validationDeplacement(Element.GARDE_GAUCHE, -1) && validationDeplacement(Element.GARDE_DROIT, -1)){
+								unPlusUn(direction);
+								nbActions++;
+							}
+						}
+						else{
+							if(validationDeplacement(Element.GARDE_GAUCHE, 1) && validationDeplacement(Element.GARDE_DROIT, 1)){
+								unPlusUn(direction);
+								nbActions++;
+							}
+						}
+					}
+					else{
+						int direction = random.nextInt(2);
+						if(direction == 0){
+							if(validationDeplacement(el, -2)){
+								jouerCarte(el, obterirPositionElement(el) -2, choix);
+								nbActions++;
+							}
+						}
+						else{
+							if(validationDeplacement(el, 2)){
+								jouerCarte(el, obterirPositionElement(el) 2, choix);
+								nbActions++;
+							}
+						}
+					}
+				}
+				if(carte.deplacement() == Deplacement.MILIEU){
+					if(validationDeplacement(el, -obterirPositionElement(el))){
+						jouerCarte(el, 0, choix);
+						nbActions++;
+					}
+				}
+				else{
+					int direction = random.nextInt(2);
+					if(direction == 0){
+						if(validationDeplacement(el, carte.deplacement())){
+							jouerCarte(el, obterirPositionElement(el) - carte.deplacement().getValeurDeplacement(), choix);
+							nbActions++;
+						}
+					}
+					else{
+						if(validationDeplacement(el, 2)){
+							jouerCarte(el, obterirPositionElement(el) + carte.deplacement().getValeurDeplacement(), choix);
+							nbActions++;
+						}
+					}
+				}
 			}
 		}
-
-
 	}
 
 	private boolean fin(){
