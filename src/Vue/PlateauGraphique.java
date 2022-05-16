@@ -19,15 +19,30 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     Jeu jeu;
     Plateau plateau;
-    int largeurCasePlateau, hauteurCasePlateau, largeurCaseCarte, hauteurCaseCarte;
+
     int taillePlateau = 0;
     Graphics2D dessinable;
     ImagePlateau imagePlateau, imageCouronne, imageGarde, imageRoi, imageFou, imageSorcier, imagePioche, imageCarte, imageCarteErreur;
     int largeurFenetre = 0;
     int hauteurFenetre = 0;
+    
+    // TO DO !!!
+    int largeurCaseCarte, hauteurCaseCarte = 0;
+    int largeurCasePlateau, hauteurCasePlateau = 0;
+    int debutPlateauX, debutPlateauY, finPlateauX, finPlateauY, quartHauteurPlateau = 0;
+
+    // TO DO !!!
+    int debutCartesX = 0;
+    int debutCartesY = 0;
+    int finCartesX = 0;
+    int finCartesY = 0;
 
 
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     public PlateauGraphique(Jeu j) {
+        
         imagePlateau = chargeImage("plateau");
         imageCouronne = chargeImage("couronne");
         imageGarde = chargeImage("garde");
@@ -42,124 +57,177 @@ public class PlateauGraphique extends JPanel implements Observateur {
         //plateau = jeu.plateau();
     }
 
+    // ===========================
+    // ===== PAINT COMPONENT =====
+    // ===========================
     @Override
     public void paintComponent(Graphics g) {
 
-        // Graphics 2D est le vrai type de l'objet passé en paramètre
-        // Le cast permet d'avoir acces a un peu plus de primitives de dessin
         dessinable = (Graphics2D) g;
         
-        // On reccupere quelques infos provenant de la partie JComponent
         largeurFenetre = getWidth();
         hauteurFenetre = getHeight();
+
         taillePlateau = jeu.obtenirInfoPlateau(InfoPlateau.TAILLE_DU_PLATEAU);
-        // On efface tout
+
+        debutPlateauY = hauteurFenetre / 7;
+        finPlateauX = largeurFenetre;
+        finPlateauY = 4 * debutPlateauY;
+        largeurCasePlateau = finPlateauX / taillePlateau;
+        hauteurCasePlateau = finPlateauY;
+        quartHauteurPlateau = hauteurCasePlateau / 4;
+
         dessinable.clearRect(0, 0, largeurFenetre, hauteurFenetre);
+
         tracerPlateau();
         afficherCartesJoueurCourant();        
     }
-    public void tracerPlateau(){
 
-        largeurCasePlateau = largeurFenetre/taillePlateau;
+    // ===========================
+    // ===== TRACER ELEMENTS =====
+    // ===========================
+    public void tracerPlateau() {
 
-        hauteurCasePlateau = 4*hauteurFenetre/7;
-        System.out.println(hauteurFenetre);
-        int hauteurLigneCouronne = hauteurFenetre/7;
-        int hauteurLigneFou = hauteurLigneCouronne + hauteurCasePlateau/4;
-        int hauteurLigneCortege = hauteurLigneCouronne + 2*hauteurCasePlateau/4;
-        int hauteurLigneSorcier = hauteurLigneCouronne + 3*hauteurCasePlateau/4;
+        tracerImage(imagePlateau, debutPlateauX, debutPlateauY, finPlateauX, finPlateauY);
 
-        tracerImage(imagePlateau, 0, hauteurFenetre/7, largeurFenetre, 4*hauteurFenetre/7);
-
-        int Couronne = positionJeton(jeu.obtenirPositionElement(Element.COURONNE));
-        tracerImage(imageCouronne, Couronne, hauteurLigneCouronne, largeurCasePlateau, hauteurCasePlateau/4);
-
-        int Gg = positionJeton(jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
-        tracerImage(imageGarde, Gg, hauteurLigneCortege, largeurCasePlateau, hauteurCasePlateau/4);
-
-        int Roi = positionJeton(jeu.obtenirPositionElement(Element.ROI));
-        tracerImage(imageRoi, Roi, hauteurLigneCortege, largeurCasePlateau, hauteurCasePlateau/4);
-
-        int Gd = positionJeton(jeu.obtenirPositionElement(Element.GARDE_DROIT));
-        tracerImage(imageGarde, Gd, hauteurLigneCortege, largeurCasePlateau, hauteurCasePlateau/4);
-        
-        int Fou = positionJeton(jeu.obtenirPositionElement(Element.FOU));
-        tracerImage(imageFou, Fou, hauteurLigneFou, largeurCasePlateau, hauteurCasePlateau/4);
-
-        int Sorcier = positionJeton(jeu.obtenirPositionElement(Element.SORCIER));
-        tracerImage(imageSorcier, Sorcier, hauteurLigneSorcier, largeurCasePlateau, hauteurCasePlateau/4);        
+        tracerImageElement(Element.COURONNE, imageCouronne);
+        tracerImageElement(Element.GARDE_GAUCHE, imageGarde);
+        tracerImageElement(Element.ROI, imageRoi);
+        tracerImageElement(Element.GARDE_DROIT, imageGarde);
+        tracerImageElement(Element.FOU, imageFou);
+        tracerImageElement(Element.SORCIER, imageSorcier);
     }
 
-    public void afficherCartesJoueurCourant(){
+    void tracerImageElement(Element element, ImagePlateau imageElement) {
+        int hauteurElement = debutPlateauY;
+        switch (element) {
+            case COURONNE:
+                break;
+            case FOU:
+                hauteurElement = hauteurElement + quartHauteurPlateau;
+                break;
+            case GARDE_GAUCHE:
+            case GARDE_DROIT:
+            case ROI:
+                hauteurElement = hauteurElement + 2 * quartHauteurPlateau;
+                break;
+            case SORCIER:
+                hauteurElement = hauteurElement + 3 * quartHauteurPlateau;
+                break;
+            default:
+                break;
+        }
+        tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement, largeurCasePlateau, quartHauteurPlateau);
+    }
+
+    public void afficherCartesJoueurCourant() {
+
         Carte [] cartesJoueurCourant = jeu.recupererMainJoueur(jeu.joueurCourant());
-        for(int i = 0; i<cartesJoueurCourant.length; i++){
-            switch(cartesJoueurCourant[i].personnage()){
+        ImagePlateau image;
+
+        for(int i = 0; i < cartesJoueurCourant.length; i++){
+
+            debutCartesX = (i + 1) * largeurFenetre / 16;
+            debutCartesY = 6 * debutPlateauY;
+            finCartesX = largeurFenetre / 16;
+            finCartesY = debutPlateauY;
+
+            switch(cartesJoueurCourant[i].personnage()) {
                 case ROI:
-                    tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                    image = imageRoi;
                     break;
                 case FOU:
-                    switch(cartesJoueurCourant[i].deplacement()){
+                    switch(cartesJoueurCourant[i].deplacement()) {
                         case UN:
+                            image = imageFouUn;
+                            break;
                         case DEUX:
+                            image = imageFouDeux;
+                            break;
                         case TROIS:
+                            image = imageFouTrois;
+                            break;
                         case QUATRE:
+                            image = imageFouQuatre;
+                            break;
                         case CINQ:
+                            image = imageFouCinq;
+                            break;
                         case MILIEU:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageFouM;
                             break;
                         default:
-                            tracerImage(imageCarteErreur, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageCarteErreur;
+                            break;
                     }
                     break;
                 case SORCIER:
-                    switch(cartesJoueurCourant[i].deplacement()){
+                    switch(cartesJoueurCourant[i].deplacement()) {
                         case UN:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageSorcierUn;
                             break;
                         case DEUX:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageSorcierDeux;
                             break;
                         case TROIS:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageSorcierTrois;
                             break;
                         default:
-                            tracerImage(imageCarteErreur, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageCarteErreur;
+                            break;
                     }
                     break;
                 case GARDES:
-                    switch(cartesJoueurCourant[i].deplacement()){
+                    switch(cartesJoueurCourant[i].deplacement()) {
                         case UN:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageGardesUn;
                             break;
                         case UN_PLUS_UN:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageGardesUnPlusUn;
                             break;
                         default:
-                            tracerImage(imageCarteErreur, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                            image = imageCarteErreur;
+                            break;
                     }
+                    break;
                 case VIDE:
-                    tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                    image = imageVide;
                     break;
                 default:
-                    tracerImage(imageCarteErreur, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
+                    image = imageCarteErreur;
+                    break;
             }
+            tracerImage(image, debutCartesX, debutCartesY, finCartesX, finCartesY);
         }
     }
 
     public int positionJeton(int positionElement){
-        return (positionElement+taillePlateau/2) * largeurCasePlateau;
+        return (positionElement + taillePlateau / 2) * largeurCasePlateau;
     }
 
+    // ==================
+    // ===== IMAGES =====
+    // ==================
     private ImagePlateau chargeImage(String nomImage) {
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImage(in);
     }
 
-    
     public void tracerImage(ImagePlateau image, int x, int y, int largeurCase, int hauteurCase) {
         dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
 
+    // =======================
+    // ===== MISE A JOUR =====
+    // =======================
+    @Override
+    public void miseAJour() {
+        // TODO
+    }
+
+    // ===================================================
+    // ===== INFO POSITION ELEMENT GRAPHIQUE PLATEAU =====
+    // ===================================================
     public int largeurCasePlateau() {
         return largeurCasePlateau;
     }
@@ -176,39 +244,35 @@ public class PlateauGraphique extends JPanel implements Observateur {
         return hauteurCaseCarte;
     }
 
-    @Override
-    public void miseAJour() {
-    }
-
     public int debutPlateauX() {
-        return 0;
-    }
-
-    public int finPlateauX() {
-        return 0;
+        return debutPlateauX;
     }
 
     public int debutPlateauY() {
-        return 0;
+        return debutPlateauY;
+    }
+
+    public int finPlateauX() {
+        return finPlateauX;
     }
 
     public int finPlateauY() {
-        return 0;
+        return finPlateauY;
     }
 
     public int debutCartesX() {
-        return 0;
-    }
-
-    public int finCartesX() {
-        return 0;
-    }
-
-    public int finCartesY() {
-        return 0;
+        return debutCartesX;
     }
 
     public int debutCartesY() {
-        return 0;
+        return debutCartesY;
+    }
+
+    public int finCartesX() {
+        return finCartesX;
+    }
+
+    public int finCartesY() {
+        return finCartesY;
     }
 }
