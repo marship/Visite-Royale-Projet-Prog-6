@@ -5,15 +5,15 @@ import java.util.Random;
 import Global.Deplacement;
 import Global.Element;
 import Modele.Carte;
-import Modele.Plateau;
+import Modele.Jeu;
 
 class JoueurIA extends Joueur {
 
 	Random random;
 	int nbActions;
 
-	JoueurIA(int numeroJoueurCourant, Plateau plateau) {
-		super(numeroJoueurCourant, plateau);
+	JoueurIA(int numeroJoueurCourant, Jeu jeu) {
+		super(numeroJoueurCourant, jeu);
 		random = new Random();
 	}
 
@@ -49,58 +49,58 @@ class JoueurIA extends Joueur {
 	private void activerSorcier() {
 		int kiTP = random.nextInt(10);
 		if(kiTP < 2){
-			if(estPouvoirSorcierActivable(Element.GARDE_GAUCHE)){
-				teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
+			if(jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)){
+				jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
 				nbActions = 10;
 			}
 		}
 		if(kiTP >= 2 && kiTP < 5){
-			if(estPouvoirSorcierActivable(Element.ROI)){
-				teleportationPouvoirSorcier(Element.ROI);
+			if(jeu.estPouvoirSorcierActivable(Element.ROI)){
+				jeu.teleportationPouvoirSorcier(Element.ROI);
 				nbActions = 10;
 			}
 		}
 		if(kiTP >= 5 && kiTP < 7){
-			if(estPouvoirSorcierActivable(Element.GARDE_DROIT)){
-				teleportationPouvoirSorcier(Element.GARDE_DROIT);
+			if(jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)){
+				jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
 				nbActions = 10;
 			}
 		}
 	}
 
 	private void activerFou() {
-		if(estPouvoirFouActivable()){
+		if(jeu.estPouvoirFouActivable()){
 			int choix = random.nextInt(10);
 			if(choix < 2){
-				personnageManipulerParLeFou(Element.GARDE_GAUCHE);
+				jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
 			}
 			if(choix >= 2 && choix < 4){
-				personnageManipulerParLeFou(Element.ROI);
+				jeu.personnageManipulerParLeFou(Element.ROI);
 			}
 			if(choix >= 4 && choix < 6){
-				personnageManipulerParLeFou(Element.GARDE_DROIT);
+				jeu.personnageManipulerParLeFou(Element.GARDE_DROIT);
 			}
 			if(choix >= 6 && choix < 8){
-				personnageManipulerParLeFou(Element.SORCIER);
+				jeu.personnageManipulerParLeFou(Element.SORCIER);
 			}
 			if(choix >= 8){
-				personnageManipulerParLeFou(Element.FOU);
+				jeu.personnageManipulerParLeFou(Element.FOU);
 			}
 		}
 	}
 
 	private void jouerDeuxRoi() {
-		if(plateau.paquet.nombreCartesElement(numeroJoueurCourant, Element.ROI, 0 ) >= 2){
+		if(jeu.plateau().paquet.nombreCartesElement(numeroJoueurCourant, Element.ROI, 0 ) >= 2){
 			int direction = random.nextInt(3);
 			int[] cartes = new int[2];
-			cartes[0] = plateau.paquet.trouverRoi(numeroJoueurCourant, 0);
-			cartes[1] = plateau.paquet.trouverRoi(numeroJoueurCourant, 1);
-			if(direction == 0 && (positionsPourCour() == 1 || positionsPourCour() == 0){
-				deplacerCour(0, cartes);
+			cartes[0] = jeu.plateau().paquet.trouverRoi(numeroJoueurCourant, 0);
+			cartes[1] = jeu.plateau().paquet.trouverRoi(numeroJoueurCourant, 1);
+			if(direction == 0 && (jeu.positionsPourCour() == 1 || jeu.positionsPourCour() == 0)){
+				jeu.deplacerCour(0, cartes);
 				nbActions++;
 			}
-			if(direction == 1 && (positionsPourCour() == 2 || positionsPourCour() == 0){
-				deplacerCour(1, cartes);
+			if(direction == 1 && (jeu.positionsPourCour() == 2 || jeu.positionsPourCour() == 0)){
+				jeu.deplacerCour(1, cartes);
 				nbActions++;
 			}
 		}
@@ -109,8 +109,8 @@ class JoueurIA extends Joueur {
 	private void jouerCarte(){
 		int choix = random.nextInt(10);
 		if(choix < 8){
-			if(listeCarteJouable()[choix] != 0){
-				Carte carte = plateau.paquet.mainJoueur(numeroJoueurCourant)[choix];
+			if(jeu.listeCarteJouable()[choix] != 0){
+				Carte carte = jeu.plateau().paquet.mainJoueur(numeroJoueurCourant)[choix];
 				Element el = carte.personnage();
 				if(carte.personnage() == Element.GARDES){
 					int garde = random.nextInt(2);
@@ -122,7 +122,7 @@ class JoueurIA extends Joueur {
 					}
 				}
 				if(carte.deplacement() == Deplacement.RAPPROCHE){
-					rapproche(choix);
+					jeu.rapproche(choix);
 					nbActions++;
 				}
 				if(carte.deplacement() == Deplacement.UN_PLUS_UN){
@@ -130,14 +130,14 @@ class JoueurIA extends Joueur {
 					if(taille == 1){
 						int direction = random.nextInt(2);
 						if(direction == 0){
-							if(validationDeplacement(Element.GARDE_GAUCHE, -1) && validationDeplacement(Element.GARDE_DROIT, -1)){
-								unPlusUn(direction);
+							if(jeu.validationDeplacement(Element.GARDE_GAUCHE, -1) && jeu.validationDeplacement(Element.GARDE_DROIT, -1)){
+								jeu.unPlusUn(direction, choix);
 								nbActions++;
 							}
 						}
 						else{
-							if(validationDeplacement(Element.GARDE_GAUCHE, 1) && validationDeplacement(Element.GARDE_DROIT, 1)){
-								unPlusUn(direction);
+							if(jeu.validationDeplacement(Element.GARDE_GAUCHE, 1) && jeu.validationDeplacement(Element.GARDE_DROIT, 1)){
+								jeu.unPlusUn(direction, choix);
 								nbActions++;
 							}
 						}
@@ -145,36 +145,36 @@ class JoueurIA extends Joueur {
 					else{
 						int direction = random.nextInt(2);
 						if(direction == 0){
-							if(validationDeplacement(el, -2)){
-								jouerCarte(el, obterirPositionElement(el) -2, choix);
+							if(jeu.validationDeplacement(el, -2)){
+								jeu.jouerCarte(el, jeu.obtenirPositionElement(el) -2, choix);
 								nbActions++;
 							}
 						}
 						else{
-							if(validationDeplacement(el, 2)){
-								jouerCarte(el, obterirPositionElement(el) 2, choix);
+							if(jeu.validationDeplacement(el, 2)){
+								jeu.jouerCarte(el, jeu.obtenirPositionElement(el) + 2, choix);
 								nbActions++;
 							}
 						}
 					}
 				}
 				if(carte.deplacement() == Deplacement.MILIEU){
-					if(validationDeplacement(el, -obterirPositionElement(el))){
-						jouerCarte(el, 0, choix);
+					if(jeu.validationDeplacement(el, -jeu.obtenirPositionElement(el))){
+						jeu.jouerCarte(el, 0, choix);
 						nbActions++;
 					}
 				}
 				else{
 					int direction = random.nextInt(2);
 					if(direction == 0){
-						if(validationDeplacement(el, carte.deplacement())){
-							jouerCarte(el, obterirPositionElement(el) - carte.deplacement().getValeurDeplacement(), choix);
+						if(jeu.validationDeplacement(el, -carte.deplacement().getValeurDeplacement())){
+							jeu.jouerCarte(el, jeu.obtenirPositionElement(el) - carte.deplacement().getValeurDeplacement(), choix);
 							nbActions++;
 						}
 					}
 					else{
-						if(validationDeplacement(el, 2)){
-							jouerCarte(el, obterirPositionElement(el) + carte.deplacement().getValeurDeplacement(), choix);
+						if(jeu.validationDeplacement(el, carte.deplacement().getValeurDeplacement())){
+							jeu.jouerCarte(el, jeu.obtenirPositionElement(el) + carte.deplacement().getValeurDeplacement(), choix);
 							nbActions++;
 						}
 					}
