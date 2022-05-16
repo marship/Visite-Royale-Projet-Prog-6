@@ -13,9 +13,6 @@ public class AdaptateurClavier extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        
-        System.out.println("Touche presse !!!");
-
         switch (e.getKeyCode()) {
             case KeyEvent.VK_S:
                 System.out.println("Sorcier");
