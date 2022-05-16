@@ -1,6 +1,6 @@
 package Joueur;
 
-import Modele.Plateau;
+import Modele.Jeu;
 
 // Classe commune à tous les joueurs : IA ou humain
 // L'idée est que, en ayant la même interface, tous les joueurs sont traités de la même
@@ -12,15 +12,15 @@ import Modele.Plateau;
 // - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
 abstract class Joueur {
 
-	Plateau plateau;
+	Jeu jeu;
 	int numeroJoueurCourant;
 
 	// Le joueur connait son numéro, cela lui permet d'inspecter le plateau en
 	// sachant
 	// repérer ses pions et évaluer où il en est
-	Joueur(int nJoueurCourant, Plateau p) {
+	Joueur(int nJoueurCourant, Jeu j) {
 		numeroJoueurCourant = nJoueurCourant;
-		plateau = p;
+		jeu = j;
 	}
 
 	int numeroJoueurCourant() {
