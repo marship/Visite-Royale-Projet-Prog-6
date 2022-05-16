@@ -1,29 +1,78 @@
 package Joueur;
 
+import Global.Deplacement;
+import Global.Element;
 import Global.InfoJeu;
+import Modele.Carte;
 import Modele.Jeu;
 
 public class JoueurHumain extends Joueur {
 
+	static final InfoJeu MENU_PRICIPAL = InfoJeu.MENU_PRICIPAL;
+	static final InfoJeu OPTIONS = InfoJeu.OPTIONS;
+	static final InfoJeu DEBUT_TOUR = InfoJeu.DEBUT_TOUR;
+	static final InfoJeu CHOIX_GARDE = InfoJeu.CHOIX_GARDE;
+	static final InfoJeu CHOIX_FOU = InfoJeu.CHOIX_FOU;
+	static final InfoJeu CHOIX_SORCIER = InfoJeu.CHOIX_SORCIER;
+	static final InfoJeu CHOIX_DEPLACEMENT = InfoJeu.CHOIX_DEPLACEMENT;
+	static final InfoJeu APRES_UNE_CARTE = InfoJeu.APRES_UNE_CARTE;
+	static final InfoJeu JOUER_UNE_CARTE = InfoJeu.JOUER_UNE_CARTE;
+
 	public JoueurHumain(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
-    }
+	}
 
 	@Override
-	void jeu(InfoJeu informationJeu, int choixAction) {
-		// A adapter selon le jeu,
-		// Un coup peut être constitué de plusieurs passages par cette fonction, ex :
-		// - selection d'un pièce + surlignage des coups possibles
-		// - selection de la destination
-		// Autrement dit une machine à état peut aussi être gérée par un objet de cette
-		// classe. Dans le cas du morpion, un clic suffit.
+	public boolean jeu(int caseChoisie, int positionCarteDansLaMain) {
 
-        switch (informationJeu) {
-            // TODO
-        
-            default:
-                break;
-        }
+		Carte carteChoisie = jeu.recupererMainJoueur(numeroJoueurCourant)[positionCarteDansLaMain];
+
+		if (jeu.listeCarteJouable()[positionCarteDansLaMain] == 0) {
+			return false;
+		}
+
+		if (jeu.listeDeplacementPossiblesAvecCarte(carteChoisie.personnage(),
+				carteChoisie.deplacement())[caseChoisie] == 0) {
+			return false;
+		}
+
+		if (carteChoisie.personnage() == Element.GARDES) {
+			if (carteChoisie.deplacement() == Deplacement.RAPPROCHE) {
+				jeu.rapproche(positionCarteDansLaMain);
+			}
+			if (carteChoisie.deplacement() == Deplacement.UN_PLUS_UN) {
+				if (((caseChoisie - 2 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE))
+						|| (caseChoisie + 2 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE)))
+						&& jeu.obtenirPositionElement(Element.ROI) > caseChoisie) {
+					jeu.jouerCarte(Element.GARDE_GAUCHE, caseChoisie, positionCarteDansLaMain);
+				} else {
+					if (((caseChoisie - 2 == jeu.obtenirPositionElement(Element.GARDE_DROIT))
+							|| (caseChoisie + 2 == jeu.obtenirPositionElement(Element.GARDE_DROIT)))
+							&& jeu.obtenirPositionElement(Element.ROI) < caseChoisie) {
+						jeu.jouerCarte(Element.GARDE_DROIT, caseChoisie, positionCarteDansLaMain);
+					} else {
+						if ((caseChoisie - 1 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE))
+								|| (caseChoisie - 1 == jeu.obtenirPositionElement(Element.GARDE_DROIT))) {
+							jeu.unPlusUn(1, positionCarteDansLaMain);
+						} else {
+							jeu.unPlusUn(0, positionCarteDansLaMain);
+						}
+					}
+				}
+			}
+			if (carteChoisie.deplacement() == Deplacement.UN) {
+				if ((caseChoisie - 1 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE))
+						|| (caseChoisie + 1 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE))) {
+					jeu.jouerCarte(Element.GARDE_GAUCHE, caseChoisie, positionCarteDansLaMain);
+				}
+				else{
+					jeu.jouerCarte(Element.GARDE_DROIT, caseChoisie, positionCarteDansLaMain);
+				}
+			}
+			return true;
+		}
+		jeu.jouerCarte(carteChoisie.personnage(), caseChoisie, positionCarteDansLaMain);
+		return true;
 
 	}
 }

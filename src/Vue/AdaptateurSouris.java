@@ -1,4 +1,5 @@
 package Vue;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,17 +15,19 @@ public class AdaptateurSouris extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("Clic !");
-        int coupX = e.getX() / plateauGraphique.hauteurCase();
-        int coupY = e.getY() / plateauGraphique.largeurCase();
-        collecteurEvenements.clicSouris(coupX, coupY);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
         int coupX = e.getX();
         int coupY = e.getY();
-        collecteurEvenements.traqueSouris(coupX, coupY);
+        if (coupX >= plateauGraphique.debutPlateauX() && coupX <= plateauGraphique.finPlateauX()
+                && coupY >= plateauGraphique.debutPlateauY() && coupY <= plateauGraphique.finPlateauY()) {
+            coupY = e.getY() / plateauGraphique.largeurCasePlateau();
+            collecteurEvenements.clicPlateau(coupY);
+        }
+        else{
+            if (coupX >= plateauGraphique.debutCartesX() && coupX <= plateauGraphique.finCartesX()
+                    && coupY >= plateauGraphique.debutCartesY() && coupY <= plateauGraphique.finCartesY()) {
+                coupY = e.getY() / plateauGraphique.largeurCaseCarte();
+                collecteurEvenements.clicCarte(coupY);
+            }
+        }
     }
-
 }

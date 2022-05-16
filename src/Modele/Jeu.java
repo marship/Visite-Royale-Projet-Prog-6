@@ -184,6 +184,25 @@ public class Jeu extends Observable {
         }
     }
 
+    public Element obtenirElementPosition(int positon){
+        if(obtenirPositionElement(ROI) == positon){
+            return ROI;
+        }
+        if(obtenirPositionElement(FOU) == positon){
+            return FOU;
+        }
+        if(obtenirPositionElement(SORCIER) == positon){
+            return SORCIER;
+        }
+        if(obtenirPositionElement(GARDE_GAUCHE) == positon){
+            return GARDE_GAUCHE;
+        }
+        if(obtenirPositionElement(GARDE_DROIT) == positon){
+            return GARDE_DROIT;
+        }
+        return VIDE;
+    }
+
     public Personnage obtenirPersonnageElement(Element element) {
         switch (element) {
             case ROI:

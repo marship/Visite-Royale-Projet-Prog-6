@@ -19,7 +19,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     Jeu jeu;
     Plateau plateau;
-    int largeurCase, hauteurCase;
+    int largeurCasePlateau, hauteurCasePlateau, largeurCaseCarte, hauteurCaseCarte;
     int taillePlateau = 0;
     Graphics2D dessinable;
     ImagePlateau imagePlateau, imageCouronne, imageGarde, imageRoi, imageFou, imageSorcier, imagePioche, imageCarte, imageCarteErreur;
@@ -60,34 +60,34 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
     public void tracerPlateau(){
 
-        largeurCase = largeurFenetre/taillePlateau;
+        largeurCasePlateau = largeurFenetre/taillePlateau;
 
-        hauteurCase = 4*hauteurFenetre/7;
+        hauteurCasePlateau = 4*hauteurFenetre/7;
         System.out.println(hauteurFenetre);
         int hauteurLigneCouronne = hauteurFenetre/7;
-        int hauteurLigneFou = hauteurLigneCouronne + hauteurCase/4;
-        int hauteurLigneCortege = hauteurLigneCouronne + 2*hauteurCase/4;
-        int hauteurLigneSorcier = hauteurLigneCouronne + 3*hauteurCase/4;
+        int hauteurLigneFou = hauteurLigneCouronne + hauteurCasePlateau/4;
+        int hauteurLigneCortege = hauteurLigneCouronne + 2*hauteurCasePlateau/4;
+        int hauteurLigneSorcier = hauteurLigneCouronne + 3*hauteurCasePlateau/4;
 
         tracerImage(imagePlateau, 0, hauteurFenetre/7, largeurFenetre, 4*hauteurFenetre/7);
 
         int Couronne = positionJeton(jeu.obtenirPositionElement(Element.COURONNE));
-        tracerImage(imageCouronne, Couronne, hauteurLigneCouronne, largeurCase, hauteurCase/4);
+        tracerImage(imageCouronne, Couronne, hauteurLigneCouronne, largeurCasePlateau, hauteurCasePlateau/4);
 
         int Gg = positionJeton(jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
-        tracerImage(imageGarde, Gg, hauteurLigneCortege, largeurCase, hauteurCase/4);
+        tracerImage(imageGarde, Gg, hauteurLigneCortege, largeurCasePlateau, hauteurCasePlateau/4);
 
         int Roi = positionJeton(jeu.obtenirPositionElement(Element.ROI));
-        tracerImage(imageRoi, Roi, hauteurLigneCortege, largeurCase, hauteurCase/4);
+        tracerImage(imageRoi, Roi, hauteurLigneCortege, largeurCasePlateau, hauteurCasePlateau/4);
 
         int Gd = positionJeton(jeu.obtenirPositionElement(Element.GARDE_DROIT));
-        tracerImage(imageGarde, Gd, hauteurLigneCortege, largeurCase, hauteurCase/4);
+        tracerImage(imageGarde, Gd, hauteurLigneCortege, largeurCasePlateau, hauteurCasePlateau/4);
         
         int Fou = positionJeton(jeu.obtenirPositionElement(Element.FOU));
-        tracerImage(imageFou, Fou, hauteurLigneFou, largeurCase, hauteurCase/4);
+        tracerImage(imageFou, Fou, hauteurLigneFou, largeurCasePlateau, hauteurCasePlateau/4);
 
         int Sorcier = positionJeton(jeu.obtenirPositionElement(Element.SORCIER));
-        tracerImage(imageSorcier, Sorcier, hauteurLigneSorcier, largeurCase, hauteurCase/4);        
+        tracerImage(imageSorcier, Sorcier, hauteurLigneSorcier, largeurCasePlateau, hauteurCasePlateau/4);        
     }
 
     public void afficherCartesJoueurCourant(){
@@ -100,20 +100,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 case FOU:
                     switch(cartesJoueurCourant[i].deplacement()){
                         case UN:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
-                            break;
                         case DEUX:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
-                            break;
                         case TROIS:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
-                            break;
                         case QUATRE:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
-                            break;
                         case CINQ:
-                            tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
-                            break;
                         case MILIEU:
                             tracerImage(imageCarte, (i+1)*largeurFenetre/16, 6*hauteurFenetre/7, largeurFenetre/16, hauteurFenetre/7);
                             break;
@@ -157,7 +147,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public int positionJeton(int positionElement){
-        return (positionElement+taillePlateau/2) * largeurCase;
+        return (positionElement+taillePlateau/2) * largeurCasePlateau;
     }
 
     private ImagePlateau chargeImage(String nomImage) {
@@ -170,15 +160,55 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
 
-    public int largeurCase() {
-        return largeurCase;
+    public int largeurCasePlateau() {
+        return largeurCasePlateau;
     }
 
-    public int hauteurCase() {
-        return hauteurCase;
+    public int hauteurCasePlateau() {
+        return hauteurCasePlateau;
+    }
+
+    public int largeurCaseCarte() {
+        return largeurCaseCarte;
+    }
+
+    public int hauteurCaseCarte() {
+        return hauteurCaseCarte;
     }
 
     @Override
     public void miseAJour() {
+    }
+
+    public int debutPlateauX() {
+        return 0;
+    }
+
+    public int finPlateauX() {
+        return 0;
+    }
+
+    public int debutPlateauY() {
+        return 0;
+    }
+
+    public int finPlateauY() {
+        return 0;
+    }
+
+    public int debutCartesX() {
+        return 0;
+    }
+
+    public int finCartesX() {
+        return 0;
+    }
+
+    public int finCartesY() {
+        return 0;
+    }
+
+    public int debutCartesY() {
+        return 0;
     }
 }
