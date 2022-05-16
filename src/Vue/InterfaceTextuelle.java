@@ -77,10 +77,11 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     }
                     break;
                 case 11:
-                    if (jeu.plateau().paquet.nombreCartesElement(jeu.plateau().joueurCourant, Element.ROI, 0) >= 2 && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                    if (jeu.plateau().paquet.nombreCartesElement(jeu.plateau().joueurCourant, Element.ROI, 0) >= 2
+                            && (jeu.dernierTypeDePersonnageJouer == Element.ROI
+                                    || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
                         deplacerCour();
-                    }
-                    else {
+                    } else {
                         Configuration.instance().logger().info("Vous ne pouvez pas déplacer la cour !");
                     }
                     break;
@@ -179,11 +180,11 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     jeu.personnageManipulerParLeFou(Element.GARDES);
                     break;
 
-                case 4:
+                case 3:
                     jeu.personnageManipulerParLeFou(Element.SORCIER);
                     break;
 
-                case 5:
+                case 4:
                     jeu.personnageManipulerParLeFou(Element.FOU);
                     break;
 
@@ -208,8 +209,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                 if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
                     jeu.teleportationPouvoirSorcier(Element.ROI);
                     jeu.finDeTour();
-                }
-                else{
+                } else {
                     Configuration.instance().logger().info("Teleportation interdite !");
                 }
                 break;
@@ -218,8 +218,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                 if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
                     jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
                     jeu.finDeTour();
-                }
-                else{
+                } else {
                     Configuration.instance().logger().info("Teleportation interdite !");
                 }
                 break;
@@ -228,8 +227,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                 if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
                     jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
                     jeu.finDeTour();
-                }
-                else{
+                } else {
                     Configuration.instance().logger().info("Teleportation interdite !");
                 }
                 break;
@@ -245,15 +243,23 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         } else {
             Carte carte = jeu.recupererMainJoueur(jeu.plateau().joueurCourant)[choix];
             Element el = jeu.plateau().paquet.mainJoueur(jeu.plateau().joueurCourant)[choix].personnage();
-            if ((el == Element.GARDES) || (jeu.personnageManipulerParLeFou == Element.GARDES)) {
+            if ((el == Element.GARDES) || ((jeu.personnageManipulerParLeFou == Element.GARDES)
+                    || (jeu.personnageManipulerParLeFou == Element.GARDE_GAUCHE)
+                    || (jeu.personnageManipulerParLeFou == Element.GARDE_DROIT))) {
                 System.out.println("Quel garde voulez vous bouger ?");
                 Configuration.instance().logger().info("1 : Gauche");
                 Configuration.instance().logger().info("2 : Droite");
                 int garde = sc.nextInt();
                 if (garde == 1) {
                     el = Element.GARDE_GAUCHE;
+                    if (jeu.personnageManipulerParLeFou == Element.GARDES) {
+                        jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
+                    }
                 } else {
                     el = Element.GARDE_DROIT;
+                    if (jeu.personnageManipulerParLeFou == Element.GARDES) {
+                        jeu.personnageManipulerParLeFou(Element.GARDE_DROIT);
+                    }
                 }
             }
             int i = -8;
@@ -280,39 +286,37 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                 if (el == Element.FOU && jeu.personnageManipulerParLeFou != Element.GARDES) {
                     jeu.jouerCarte(jeu.personnageManipulerParLeFou, jouer, choix);
                 } else {
-                    if ((el == Element.GARDE_GAUCHE || el == Element.GARDE_DROIT) && (carte.deplacement() != Deplacement.UN)) {
+                    if ((el == Element.GARDE_GAUCHE || el == Element.GARDE_DROIT)
+                            && (carte.deplacement() != Deplacement.UN)) {
                         Sequence<Element> elements = Configuration.instance().nouvelleSequence();
                         elements.insereQueue(Element.GARDE_GAUCHE);
                         elements.insereQueue(Element.GARDE_DROIT);
                         int[] positions = new int[2];
                         boolean un_plus_un = false;
                         if (carte.deplacement() == Deplacement.UN_PLUS_UN) {
-                            if(el == Element.GARDE_GAUCHE){
-                                if( (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 2 == jouer) || (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 2 == jouer) ){
+                            if (el == Element.GARDE_GAUCHE) {
+                                if ((jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 2 == jouer)
+                                        || (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 2 == jouer)) {
                                     jeu.jouerCarte(el, jouer, choix);
                                     un_plus_un = true;
-                                }
-                                else{
-                                    
+                                } else {
+
                                     positions[0] = jouer;
-                                    if(jeu.obtenirPositionElement(Element.GARDE_GAUCHE) > jouer){
+                                    if (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) > jouer) {
                                         positions[1] = jeu.obtenirPositionElement(Element.GARDE_DROIT) - 1;
-                                    }
-                                    else{
+                                    } else {
                                         positions[1] = jeu.obtenirPositionElement(Element.GARDE_DROIT) + 1;
                                     }
                                 }
-                            }
-                            else{
-                                if( (jeu.obtenirPositionElement(Element.GARDE_DROIT) + 2 == jouer) || (jeu.obtenirPositionElement(Element.GARDE_DROIT) - 2 == jouer) ){
+                            } else {
+                                if ((jeu.obtenirPositionElement(Element.GARDE_DROIT) + 2 == jouer)
+                                        || (jeu.obtenirPositionElement(Element.GARDE_DROIT) - 2 == jouer)) {
                                     jeu.jouerCarte(el, jouer, choix);
                                     un_plus_un = true;
-                                }
-                                else{
-                                    if(jeu.obtenirPositionElement(Element.GARDE_DROIT) > jouer){
+                                } else {
+                                    if (jeu.obtenirPositionElement(Element.GARDE_DROIT) > jouer) {
                                         positions[0] = jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1;
-                                    }
-                                    else{
+                                    } else {
                                         positions[0] = jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1;
                                     }
                                     positions[1] = jouer;
@@ -324,7 +328,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                         }
                         int[] cartes = new int[1];
                         cartes[0] = choix;
-                        if(!un_plus_un){
+                        if (!un_plus_un) {
                             jeu.jouerSequenceCarte(elements, positions, cartes);
                         }
                     } else {
