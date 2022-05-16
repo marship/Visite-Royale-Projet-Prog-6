@@ -22,7 +22,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     int taillePlateau = 0;
     Graphics2D dessinable;
-    ImagePlateau imagePlateau, imageCouronne, imageGarde, imageRoi, imageFou, imageSorcier, imagePioche, imageCarte, imageCarteErreur;
+    ImagePlateau imagePlateau, imageCouronne, imageGardeG, imageGardeD, imageRoi, imageFou, imageSorcier, imagePioche, imageCarte, imageCarteErreur, imageCarteVide;
+    ImagePlateau imageFouUn, imageFouDeux, imageFouTrois, imageFouQuatre, imageFouCinq, imageFouM;
+    ImagePlateau imageSorcierUn, imageSorcierDeux, imageSorcierTrois;
+    ImagePlateau imageGardesUn, imageGardesUnPlusUn;
     int largeurFenetre = 0;
     int hauteurFenetre = 0;
     
@@ -44,15 +47,33 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public PlateauGraphique(Jeu j) {
         
         imagePlateau = chargeImage("plateau");
-        imageCouronne = chargeImage("couronne");
-        imageGarde = chargeImage("garde");
-        imageRoi = chargeImage("roi");
-        imageFou = chargeImage("fou");
-        imageSorcier = chargeImage("sorcier");
-        //imagePioche = chargeImage("pioche");
-        imageCarte = chargeImage("carte");
+        imageCouronne = chargeImage("jeton_Grande_Couronne");
+        /*
+        imageGardeD = chargeImage("jeton_Garde_Droit");
+        imageGardeG = chargeImage("jeton_Garde_Gauche");
+        imageRoi = chargeImage("jeton_Roi");
+        imageFou = chargeImage("jeton_Fou");
+        imageSorcier = chargeImage("jeton_Sorcier");
+        imagePioche = chargeImage("dosCarte");
         imageCarteErreur = chargeImage("carteErreur");
+        imageCarteVide = chargeImage("carteVide");
+        */
+/*
+        imageFouUn = chargeImage("Fou_1");
+        imageFouDeux = chargeImage("Fou_2"); 
+        imageFouTrois = chargeImage("Fou_3");
+        imageFouQuatre = chargeImage("Fou_4");
+        imageFouCinq = chargeImage("Fou_5");
+        imageFouM = chargeImage("Fou_M");
 
+        imageSorcierUn = chargeImage("Sorcier_1");
+        imageSorcierDeux = chargeImage("Sorcier_2");
+        imageSorcierTrois = chargeImage("Sorcier_3");
+
+        imageGardesUn = chargeImage("Garde_1");
+        imageGardesUnPlusUn = chargeImage("Garde_1plus1");
+
+        */
         jeu = j;
         //plateau = jeu.plateau();
     }
@@ -91,9 +112,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
         tracerImage(imagePlateau, debutPlateauX, debutPlateauY, finPlateauX, finPlateauY);
 
         tracerImageElement(Element.COURONNE, imageCouronne);
-        tracerImageElement(Element.GARDE_GAUCHE, imageGarde);
+        tracerImageElement(Element.GARDE_GAUCHE, imageGardeG);
         tracerImageElement(Element.ROI, imageRoi);
-        tracerImageElement(Element.GARDE_DROIT, imageGarde);
+        tracerImageElement(Element.GARDE_DROIT, imageGardeD);
         tracerImageElement(Element.FOU, imageFou);
         tracerImageElement(Element.SORCIER, imageSorcier);
     }
@@ -191,7 +212,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     }
                     break;
                 case VIDE:
-                    image = imageVide;
+                    image = imageCarteVide;
                     break;
                 default:
                     image = imageCarteErreur;
