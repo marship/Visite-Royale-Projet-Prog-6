@@ -54,26 +54,93 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicPlateau(int coupY) {
-        if(carteActuelle != 8){
-            if(joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupY, carteActuelle)){
+        if (carteActuelle != 8) {
+            if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupY, carteActuelle)) {
                 carteActuelle = 8;
             }
-        }
-        else{
+        } else {
             Element el = jeu.obtenirElementPosition(coupY);
-            switch (el) {
-                case ROI:
-                    // TODO
-                    break;
-                case FOU:
-                    // TODO
-                    break;
-                case SORCIER:
-                    // TODO
-                    break;
-            
-                default:
-                    break;
+            if (ETAT_JEU == InfoJeu.CHOIX_FOU) {
+                switch (el) {
+                    case ROI:
+                    case SORCIER:
+                        jeu.personnageManipulerParLeFou(el);
+                        break;
+                    case GARDE_GAUCHE:
+                    case GARDE_DROIT:
+                        jeu.personnageManipulerParLeFou(Element.GARDES);
+                        break;
+                    default:
+                        jeu.personnageManipulerParLeFou(Element.FOU);
+                        break;
+                }
+                ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                return;
+            }
+            if (ETAT_JEU == InfoJeu.CHOIX_SORCIER) {
+                switch (el) {
+                    case ROI:
+                        if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
+                            jeu.teleportationPouvoirSorcier(Element.ROI);
+                            jeu.finDeTour();
+                        }
+                        break;
+                    case GARDE_GAUCHE:
+                        if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
+                            jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
+                            jeu.finDeTour();
+                        }
+                        break;
+                    case GARDE_DROIT:
+                        if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
+                            jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
+                            jeu.finDeTour();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                return;
+            }
+            if (ETAT_JEU == InfoJeu.CHOIX_ROI) {
+                int possible = jeu.positionsPourCour();
+                if (coupY - 8 == jeu.obtenirPositionElement(Element.ROI) - 1 && (possible == 1 || possible == 0)) {
+                    int[] cartes = new int[2];
+                    cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
+                    cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
+                    jeu.deplacerCour(0, cartes);
+                }
+                if (coupY - 8 == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 1 || possible == 0)) {
+                    int[] cartes = new int[2];
+                    cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
+                    cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
+                    jeu.deplacerCour(1, cartes);
+                }
+                ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                return;
+            }
+            if (ETAT_JEU == InfoJeu.DEBUT_TOUR) {
+                switch (el) {
+                    case ROI:
+                        if (jeu.plateau().paquet.nombreCartesElement(joueurCourant, Element.ROI, 0) >= 2
+                                && (jeu.dernierTypeDePersonnageJouer == Element.ROI
+                                        || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                            ETAT_JEU = InfoJeu.CHOIX_ROI;
+                        }
+                        break;
+                    case FOU:
+                        if (jeu.estPouvoirFouActivable()) {
+                            ETAT_JEU = InfoJeu.CHOIX_FOU;
+                        }
+                        break;
+                    case SORCIER:
+                        ETAT_JEU = InfoJeu.CHOIX_SORCIER;
+                        break;
+                    default:
+                        break;
+                }
+                return;
             }
         }
     }
@@ -93,20 +160,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             default:
                 break;
         }
-
-    }
-
-    int recalculerPositionClic(int x, int y) { // TODO
-        int choix = 0;
-        switch (ETAT_JEU) {
-            case DEBUT_TOUR:
-
-                break;
-
-            default:
-                break;
-        }
-        return choix;
 
     }
 
