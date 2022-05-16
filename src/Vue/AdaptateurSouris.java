@@ -19,4 +19,11 @@ public class AdaptateurSouris extends MouseAdapter {
         collecteurEvenements.clicSouris(coupX, coupY);
     }
 
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        int coupX = e.getX();
+        int coupY = e.getY();
+        collecteurEvenements.traqueSouris(coupX, coupY);
+    }
+
 }

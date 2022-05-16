@@ -357,4 +357,10 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         Configuration.instance().logger().info("10 : Fin du tour");
     }
 
+    @Override
+    public void miseAJourFinDeTour() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
