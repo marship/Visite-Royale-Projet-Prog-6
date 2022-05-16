@@ -8,7 +8,7 @@ public enum InfoJeu {
     CHOIX_GARDE (3),
     CHOIX_FOU (4),
     CHOIX_SORCIER (5),
-    CHOIX_DEPLACEMENT (6),
+    CHOIX_ROI (6),
     APRES_UNE_CARTE(7),
     JOUER_UNE_CARTE (8);
 

@@ -14,7 +14,7 @@ public class JoueurHumain extends Joueur {
 	static final InfoJeu CHOIX_GARDE = InfoJeu.CHOIX_GARDE;
 	static final InfoJeu CHOIX_FOU = InfoJeu.CHOIX_FOU;
 	static final InfoJeu CHOIX_SORCIER = InfoJeu.CHOIX_SORCIER;
-	static final InfoJeu CHOIX_DEPLACEMENT = InfoJeu.CHOIX_DEPLACEMENT;
+	static final InfoJeu CHOIX_ROI = InfoJeu.CHOIX_ROI;
 	static final InfoJeu APRES_UNE_CARTE = InfoJeu.APRES_UNE_CARTE;
 	static final InfoJeu JOUER_UNE_CARTE = InfoJeu.JOUER_UNE_CARTE;
 
