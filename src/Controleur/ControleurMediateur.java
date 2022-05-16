@@ -26,6 +26,8 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     int carteActuelle; // Sert pour se souvenir de quelle carte est choisie pour le moment
 
+    final int lenteurAttente = 50;
+
     int decompteTimer;
 
     @Override
@@ -83,18 +85,21 @@ public class ControleurMediateur implements CollecteurEvenements {
                         if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
                             jeu.teleportationPouvoirSorcier(Element.ROI);
                             jeu.finDeTour();
+                            changerJoueurCourant();
                         }
                         break;
                     case GARDE_GAUCHE:
                         if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
                             jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
                             jeu.finDeTour();
+                            changerJoueurCourant();
                         }
                         break;
                     case GARDE_DROIT:
                         if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
                             jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
                             jeu.finDeTour();
+                            changerJoueurCourant();
                         }
                         break;
                     default:
@@ -169,11 +174,27 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void tictac() {
-
-    }
+		if (jeu.actionAutoriser()) {
+			if (decompteTimer == 0) {
+				int type = typeJoueur[joueurCourant];
+				// Lorsque le temps est écoulé on le transmet au joueur courant.
+				// Si un coup a été joué (IA) on change de joueur.
+				if (joueurs[joueurCourant][type].tempsEcoule()) {
+					changerJoueurCourant();
+				} else {
+				// Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on l'attend.
+					System.out.println("On vous attend, joueur " + joueurs[joueurCourant][type].numeroJoueurCourant());
+					decompteTimer = lenteurAttente;
+				}
+			} else {
+				decompteTimer--;
+			}
+		}
+	}
 
     public void changerJoueurCourant() {
-
+        joueurCourant = (joueurCourant + 1) % joueurs.length;
+		decompteTimer = lenteurAttente;
     }
 
     @Override
