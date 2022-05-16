@@ -17,7 +17,7 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
     PlateauGraphique plateauGraphique;
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
-                    boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonJoker, boutonMenu;
+                    boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonJoker, boutonMenu, boutonFinDeTour;
                     
 	CardLayout layout; 
 
@@ -60,8 +60,6 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 		chrono.start();
 
 		fenetre.add(panelCourant);
-
-		
 
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenetre.setSize(1280, 720);
@@ -200,43 +198,45 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 	//TODO Faire l'affichage du plateau de jeu
 	public void creerPlateauJeu(){
 
-		//panelPlateau = new JPanel();
-		//panelPlateau.setBorder(new EmptyBorder(240,640/4,50,640/4));
-		//GridBagConstraints layoutConstraint = new GridBagConstraints();
         plateauGraphique = new PlateauGraphique(jeu);
-		
-		/*JLabel imglabel = new JLabel(new ImageIcon("res/Images/plateau.png"));
-		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
-		layoutConstraint.gridx = 0;
-		layoutConstraint.gridy = 0;
-		panelPlateau.add(imglabel, layoutConstraint);*/
+        //GridBagConstraints layoutConstraint = new GridBagConstraints();
 
-        JButton boutonRandom = new JButton("Joker");
-        boutonRandom.addActionListener(new AdaptateurCommande(collecteurEvenements, "Joker"));
-        plateauGraphique.add(boutonRandom);
-
-		/*boutonJoker = new DesignBoutons("Joker", "res/Images/textureBouton.png");
+        Box boxBoutons = Box.createHorizontalBox();
+		boutonJoker = new DesignBoutons("Joker", "res/Images/textureBouton.png");
         boutonJoker.addActionListener(new AdaptateurCommande(collecteurEvenements, "Joker"));
-        panelPlateau.add(boutonJoker);
-		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
-		layoutConstraint.gridx = 0;
-		layoutConstraint.gridy = 1;
-        panelPlateau.add(boutonJoker, layoutConstraint);
+		//layoutConstraint.gridx = 0;
+		//layoutConstraint.gridy = 0;
+        boxBoutons.add(boutonJoker);
 
-		/*boutonMenu = new DesignBoutons("Menu", "res/Images/textureBouton.png");
+		boutonMenu = new DesignBoutons("Menu", "res/Images/textureBouton.png");
         boutonMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "Menu"));
-        panelPlateau.add(boutonMenu);
-		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
+        //layoutConstraint.gridx = 0;
+		//layoutConstraint.gridy = 1;
+        boxBoutons.add(boutonMenu);
+
+        boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/textureBouton.png");
+        boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
+        //layoutConstraint.gridx = 0;
+		//layoutConstraint.gridy = 2;
+        boxBoutons.add(boutonFinDeTour);
+
+        plateauGraphique.add(boxBoutons);
+
+		/*layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
 		layoutConstraint.gridx = 1;
 		layoutConstraint.gridy = 1;
         panelPlateau.add(boutonMenu, layoutConstraint);
 
-        int garde = Jeu.obtenirPositionElement(Element.GARDE_GAUCHE);
 		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
 		layoutConstraint.gridx = 0;
 		layoutConstraint.gridy = 0;
 		panelPlateau.add(imglabel, layoutConstraint); */
     } 
+
+    public void miseAJourFinDeTour() {
+        jeu.finDeTour();
+        fenetre.repaint();
+    }
 	//Crée le JPanel des regles
 	//TODO Faire l'affichage des regles
 	public void creerRegles(){
@@ -246,6 +246,7 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 	    //Crée le JPanel des options
     //TODO Faire l'affichage des options
     public void creerOptions(){
+
 
         panelOptions = new ArrierePlan("res/Images/backgroundOptions.png");
         panelOptions.setLayout(new GridLayout(0, 1, 0, 30));
@@ -301,10 +302,9 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
         boutonRetourAccueil.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
         panelOptions.add(boutonRetourAccueil);
     }
-
+    
     @Override
     public void miseAJour() {
-        // TODO Auto-generated method stub
         
     }
 }

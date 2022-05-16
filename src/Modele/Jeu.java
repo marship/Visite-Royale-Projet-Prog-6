@@ -5,6 +5,7 @@ import java.util.Arrays;
 import Global.Configuration;
 import Global.Deplacement;
 import Global.Element;
+import Global.InfoPlateau;
 import Pattern.Observable;
 import Structures.Sequence;
 
@@ -195,6 +196,25 @@ public class Jeu extends Observable {
                 return plateau.gardeDroit;
             default:
                 return null;
+        }
+    }
+
+    public int obtenirInfoPlateau(InfoPlateau element) {
+        switch (element) {
+            case TAILLE_DU_PLATEAU:
+                return TAILLE_DU_PLATEAU;
+            case CENTRE_DU_PLATEAU:
+                return CENTRE_DU_PLATEAU;
+            case EXTREMITE_GAUCHE_DU_PLATEAU:
+                return EXTREMITE_GAUCHE_DU_PLATEAU;
+            case EXTREMITE_DROITE_DU_PLATEAU:
+                return EXTREMITE_DROITE_DU_PLATEAU;
+            case ENTREE_CHATEAU_GAUCHE:
+                return ENTREE_CHATEAU_GAUCHE;
+            case ENTREE_CHATEAU_DROIT:
+                return ENTREE_CHATEAU_DROIT;
+            default:
+                return -1;
         }
     }
 

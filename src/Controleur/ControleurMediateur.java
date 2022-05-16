@@ -30,8 +30,11 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 	@Override
 	public void clicSouris(int coupX, int coupY) {
-
 	}
+
+    @Override
+    public void traqueSouris(int coupX, int coupY) {
+    }
 
     @Override
     public void tictac() {
@@ -67,6 +70,15 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "Quitter":
                 System.exit(0);
+                break;
+            case "FinDeTour":
+                interfaceUtilisateur.miseAJourFinDeTour();
+                break;
+            case "MenuEnJeu":
+                break;
+            case "JouerCarte":
+                break;
+            case "PouvoirFou":
                 break;
             default:
                 return false;
