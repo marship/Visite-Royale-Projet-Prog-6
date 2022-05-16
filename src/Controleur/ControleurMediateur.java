@@ -174,27 +174,28 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void tictac() {
-		if (jeu.actionAutoriser()) {
-			if (decompteTimer == 0) {
-				int type = typeJoueur[joueurCourant];
-				// Lorsque le temps est écoulé on le transmet au joueur courant.
-				// Si un coup a été joué (IA) on change de joueur.
-				if (joueurs[joueurCourant][type].tempsEcoule()) {
-					changerJoueurCourant();
-				} else {
-				// Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on l'attend.
-					System.out.println("On vous attend, joueur " + joueurs[joueurCourant][type].numeroJoueurCourant());
-					decompteTimer = lenteurAttente;
-				}
-			} else {
-				decompteTimer--;
-			}
-		}
-	}
+        if (jeu.actionAutoriser()) {
+            if (decompteTimer == 0) {
+                int type = typeJoueur[joueurCourant];
+                // Lorsque le temps est écoulé on le transmet au joueur courant.
+                // Si un coup a été joué (IA) on change de joueur.
+                if (joueurs[joueurCourant][type].tempsEcoule()) {
+                    changerJoueurCourant();
+                } else {
+                    // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
+                    // l'attend.
+                    System.out.println("On vous attend, joueur " + joueurs[joueurCourant][type].numeroJoueurCourant());
+                    decompteTimer = lenteurAttente;
+                }
+            } else {
+                decompteTimer--;
+            }
+        }
+    }
 
     public void changerJoueurCourant() {
         joueurCourant = (joueurCourant + 1) % joueurs.length;
-		decompteTimer = lenteurAttente;
+        decompteTimer = lenteurAttente;
     }
 
     @Override
@@ -225,10 +226,21 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "PouvoirFou":
                 break;
+            case "fin":
+                finDeTour();
+                break;
             default:
                 return false;
         }
         return true;
+    }
+
+    private void finDeTour() {
+        if(jeu.dernierTypeDePersonnageJouer != Element.VIDE){
+            jeu.finDeTour();
+            ETAT_JEU = InfoJeu.DEBUT_TOUR;
+            changerJoueurCourant();
+        }
     }
 
     @Override
