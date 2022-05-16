@@ -370,6 +370,42 @@ public class Jeu extends Observable {
         metAJour();
     }
 
+    public void deplacerCour(int direction, int[] cartes){
+        int i = 0;
+        while (i != cartes.length) {
+            poserCarte(cartes[i]);
+            i++;
+        }
+        if(direction == 0){ // Gauche
+            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
+            obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
+            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
+        }
+        else{ // Droit
+            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+            obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+        }
+    }
+
+    public void unPlusUn(int direction, int carte){
+        poserCarte(carte);
+        if(direction == 0){ // Gauche
+            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
+            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
+        }
+        else{
+            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+        }
+    }
+
+    public void rapproche(int carte){
+        poserCarte(carte);
+        obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
+        obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+    }
+
     public void poserCarte(int positionCarteDansLaMain) {
         majDernierTypeDePersonnageJouer(recupererMainJoueur(plateau().joueurCourant)[positionCarteDansLaMain].personnage());
         plateau.paquet.enleverCarte(plateau().joueurCourant, positionCarteDansLaMain);
@@ -444,9 +480,14 @@ public class Jeu extends Observable {
                 per[1] = GARDE_GAUCHE;
                 base[1] = obtenirPositionElement(GARDE_GAUCHE);
             }
-            return selonLePersoMaisEnRecurcifPersoSpecial(per, listeCarte, positionAccessibleAvecPerso, base);
+            positionAccessibleAvecPerso = selonLePersoMaisEnRecurcifPersoGardes(per, listeCarte, positionAccessibleAvecPerso, base);
+            obtenirPersonnageElement(per[0]).positionnerPersonnage(base[0]);
+            obtenirPersonnageElement(per[1]).positionnerPersonnage(base[1]);
+            return positionAccessibleAvecPerso;
         }
-        return selonLePersoMaisEnRecurcifPersoBase(perso, listeCarte, positionAccessibleAvecPerso, positionDeBase);
+        positionAccessibleAvecPerso = selonLePersoMaisEnRecurcifPersoBase(perso, listeCarte, positionAccessibleAvecPerso, positionDeBase);
+        obtenirPersonnageElement(perso).positionnerPersonnage(positionDeBase);
+        return positionAccessibleAvecPerso;
     }
 
     public int[] selonLePersoMaisEnRecurcifPersoBase(Element perso, Carte[] listeCarte, int[] positions, int positionRelatif){
@@ -473,18 +514,16 @@ public class Jeu extends Observable {
         return positions;
     }
 
-    public int[] selonLePersoMaisEnRecurcifPersoSpecial(Element[] perso, Carte[] listeCarte, int[] positions, int[] positionRelatif){
+    public int[] selonLePersoMaisEnRecurcifPersoGardes(Element[] perso, Carte[] listeCarte, int[] positions, int[] positionRelatif){
         int i = 0;
         Carte vide = new Carte(VIDE, Deplacement.VIDE);
         while(i < 8){
-            System.out.println(i);
             obtenirPersonnageElement(perso[0]).positionnerPersonnage(positionRelatif[0]);
             obtenirPersonnageElement(perso[1]).positionnerPersonnage(positionRelatif[1]);
             Carte carte = listeCarte[i];
             Carte[] sansLaCarte = Arrays.copyOf(listeCarte, 8);
             sansLaCarte[i] = vide;
             if(!carte.estIdentique(vide)){
-                System.out.println("Mais si je rentre !");
                 int[] deplacementRelatif = listeDeplacementPossiblesAvecCarte(perso[0], carte.deplacement());
                 positions = fustionTableau(positions, deplacementRelatif);
                 int j = 0;
@@ -526,7 +565,7 @@ public class Jeu extends Observable {
                         else{
                             positionRelatif[0] = j - 8;
                         }
-                        positions = selonLePersoMaisEnRecurcifPersoSpecial(perso, sansLaCarte, positions, positionRelatif);
+                        positions = selonLePersoMaisEnRecurcifPersoGardes(perso, sansLaCarte, positions, positionRelatif);
                     }
                     j++;
                 }
@@ -535,6 +574,8 @@ public class Jeu extends Observable {
         }
         return positions;
     }
+
+
 
     public int[] fustionTableau(int[] un, int[] deux){
         int[] res = initialiserTableau(TAILLE_DU_PLATEAU, 0);

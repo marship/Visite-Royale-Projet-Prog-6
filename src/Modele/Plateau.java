@@ -39,12 +39,12 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ====================
     // ===== ELEMENTS =====
     // ====================
-    Personnage gardeGauche;
-    Personnage gardeDroit;
-    Personnage roi;
-    Personnage fou;
-    Personnage sorcier;
-    Couronne couronne;
+    public Personnage gardeGauche;
+    public Personnage gardeDroit;
+    public Personnage roi;
+    public Personnage fou;
+    public Personnage sorcier;
+    public Couronne couronne;
     public Paquet paquet;
 
     // ============================
@@ -295,7 +295,13 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         String ligneCouronne = "";
         for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
             if (i == couronne.positionCouronne()) {
-                ligneCouronne = ligneCouronne + "| C ";
+                if(couronne.etatCouronne()){
+                    ligneCouronne = ligneCouronne + "| C ";
+                }
+                else{
+                    ligneCouronne = ligneCouronne + "| c ";
+                }
+                
             } else {
                 ligneCouronne = ligneCouronne + "|   ";
             }

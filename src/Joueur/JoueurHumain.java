@@ -1,11 +1,11 @@
 package Joueur;
 
-import Modele.Plateau;
+import Modele.Jeu;
 
 class JoueurHumain extends Joueur {
 
-	JoueurHumain(int numeroJoueurCourant, Plateau plateau) {
-		super(numeroJoueurCourant, plateau);
+	JoueurHumain(int numeroJoueurCourant, Jeu jeu) {
+		super(numeroJoueurCourant, jeu);
 	}
 
 	@Override
