@@ -7,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
-import Global.Element;
-
 
 public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
 	
@@ -61,13 +59,15 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
 		fenetre.add(panelCourant);
 
+        // Garde à jour l'interface graphique du controleur
+        collecteurEvenements.ajouteInterfaceUtilisateur(this);
+
+                
         // Mise en place des Listeners
         ((Component) plateauGraphique).addMouseMotionListener(new AdaptateurSourisMouvement(plateauGraphique, collecteurEvenements));
         ((Component) plateauGraphique).addMouseListener(new AdaptateurSouris(plateauGraphique, collecteurEvenements));
         fenetre.addKeyListener(new AdaptateurClavier(collecteurEvenements));
-
-        // Garde à jour l'interface graphique du controleur
-        collecteurEvenements.ajouteInterfaceUtilisateur(this);
+        fenetre.setFocusable(true);
 
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenetre.setSize(1280, 720);
