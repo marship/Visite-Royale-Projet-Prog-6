@@ -1,6 +1,10 @@
 package Controleur;
 
 import Global.InfoJeu;
+import Joueur.Joueur;
+import Joueur.JoueurHumain;
+import Joueur.JoueurIAAleatoire;
+import Joueur.JoueurIAExperte;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
@@ -8,12 +12,14 @@ import Vue.InterfaceUtilisateur;
 public class ControleurMediateur implements CollecteurEvenements {
 	
     static final int TEMPS_ATTENTE = 50;
+    static final int NOMBRE_JOUEUR = 2;
+    static final int NOMBRE_TYPE_JOUEUR = 3;
     static InfoJeu ETAT_JEU = InfoJeu.DEBUT_TOUR;
 
     Jeu jeu;
     InterfaceUtilisateur interfaceUtilisateur;
 
-	// Joueur[][] joueurs;
+	Joueur[][] joueurs;
 	int [] typeJoueur;
 	int joueurCourant;
 
@@ -25,11 +31,28 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
 	public ControleurMediateur(Jeu j) {
+		jeu = j;
+		joueurs = new Joueur[NOMBRE_JOUEUR][NOMBRE_TYPE_JOUEUR];
+		typeJoueur = new int[NOMBRE_TYPE_JOUEUR];
+		for (int i = 0; i < joueurs.length; i++) {
+			joueurs[i][0] = new JoueurHumain(i, jeu);
+			joueurs[i][1] = new JoueurIAAleatoire(i, jeu);
+            joueurs[i][2] = new JoueurIAExperte(i, jeu);
+			typeJoueur[i] = 0;
+		}
+	}
 
+    @Override
+	public void changerJoueurCourant(int numeroJoueur, int typeDuJoueur) {
+		System.out.println("Nouveau type " + typeJoueur + " pour le joueur " + numeroJoueur);
+		typeJoueur[numeroJoueur] = typeDuJoueur;
 	}
 
 	@Override
 	public void clicSouris(int coupX, int coupY) {
+        // TODO RecalculerPositionClic -> information calculé
+
+        // joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(infoCalculee, choixAction);
 	}
 
     @Override
@@ -44,13 +67,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     public void changerJoueurCourant() {
         
     }
-
-    @Override
-    public void changerJoueurCourant(int numeroJoueur, int typeJoueur) {
-        
-    }
-
-	
 
     @Override
     public boolean commande(String commande) {

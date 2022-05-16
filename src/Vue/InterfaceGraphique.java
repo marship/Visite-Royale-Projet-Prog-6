@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
+import Global.Element;
+
+
 public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
 	
     Jeu jeu;
@@ -29,9 +32,9 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
 	public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
         InterfaceGraphique vue = new InterfaceGraphique(jeu, cEvenements);
-		SwingUtilities.invokeLater(vue);
+		cEvenements.ajouteInterfaceUtilisateur(vue);
+        SwingUtilities.invokeLater(vue);
         // Garde à jour l'interface graphique du controleur
-        cEvenements.ajouteInterfaceUtilisateur(vue);
 	}
 
 
@@ -47,7 +50,7 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
         creerPlateauJeu();
 		panelCourant.add(plateauGraphique, "Plateau");
 		creerMenuPrincipal();
-    	panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
+        panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
         creerSelectionJoueurs();
 		panelCourant.add(panelSelectionJoueurs, "Jouer");
 		creerOptions();
@@ -57,6 +60,14 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 		chrono.start();
 
 		fenetre.add(panelCourant);
+
+        // Mise en place des Listeners
+        ((Component) plateauGraphique).addMouseMotionListener(new AdaptateurSourisMouvement(plateauGraphique, collecteurEvenements));
+        ((Component) plateauGraphique).addMouseListener(new AdaptateurSouris(plateauGraphique, collecteurEvenements));
+        fenetre.addKeyListener(new AdaptateurClavier(collecteurEvenements));
+
+        // Garde à jour l'interface graphique du controleur
+        collecteurEvenements.ajouteInterfaceUtilisateur(this);
 
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenetre.setSize(1280, 720);
@@ -144,7 +155,7 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
         test.gridx = 0;
         test.gridy = 2;
         panelSelectionJoueurs.add(comboBoxJoueur1, test);
-       
+
         test.insets = new Insets(10,10,0,10);  //top padding
 
         JLabel nomJoueur2 = new JLabel("Nom du Joueur 2");
@@ -167,7 +178,6 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
         test.gridx = 1;
         test.gridy = 2;
         panelSelectionJoueurs.add(comboBoxJoueur2, test);
-       
         
         test.anchor = GridBagConstraints.PAGE_END; //bottom of space
         test.insets = new Insets(50,20,0,20);  //padding des boutons 

@@ -13,23 +13,32 @@ public class AdaptateurClavier extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        
+        System.out.println("Touche presse !!!");
+
         switch (e.getKeyCode()) {
             case KeyEvent.VK_S:
+                System.out.println("Sorcier");
                 collecteurEvenements.commande("Sorcier");
                 break;
             case KeyEvent.VK_F:
+                System.out.println("Fou");
                 collecteurEvenements.commande("Fou");
                 break;
             case KeyEvent.VK_D:
+                System.out.println("Roi");
                 collecteurEvenements.commande("Roi");
                 break;
             case KeyEvent.VK_LEFT:
+                System.out.println("Gauche");
                 collecteurEvenements.commande("left");
                 break;
             case KeyEvent.VK_RIGHT:
+                System.out.println("Droite");
                 collecteurEvenements.commande("right");
                 break;
             case KeyEvent.VK_Q:
+                System.out.println("Quit");
                 collecteurEvenements.commande("quit");
                 break;
             case KeyEvent.VK_U:

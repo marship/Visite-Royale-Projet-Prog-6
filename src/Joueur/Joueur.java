@@ -1,5 +1,6 @@
 package Joueur;
 
+import Global.InfoJeu;
 import Modele.Jeu;
 
 // Classe commune à tous les joueurs : IA ou humain
@@ -10,7 +11,7 @@ import Modele.Jeu;
 // - provoquer une temporisation (utilisé dans une IA)
 // - tenir compte d'une temporisation écoulée (utilisé dans une IA)
 // - tenir compte d'un coup joué à la souris (utilisé par un joueur humain)
-abstract class Joueur {
+public abstract class Joueur {
 
 	Jeu jeu;
 	int numeroJoueurCourant;
@@ -35,7 +36,7 @@ abstract class Joueur {
 
 	// Méthode appelée pour tous les joueurs lors d'un clic sur le plateau
 	// Si un joueur n'est pas concerné, il lui suffit de l'ignorer
-	boolean jeu(int coupX, int coupY) {
-		return false;
+	void jeu(InfoJeu informationJeu, int choixAction) {
+        // TODO
 	}
 }

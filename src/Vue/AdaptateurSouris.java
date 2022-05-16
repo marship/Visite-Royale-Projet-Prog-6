@@ -14,6 +14,7 @@ public class AdaptateurSouris extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        System.out.println("Clic !");
         int coupX = e.getX() / plateauGraphique.hauteurCase();
         int coupY = e.getY() / plateauGraphique.largeurCase();
         collecteurEvenements.clicSouris(coupX, coupY);

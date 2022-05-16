@@ -28,7 +28,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         jeu = j;
         collecteurEvenements = cEvenements;
         sc = new Scanner(System.in);
-        cEvenements.ajouteInterfaceUtilisateur(vue);
+        collecteurEvenements.ajouteInterfaceUtilisateur(vue);
         run();
     }
 
@@ -45,6 +45,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     }
 
     public static void run() {
+
         while (!jeu.estPartieTerminee()) {
             afficherPlateauMainOptions(options);
             int choix = sc.nextInt();
