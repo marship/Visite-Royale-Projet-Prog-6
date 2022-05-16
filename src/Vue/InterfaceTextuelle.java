@@ -144,18 +144,18 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                 break;
         }
         int choix = sc.nextInt();
-        if (choix == 1 && (direction == 1 || direction == 0)) {
+        if (choix == 1 && (direction == 2 || direction == 0)) {
             int[] cartes = new int[2];
             cartes[0] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 0);
             cartes[1] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 1);
-            jeu.deplacerCour(choix, cartes);
+            jeu.deplacerCour(1, cartes);
             options = 1;
         } else {
-            if (choix == 2 && (direction == 2 || direction == 0)) {
+            if (choix == 2 && (direction == 1 || direction == 0)) {
                 int[] cartes = new int[2];
                 cartes[0] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 0);
                 cartes[1] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 1);
-                jeu.deplacerCour(choix, cartes);
+                jeu.deplacerCour(0, cartes);
                 options = 1;
             } else {
                 Configuration.instance().logger().info("Deplacement de la cour impossible dans ce sens !");

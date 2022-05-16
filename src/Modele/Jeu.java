@@ -319,22 +319,25 @@ public class Jeu extends Observable {
                     .resteAssezCarteDansPioche(plateau.paquet.nombreCarteManquante(plateau().joueurCourant))) {
                 plateau.paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
+                Configuration.instance().logger().info("Il reste " + plateau.paquet.pioche().taille() + " cartes dans la pioche");
             } else {
                 if (getEtatCouronne()) {
                     plateau.paquet.melangerDefausse();
                     plateau.paquet.remplirMain(plateau().joueurCourant);
                     changerEtatCouronne();
                     changerJoueurCourant();
+                    Configuration.instance().logger().info("La pioche se recharge pour la première fois !");
                 } else {
                     if (obtenirPositionElement(ROI) == 0) {
                         plateau.paquet.melangerDefausse();
                         plateau.paquet.remplirMain(plateau().joueurCourant);
                         changerJoueurCourant();
+                        Configuration.instance().logger().info("Le roi est au centre, la partie continue !");
                     } else {
                         if (obtenirPositionElement(ROI) > 0) {
-                            joueurGagnant = JOUEUR_DROIT;
+                            plateau().joueurGagnant = JOUEUR_DROIT;
                         } else {
-                            joueurGagnant = JOUEUR_GAUCHE;
+                            plateau().joueurGagnant = JOUEUR_GAUCHE;
                         }
                         traiterGagnant();
                     }
@@ -616,12 +619,12 @@ public class Jeu extends Observable {
 
     public int positionsPourCour() {
         if (obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU) {
-            return 1;
+            return 1; // Deplacement Droite impossible
         } else {
             if (obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU) {
-                return 2;
+                return 2; // Deplacement Gauche impossible
             }
-            return 0;
+            return 0; // Double Deplacements possibles
         }
     }
 

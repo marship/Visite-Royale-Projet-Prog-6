@@ -72,12 +72,10 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
     public int taille(){
         int resultat = 0;
         Maillon<Titi> courant = tete;
-
         while (courant != null) {
             resultat = resultat + 1;
             courant = courant.suivant;
         }
-        
         return resultat;
     }
 }
