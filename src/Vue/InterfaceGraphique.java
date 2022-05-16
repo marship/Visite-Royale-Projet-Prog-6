@@ -7,9 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
-import Global.Element;
-
-
 public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
 	
     Jeu jeu;
@@ -67,7 +64,7 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 	}
 
 	//affiche le panel passé en paramètre
-	public void afficher_panel(String nomPanel){
+	public void afficherPanel(String nomPanel){
 
 		layout.show(panelCourant, nomPanel);
     } 

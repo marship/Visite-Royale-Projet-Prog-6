@@ -1,6 +1,6 @@
 package Vue;
 
 public interface InterfaceUtilisateur {
-	void afficher_panel(String nomPanel);
+	void afficherPanel(String nomPanel);
 	void miseAJourFinDeTour();
 }

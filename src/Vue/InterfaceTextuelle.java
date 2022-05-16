@@ -39,7 +39,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     }
 
     @Override
-    public void afficher_panel(String nomPanel) {
+    public void afficherPanel(String nomPanel) {
         // TODO Auto-generated method stub
 
     }

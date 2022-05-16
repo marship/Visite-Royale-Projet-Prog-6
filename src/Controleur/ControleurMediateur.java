@@ -56,17 +56,17 @@ public class ControleurMediateur implements CollecteurEvenements {
     public boolean commande(String commande) {
         switch (commande) {
             case "Jouer":
-                interfaceUtilisateur.afficher_panel("Jouer");
+                interfaceUtilisateur.afficherPanel("Jouer");
                 break;
             case "MenuPrincipal":
-                interfaceUtilisateur.afficher_panel("MenuPrincipal");
+                interfaceUtilisateur.afficherPanel("MenuPrincipal");
             break;
             case "Charger":
                 break;
             case "Regles":
                 break;
             case "Options":
-                interfaceUtilisateur.afficher_panel("Options");
+                interfaceUtilisateur.afficherPanel("Options");
                 break;
             case "Quitter":
                 System.exit(0);

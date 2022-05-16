@@ -177,6 +177,8 @@ public class Jeu extends Observable {
                 return plateau.gardeGauche.positionPersonnage();
             case GARDE_DROIT:
                 return plateau.gardeDroit.positionPersonnage();
+            case COURONNE:
+                return plateau.couronne.positionCouronne();
             default:
                 return 10;
         }
