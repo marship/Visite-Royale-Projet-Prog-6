@@ -38,12 +38,6 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
 
     }
 
-    @Override
-    public void afficherPanel(String nomPanel) {
-        // TODO Auto-generated method stub
-
-    }
-
     public static void run() {
 
         while (!jeu.estPartieTerminee()) {
@@ -371,8 +365,11 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
 
     @Override
     public void miseAJourFinDeTour() {
-        // TODO Auto-generated method stub
-        
+        // Inutile dans l'interfaceTextuelle !!
     }
 
+    @Override
+    public void afficherPanneau(String nomPanneau) {
+        // Inutile dans l'interfaceTextuelle !!
+    }
 }
