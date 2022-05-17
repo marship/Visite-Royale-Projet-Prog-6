@@ -5,7 +5,11 @@ import Pattern.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
+
 import javax.swing.border.EmptyBorder;
+
+import Global.Element;
 
 
 public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
@@ -311,6 +315,12 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
     
     @Override
     public void miseAJour() {
+        fenetre.repaint();
+    }
+
+    @Override
+    public void afficherPanneau(String nomPanneau) {
+        // TODO Auto-generated method stub
         
     }
 

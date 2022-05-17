@@ -19,14 +19,16 @@ public class AdaptateurSouris extends MouseAdapter {
         int coupY = e.getY();
         if (coupX >= plateauGraphique.debutPlateauX() && coupX <= plateauGraphique.finPlateauX()
                 && coupY >= plateauGraphique.debutPlateauY() && coupY <= plateauGraphique.finPlateauY()) {
-            coupY = e.getY() / plateauGraphique.largeurCasePlateau();
-            collecteurEvenements.clicPlateau(coupY);
+            coupX = e.getX() / plateauGraphique.largeurCasePlateau() - 8;
+            coupY = e.getY() / plateauGraphique.quartHauteurPlateau;
+            collecteurEvenements.clicPlateau(coupX, coupY);
         }
         else{
             if (coupX >= plateauGraphique.debutCartesX() && coupX <= plateauGraphique.finCartesX()
                     && coupY >= plateauGraphique.debutCartesY() && coupY <= plateauGraphique.finCartesY()) {
-                coupY = e.getY() / plateauGraphique.largeurCaseCarte();
-                collecteurEvenements.clicCarte(coupY);
+                        coupX = e.getX() / plateauGraphique.largeurCaseCarte();
+                System.out.println(coupX);
+                collecteurEvenements.clicCarte(coupX);
             }
         }
     }
