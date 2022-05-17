@@ -17,8 +17,8 @@ public class AdaptateurSouris extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         int coupX = e.getX();
         int coupY = e.getY();
-        if (coupX >= plateauGraphique.debutPlateauX() && coupX <= plateauGraphique.finPlateauX()
-                && coupY >= plateauGraphique.debutPlateauY() && coupY <= plateauGraphique.finPlateauY()) {
+        if (coupX >= plateauGraphique.debutPlateauX() && coupX <= plateauGraphique.largeurPlateau()
+                && coupY >= plateauGraphique.debutPlateauY() && coupY <= plateauGraphique.hauteurPlateau()) {
             coupX = e.getX() / plateauGraphique.largeurCasePlateau() - 8;
             coupY = e.getY() / plateauGraphique.quartHauteurPlateau;
             collecteurEvenements.clicPlateau(coupX, coupY);
