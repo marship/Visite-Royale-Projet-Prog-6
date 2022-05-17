@@ -101,7 +101,7 @@ public class Paquet {
             System.out.print("|" + carte.toString() + "|");
             i++;
         }
-        System.out.println("");
+        System.out.println("\n");
     }
 
     public void afficherTour() {

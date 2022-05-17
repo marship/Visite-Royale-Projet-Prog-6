@@ -17,32 +17,27 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
 
     static int options = 0;
 
-    InterfaceTextuelle(Jeu j, CollecteurEvenements cEvenements) {
-        jeu = j;
-        collecteurEvenements = cEvenements;
-        sc = new Scanner(System.in);
-    }
-
+    // ==========================
+    // ===== (CONSTRUCTEUR) =====
+    // ==========================
     public static void demarrer(Jeu j, CollecteurEvenements cEvenements) {
-        InterfaceGraphique vue = new InterfaceGraphique(jeu, cEvenements);
         jeu = j;
         collecteurEvenements = cEvenements;
         sc = new Scanner(System.in);
-        collecteurEvenements.ajouteInterfaceUtilisateur(vue);
         run();
     }
 
-    @Override
-    public void miseAJour() {
-        // TODO Auto-generated method stub
-
-    }
-
+    // ===============
+    // ===== RUN =====
+    // ===============
     public static void run() {
 
         while (!jeu.estPartieTerminee()) {
+
             afficherPlateauMainOptions(options);
+
             int choix = sc.nextInt();
+
             switch (choix) {
                 case 1:
                 case 2:
@@ -59,113 +54,108 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     if (options == 0) {
                         pouvoirSorcier();
                     } else {
-                        Configuration.instance().logger()
-                                .info("Vous avez déjà fait un autre type de deplacement ce tour");
+                        Configuration.instance().logger().warning("Vous avez deja fait un autre type de deplacement ce tour !");
                     }
                     break;
                 case 0:
                     if (options == 0) {
                         pouvoirFou();
                     } else {
-                        Configuration.instance().logger()
-                                .info("Vous avez déjà fait un autre type de deplacement ce tour");
+                        Configuration.instance().logger().warning("Vous avez deja fait un autre type de deplacement ce tour !");
                     }
                     break;
                 case 11:
                     if (jeu.plateau().paquet.nombreCartesElement(jeu.plateau().joueurCourant, Element.ROI, 0) >= 2
-                            && (jeu.dernierTypeDePersonnageJouer == Element.ROI
-                                    || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                        && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
                         deplacerCour();
                     } else {
-                        Configuration.instance().logger().info("Vous ne pouvez pas déplacer la cour !");
+                        Configuration.instance().logger().info("Vous ne pouvez pas deplacer la cour !");
                     }
                     break;
                 case 10:
                     if (options == 0) {
-                        Configuration.instance().logger()
-                                .info("Vous ne pouvez pas finir votre tour sans faire un déplacement !");
+                        Configuration.instance().logger().info("Vous ne pouvez pas finir votre tour sans faire un deplacement !");
                     } else {
                         options = 0;
                         jeu.finDeTour();
+                        System.out.println("#################################################################\n");
                     }
                     break;
                 case 666:
+                    // TODO DELETE Cas de test Paul
                     selonPerso(Element.FOU);
                     break;
                 case 999:
+                    // TODO DELETE Cas de test Paul
                     Evaluation eval = new Evaluation(jeu.plateau());
                     System.out.println(eval.note(jeu.plateau().joueurCourant));
                     System.out.println(eval.note(0));
                     break;
                 default:
-                    Configuration.instance().logger().info("Erreur lors du choix des options");
+                    Configuration.instance().logger().info("Erreur lors du choix des options !");
                     break;
             }
         }
     }
 
-    private static void selonPerso(Element fou) {
-        int[] a = jeu.listeDeplacementPossiblesAvecPerso(Element.GARDE_GAUCHE);
-        int i = -8;
-        while (i <= 8) {
-            if (i >= 0) {
-                System.out.print(" ");
-            }
-            System.out.print(i + " ");
-            i++;
-        }
-        System.out.println(" ");
-        i = 0;
-        while (i != 17) {
-            System.out.print(" " + a[i] + " ");
-            i++;
-        }
-    }
-
+    // ================
+    // ===== COUR =====
+    // ================
     private static void deplacerCour() {
-        Configuration.instance().logger().info("De quel côté voulez vous bouger la cour ?");
+
+        Configuration.instance().logger().info("Selectionnez de quel cote doit se deplacer la cour");
+
         int direction = jeu.positionsPourCour();
+
         switch (direction) {
             case 1:
-                Configuration.instance().logger().info("1 : Droite");
+                System.out.println("1 : Droite");
                 break;
             case 2:
-                Configuration.instance().logger().info("2 : Gauche");
+                System.out.println("2 : Gauche");
                 break;
             default:
-                Configuration.instance().logger().info("1 : Droite");
-                Configuration.instance().logger().info("2 : Gauche");
+                System.out.println("1 : Droite");
+                System.out.println("2 : Gauche");
                 break;
         }
+
         int choix = sc.nextInt();
+
         if (choix == 1 && (direction == 2 || direction == 0)) {
-            int[] cartes = new int[2];
-            cartes[0] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 0);
-            cartes[1] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 1);
-            jeu.deplacerCour(1, cartes);
-            options = 1;
+            directionDeplacementCour(1);
+        } else if (choix == 2 && (direction == 1 || direction == 0)) {
+            directionDeplacementCour(0);
         } else {
-            if (choix == 2 && (direction == 1 || direction == 0)) {
-                int[] cartes = new int[2];
-                cartes[0] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 0);
-                cartes[1] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 1);
-                jeu.deplacerCour(0, cartes);
-                options = 1;
-            } else {
-                Configuration.instance().logger().info("Deplacement de la cour impossible dans ce sens !");
-                options = 0;
-            }
+            options = 0;
+            Configuration.instance().logger().warning("Deplacement de la cour impossible dans ce sens !");
         }
     }
 
+    static void directionDeplacementCour(int direction) {
+        int[] cartes = new int[2];
+        cartes[0] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 0);
+        cartes[1] = jeu.plateau().paquet.trouverRoi(jeu.plateau().joueurCourant, 1);
+        jeu.deplacerCour(direction, cartes);
+        options = 1;
+    }
+
+    // =======================
+    // ===== POUVOIR FOU =====
+    // =======================
     private static void pouvoirFou() {
+
         if (jeu.estPouvoirFouActivable()) {
-            Configuration.instance().logger().info("Que doivent bouger les cartes fou ?");
-            Configuration.instance().logger().info("1 : ROI");
-            Configuration.instance().logger().info("2 : GARDES");
-            Configuration.instance().logger().info("3 : SORCIER");
-            Configuration.instance().logger().info("4 : FOU");
+
+            Configuration.instance().logger().info("Selectionner le personnage a controler :");
+
+            System.out.println("1 : ROI");
+            System.out.println("2 : GARDES");
+            System.out.println("3 : SORCIER");
+            System.out.println("4 : FOU");
+
             int fou = sc.nextInt();
+
             switch (fou) {
                 case 1:
                     jeu.personnageManipulerParLeFou(Element.ROI);
@@ -187,51 +177,51 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     break;
             }
         } else {
-            Configuration.instance().logger().info("Pouvoir du fou impossible à utiliser !");
+            Configuration.instance().logger().warning("Pouvoir du fou impossible à utiliser !");
         }
     }
 
+    // ===========================
+    // ===== POUVOIR SORCIER =====
+    // ===========================
     private static void pouvoirSorcier() {
-        Configuration.instance().logger().info("Vous pouvez TP :");
-        Configuration.instance().logger().info("1 : ROI : " + jeu.estPouvoirSorcierActivable(Element.ROI));
-        Configuration.instance().logger()
-                .info("2 : GARDE GAUCHE : " + jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE));
-        Configuration.instance().logger()
-                .info("3 : GARDE DROIT : " + jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT));
-        int choix = sc.nextInt();
-        switch (choix) {
+
+        Configuration.instance().logger().info("Selectionner le personnage a teleporter :");
+
+        System.out.println("1 : ROI (" + jeu.estPouvoirSorcierActivable(Element.ROI) + ")");
+        System.out.println("2 : GARDE GAUCHE (" + jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE) + ")");
+        System.out.println("3 : GARDE DROIT (" + jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT) + ")");
+        
+        int sorcier = sc.nextInt();
+
+        switch (sorcier) {
             case 1:
-                if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
-                    jeu.teleportationPouvoirSorcier(Element.ROI);
-                    jeu.finDeTour();
-                } else {
-                    Configuration.instance().logger().info("Teleportation interdite !");
-                }
+                choixTeleportation(Element.ROI);
                 break;
-
             case 2:
-                if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
-                    jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
-                    jeu.finDeTour();
-                } else {
-                    Configuration.instance().logger().info("Teleportation interdite !");
-                }
+                choixTeleportation(Element.GARDE_GAUCHE);
                 break;
-
             case 3:
-                if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
-                    jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
-                    jeu.finDeTour();
-                } else {
-                    Configuration.instance().logger().info("Teleportation interdite !");
-                }
+                choixTeleportation(Element.GARDE_DROIT);
                 break;
-
             default:
+                Configuration.instance().logger().warning("Pouvoir du sorcier impossible à utiliser !");
                 break;
         }
     }
 
+    static void choixTeleportation(Element element) {
+        if (jeu.estPouvoirSorcierActivable(element)) {
+            jeu.teleportationPouvoirSorcier(element);
+            jeu.finDeTour();
+        } else {
+            Configuration.instance().logger().warning("Teleportation du " + element.name() + " interdite !");
+        }
+    }
+
+    // =======================
+    // ===== JOUER CARTE ===== // TODO
+    // =======================
     private static void jouerCarte(int choix) {
         if (jeu.listeCarteJouable()[choix] == 0) {
             System.out.println("Carte non identique");
@@ -346,21 +336,58 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         }
     }
 
+    // ============================
+    // ===== AFFICHER OPTIONS =====
+    // ============================
     private static void afficherPlateauMainOptions(int options) {
-        Configuration.instance().logger().info("Au tour de " + jeu.plateau().joueurCourant + " de jouer !");
+
+        System.out.println("Au tour du joueur " + jeu.joueurCourant() + " de jouer !");
+        
         jeu.plateau().afficherPlateau();
-        jeu.plateau().paquet.afficherMain(jeu.plateau().joueurCourant);
-        Configuration.instance().logger().info("1/8 : La carte à jouer");
+        jeu.plateau().paquet.afficherMain(jeu.joueurCourant());
+
+        System.out.println("1/8 : Selection de la carte a jouer");
+
         if (options == 0) {
-            Configuration.instance().logger().info("0 : Le pouvoir du fou");
-            Configuration.instance().logger().info("9 : Le pouvoir du sorcier");
+            System.out.println("9   : Activer le pouvoir du sorcier");
+            System.out.println("0   : Activer le pouvoir du fou");
         }
-        if (jeu.plateau().paquet.nombreCartesElement(jeu.plateau().joueurCourant, Element.ROI, 0) >= 2
-                && (jeu.dernierTypeDePersonnageJouer == Element.ROI
-                        || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
-            Configuration.instance().logger().info("11 : Jouer deux cartes Roi");
+
+        if (jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.ROI, 0) >= 2
+            && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+            System.out.println("11  : Jouer deux cartes Roi (Deplacement de la cour)");
         }
-        Configuration.instance().logger().info("10 : Fin du tour");
+
+        System.out.println("10  : Terminer le tour\n");
+    }
+
+    // =====================
+    // ===== TEST PAUL ===== //TODO DELETE
+    // =====================
+    private static void selonPerso(Element fou) {
+        int[] a = jeu.listeDeplacementPossiblesAvecPerso(Element.GARDE_GAUCHE);
+        int i = -8;
+        while (i <= 8) {
+            if (i >= 0) {
+                System.out.print(" ");
+            }
+            System.out.print(i + " ");
+            i++;
+        }
+        System.out.println(" ");
+        i = 0;
+        while (i != 17) {
+            System.out.print(" " + a[i] + " ");
+            i++;
+        }
+    }
+
+    // ==================================
+    // ===== IMPLEMENTATION INUTILE =====
+    // ==================================
+    @Override
+    public void miseAJour() {
+        // Inutile dans l'interfaceTextuelle !!
     }
 
     @Override
