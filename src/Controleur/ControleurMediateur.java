@@ -46,10 +46,11 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][0] = new JoueurHumain(i, jeu);
             joueurs[i][1] = new JoueurIAAleatoire(i, jeu);
             joueurs[i][2] = new JoueurIAExperte(i, jeu);
-            typeJoueur[i] = 0;
         }
+        typeJoueur[0] = 1;
+        typeJoueur[1] = 1;
         carteActuelle = 8;
-        joueurCourant = 1;
+        joueurCourant = 0;
     }
 
     @Override
@@ -60,7 +61,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicPlateau(int coupX, int coupY) {
-        jeu.plateau().paquet.afficherMain(joueurCourant);
         if (carteActuelle != 8) {
             if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, carteActuelle)) {
                 carteActuelle = 8;

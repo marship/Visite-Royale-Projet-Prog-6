@@ -24,7 +24,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ==========================
     // ===== IMAGES PLATEAU =====
     // ==========================
-    ImagePlateau imagePlateau;
+    ImagePlateau imagePlateau, imageBandeauTour, imageCadreCartesPosees, imageCadrePiocheDefausse;
 
     // =========================
     // ===== IMAGES JETONS =====
@@ -35,7 +35,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // =========================
     // ===== IMAGES CARTES =====
     // =========================
-    ImagePlateau imageCarteErreur, imageCarteVide, imageDosCartes;
+    ImagePlateau imageCarteErreur, imageCarteVide, imageDosCarte;
     ImagePlateau imageCarteRoi;
     ImagePlateau imageCarteFouUn, imageCarteFouDeux, imageCarteFouTrois, imageCarteFouQuatre, imageCarteFouCinq,
             imageCarteFouM;
@@ -49,7 +49,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     int largeurFenetre, hauteurFenetre = 0;
     int largeurCaseCarte, hauteurCaseCarte = 0;
     int largeurCasePlateau, hauteurCasePlateau = 0;
-    int debutPlateauX, debutPlateauY, finPlateauX, finPlateauY, quartHauteurPlateau = 0;
+    int debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau, quartHauteurPlateau = 0;
     int debutCartesX, debutCartesY, largeurCarte, hauteurCarte = 0;
 
     /////////////////////////////////////////////////////////////////////////
@@ -60,6 +60,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public PlateauGraphique(Jeu j) {
         chargementDesImages();
         jeu = j;
+        jeu.ajouteObservateur(this);
         // plateau = jeu.plateau();
     }
 
@@ -76,16 +77,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         taillePlateau = jeu.obtenirInfoPlateau(InfoPlateau.TAILLE_DU_PLATEAU);
 
-        debutPlateauY = hauteurFenetre / 7;
-        finPlateauX = largeurFenetre;
-        finPlateauY = 3 * debutPlateauY;
-        largeurCasePlateau = finPlateauX / taillePlateau;
-        hauteurCasePlateau = finPlateauY;
+        debutPlateauY = 5 * hauteurFenetre / 28;
+        largeurPlateau = largeurFenetre;
+        hauteurPlateau = 3 * hauteurFenetre / 7;
+
+        largeurCarte = largeurFenetre / 16;
+        hauteurCarte = hauteurFenetre / 7;
+
+        largeurCasePlateau = largeurPlateau / taillePlateau;
+        hauteurCasePlateau = hauteurPlateau;
         quartHauteurPlateau = hauteurCasePlateau / 4;
 
         dessinable.clearRect(0, 0, largeurFenetre, hauteurFenetre);
 
         tracerPlateau();
+        afficherCartesAutreJoueur();
+        afficherZoneCartesJouees();
         afficherCartesJoueurCourant();
     }
 
@@ -94,7 +101,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // =======================
     @Override
     public void miseAJour() {
-        // TODO
+        repaint();
     }
 
     // ===========================
@@ -102,7 +109,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===========================
     public void tracerPlateau() {
 
-        tracerImage(imagePlateau, debutPlateauX, debutPlateauY, finPlateauX, finPlateauY);
+        tracerImage(imagePlateau, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
 
         tracerImageElement(Element.COURONNE, imageJetonGrandeCouronne);
         tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGauche);
@@ -141,9 +148,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
         ImagePlateau image;
 
         debutCartesX = largeurFenetre / 16;
-        debutCartesY = 6 * debutPlateauY;
-        largeurCarte = largeurFenetre / 16;
-        hauteurCarte = debutPlateauY;
+        debutCartesY = 6 * hauteurFenetre / 7;
+        
 
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
             switch (cartesJoueurCourant[i].personnage()) {
@@ -218,6 +224,26 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
     }
 
+    public void afficherCartesAutreJoueur() {
+
+        debutCartesX = largeurFenetre / 16;
+        debutCartesY = 0;
+
+        for (int i = 0; i < 8; i++) {
+            tracerImage(imageDosCarte, (4+i)*debutCartesX, 0, largeurCarte, hauteurCarte);
+        }
+    }
+
+    public void afficherZoneCartesJouees() {
+
+        debutCartesX = largeurFenetre / 16;
+        debutCartesY = 18 * hauteurFenetre / 28;
+        tracerImage(imageCadreCartesPosees, 4*debutCartesX, debutCartesY, 8*largeurCarte, hauteurCarte);
+        /*for (int i = 0; i < 8; i++) {
+            tracerImage(imageDosCarte, (4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+        }*/
+    }
+
     public int positionJeton(int positionElement) {
         return (positionElement + taillePlateau / 2) * largeurCasePlateau;
     }
@@ -233,7 +259,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public void tracerImage(ImagePlateau image, int x, int y, int largeurCase, int hauteurCase) {
         dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
-
+    //TODO charger images depuis le fichier de configuration
+    //TODO etablir convention pour les noms des images
     private void chargementDesImages() {
         imagePlateau = chargeImage("plateau");
 
@@ -249,7 +276,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageCarteErreur = chargeImage("carteErreur");
         imageCarteVide = chargeImage("carteVide");
 
-        imageDosCartes = chargeImage("dosCarte");
+        imageDosCarte = chargeImage("dosCarte");
 
         imageCarteRoi = chargeImage("Roi_1");
 
@@ -267,6 +294,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageCarteGardesUn = chargeImage("Garde_1");
         imageCarteGardesUnPlusUn = chargeImage("Garde_1plus1");
         imageCarteGardesRaproche = chargeImage("Garde_Raproche");
+
+        imageBandeauTour = chargeImage("BandeauTour");
+        imageCadreCartesPosees = chargeImage("cadreCartesPosees");
+        imageCadrePiocheDefausse = chargeImage("cadrePiocheDefausse");
     }
 
     // ===================================================
@@ -296,12 +327,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
         return debutPlateauY;
     }
 
-    public int finPlateauX() {
-        return finPlateauX;
+    public int largeurPlateau() {
+        return largeurPlateau;
     }
 
-    public int finPlateauY() {
-        return finPlateauY + debutPlateauY;
+    public int hauteurPlateau() {
+        return hauteurPlateau + debutPlateauY;
     }
 
     public int debutZoneCartesX() {
@@ -326,5 +357,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     public int hauteurCarte() {
         return hauteurCarte;
+    }
+
+    public int quartHauteurPlateau(){
+        return quartHauteurPlateau;
     }
 }

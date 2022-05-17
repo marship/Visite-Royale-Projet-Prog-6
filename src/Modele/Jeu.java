@@ -335,8 +335,10 @@ public class Jeu extends Observable {
                         Configuration.instance().logger().info("Le roi est au centre, la partie continue !");
                     } else {
                         if (obtenirPositionElement(ROI) > 0) {
+                            joueurGagnant = JOUEUR_DROIT;
                             plateau().joueurGagnant = JOUEUR_DROIT;
                         } else {
+                            joueurGagnant = JOUEUR_GAUCHE;
                             plateau().joueurGagnant = JOUEUR_GAUCHE;
                         }
                         traiterGagnant();
@@ -409,6 +411,7 @@ public class Jeu extends Observable {
             obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
             obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
         }
+        metAJour();
     }
 
     public void unPlusUn(int direction, int carte) {
@@ -420,12 +423,14 @@ public class Jeu extends Observable {
             obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
             obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
         }
+        metAJour();
     }
 
     public void rapproche(int carte) {
         poserCarte(carte);
         obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
         obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+        metAJour();
     }
 
     public void poserCarte(int positionCarteDansLaMain) {
@@ -631,8 +636,19 @@ public class Jeu extends Observable {
         int deplacementCarte = deplace.getValeurDeplacement();
         switch (perso) {
             case GARDES:
-                positionAccessibleAvecCarte = fustionTableau(listeDeplacementPossiblesAvecCarte(GARDE_GAUCHE, deplace),
-                        listeDeplacementPossiblesAvecCarte(GARDE_DROIT, deplace));
+                if (personnageManipulerParLeFou == Element.GARDES) {
+                    Element el = personnageManipulerParLeFou;
+                    personnageManipulerParLeFou(GARDE_GAUCHE);
+                    positionAccessibleAvecCarte = listeDeplacementPossiblesAvecCarte(FOU, deplace);
+                    personnageManipulerParLeFou(GARDE_DROIT);
+                    positionAccessibleAvecCarte = fustionTableau(positionAccessibleAvecCarte,
+                            listeDeplacementPossiblesAvecCarte(FOU, deplace));
+                    personnageManipulerParLeFou(el);
+                } else {
+                    positionAccessibleAvecCarte = fustionTableau(
+                            listeDeplacementPossiblesAvecCarte(GARDE_GAUCHE, deplace),
+                            listeDeplacementPossiblesAvecCarte(GARDE_DROIT, deplace));
+                }
                 break;
             case GARDE_GAUCHE:
                 switch (deplace) {

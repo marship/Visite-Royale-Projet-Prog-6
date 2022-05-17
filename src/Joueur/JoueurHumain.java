@@ -31,9 +31,17 @@ public class JoueurHumain extends Joueur {
 			return false;
 		}
 
-		if (jeu.listeDeplacementPossiblesAvecCarte(carteChoisie.personnage(),
-				carteChoisie.deplacement())[caseChoisie + 8] == 0) {
-			return false;
+		if (carteChoisie.personnage() == Element.FOU) {
+			System.out.println(jeu.personnageManipulerParLeFou);
+			int[] a = jeu.listeDeplacementPossiblesAvecCarte(jeu.personnageManipulerParLeFou, carteChoisie.deplacement());
+			if (a[caseChoisie + 8] == 0) {
+				return false;
+			}
+		} else {
+			if (jeu.listeDeplacementPossiblesAvecCarte(carteChoisie.personnage(),
+					carteChoisie.deplacement())[caseChoisie + 8] == 0) {
+				return false;
+			}
 		}
 
 		if (carteChoisie.personnage() == Element.GARDES) {
@@ -64,14 +72,27 @@ public class JoueurHumain extends Joueur {
 				if ((caseChoisie - 1 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE))
 						|| (caseChoisie + 1 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE))) {
 					jeu.jouerCarte(Element.GARDE_GAUCHE, caseChoisie, positionCarteDansLaMain);
-				}
-				else{
+				} else {
 					jeu.jouerCarte(Element.GARDE_DROIT, caseChoisie, positionCarteDansLaMain);
 				}
 			}
 			return true;
 		}
-		jeu.jouerCarte(carteChoisie.personnage(), caseChoisie, positionCarteDansLaMain);
+
+		if (carteChoisie.personnage() == Element.FOU) {
+			System.out.println("WESH,,,,,,,,,,,,,,,,,");
+			if (jeu.personnageManipulerParLeFou == Element.GARDES) {
+				if (jeu.validationDeplacement(Element.GARDE_GAUCHE, caseChoisie)) {
+					jeu.jouerCarte(Element.GARDE_GAUCHE, caseChoisie, positionCarteDansLaMain);
+				} else {
+					jeu.jouerCarte(Element.GARDE_DROIT, caseChoisie, positionCarteDansLaMain);
+				}
+			} else {
+				jeu.jouerCarte(jeu.personnageManipulerParLeFou, caseChoisie, positionCarteDansLaMain);
+			}
+		} else {
+			jeu.jouerCarte(carteChoisie.personnage(), caseChoisie, positionCarteDansLaMain);
+		}
 		return true;
 
 	}
