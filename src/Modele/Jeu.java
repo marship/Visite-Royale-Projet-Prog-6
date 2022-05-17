@@ -718,11 +718,9 @@ public class Jeu extends Observable {
             case FOU:
                 switch (personnageManipulerParLeFou) {
                     case GARDE_GAUCHE:
+                    System.out.println("c'est ça");
                         if (deplace == Deplacement.MILIEU) {
                             if (validationDeplacement(GARDE_GAUCHE, -obtenirPositionElement(GARDE_GAUCHE))) {
-                                positionAccessibleAvecCarte[EXTREMITE_DROITE_DU_PLATEAU] = 1;
-                            }
-                            if (validationDeplacement(GARDE_DROIT, -obtenirPositionElement(GARDE_DROIT))) {
                                 positionAccessibleAvecCarte[EXTREMITE_DROITE_DU_PLATEAU] = 1;
                             }
                         } else {
@@ -732,14 +730,6 @@ public class Jeu extends Observable {
                             }
                             if (validationDeplacement(GARDE_GAUCHE, -deplacementCarte)) {
                                 positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_GAUCHE))
-                                        - deplacementCarte] = 1;
-                            }
-                            if (validationDeplacement(GARDE_DROIT, deplacementCarte)) {
-                                positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_DROIT))
-                                        + deplacementCarte] = 1;
-                            }
-                            if (validationDeplacement(GARDE_DROIT, -deplacementCarte)) {
-                                positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(GARDE_DROIT))
                                         - deplacementCarte] = 1;
                             }
                         }
@@ -761,6 +751,24 @@ public class Jeu extends Observable {
                         }
                         break;
                     case ROI:
+                        if(estPouvoirFouActivable()){
+                            if (deplace == Deplacement.MILIEU) {
+                                if (validationDeplacement(personnageManipulerParLeFou,
+                                        -obtenirPositionElement(personnageManipulerParLeFou))) {
+                                    positionAccessibleAvecCarte[EXTREMITE_DROITE_DU_PLATEAU] = 1;
+                                }
+                            } else {
+                                if (validationDeplacement(personnageManipulerParLeFou, deplacementCarte)) {
+                                    positionAccessibleAvecCarte[positionPlus8(
+                                            obtenirPositionElement(personnageManipulerParLeFou)) + deplacementCarte] = 1;
+                                }
+                                if (validationDeplacement(personnageManipulerParLeFou, -deplacementCarte)) {
+                                    positionAccessibleAvecCarte[positionPlus8(
+                                            obtenirPositionElement(personnageManipulerParLeFou)) - deplacementCarte] = 1;
+                                }
+                            }
+                        }
+                        break;
                     case FOU:
                     case SORCIER:
                         if (deplace == Deplacement.MILIEU) {

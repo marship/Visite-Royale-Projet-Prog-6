@@ -244,6 +244,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         } else {
             Carte carte = jeu.recupererMainJoueur(jeu.plateau().joueurCourant)[choix];
             Element el = jeu.plateau().paquet.mainJoueur(jeu.plateau().joueurCourant)[choix].personnage();
+            int[] a;
             if ((el == Element.GARDES) || ((jeu.personnageManipulerParLeFou == Element.GARDES)
                     || (jeu.personnageManipulerParLeFou == Element.GARDE_GAUCHE)
                     || (jeu.personnageManipulerParLeFou == Element.GARDE_DROIT))) {
@@ -255,6 +256,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     el = Element.GARDE_GAUCHE;
                     if (jeu.personnageManipulerParLeFou == Element.GARDES) {
                         jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
+                        System.out.println(jeu.personnageManipulerParLeFou);
                     }
                 } else {
                     el = Element.GARDE_DROIT;
@@ -262,9 +264,18 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                         jeu.personnageManipulerParLeFou(Element.GARDE_DROIT);
                     }
                 }
+                if(jeu.plateau().paquet.mainJoueur(jeu.plateau().joueurCourant)[choix].personnage() == Element.GARDES){
+                    a = jeu.listeDeplacementPossiblesAvecCarte(el, carte.deplacement());
+                }
+                else{
+                    a = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU, carte.deplacement());
+                }
+            }
+            else{
+                a = jeu.listeDeplacementPossiblesAvecCarte(el, carte.deplacement());
             }
             int i = -8;
-            int[] a = jeu.listeDeplacementPossiblesAvecCarte(el, carte.deplacement());
+            
             while (i <= 8) {
                 if (i >= 0) {
                     System.out.print(" ");
@@ -284,7 +295,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                 System.out.println("Deplacement impossible !");
             } else {
                 jeu.majDernierTypeDePersonnageJouer(carte.personnage());
-                if (el == Element.FOU && jeu.personnageManipulerParLeFou != Element.GARDES) {
+                if (carte.personnage() == Element.FOU) {
                     jeu.jouerCarte(jeu.personnageManipulerParLeFou, jouer, choix);
                 } else {
                     if ((el == Element.GARDE_GAUCHE || el == Element.GARDE_DROIT)
