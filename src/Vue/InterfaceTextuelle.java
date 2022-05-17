@@ -390,6 +390,9 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         // Inutile dans l'interfaceTextuelle !!
     }
 
+    // ==================================
+    // ===== IMPLEMENTATION INUTILE =====
+    // ==================================
     @Override
     public void miseAJourFinDeTour() {
         // Inutile dans l'interfaceTextuelle !!

@@ -268,7 +268,7 @@ public class Jeu extends Observable {
     }
 
     public int joueurCourant() {
-        return plateau.joueurCourant;
+        return plateau().joueurCourant;
     }
 
     // TODO IA

@@ -320,13 +320,6 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
     @Override
     public void afficherPanneau(String nomPanneau) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void afficherPanneau(String nomPanneau) {
-        // TODO Auto-generated method stub
-        
+        // Inutile dans l'interfaceTextuelle !!
     }
 }
