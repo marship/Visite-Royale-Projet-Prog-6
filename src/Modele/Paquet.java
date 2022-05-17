@@ -311,7 +311,7 @@ public class Paquet {
                 nbVide++;
             }
         }
-        return NOMBRE_CARTE_EN_MAIN - nbVide;
+        return nbVide;
     }
 
     public boolean resteAssezCarteDansPioche(int i) {
