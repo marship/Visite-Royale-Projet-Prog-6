@@ -22,7 +22,7 @@ public class AdaptateurSourisMouvement implements MouseMotionListener {
     public void mouseMoved(MouseEvent e) {
         int coupX = e.getX();
         int coupY = e.getY();
-        System.out.println(coupX + ", " + coupY);
+        // System.out.println(coupX + ", " + coupY);
         collecteurEvenements.traqueSouris(coupX, coupY);
     }
     

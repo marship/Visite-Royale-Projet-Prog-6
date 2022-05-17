@@ -19,26 +19,24 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     Jeu jeu;
     Plateau plateau;
-
-    int taillePlateau = 0;
     Graphics2D dessinable;
-    ImagePlateau imagePlateau, imageCouronne, imageGardeG, imageGardeD, imageRoi, imageFou, imageSorcier, imagePioche, imageCarte, imageCarteErreur, imageCarteVide;
-    ImagePlateau imageFouUn, imageFouDeux, imageFouTrois, imageFouQuatre, imageFouCinq, imageFouM;
-    ImagePlateau imageSorcierUn, imageSorcierDeux, imageSorcierTrois;
-    ImagePlateau imageGardesUn, imageGardesUnPlusUn;
-    int largeurFenetre = 0;
-    int hauteurFenetre = 0;
+
+    ImagePlateau imagePlateau;
+
+    ImagePlateau imageJetonGrandeCouronne, imageJetonPetiteCouronne;
+    ImagePlateau imageJetonGardeGauche, imageJetonGardeDroit, imageJetonRoi, imageJetonFou, imageJetonSorcier;
+    ImagePlateau imageCarteErreur, imageCarteVide, imageDosCartes;
+    ImagePlateau imageCarteRoi;
+    ImagePlateau imageCarteFouUn, imageCarteFouDeux, imageCarteFouTrois, imageCarteFouQuatre, imageCarteFouCinq, imageCarteFouM;
+    ImagePlateau imageCarteSorcierUn, imageCarteSorcierDeux, imageCarteSorcierTrois;
+    ImagePlateau imageCarteGardesUn, imageCarteGardesUnPlusUn, imageCarteGardesRaproche;
     
-    // TO DO !!!
+    int taillePlateau = 0;
+    int largeurFenetre, hauteurFenetre = 0;
     int largeurCaseCarte, hauteurCaseCarte = 0;
     int largeurCasePlateau, hauteurCasePlateau = 0;
     int debutPlateauX, debutPlateauY, finPlateauX, finPlateauY, quartHauteurPlateau = 0;
-
-    // TO DO !!!
-    int debutCartesX = 0;
-    int debutCartesY = 0;
-    int finCartesX = 0;
-    int finCartesY = 0;
+    int debutCartesX, debutCartesY, finCartesX, finCartesY = 0;
 
 
     // ========================
@@ -46,34 +44,48 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ========================
     public PlateauGraphique(Jeu j) {
         
+        // ==========================
+        // ===== IMAGES PLATEAU =====
+        // ==========================
         imagePlateau = chargeImage("plateau");
-        imageCouronne = chargeImage("jeton_Grande_Couronne");
-        /*
-        imageGardeD = chargeImage("jeton_Garde_Droit");
-        imageGardeG = chargeImage("jeton_Garde_Gauche");
-        imageRoi = chargeImage("jeton_Roi");
-        imageFou = chargeImage("jeton_Fou");
-        imageSorcier = chargeImage("jeton_Sorcier");
-        imagePioche = chargeImage("dosCarte");
+
+        // =========================
+        // ===== IMAGES JETONS =====
+        // =========================
+        imageJetonGrandeCouronne = chargeImage("jeton_Grande_Couronne");
+        imageJetonPetiteCouronne = chargeImage("jeton_Petite_Couronne");
+        
+        imageJetonGardeGauche = chargeImage("jeton_Garde_Gauche");
+        imageJetonGardeDroit = chargeImage("jeton_Garde_Droit");
+        imageJetonRoi = chargeImage("jeton_Roi");
+        imageJetonFou = chargeImage("jeton_Fou");
+        imageJetonSorcier = chargeImage("jeton_Sorcier");
+
+        // =========================
+        // ===== IMAGES CARTES =====
+        // =========================
         imageCarteErreur = chargeImage("carteErreur");
         imageCarteVide = chargeImage("carteVide");
-        */
-/*
-        imageFouUn = chargeImage("Fou_1");
-        imageFouDeux = chargeImage("Fou_2"); 
-        imageFouTrois = chargeImage("Fou_3");
-        imageFouQuatre = chargeImage("Fou_4");
-        imageFouCinq = chargeImage("Fou_5");
-        imageFouM = chargeImage("Fou_M");
 
-        imageSorcierUn = chargeImage("Sorcier_1");
-        imageSorcierDeux = chargeImage("Sorcier_2");
-        imageSorcierTrois = chargeImage("Sorcier_3");
+        imageDosCartes = chargeImage("dosCarte");
+        
+        imageCarteRoi = chargeImage("Roi_1");
 
-        imageGardesUn = chargeImage("Garde_1");
-        imageGardesUnPlusUn = chargeImage("Garde_1plus1");
+        imageCarteFouUn = chargeImage("Fou_1");
+        imageCarteFouDeux = chargeImage("Fou_2"); 
+        imageCarteFouTrois = chargeImage("Fou_3");
+        imageCarteFouQuatre = chargeImage("Fou_4");
+        imageCarteFouCinq = chargeImage("Fou_5");
+        imageCarteFouM = chargeImage("Fou_M");
 
-        */
+        imageCarteSorcierUn = chargeImage("Sorcier_1");
+        imageCarteSorcierDeux = chargeImage("Sorcier_2");
+        imageCarteSorcierTrois = chargeImage("Sorcier_3");
+
+        imageCarteGardesUn = chargeImage("Garde_1");
+        imageCarteGardesUnPlusUn = chargeImage("Garde_1plus1");
+        imageCarteGardesRaproche = chargeImage("Garde_Raproche");
+
         jeu = j;
         //plateau = jeu.plateau();
     }
@@ -93,7 +105,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         debutPlateauY = hauteurFenetre / 7;
         finPlateauX = largeurFenetre;
-        finPlateauY = 4 * debutPlateauY;
+        finPlateauY = 3 * debutPlateauY;
         largeurCasePlateau = finPlateauX / taillePlateau;
         hauteurCasePlateau = finPlateauY;
         quartHauteurPlateau = hauteurCasePlateau / 4;
@@ -111,12 +123,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         tracerImage(imagePlateau, debutPlateauX, debutPlateauY, finPlateauX, finPlateauY);
 
-        tracerImageElement(Element.COURONNE, imageCouronne);
-        tracerImageElement(Element.GARDE_GAUCHE, imageGardeG);
-        tracerImageElement(Element.ROI, imageRoi);
-        tracerImageElement(Element.GARDE_DROIT, imageGardeD);
-        tracerImageElement(Element.FOU, imageFou);
-        tracerImageElement(Element.SORCIER, imageSorcier);
+        tracerImageElement(Element.COURONNE, imageJetonGrandeCouronne);
+        tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGauche);
+        tracerImageElement(Element.ROI, imageJetonRoi);
+        tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroit);
+        tracerImageElement(Element.FOU, imageJetonFou);
+        tracerImageElement(Element.SORCIER, imageJetonSorcier);
     }
 
     void tracerImageElement(Element element, ImagePlateau imageElement) {
@@ -138,7 +150,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
             default:
                 break;
         }
-        tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement, largeurCasePlateau, quartHauteurPlateau);
+        int test = positionJeton(jeu.obtenirPositionElement(element));
+        tracerImage(imageElement, test, hauteurElement, largeurCasePlateau, quartHauteurPlateau);
     }
 
     public void afficherCartesJoueurCourant() {
@@ -155,27 +168,27 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
             switch(cartesJoueurCourant[i].personnage()) {
                 case ROI:
-                    image = imageRoi;
+                    image = imageCarteRoi;
                     break;
                 case FOU:
                     switch(cartesJoueurCourant[i].deplacement()) {
                         case UN:
-                            image = imageFouUn;
+                            image = imageCarteFouUn;
                             break;
                         case DEUX:
-                            image = imageFouDeux;
+                            image = imageCarteFouDeux;
                             break;
                         case TROIS:
-                            image = imageFouTrois;
+                            image = imageCarteFouTrois;
                             break;
                         case QUATRE:
-                            image = imageFouQuatre;
+                            image = imageCarteFouQuatre;
                             break;
                         case CINQ:
-                            image = imageFouCinq;
+                            image = imageCarteFouCinq;
                             break;
                         case MILIEU:
-                            image = imageFouM;
+                            image = imageCarteFouM;
                             break;
                         default:
                             image = imageCarteErreur;
@@ -185,13 +198,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 case SORCIER:
                     switch(cartesJoueurCourant[i].deplacement()) {
                         case UN:
-                            image = imageSorcierUn;
+                            image = imageCarteSorcierUn;
                             break;
                         case DEUX:
-                            image = imageSorcierDeux;
+                            image = imageCarteSorcierDeux;
                             break;
                         case TROIS:
-                            image = imageSorcierTrois;
+                            image = imageCarteSorcierTrois;
                             break;
                         default:
                             image = imageCarteErreur;
@@ -201,10 +214,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 case GARDES:
                     switch(cartesJoueurCourant[i].deplacement()) {
                         case UN:
-                            image = imageGardesUn;
+                            image = imageCarteGardesUn;
                             break;
                         case UN_PLUS_UN:
-                            image = imageGardesUnPlusUn;
+                            image = imageCarteGardesUnPlusUn;
+                            break;
+                        case RAPPROCHE:
+                            image = imageCarteGardesRaproche;
                             break;
                         default:
                             image = imageCarteErreur;
