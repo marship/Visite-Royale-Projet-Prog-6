@@ -44,6 +44,9 @@ public class Evaluation {
                     noteSorcier = - ( (resSorcierGentil + resSorcierMechant) / 2 );
                 }
             }
+            System.out.println(resSorcierGentil);
+            System.out.println(resSorcierMechant);
+            System.out.println(noteSorcier);
             // NbPièces
             double resNbPiècesGentil = calculPiece(calcul);
             double resNbPiècesMechant = calculPiece(!calcul);

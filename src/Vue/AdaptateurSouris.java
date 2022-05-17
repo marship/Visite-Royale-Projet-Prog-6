@@ -4,7 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AdaptateurSouris extends MouseAdapter {
-    
+
     PlateauGraphique plateauGraphique;
     CollecteurEvenements collecteurEvenements;
 
@@ -22,12 +22,10 @@ public class AdaptateurSouris extends MouseAdapter {
             coupX = e.getX() / plateauGraphique.largeurCasePlateau() - 8;
             coupY = e.getY() / plateauGraphique.quartHauteurPlateau;
             collecteurEvenements.clicPlateau(coupX, coupY);
-        }
-        else{
-            if (coupX >= plateauGraphique.debutZoneCartesX() && coupX <= plateauGraphique.largeurCarte()
-                    && coupY >= plateauGraphique.debutZoneCartesY() && coupY <= plateauGraphique.hauteurCarte()) {
-                        coupX = e.getX() / plateauGraphique.largeurCaseCarte();
-                System.out.println(coupX);
+        } else {
+            if (coupX >= plateauGraphique.debutZoneCartesX() && coupX <= plateauGraphique.finZoneCartesX()
+                    && coupY >= plateauGraphique.debutZoneCartesY() && coupY <= plateauGraphique.finZoneCartesY()) {
+                coupX = e.getX() / plateauGraphique.largeurCarte() - 4;
                 collecteurEvenements.clicCarte(coupX);
             }
         }

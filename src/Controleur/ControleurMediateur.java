@@ -60,7 +60,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicPlateau(int coupX, int coupY) {
-        jeu.plateau().paquet.afficherMain(joueurCourant);
         if (carteActuelle != 8) {
             if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, carteActuelle)) {
                 carteActuelle = 8;
@@ -246,12 +245,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 System.exit(0);
                 break;
             case "FinDeTour":
-                /*
-                 * Random r = new Random();
-                 * int i = r.nextInt(17);
-                 * jeu.jouerCarte(Element.FOU, i - 8, 2);
-                 * finDeTour();
-                 */
+                finDeTour();
                 interfaceUtilisateur.miseAJourFinDeTour();
                 break;
             case "MenuEnJeu":
