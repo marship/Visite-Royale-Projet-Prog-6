@@ -76,11 +76,11 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     void initialisation() {
         joueurCourant = JOUEUR_DROIT;
 
-        gardeGauche = new Personnage(GARDE_GAUCHE, POSITION_BASE_GARDE_GAUCHE, false);
-        gardeDroit = new Personnage(GARDE_DROIT, POSITION_BASE_GARDE_DROIT, false);
-        roi = new Personnage(ROI, POSITION_BASE_ROI, false);
-        fou = new Personnage(FOU, POSITION_BASE_FOU, true);
-        sorcier = new Personnage(SORCIER, POSITION_BASE_SORCIER, true);
+        gardeGauche = new Personnage(GARDE_GAUCHE, POSITION_BASE_GARDE_GAUCHE);
+        gardeDroit = new Personnage(GARDE_DROIT, POSITION_BASE_GARDE_DROIT);
+        roi = new Personnage(ROI, POSITION_BASE_ROI);
+        fou = new Personnage(FOU, POSITION_BASE_FOU);
+        sorcier = new Personnage(SORCIER, POSITION_BASE_SORCIER);
         couronne = new Couronne();
 
         paquet = new Paquet();
@@ -95,13 +95,11 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         try {
             clone = (Plateau) super.clone();
 
-            clone.gardeGauche = new Personnage(gardeGauche.nomPersonnage, gardeGauche.positionPersonnage,
-                    gardeGauche.capaciteSpecial);
-            clone.gardeDroit = new Personnage(gardeDroit.nomPersonnage, gardeDroit.positionPersonnage,
-                    gardeDroit.capaciteSpecial);
-            clone.roi = new Personnage(roi.nomPersonnage, roi.positionPersonnage, roi.capaciteSpecial);
-            clone.fou = new Personnage(fou.nomPersonnage, fou.positionPersonnage, fou.capaciteSpecial);
-            clone.sorcier = new Personnage(sorcier.nomPersonnage, sorcier.positionPersonnage, sorcier.capaciteSpecial);
+            clone.gardeGauche = new Personnage(gardeGauche.nomPersonnage, gardeGauche.positionPersonnage);
+            clone.gardeDroit = new Personnage(gardeDroit.nomPersonnage, gardeDroit.positionPersonnage);
+            clone.roi = new Personnage(roi.nomPersonnage, roi.positionPersonnage);
+            clone.fou = new Personnage(fou.nomPersonnage, fou.positionPersonnage);
+            clone.sorcier = new Personnage(sorcier.nomPersonnage, sorcier.positionPersonnage);
             clone.couronne = new Couronne();
             clone.couronne.definirEtatCouronne(couronne.etatCouronne());
             clone.couronne.positionnerCouronne(couronne.positionCouronne());

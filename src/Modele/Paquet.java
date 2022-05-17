@@ -12,9 +12,13 @@ import Structures.FAP;
 import Structures.FAPListe;
 
 public class Paquet {
+
     Sequence<Carte> pioche, defausse, tourActuel;
     Object[][] mainJoueurs;
 
+    // ===============================
+    // ===== INFORMATIONS CARTES =====
+    // ===============================
     static final int NOMBRE_TYPE_CARTE = 4;
 
     static final int NOMBRE_TYPE_CARTE_ROI = 1;
@@ -42,12 +46,18 @@ public class Paquet {
     static final int NOMBRE_JOUEUR = 2;
     static final int NOMBRE_CARTE_EN_MAIN = 8;
 
+    // ====================
+    // ===== ELEMENTS =====
+    // ====================
     static final Element VIDE_ELEMENT = Element.VIDE;
     static final Element ROI = Element.ROI;
     static final Element GARDES = Element.GARDES;
     static final Element FOU = Element.FOU;
     static final Element SORCIER = Element.SORCIER;
 
+    // ========================
+    // ===== DEPLACEMENTS =====
+    // ========================
     static final Deplacement VIDE_DEPLACEMENT = Deplacement.VIDE;
     static final Deplacement RAPPROCHE = Deplacement.RAPPROCHE;
     static final Deplacement UN = Deplacement.UN;
@@ -58,6 +68,11 @@ public class Paquet {
     static final Deplacement MILIEU = Deplacement.MILIEU;
     static final Deplacement UN_PLUS_UN = Deplacement.UN_PLUS_UN;
 
+    /////////////////////////////////////////////////////////////////////////
+
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     public Paquet() {
         tourActuel = Configuration.instance().nouvelleSequence();
         creerPaquet();

@@ -890,8 +890,8 @@ public class Jeu extends Observable {
         }
     }
 
-    public boolean estTeleportationValide(Element element, int teleporter) {
-        return validationDeplacement(element, teleporter);
+    public boolean estTeleportationValide(Element element, int distanceDeLateleportation) {
+        return validationDeplacement(element, distanceDeLateleportation);
     }
 
     public int calculerTeleportation(Element element) {

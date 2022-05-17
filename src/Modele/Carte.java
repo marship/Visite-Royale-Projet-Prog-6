@@ -3,18 +3,24 @@ package Modele;
 import Global.Deplacement;
 import Global.Element;
 
-// A REVOIR PAS SUR DU TRUC
 public class Carte {
+
     Element personnage;
     Deplacement deplacement;
-    boolean estGarde;
 
+    /////////////////////////////////////////////////////////////////////////
+
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     Carte(Element perso, Deplacement deplace) {
         personnage = perso;
         deplacement = deplace;
-        estGarde = (perso == Element.GARDE_GAUCHE);
     }
 
+    // ========================
+    // ===== INFORMATIONS =====
+    // ========================
     public Element personnage() {
         return personnage;
     }
@@ -23,16 +29,14 @@ public class Carte {
         return deplacement;
     }
 
-    public boolean estGarde() {
-        return estGarde;
-    }
-
     public boolean estIdentique(Carte comparaison) {
         return (personnage == comparaison.personnage()) && (deplacement == comparaison.deplacement());
     }
 
-    public String toString(){
+    // =====================
+    // ===== AFFICHAGE =====
+    // =====================
+    public String toString() {
         return "" + personnage.name() + " " + deplacement.name();
     }
-
 }
