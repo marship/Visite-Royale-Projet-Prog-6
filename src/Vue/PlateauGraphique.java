@@ -50,7 +50,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     int largeurCaseCarte, hauteurCaseCarte = 0;
     int largeurCasePlateau, hauteurCasePlateau = 0;
     int debutPlateauX, debutPlateauY, finPlateauX, finPlateauY, quartHauteurPlateau = 0;
-    int debutCartesX, debutCartesY, finCartesX, finCartesY = 0;
+    int debutCartesX, debutCartesY, largeurCarte, hauteurCarte = 0;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -140,13 +140,16 @@ public class PlateauGraphique extends JPanel implements Observateur {
         Carte[] cartesJoueurCourant = jeu.recupererMainJoueur(jeu.joueurCourant());
         ImagePlateau image;
 
+        debutCartesX = largeurFenetre / 16;
+        debutCartesY = 6 * debutPlateauY;
+        largeurCarte = largeurFenetre / 16;
+        hauteurCarte = debutPlateauY;
+
+        System.out.println("Carte de taille: " + largeurCarte + "x" + hauteurCarte);
+        System.out.println("Point de depart: (" + debutZoneCartesX() + ";" + debutZoneCartesY() + ")");
+        System.out.println("Point de final: (" + finZoneCartesX() + ";" + finZoneCartesY() + ")");
+
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
-
-            debutCartesX = largeurFenetre / 16;
-            debutCartesY = 6 * debutPlateauY;
-            finCartesX = largeurFenetre / 16;
-            finCartesY = debutPlateauY;
-
             switch (cartesJoueurCourant[i].personnage()) {
                 case ROI:
                     image = imageCarteRoi;
@@ -215,7 +218,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     image = imageCarteErreur;
                     break;
             }
-            tracerImage(image, (i + 1) * debutCartesX, debutCartesY, finCartesX, finCartesY);
+            tracerImage(image, (4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
         }
     }
 
@@ -305,19 +308,27 @@ public class PlateauGraphique extends JPanel implements Observateur {
         return finPlateauY + debutPlateauY;
     }
 
-    public int debutCartesX() {
-        return debutCartesX;
+    public int debutZoneCartesX() {
+        return 4*debutCartesX;
     }
 
-    public int debutCartesY() {
+    public int debutZoneCartesY() {
         return debutCartesY;
     }
 
-    public int finCartesX() {
-        return finCartesX;
+    public int finZoneCartesX() {
+        return debutZoneCartesX() + 8 * largeurCarte;
     }
 
-    public int finCartesY() {
-        return finCartesY;
+    public int finZoneCartesY() {
+        return debutCartesY+hauteurCarte;
+    }
+
+    public int largeurCarte() {
+        return largeurCarte;
+    }
+
+    public int hauteurCarte() {
+        return hauteurCarte;
     }
 }
