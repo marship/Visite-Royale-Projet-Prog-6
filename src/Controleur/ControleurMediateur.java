@@ -218,6 +218,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 System.exit(0);
                 break;
             case "FinDeTour":
+                finDeTour();
                 interfaceUtilisateur.miseAJourFinDeTour();
                 break;
             case "MenuEnJeu":
@@ -225,9 +226,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "JouerCarte":
                 break;
             case "PouvoirFou":
-                break;
-            case "fin":
-                finDeTour();
                 break;
             default:
                 return false;

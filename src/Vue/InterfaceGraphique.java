@@ -241,7 +241,6 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
     } 
 
     public void miseAJourFinDeTour() {
-        jeu.finDeTour();
         fenetre.repaint();
     }
 	//Crée le JPanel des regles
