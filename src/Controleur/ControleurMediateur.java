@@ -46,10 +46,11 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][0] = new JoueurHumain(i, jeu);
             joueurs[i][1] = new JoueurIAAleatoire(i, jeu);
             joueurs[i][2] = new JoueurIAExperte(i, jeu);
-            typeJoueur[i] = 0;
         }
+        typeJoueur[0] = 1;
+        typeJoueur[1] = 1;
         carteActuelle = 8;
-        joueurCourant = 1;
+        joueurCourant = 0;
     }
 
     @Override

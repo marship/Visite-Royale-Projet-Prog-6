@@ -33,27 +33,7 @@ public class JoueurHumain extends Joueur {
 
 		if (carteChoisie.personnage() == Element.FOU) {
 			System.out.println(jeu.personnageManipulerParLeFou);
-			int[] a = jeu.listeDeplacementPossiblesAvecCarte(Element.GARDE_GAUCHE, carteChoisie.deplacement());
-			int i = 0;
-			while(i < 17){
-				System.out.print(a[i] + " ");
-				i++;
-			}
-			System.out.println(" ");
-			a = jeu.listeDeplacementPossiblesAvecCarte(Element.GARDE_DROIT, carteChoisie.deplacement());
-			i = 0;
-			while(i < 17){
-				System.out.print(a[i] + " ");
-				i++;
-			}
-			System.out.println(" ");
-			a = jeu.listeDeplacementPossiblesAvecCarte(jeu.personnageManipulerParLeFou, carteChoisie.deplacement());
-			i = 0;
-			while(i < 17){
-				System.out.print(a[i] + " ");
-				i++;
-			}
-			System.out.println(" ");
+			int[] a = jeu.listeDeplacementPossiblesAvecCarte(jeu.personnageManipulerParLeFou, carteChoisie.deplacement());
 			if (a[caseChoisie + 8] == 0) {
 				return false;
 			}

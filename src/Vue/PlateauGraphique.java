@@ -358,4 +358,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public int hauteurCarte() {
         return hauteurCarte;
     }
+
+    public int quartHauteurPlateau(){
+        return quartHauteurPlateau;
+    }
 }

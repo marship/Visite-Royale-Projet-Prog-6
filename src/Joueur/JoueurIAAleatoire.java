@@ -42,7 +42,6 @@ public class JoueurIAAleatoire extends Joueur {
 			}
 		} while (!fin());
 		nbActions = 0;
-
 		return true;
 	}
 

@@ -20,7 +20,7 @@ public class AdaptateurSouris extends MouseAdapter {
         if (coupX >= plateauGraphique.debutPlateauX() && coupX <= plateauGraphique.largeurPlateau()
                 && coupY >= plateauGraphique.debutPlateauY() && coupY <= plateauGraphique.hauteurPlateau()) {
             coupX = e.getX() / plateauGraphique.largeurCasePlateau() - 8;
-            coupY = e.getY() / plateauGraphique.quartHauteurPlateau;
+            coupY = e.getY() / plateauGraphique.quartHauteurPlateau() - 1;
             collecteurEvenements.clicPlateau(coupX, coupY);
         } else {
             if (coupX >= plateauGraphique.debutZoneCartesX() && coupX <= plateauGraphique.finZoneCartesX()

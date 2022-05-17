@@ -335,8 +335,10 @@ public class Jeu extends Observable {
                         Configuration.instance().logger().info("Le roi est au centre, la partie continue !");
                     } else {
                         if (obtenirPositionElement(ROI) > 0) {
+                            joueurGagnant = JOUEUR_DROIT;
                             plateau().joueurGagnant = JOUEUR_DROIT;
                         } else {
+                            joueurGagnant = JOUEUR_GAUCHE;
                             plateau().joueurGagnant = JOUEUR_GAUCHE;
                         }
                         traiterGagnant();
