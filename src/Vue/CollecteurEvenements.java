@@ -11,6 +11,6 @@ public interface CollecteurEvenements {
     void ajouteInterfaceUtilisateur(InterfaceUtilisateur interfaceUtilisateur);
     void choix(int choix);
     InfoJeu getInfoJeu();
-    void clicPlateau(int coupY);
-    void clicCarte(int coupY);
+    void clicPlateau(int coupX, int coupY);
+    void clicCarte(int coupX);
 }

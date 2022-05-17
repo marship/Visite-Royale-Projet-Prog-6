@@ -311,6 +311,12 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
     
     @Override
     public void miseAJour() {
+        fenetre.repaint();
+    }
+
+    @Override
+    public void afficherPanneau(String nomPanneau) {
+        // TODO Auto-generated method stub
         
     }
 }

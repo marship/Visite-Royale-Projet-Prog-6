@@ -7,6 +7,7 @@ import Joueur.JoueurHumain;
 import Joueur.JoueurIAAleatoire;
 import Joueur.JoueurIAExperte;
 import Modele.Jeu;
+import Pattern.Observable;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
 
@@ -55,13 +56,36 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     @Override
-    public void clicPlateau(int coupY) {
+    public void clicPlateau(int coupX, int coupY) {
         if (carteActuelle != 8) {
-            if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupY, carteActuelle)) {
+            if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, carteActuelle)) {
                 carteActuelle = 8;
             }
         } else {
-            Element el = jeu.obtenirElementPosition(coupY);
+            Element el = Element.VIDE;
+            switch (coupY) {
+                case 2:
+                    if (jeu.obtenirPositionElement(Element.FOU) == coupX) {
+                        el = Element.FOU;
+                    }
+                    break;
+                case 3:
+                    if (jeu.obtenirPositionElement(Element.ROI) == coupX) {
+                        el = Element.ROI;
+                    }
+                    if (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) == coupX) {
+                        el = Element.GARDE_GAUCHE;
+                    }
+                    if (jeu.obtenirPositionElement(Element.GARDE_DROIT) == coupX) {
+                        el = Element.GARDE_DROIT;
+                    }
+                    break;
+                case 4:
+                    if (jeu.obtenirPositionElement(Element.SORCIER) == coupX) {
+                        el = Element.SORCIER;
+                    }
+                    break;
+            }
             if (ETAT_JEU == InfoJeu.CHOIX_FOU) {
                 switch (el) {
                     case ROI:
@@ -110,13 +134,13 @@ public class ControleurMediateur implements CollecteurEvenements {
             }
             if (ETAT_JEU == InfoJeu.CHOIX_ROI) {
                 int possible = jeu.positionsPourCour();
-                if (coupY - 8 == jeu.obtenirPositionElement(Element.ROI) - 1 && (possible == 1 || possible == 0)) {
+                if (coupX - 8 == jeu.obtenirPositionElement(Element.ROI) - 1 && (possible == 1 || possible == 0)) {
                     int[] cartes = new int[2];
                     cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
                     cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
                     jeu.deplacerCour(0, cartes);
                 }
-                if (coupY - 8 == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 1 || possible == 0)) {
+                if (coupX - 8 == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 1 || possible == 0)) {
                     int[] cartes = new int[2];
                     cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
                     cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
@@ -148,17 +172,18 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return;
             }
         }
+        Observable.metAJour();
     }
 
     @Override
-    public void clicCarte(int coupY) {
+    public void clicCarte(int coupX) {
         switch (ETAT_JEU) {
             case DEBUT_TOUR:
             case APRES_UNE_CARTE:
-                if (carteActuelle == coupY) {
+                if (carteActuelle == coupX) {
                     carteActuelle = 8;
                 } else {
-                    carteActuelle = coupY;
+                    carteActuelle = coupX;
                 }
                 break;
 
@@ -184,7 +209,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 } else {
                     // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
                     // l'attend.
-                    System.out.println("On vous attend, joueur " + joueurs[joueurCourant][type].numeroJoueurCourant());
                     decompteTimer = lenteurAttente;
                 }
             } else {
@@ -234,7 +258,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     private void finDeTour() {
-        if(jeu.dernierTypeDePersonnageJouer != Element.VIDE){
+        if (jeu.dernierTypeDePersonnageJouer != Element.VIDE) {
             jeu.finDeTour();
             ETAT_JEU = InfoJeu.DEBUT_TOUR;
             changerJoueurCourant();
