@@ -246,12 +246,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 System.exit(0);
                 break;
             case "FinDeTour":
-                /*
-                 * Random r = new Random();
-                 * int i = r.nextInt(17);
-                 * jeu.jouerCarte(Element.FOU, i - 8, 2);
-                 * finDeTour();
-                 */
+                finDeTour();
                 interfaceUtilisateur.miseAJourFinDeTour();
                 break;
             case "MenuEnJeu":

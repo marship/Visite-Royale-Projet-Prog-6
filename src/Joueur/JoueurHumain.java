@@ -32,7 +32,7 @@ public class JoueurHumain extends Joueur {
 		}
 
 		if (jeu.listeDeplacementPossiblesAvecCarte(carteChoisie.personnage(),
-				carteChoisie.deplacement())[caseChoisie] == 0) {
+				carteChoisie.deplacement())[caseChoisie + 8] == 0) {
 			return false;
 		}
 

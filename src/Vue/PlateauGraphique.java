@@ -145,10 +145,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         largeurCarte = largeurFenetre / 16;
         hauteurCarte = debutPlateauY;
 
-        System.out.println("Carte de taille: " + largeurCarte + "x" + hauteurCarte);
-        System.out.println("Point de depart: (" + debutZoneCartesX() + ";" + debutZoneCartesY() + ")");
-        System.out.println("Point de final: (" + finZoneCartesX() + ";" + finZoneCartesY() + ")");
-
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
             switch (cartesJoueurCourant[i].personnage()) {
                 case ROI:
