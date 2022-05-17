@@ -12,6 +12,6 @@ hs_err_pid*
 ##############################
 ## Visual Studio Code
 ##############################
-.vscode/
-.code-workspace
-.bin/
+.vscode
+code-workspace
+bin
