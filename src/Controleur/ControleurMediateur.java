@@ -1,5 +1,7 @@
 package Controleur;
 
+import java.util.Random;
+
 import Global.Element;
 import Global.InfoJeu;
 import Joueur.Joueur;
@@ -47,6 +49,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             typeJoueur[i] = 0;
         }
         carteActuelle = 8;
+        joueurCourant = 1;
     }
 
     @Override
@@ -57,6 +60,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicPlateau(int coupX, int coupY) {
+        jeu.plateau().paquet.afficherMain(joueurCourant);
         if (carteActuelle != 8) {
             if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, carteActuelle)) {
                 carteActuelle = 8;
@@ -134,13 +138,14 @@ public class ControleurMediateur implements CollecteurEvenements {
             }
             if (ETAT_JEU == InfoJeu.CHOIX_ROI) {
                 int possible = jeu.positionsPourCour();
-                if (coupX - 8 == jeu.obtenirPositionElement(Element.ROI) - 1 && (possible == 1 || possible == 0)) {
+                System.out.println(possible);
+                if (coupX == jeu.obtenirPositionElement(Element.ROI) - 1 && (possible == 1 || possible == 0)) {
                     int[] cartes = new int[2];
                     cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
                     cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
                     jeu.deplacerCour(0, cartes);
                 }
-                if (coupX - 8 == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 1 || possible == 0)) {
+                if (coupX == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 1 || possible == 0)) {
                     int[] cartes = new int[2];
                     cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
                     cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
@@ -172,7 +177,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return;
             }
         }
-        Observable.metAJour();
     }
 
     @Override
@@ -242,7 +246,12 @@ public class ControleurMediateur implements CollecteurEvenements {
                 System.exit(0);
                 break;
             case "FinDeTour":
-                finDeTour();
+                /*
+                 * Random r = new Random();
+                 * int i = r.nextInt(17);
+                 * jeu.jouerCarte(Element.FOU, i - 8, 2);
+                 * finDeTour();
+                 */
                 interfaceUtilisateur.miseAJourFinDeTour();
                 break;
             case "MenuEnJeu":
