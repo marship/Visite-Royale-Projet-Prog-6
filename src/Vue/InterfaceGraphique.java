@@ -5,11 +5,8 @@ import Pattern.Observateur;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
 import javax.swing.border.EmptyBorder;
-
-import Global.Element;
 
 
 public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
@@ -19,13 +16,15 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
     PlateauGraphique plateauGraphique;
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
-                    boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonJoker, boutonMenu, boutonFinDeTour;
+                boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonAnnulerJeu, boutonOptionsJeu, boutonFinDeTour, boutonHistorique;
                     
 	CardLayout layout; 
-
     JPanel panelCourant, panelMenuPrincipal, panelPlateau, panelSelectionJoueurs;
 	ArrierePlan panelOptions;
     JFrame fenetre;
+
+    private int hauteurFenetre;
+    private int largeurFenetre;
 
 	InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
 		jeu = j;
@@ -45,6 +44,10 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 	public void run() {
 
 		fenetre = new JFrame("Visite Royale");
+        fenetre.setSize(1280, 720);
+        hauteurFenetre = fenetre.getHeight();
+        System.out.println("alled" + hauteurFenetre);
+        largeurFenetre = fenetre.getWidth();
 
 		layout = new CardLayout();
 		panelCourant = new JPanel(layout);
@@ -74,8 +77,10 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
         fenetre.setFocusable(true);
 
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		fenetre.setSize(1280, 720);
+		
 		fenetre.setVisible(true);
+
+ 
 	}
 
 	//affiche le panel passé en paramètre
@@ -87,9 +92,13 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 	//Crée le JPanel du menu principal
 	public void creerMenuPrincipal(){
 
+        int borderTop = hauteurFenetre / 3;
+        int borderBottom = hauteurFenetre / 10;
+        int borderSides = largeurFenetre / 4;
+
 		panelMenuPrincipal = new ArrierePlan("res/Images/backgroundMenu.png");
 		panelMenuPrincipal.setLayout(new GridLayout(0,1,0,30));
-		panelMenuPrincipal.setBorder(new EmptyBorder(240,640/4,50,640/4));
+		panelMenuPrincipal.setBorder(new EmptyBorder(borderTop,borderSides,borderBottom,borderSides));
 
         boutonJouer = new DesignBoutons("Jouer", "res/Images/textureBouton.png");
         boutonJouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
@@ -114,18 +123,15 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
     public void creerSelectionJoueurs(){
 
+        int borderTop = hauteurFenetre / 2;
+        int borderBottom = hauteurFenetre / 3;
+        int borderSides = largeurFenetre / 3;
+
         panelSelectionJoueurs = new ArrierePlan("res/Images/backgroundSelection.png");
         panelSelectionJoueurs.setLayout(new GridBagLayout());
 
-        int height = 720;
-        int width = 1280;
-
-        int borderTop = height / 2;
-        int borderBottom = height / 3;
-        int borderSides = width / 3;
-
         panelSelectionJoueurs.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
-        GridBagConstraints test = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
 
         String[] choixComboBox = {
             "Humain",
@@ -133,20 +139,20 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
             "IA experte"
         };
 
-        test.fill = GridBagConstraints.HORIZONTAL;
-        test.insets = new Insets(10,0,0,10);  //top padding
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10,0,0,10);  //top padding
 
         JLabel nomJoueur1 = new JLabel("Nom du Joueur 1");
-        test.weightx = 0.5;
-        test.gridx = 0;
-        test.gridy = 0;  
-        panelSelectionJoueurs.add(nomJoueur1, test);
+        gbc.weightx = 0.5;
+        gbc.gridx = 0;
+        gbc.gridy = 0;  
+        panelSelectionJoueurs.add(nomJoueur1, gbc);
 
 
         JTextField valeurNomJoueur1 = new JTextField();
-        test.gridx = 0;
-        test.gridy = 1;  
-        panelSelectionJoueurs.add(valeurNomJoueur1, test);
+        gbc.gridx = 0;
+        gbc.gridy = 1;  
+        panelSelectionJoueurs.add(valeurNomJoueur1, gbc);
 
 
         JComboBox<String> comboBoxJoueur1 = new JComboBox<>();
@@ -155,22 +161,22 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
         }
         comboBoxJoueur1.setFocusable(false);
         //comboBox.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
-        test.ipady = 0;
-        test.gridx = 0;
-        test.gridy = 2;
-        panelSelectionJoueurs.add(comboBoxJoueur1, test);
+        gbc.ipady = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panelSelectionJoueurs.add(comboBoxJoueur1, gbc);
 
-        test.insets = new Insets(10,10,0,10);  //top padding
+        gbc.insets = new Insets(10,10,0,10);  //top padding
 
         JLabel nomJoueur2 = new JLabel("Nom du Joueur 2");
-        test.gridx = 1;
-        test.gridy = 0;  
-        panelSelectionJoueurs.add(nomJoueur2, test);
+        gbc.gridx = 1;
+        gbc.gridy = 0;  
+        panelSelectionJoueurs.add(nomJoueur2, gbc);
 
         JTextField valeurNomJoueur2 = new JTextField();
-        test.gridx = 1;
-        test.gridy = 1;  
-        panelSelectionJoueurs.add(valeurNomJoueur2, test);
+        gbc.gridx = 1;
+        gbc.gridy = 1;  
+        panelSelectionJoueurs.add(valeurNomJoueur2, gbc);
 
         JComboBox<String> comboBoxJoueur2 = new JComboBox<>();
         for(int i = 0; i < choixComboBox.length; i++){
@@ -179,27 +185,27 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
         comboBoxJoueur2.setFocusable(false);
         //comboBox.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
         
-        test.gridx = 1;
-        test.gridy = 2;
-        panelSelectionJoueurs.add(comboBoxJoueur2, test);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panelSelectionJoueurs.add(comboBoxJoueur2, gbc);
         
-        test.anchor = GridBagConstraints.PAGE_END; //bottom of space
-        test.insets = new Insets(50,20,0,20);  //padding des boutons 
-        test.gridx = 0;
-        test.gridy = 3;
-        test.weightx = 0.5;
+        gbc.anchor = GridBagConstraints.PAGE_END;
+        gbc.insets = new Insets(50,20,0,20);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 0.5;
 
         DesignBoutons valider = new DesignBoutons("Valider", "res/Images/textureBouton.png");
         System.out.println(valider.getBounds());
         valider.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
         valider.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelSelectionJoueurs.add(valider, test);
+        panelSelectionJoueurs.add(valider, gbc);
         
-        test.gridx = 1;
+        gbc.gridx = 1;
         DesignBoutons annuler = new DesignBoutons("Annuler", "res/Images/textureBouton.png");
         annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
         valider.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelSelectionJoueurs.add(annuler, test);
+        panelSelectionJoueurs.add(annuler, gbc);
 
 
 
@@ -210,38 +216,36 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 	public void creerPlateauJeu(){
 
         plateauGraphique = new PlateauGraphique(jeu);
-        //GridBagConstraints layoutConstraint = new GridBagConstraints();
+        plateauGraphique.setLayout(new BorderLayout());
 
-        Box boxBoutons = Box.createHorizontalBox();
-		boutonJoker = new DesignBoutons("Joker", "res/Images/textureBouton.png");
-        boutonJoker.addActionListener(new AdaptateurCommande(collecteurEvenements, "Joker"));
-		//layoutConstraint.gridx = 0;
-		//layoutConstraint.gridy = 0;
-        boxBoutons.add(boutonJoker);
+        Box boxBoutonsSud = Box.createHorizontalBox();
+        Box boxBoutonsNord = Box.createHorizontalBox();
+        Box boxBoutonFinDeTour =  Box.createVerticalBox();
+        
+		boutonAnnulerJeu = new DesignBoutons("Annuler", "res/Images/texturePetitBouton.png");
+        //boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
+        boutonHistorique = new DesignBoutons("Historique", "res/Images/texturePetitBouton.png");
+        //boutonHistorique.addActionListener(new AdaptateurCommande(collecteurEvenements, "Historique"));
+        boxBoutonsSud.add(boutonAnnulerJeu);
+        boxBoutonsSud.add(Box.createGlue());
+        boxBoutonsSud.add(boutonHistorique);
+        plateauGraphique.add(boxBoutonsSud, BorderLayout.SOUTH);
 
-		boutonMenu = new DesignBoutons("Menu", "res/Images/textureBouton.png");
-        boutonMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "Menu"));
-        //layoutConstraint.gridx = 0;
-		//layoutConstraint.gridy = 1;
-        boxBoutons.add(boutonMenu);
+		boutonOptionsJeu = new DesignBoutons("Options", "res/Images/texturePetitBouton.png");
+        //boutonOptionsJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "OptionsJeu"));
+        boxBoutonsNord.add(Box.createGlue());
+        boxBoutonsNord.add(boutonOptionsJeu);
+        plateauGraphique.add(boxBoutonsNord, BorderLayout.NORTH);
 
-        boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/textureBouton.png");
+        boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/texturePetitBouton.png");
         boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
-        //layoutConstraint.gridx = 0;
-		//layoutConstraint.gridy = 2;
-        boxBoutons.add(boutonFinDeTour);
+        int padding = 9 * (hauteurFenetre/14);
+        padding = 350;
+        boxBoutonFinDeTour.add(Box.createVerticalStrut((int) padding));
+        boxBoutonFinDeTour.add(boutonFinDeTour);
+        plateauGraphique.add(boxBoutonFinDeTour, BorderLayout.EAST);
+        
 
-        plateauGraphique.add(boxBoutons);
-
-		/*layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
-		layoutConstraint.gridx = 1;
-		layoutConstraint.gridy = 1;
-        panelPlateau.add(boutonMenu, layoutConstraint);
-
-		layoutConstraint.fill = GridBagConstraints.HORIZONTAL;
-		layoutConstraint.gridx = 0;
-		layoutConstraint.gridy = 0;
-		panelPlateau.add(imglabel, layoutConstraint); */
     } 
 
     public void miseAJourFinDeTour() {
@@ -257,18 +261,12 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
     //TODO Faire l'affichage des options
     public void creerOptions(){
 
+        int borderTop = hauteurFenetre / 4;
+        int borderBottom = hauteurFenetre / 10;
+        int borderSides = largeurFenetre / 3;
 
         panelOptions = new ArrierePlan("res/Images/backgroundOptions.png");
         panelOptions.setLayout(new GridLayout(0, 1, 0, 30));
-
-        int height = 720;
-        int width = 1280;
-
-        int borderTop = height / 4;
-        int borderBottom = height / 10;
-        int borderSides = width / 3;
-
-        System.out.println("top = " + borderTop + " , sides = " + borderSides + " , bottom = " + borderBottom );
         panelOptions.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
 
         JLabel txtMusique = new JLabel("Volume musique");
