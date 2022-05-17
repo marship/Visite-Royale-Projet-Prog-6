@@ -21,16 +21,29 @@ public class PlateauGraphique extends JPanel implements Observateur {
     Plateau plateau;
     Graphics2D dessinable;
 
+    // ==========================
+    // ===== IMAGES PLATEAU =====
+    // ==========================
     ImagePlateau imagePlateau;
 
+    // =========================
+    // ===== IMAGES JETONS =====
+    // =========================
     ImagePlateau imageJetonGrandeCouronne, imageJetonPetiteCouronne;
     ImagePlateau imageJetonGardeGauche, imageJetonGardeDroit, imageJetonRoi, imageJetonFou, imageJetonSorcier;
+
+    // =========================
+    // ===== IMAGES CARTES =====
+    // =========================
     ImagePlateau imageCarteErreur, imageCarteVide, imageDosCartes;
     ImagePlateau imageCarteRoi;
     ImagePlateau imageCarteFouUn, imageCarteFouDeux, imageCarteFouTrois, imageCarteFouQuatre, imageCarteFouCinq, imageCarteFouM;
     ImagePlateau imageCarteSorcierUn, imageCarteSorcierDeux, imageCarteSorcierTrois;
     ImagePlateau imageCarteGardesUn, imageCarteGardesUnPlusUn, imageCarteGardesRaproche;
     
+    // =============================================
+    // ===== INFO POSITIONS ELEMENTS GRAPHIQUE =====
+    // =============================================
     int taillePlateau = 0;
     int largeurFenetre, hauteurFenetre = 0;
     int largeurCaseCarte, hauteurCaseCarte = 0;
@@ -38,54 +51,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
     int debutPlateauX, debutPlateauY, finPlateauX, finPlateauY, quartHauteurPlateau = 0;
     int debutCartesX, debutCartesY, finCartesX, finCartesY = 0;
 
+    /////////////////////////////////////////////////////////////////////////
 
     // ========================
     // ===== CONSTRUCTEUR =====
     // ========================
     public PlateauGraphique(Jeu j) {
-        
-        // ==========================
-        // ===== IMAGES PLATEAU =====
-        // ==========================
-        imagePlateau = chargeImage("plateau");
-
-        // =========================
-        // ===== IMAGES JETONS =====
-        // =========================
-        imageJetonGrandeCouronne = chargeImage("jeton_Grande_Couronne");
-        imageJetonPetiteCouronne = chargeImage("jeton_Petite_Couronne");
-        
-        imageJetonGardeGauche = chargeImage("jeton_Garde_Gauche");
-        imageJetonGardeDroit = chargeImage("jeton_Garde_Droit");
-        imageJetonRoi = chargeImage("jeton_Roi");
-        imageJetonFou = chargeImage("jeton_Fou");
-        imageJetonSorcier = chargeImage("jeton_Sorcier");
-
-        // =========================
-        // ===== IMAGES CARTES =====
-        // =========================
-        imageCarteErreur = chargeImage("carteErreur");
-        imageCarteVide = chargeImage("carteVide");
-
-        imageDosCartes = chargeImage("dosCarte");
-        
-        imageCarteRoi = chargeImage("Roi_1");
-
-        imageCarteFouUn = chargeImage("Fou_1");
-        imageCarteFouDeux = chargeImage("Fou_2"); 
-        imageCarteFouTrois = chargeImage("Fou_3");
-        imageCarteFouQuatre = chargeImage("Fou_4");
-        imageCarteFouCinq = chargeImage("Fou_5");
-        imageCarteFouM = chargeImage("Fou_M");
-
-        imageCarteSorcierUn = chargeImage("Sorcier_1");
-        imageCarteSorcierDeux = chargeImage("Sorcier_2");
-        imageCarteSorcierTrois = chargeImage("Sorcier_3");
-
-        imageCarteGardesUn = chargeImage("Garde_1");
-        imageCarteGardesUnPlusUn = chargeImage("Garde_1plus1");
-        imageCarteGardesRaproche = chargeImage("Garde_Raproche");
-
+        chargementDesImages();
         jeu = j;
         //plateau = jeu.plateau();
     }
@@ -114,6 +86,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         tracerPlateau();
         afficherCartesJoueurCourant();        
+    }
+
+    // =======================
+    // ===== MISE A JOUR =====
+    // =======================
+    @Override
+    public void miseAJour() {
+        // TODO
     }
 
     // ===========================
@@ -254,12 +234,39 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
 
-    // =======================
-    // ===== MISE A JOUR =====
-    // =======================
-    @Override
-    public void miseAJour() {
-        // TODO
+    private void chargementDesImages() {
+        imagePlateau = chargeImage("plateau");
+
+        imageJetonGrandeCouronne = chargeImage("jeton_Grande_Couronne");
+        imageJetonPetiteCouronne = chargeImage("jeton_Petite_Couronne");
+        
+        imageJetonGardeGauche = chargeImage("jeton_Garde_Gauche");
+        imageJetonGardeDroit = chargeImage("jeton_Garde_Droit");
+        imageJetonRoi = chargeImage("jeton_Roi");
+        imageJetonFou = chargeImage("jeton_Fou");
+        imageJetonSorcier = chargeImage("jeton_Sorcier");
+
+        imageCarteErreur = chargeImage("carteErreur");
+        imageCarteVide = chargeImage("carteVide");
+
+        imageDosCartes = chargeImage("dosCarte");
+        
+        imageCarteRoi = chargeImage("Roi_1");
+
+        imageCarteFouUn = chargeImage("Fou_1");
+        imageCarteFouDeux = chargeImage("Fou_2"); 
+        imageCarteFouTrois = chargeImage("Fou_3");
+        imageCarteFouQuatre = chargeImage("Fou_4");
+        imageCarteFouCinq = chargeImage("Fou_5");
+        imageCarteFouM = chargeImage("Fou_M");
+
+        imageCarteSorcierUn = chargeImage("Sorcier_1");
+        imageCarteSorcierDeux = chargeImage("Sorcier_2");
+        imageCarteSorcierTrois = chargeImage("Sorcier_3");
+
+        imageCarteGardesUn = chargeImage("Garde_1");
+        imageCarteGardesUnPlusUn = chargeImage("Garde_1plus1");
+        imageCarteGardesRaproche = chargeImage("Garde_Raproche");
     }
 
     // ===================================================
