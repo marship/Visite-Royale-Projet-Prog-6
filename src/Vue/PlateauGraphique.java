@@ -60,6 +60,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public PlateauGraphique(Jeu j) {
         chargementDesImages();
         jeu = j;
+        jeu.ajouteObservateur(this);
         // plateau = jeu.plateau();
     }
 
@@ -94,7 +95,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // =======================
     @Override
     public void miseAJour() {
-        // TODO
+        repaint();
     }
 
     // ===========================

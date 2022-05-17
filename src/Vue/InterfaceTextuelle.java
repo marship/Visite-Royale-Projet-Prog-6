@@ -256,7 +256,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                 }
             }
             else{
-                a = jeu.listeDeplacementPossiblesAvecCarte(el, carte.deplacement());
+                a = jeu.listeDeplacementPossiblesAvecCarte(Element.GARDES, carte.deplacement());
             }
             int i = -8;
             

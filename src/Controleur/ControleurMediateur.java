@@ -60,7 +60,6 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicPlateau(int coupX, int coupY) {
-        jeu.plateau().paquet.afficherMain(joueurCourant);
         if (carteActuelle != 8) {
             if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, carteActuelle)) {
                 carteActuelle = 8;
