@@ -119,20 +119,6 @@ public class Paquet {
         System.out.println("\n");
     }
 
-    public void afficherTour() {
-        Configuration.instance().logger().info("Debut de l'affichage du tour !\n");
-        Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
-        while (!defausse.estVide()) {
-            tmp.insereTete(defausse.extraitTete());
-        }
-        while (!tmp.estVide()) {
-            Carte carte = tmp.extraitTete();
-            System.out.println(carte.toString());
-            defausse.insereTete(carte);
-        }
-        Configuration.instance().logger().info("Fin de l'affichage du tour !\n");
-    }
-
     public void completerCartesEnMain(int joueur) {
         int i = 0;
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
@@ -262,10 +248,10 @@ public class Paquet {
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
         Carte main = (Carte) mainJoueurs[joueur][carte];
         mainJoueurs[joueur][carte] = vide;
-        tourActuel.insereTete(main);
+        tourActuel.insereQueue(main);
     }
 
-    public void viderCartePoser() {
+    public void viderCartePosee() {
         while (!tourActuel.estVide()) {
             defausse.insereTete(tourActuel.extraitTete());
         }
@@ -486,6 +472,10 @@ public class Paquet {
 
     public Sequence<Carte> defausse() {
         return defausse;
+    }
+
+    public Sequence<Carte> tourActuel() {
+        return tourActuel;
     }
 
     public Carte[] mainJoueur(int joueur) {
