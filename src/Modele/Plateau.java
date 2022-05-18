@@ -34,7 +34,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ===== INFORMATION PARTIE =====
     // ==============================
     public int joueurCourant = JOUEUR_DROIT;
-    public int joueurGagnant = -1;
+    public int joueurGagnant = AUCUN_GAGNANT;
 
     // ====================
     // ===== ELEMENTS =====
@@ -60,10 +60,11 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ===========================
     // ===== VALEURS GAGNANT =====
     // ===========================
-    static final int AUCUN_GAGNANT = 0;
+    static final int AUCUN_GAGNANT = -1;
     static final int ROI_GAGNANT = 1;
     static final int COURONNE_GAGNANTE = 2;
-    static final int PIOCHE_GAGNANTE = 3;
+    static final int MEULE_GAGNANTE_GAUCHE = 3;
+    static final int MEULE_GAGNANTE_DROITE = 4;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -133,6 +134,14 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         if(roi.positionPersonnage() <= EXTREMITE_GAUCHE_DU_PLATEAU + 1){
             joueurGagnant = JOUEUR_GAUCHE;
             return ROI_GAGNANT;
+        }
+        if(joueurGagnant == MEULE_GAGNANTE_DROITE) {
+            joueurGagnant = JOUEUR_DROIT;
+            return MEULE_GAGNANTE_DROITE;
+        }
+        if(joueurGagnant == MEULE_GAGNANTE_GAUCHE) {
+            joueurGagnant = JOUEUR_GAUCHE;
+            return MEULE_GAGNANTE_GAUCHE;
         }
         return AUCUN_GAGNANT;
     }

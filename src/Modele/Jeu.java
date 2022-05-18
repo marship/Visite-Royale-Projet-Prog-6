@@ -60,7 +60,8 @@ public class Jeu extends Observable {
     static final int AUCUN_GAGNANT = 0;
     static final int ROI_GAGNANT = 1;
     static final int COURONNE_GAGNANTE = 2;
-    static final int MEULE_GAGNANTE = 3;
+    static final int MEULE_GAGNANTE_GAUCHE = 3;
+    static final int MEULE_GAGNANTE_DROITE = 4;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -339,15 +340,19 @@ public class Jeu extends Observable {
                 partieEnCours = false;
                 Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " avec le roi !!");
                 break;
-            default:
+            case MEULE_GAGNANTE_GAUCHE:
+                partieTerminee = true;
+                partieEnCours = false;
+                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la meule !!");
                 break;
-        }
-        if (plateau().joueurGagnant != -1) {
-            partieTerminee = true;
-            partieEnCours = false;
-            Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la meule !!");
-        } else {
-            Configuration.instance().logger().warning("Condition de victoire inconnue !!");
+            case MEULE_GAGNANTE_DROITE:
+                partieTerminee = true;
+                partieEnCours = false;
+                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la meule !!");
+                break;
+            default:
+                Configuration.instance().logger().warning("Condition de victoire inconnue !!");
+                break;
         }
         metAJour();
     }
@@ -365,12 +370,22 @@ public class Jeu extends Observable {
                     .resteAssezCarteDansPioche(plateau().paquet.nombreCarteManquante(plateau().joueurCourant))) {
                 plateau().paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
-                Configuration.instance().logger()
-                        .info("Il reste " + plateau().paquet.pioche().taille() + " cartes dans la pioche");
+                Configuration.instance().logger().info("Il reste " + plateau().paquet.pioche().taille() + " cartes dans la pioche");
+                Configuration.instance().logger().info("La pioche se recharge pour la première fois !");
+            } else if (obtenirPositionElement(ROI) == 0) {
+                plateau().paquet.melangerDefausse();
+                plateau().paquet.remplirMain(plateau().joueurCourant);
+                changerJoueurCourant();
+                Configuration.instance().logger().info("Le roi est au centre, la partie continue !");
             } else {
-                plateau().joueurGagnant = JOUEUR_GAUCHE;
+                if (obtenirPositionElement(ROI) > 0) {
+                    plateau().joueurGagnant = MEULE_GAGNANTE_DROITE;
+                    
+                } else {
+                    plateau().joueurGagnant = MEULE_GAGNANTE_GAUCHE;
+                }
+                traiterGagnant();
             }
-            traiterGagnant();
         }
         personnageManipulerParLeFou(FOU);
         initialiserDernierTypeDePersonnageJouer();
