@@ -17,6 +17,8 @@ import java.io.InputStream;
 
 public class PlateauGraphique extends JPanel implements Observateur {
 
+    static final int EPAISSEUR_BORDURE = 3;
+
     Jeu jeu;
     Plateau plateau;
     Graphics2D dessinable;
@@ -47,7 +49,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // =============================================
     int taillePlateau = 0;
     int largeurFenetre, hauteurFenetre = 0;
-    int largeurCaseCarte, hauteurCaseCarte = 0;
     int largeurCasePlateau, hauteurCasePlateau = 0;
     int debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau, quartHauteurPlateau = 0;
     int debutCartesX, debutCartesY, largeurCarte, hauteurCarte = 0;
@@ -94,6 +95,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
         afficherCartesAutreJoueur();
         afficherZoneCartesJouees();
         afficherCartesJoueurCourant();
+
+        tracerPrevisualisation();
     }
 
     // =======================
@@ -138,8 +141,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             default:
                 break;
         }
-        int test = positionJeton(jeu.obtenirPositionElement(element));
-        tracerImage(imageElement, test, hauteurElement, largeurCasePlateau, quartHauteurPlateau);
+        tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement, largeurCasePlateau, quartHauteurPlateau);
     }
 
     public void afficherCartesJoueurCourant() {
@@ -149,7 +151,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         debutCartesX = largeurFenetre / 16;
         debutCartesY = 6 * hauteurFenetre / 7;
-        
 
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
             switch (cartesJoueurCourant[i].personnage()) {
@@ -220,7 +221,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     image = imageCarteErreur;
                     break;
             }
-            tracerImage(image, (4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
         }
     }
 
@@ -230,7 +231,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         debutCartesY = 0;
 
         for (int i = 0; i < 8; i++) {
-            tracerImage(imageDosCarte, (4+i)*debutCartesX, 0, largeurCarte, hauteurCarte);
+            tracerImage(imageDosCarte, (4 + i) * debutCartesX, 0, largeurCarte, hauteurCarte);
         }
     }
 
@@ -300,6 +301,38 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageCadrePiocheDefausse = chargeImage("cadrePiocheDefausse");
     }
 
+    // ============================
+    // ===== TRACER RECTANGLE =====
+    // ============================
+    public void tracerRectangle(int x, int y, int largeurCarte, int hauteurCarte) {
+        dessinable.setStroke(new BasicStroke(EPAISSEUR_BORDURE));
+        if (masquerPrevisualisation()) {
+            dessinable.setColor(Color.BLACK);
+        } else {
+            dessinable.setColor(Color.BLACK);  // YELLOW
+        }
+        dessinable.drawRect(x * debutZoneCartesX(), y * debutZoneCartesY(), largeurCarte(), hauteurCarte());
+        System.out.println("x = " + x * debutZoneCartesX() + ", y = " + debutZoneCartesY() + ", larg = " + largeurCarte() + ", haut = " + hauteurCarte());
+    }
+
+    public void tracerPrevisualisation() {
+        tracerRectangle(jeu.previsualisationX(), jeu.previsualisationY(), jeu.largeurPrevisualisation(), jeu.hauteurPrevisualisation());
+    }
+
+    public boolean masquerPrevisualisation() {
+        return masquerPrevisualisationNonAutorisee();
+    }
+
+    /*
+    public boolean masquerPrevisualisationDebut() {
+        return jeu.estAuDebut();
+    }
+    */
+
+    public boolean masquerPrevisualisationNonAutorisee() {
+        return !jeu.actionAutoriser();
+    }
+
     // ===================================================
     // ===== INFO POSITION ELEMENT GRAPHIQUE PLATEAU =====
     // ===================================================
@@ -309,14 +342,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     public int hauteurCasePlateau() {
         return hauteurCasePlateau;
-    }
-
-    public int largeurCaseCarte() {
-        return largeurCaseCarte;
-    }
-
-    public int hauteurCaseCarte() {
-        return hauteurCaseCarte;
     }
 
     public int debutPlateauX() {
@@ -336,7 +361,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public int debutZoneCartesX() {
-        return 4*debutCartesX;
+        return 4 * debutCartesX;
     }
 
     public int debutZoneCartesY() {
@@ -348,7 +373,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public int finZoneCartesY() {
-        return debutCartesY+hauteurCarte;
+        return debutCartesY + hauteurCarte;
     }
 
     public int largeurCarte() {

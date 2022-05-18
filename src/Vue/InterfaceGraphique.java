@@ -9,7 +9,7 @@ import java.awt.*;
 import javax.swing.border.EmptyBorder;
 
 
-public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Observateur {
+public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUtilisateur, Observateur{
 	
     Jeu jeu;
 	CollecteurEvenements collecteurEvenements;
@@ -211,7 +211,7 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
     }
 
-//Crée le JPanel du plateau de jeu
+    //Crée le JPanel du plateau de jeu
 	//TODO Faire l'affichage du plateau de jeu
 	public void creerPlateauJeu(){
 
@@ -318,6 +318,15 @@ public class InterfaceGraphique implements Runnable, InterfaceUtilisateur, Obser
 
     @Override
     public void afficherPanneau(String nomPanneau) {
-        // Inutile dans l'interfaceTextuelle !!
+        // TODO Auto-generated method stub
+    }
+
+    // ================================
+    // ====== Previsualisation ========
+    // ================================
+    @Override
+    public void previsualisation(int coupX, int coupY, int largeurPreselection, int hauteurPreselection) {
+        plateauGraphique.tracerRectangle(coupX, coupY, largeurPreselection, hauteurPreselection);
+        ((Component) plateauGraphique).repaint();
     }
 }
