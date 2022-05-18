@@ -269,6 +269,10 @@ public class Jeu extends Observable {
     public int joueurCourant() {
         return plateau().joueurCourant;
     }
+    
+    public int joueurGagnant() {
+        return plateau().joueurGagnant;
+    }
 
     // TODO IA
     // Numero : 0 = Joueur Gauche | 1 = Joueur Droit
