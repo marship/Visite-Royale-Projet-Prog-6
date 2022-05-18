@@ -32,7 +32,16 @@ public class JoueurHumain extends Joueur {
 		}
 
 		if (carteChoisie.personnage() == Element.FOU) {
-			int[] a = jeu.listeDeplacementPossiblesAvecCarte(jeu.personnageManipulerParLeFou,
+			if (jeu.personnageManipulerParLeFou == Element.ROI) {
+				if (jeu.estPouvoirFouActivable()) {
+					int[] a = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU,
+							carteChoisie.deplacement());
+					if (a[caseChoisie + 8] == 0) {
+						return false;
+					}
+				}
+			}
+			int[] a = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU,
 					carteChoisie.deplacement());
 			if (a[caseChoisie + 8] == 0) {
 				return false;
@@ -82,17 +91,16 @@ public class JoueurHumain extends Joueur {
 		if (carteChoisie.personnage() == Element.FOU) {
 			if (jeu.personnageManipulerParLeFou == Element.GARDES) {
 				jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
-				int[] a = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU,carteChoisie.deplacement());
+				int[] a = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU, carteChoisie.deplacement());
 				int i = 0;
-				while(i < 17){
+				while (i < 17) {
 					System.out.print(a[i] + " ");
 					i++;
 				}
 				System.out.println(caseChoisie + 8);
 				if (a[caseChoisie + 8] == 1) {
 					jeu.jouerCarte(Element.GARDE_GAUCHE, caseChoisie, positionCarteDansLaMain);
-				}
-				else {
+				} else {
 					jeu.jouerCarte(Element.GARDE_DROIT, caseChoisie, positionCarteDansLaMain);
 				}
 				jeu.personnageManipulerParLeFou(Element.GARDES);

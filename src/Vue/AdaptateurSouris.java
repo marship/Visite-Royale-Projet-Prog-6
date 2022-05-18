@@ -27,7 +27,6 @@ public class AdaptateurSouris extends MouseAdapter {
                     && coupY >= plateauGraphique.debutZoneCartesY() && coupY <= plateauGraphique.finZoneCartesY()) {
                         
                 coupX = e.getX() / plateauGraphique.largeurCarte() - 4;
-                System.out.println(coupX);
                 collecteurEvenements.clicCarte(coupX);
             }
         }

@@ -269,7 +269,7 @@ public class Jeu extends Observable {
     public int joueurCourant() {
         return plateau().joueurCourant;
     }
-    
+
     public int joueurGagnant() {
         return plateau().joueurGagnant;
     }
@@ -406,6 +406,7 @@ public class Jeu extends Observable {
             poserCarte(cartes[i]);
             i++;
         }
+        majDernierTypeDePersonnageJouer(ROI);
         if (direction == 0) { // Gauche
             obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
             obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
@@ -420,6 +421,7 @@ public class Jeu extends Observable {
 
     public void unPlusUn(int direction, int carte) {
         poserCarte(carte);
+        majDernierTypeDePersonnageJouer(Element.GARDES);
         if (direction == 0) { // Gauche
             obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
             obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
@@ -432,6 +434,7 @@ public class Jeu extends Observable {
 
     public void rapproche(int carte) {
         poserCarte(carte);
+        majDernierTypeDePersonnageJouer(Element.GARDES);
         obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
         obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
         metAJour();
@@ -474,7 +477,7 @@ public class Jeu extends Observable {
         } else {
             resultat = new int[nombreCartes];
             while (indice < nombreCartes) {
-                Carte carte = plateau.paquet.mainJoueur(plateau().joueurCourant)[indice];
+                Carte carte = plateau.paquet.mainJoueur(joueurCourant())[indice];
                 if (carte.personnage() == dernierTypeDePersonnageJouer) {
                     resultat[indice] = 1;
                 }
@@ -625,14 +628,16 @@ public class Jeu extends Observable {
     }
 
     public int positionsPourCour() {
-        if (obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU) {
-            return 1; // Deplacement Droite impossible
-        } else {
-            if (obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU) {
-                return 2; // Deplacement Gauche impossible
-            }
-            return 0; // Double Deplacements possibles
+        if(obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU && obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU){
+            return 3; // Les deux impossible
         }
+        if(obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU){ 
+            return 1; // Droit impossible
+        }
+        if(obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU){
+            return 2; // Gauche impossible
+        }
+        return 0; // Tout possible
     }
 
     public int[] listeDeplacementPossiblesAvecCarte(Element perso, Deplacement deplace) {

@@ -34,13 +34,13 @@ public class JoueurIAAleatoire extends Joueur {
 			}
 			// Activer le fou
 			if (choix >= 65 && choix < 85) {
-				if(nbActions != 0){
+				if (nbActions != 0) {
 					activerFou();
 				}
 			}
 			// Activer le sorcier
 			if (choix >= 85) {
-				if(nbActions != 0){
+				if (nbActions != 0) {
 					activerSorcier();
 				}
 			}
@@ -93,7 +93,9 @@ public class JoueurIAAleatoire extends Joueur {
 	}
 
 	private void jouerDeuxRoi() {
-		if (jeu.plateau().paquet.nombreCartesElement(numeroJoueurCourant, Element.ROI, 0) >= 2) {
+		if (jeu.plateau().paquet.nombreCartesElement(numeroJoueurCourant, Element.ROI, 0) >= 2
+				&& (jeu.dernierTypeDePersonnageJouer == Element.ROI
+						|| jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
 			int direction = random.nextInt(3);
 			int[] cartes = new int[2];
 			cartes[0] = jeu.plateau().paquet.trouverRoi(numeroJoueurCourant, 0);
@@ -180,6 +182,8 @@ public class JoueurIAAleatoire extends Joueur {
 						}
 					}
 				}
+			} else {
+
 			}
 		}
 	}
