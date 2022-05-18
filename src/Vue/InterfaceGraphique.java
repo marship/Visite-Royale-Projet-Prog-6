@@ -46,7 +46,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 		fenetre = new JFrame("Visite Royale");
         fenetre.setSize(1280, 720);
         hauteurFenetre = fenetre.getHeight();
-        System.out.println("alled" + hauteurFenetre);
         largeurFenetre = fenetre.getWidth();
 
 		layout = new CardLayout();
@@ -196,7 +195,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.weightx = 0.5;
 
         DesignBoutons valider = new DesignBoutons("Valider", "res/Images/textureBouton.png");
-        System.out.println(valider.getBounds());
         valider.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
         valider.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(valider, gbc);
@@ -215,36 +213,46 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	//TODO Faire l'affichage du plateau de jeu
 	public void creerPlateauJeu(){
 
-        plateauGraphique = new PlateauGraphique(jeu);
-        plateauGraphique.setLayout(new BorderLayout());
-
-        Box boxBoutonsSud = Box.createHorizontalBox();
-        Box boxBoutonsNord = Box.createHorizontalBox();
-        Box boxBoutonFinDeTour =  Box.createVerticalBox();
+        plateauGraphique = new PlateauGraphique(jeu);        
+        plateauGraphique.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
         
-		boutonAnnulerJeu = new DesignBoutons("Annuler", "res/Images/texturePetitBouton.png");
+        gbc.weightx = 0.5;
+        gbc.weighty = 0.33;
+        // Top/right
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        boutonOptionsJeu = new DesignBoutons("Options", "res/Images/texturePetitBouton.png");
+        //boutonOptionsJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "OptionsJeu"));
+        plateauGraphique.add(boutonOptionsJeu, gbc);
+
+        // bottom/left
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        boutonAnnulerJeu = new DesignBoutons("Annuler", "res/Images/texturePetitBouton.png");
         //boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
+        plateauGraphique.add(boutonAnnulerJeu, gbc);
+
+
+        // bottom/right
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.SOUTHEAST;
         boutonHistorique = new DesignBoutons("Historique", "res/Images/texturePetitBouton.png");
         //boutonHistorique.addActionListener(new AdaptateurCommande(collecteurEvenements, "Historique"));
-        boxBoutonsSud.add(boutonAnnulerJeu);
-        boxBoutonsSud.add(Box.createGlue());
-        boxBoutonsSud.add(boutonHistorique);
-        plateauGraphique.add(boxBoutonsSud, BorderLayout.SOUTH);
-
-		boutonOptionsJeu = new DesignBoutons("Options", "res/Images/texturePetitBouton.png");
-        //boutonOptionsJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "OptionsJeu"));
-        boxBoutonsNord.add(Box.createGlue());
-        boxBoutonsNord.add(boutonOptionsJeu);
-        plateauGraphique.add(boxBoutonsNord, BorderLayout.NORTH);
-
+        plateauGraphique.add(boutonHistorique, gbc);
+                
+        // middle/right
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        //gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(180, 0, 0, 0);
         boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/texturePetitBouton.png");
-        boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
-        int padding = 9 * (hauteurFenetre/14);
-        padding = 350;
-        boxBoutonFinDeTour.add(Box.createVerticalStrut((int) padding));
-        boxBoutonFinDeTour.add(boutonFinDeTour);
-        plateauGraphique.add(boxBoutonFinDeTour, BorderLayout.EAST);
-        
+        //boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
+        plateauGraphique.add(boutonFinDeTour, gbc);
+
 
     } 
 

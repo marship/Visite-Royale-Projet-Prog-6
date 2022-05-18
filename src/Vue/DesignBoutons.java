@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import java.awt.Image;
 import javax.swing.SwingConstants;
 
 public class DesignBoutons extends JButton {
@@ -20,7 +21,11 @@ public class DesignBoutons extends JButton {
         setHorizontalAlignment(SwingConstants.CENTER);
         setHorizontalTextPosition(SwingConstants.CENTER);
 
-        setIcon(new ImageIcon(icon));
+        ImageIcon iconeBoutton = new ImageIcon(icon);
+        setIcon(iconeBoutton);
+        Image img = iconeBoutton.getImage() ;  
+        Image newimg = img.getScaledInstance(getWidth(), getHeight(), java.awt.Image.SCALE_SMOOTH ) ;  
+        iconeBoutton = new ImageIcon(newimg);
         setRolloverIcon(new ImageIcon(iconHover));
     }
 
