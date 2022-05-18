@@ -32,7 +32,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     final int lenteurAttente = 200;
 
-    int decompteTimer;
+    int decompteTimer = lenteurAttente;
 
     @Override
     public InfoJeu getInfoJeu() {
@@ -48,8 +48,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][1] = new JoueurIAAleatoire(i, jeu);
             joueurs[i][2] = new JoueurIAExperte(i, jeu);
         }
-        typeJoueur[0] = 0;
-        typeJoueur[1] = 0;
+        typeJoueur[0] = 1;
+        typeJoueur[1] = 1;
         carteActuelle = 8;
         joueurCourant = jeu.joueurCourant();
     }
