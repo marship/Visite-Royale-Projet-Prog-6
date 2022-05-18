@@ -238,7 +238,7 @@ public class Jeu extends Observable {
         }
     }
 
-    private void echangerFouSorcier() {
+    public void echangerFouSorcier() {
         plateau.echangerFouSorcier();
     }
 
