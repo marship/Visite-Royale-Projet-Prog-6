@@ -80,7 +80,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 		
 		fenetre.setVisible(true);
 
- 
 	}
 
 	//affiche le panel passé en paramètre
@@ -233,7 +232,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.SOUTHWEST;
         boutonAnnulerJeu = new DesignBoutons("Annuler", "res/Images/Texture_Petit_Bouton.png");
-        //boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
+        boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
         plateauGraphique.add(boutonAnnulerJeu, gbc);
 
 

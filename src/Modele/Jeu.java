@@ -18,6 +18,8 @@ public class Jeu extends Observable {
     public boolean teleportationFaite = false;
     public Element dernierTypeDePersonnageJouer;
     public Element personnageManipulerParLeFou;
+    public int carteActuelle = 8;
+    public int cartePassee = 8;
 
     // ===============================
     // ===== INFORMATION PLATEAU =====
@@ -28,6 +30,13 @@ public class Jeu extends Observable {
     final int EXTREMITE_DROITE_DU_PLATEAU = 8;
     final int ENTREE_CHATEAU_GAUCHE = -6;
     final int ENTREE_CHATEAU_DROIT = 6;
+
+    int POSITION_DEBUT_TOUR_ROI = 0;
+    int POSITION_DEBUT_TOUR_FOU = -1;
+    int POSITION_DEBUT_TOUR_GARDE_GAUCHE = -2;
+    int POSITION_DEBUT_TOUR_GARDE_DROIT = 2;
+    int POSITION_DEBUT_TOUR_GARDE_SORCIER = 1;
+
 
     // ==================
     // ===== JOUEUR =====
@@ -238,8 +247,38 @@ public class Jeu extends Observable {
         }
     }
 
+    public int carteActuelle(){
+        return carteActuelle;
+    }
+
+    public void changeCarteActuelle(int i){
+        carteActuelle = i;
+        metAJour();
+    }
+
+    public int cartePasse(){
+        return cartePassee;
+    }
+
+    public void choisirPasserSurCarte(int i){
+        cartePassee = i;
+        metAJour();
+    }
+
     public void echangerFouSorcier() {
         plateau().echangerFouSorcier();
+    }
+
+    public void annulerTour(){
+        obtenirPersonnageElement(ROI).positionnerPersonnage(POSITION_DEBUT_TOUR_ROI);
+        obtenirPersonnageElement(FOU).positionnerPersonnage(POSITION_DEBUT_TOUR_FOU);
+        obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(POSITION_DEBUT_TOUR_GARDE_DROIT);
+        obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(POSITION_DEBUT_TOUR_GARDE_GAUCHE);
+        obtenirPersonnageElement(SORCIER).positionnerPersonnage(POSITION_DEBUT_TOUR_GARDE_SORCIER);
+        plateau().paquet.completerCartesEnMain(joueurCourant());
+        personnageManipulerParLeFou = FOU;
+        dernierTypeDePersonnageJouer = VIDE;
+        metAJour();
     }
 
     // ==================
@@ -336,7 +375,16 @@ public class Jeu extends Observable {
         personnageManipulerParLeFou(FOU);
         initialiserDernierTypeDePersonnageJouer();
         teleportationFaite = false;
+        fixerPositions();
         metAJour();
+    }
+
+    void fixerPositions(){
+        POSITION_DEBUT_TOUR_FOU = obtenirPositionElement(FOU);
+        POSITION_DEBUT_TOUR_GARDE_DROIT = obtenirPositionElement(GARDE_DROIT);
+        POSITION_DEBUT_TOUR_GARDE_GAUCHE = obtenirPositionElement(GARDE_GAUCHE);
+        POSITION_DEBUT_TOUR_GARDE_SORCIER = obtenirPositionElement(SORCIER);
+        POSITION_DEBUT_TOUR_ROI = obtenirPositionElement(ROI);
     }
 
     // ====================

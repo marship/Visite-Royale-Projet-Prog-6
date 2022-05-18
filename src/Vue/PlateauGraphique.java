@@ -239,6 +239,16 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     break;
             }
             tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            if(jeu.cartePasse() == i){
+                dessinable.setColor(new Color(255,255,0));
+                dessinable.setStroke(new BasicStroke(5f));
+                dessinable.drawRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            }
+            if(jeu.carteActuelle() == i){
+                dessinable.setColor(new Color(255,0,0));
+                dessinable.setStroke(new BasicStroke(5f));
+                dessinable.drawRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            }
         }
     }
 

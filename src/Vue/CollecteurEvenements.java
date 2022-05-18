@@ -18,4 +18,5 @@ public interface CollecteurEvenements {
     void setDebutZoneCartesY(int debutZoneCartesX);
     void setValeurHauteurPrevisualisation(int i);
     void setValeurLargeurPrevisualisation(int i);
+    void passerSurCarte(int coupX);
 }

@@ -70,7 +70,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
         choixTypeJoueur(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
-        carteActuelle = 8;
+        //jeu.changeCarteActuelle(8);
         joueurCourant = jeu.joueurCourant();
     }
 
@@ -93,9 +93,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     @Override
     public void clicPlateau(int coupX, int coupY) {
-        if (carteActuelle != 8) {
-            if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, carteActuelle)) {
-                carteActuelle = 8;
+        if (jeu.carteActuelle() != 8) {
+            if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, jeu.carteActuelle())) {
+                jeu.changeCarteActuelle(8);
             }
         } else {
             Element el = Element.VIDE;
@@ -214,12 +214,11 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (ETAT_JEU) {
             case DEBUT_TOUR:
             case APRES_UNE_CARTE:
-                if (carteActuelle == coupX) {
-                    carteActuelle = 8;
+                if (jeu.carteActuelle() == coupX) {
+                    jeu.changeCarteActuelle(8);
                 } else {
                     if (jeu.listeCarteJouable()[coupX] != 0) {
-                        carteActuelle = coupX;
-                        System.out.println(jeu.recupererMainJoueur(joueurCourant)[coupX].personnage() + " " + jeu.recupererMainJoueur(joueurCourant)[coupX].deplacement());
+                        jeu.changeCarteActuelle(coupX);
                     } else {
                         Configuration.instance().logger().info("Carte non identique");
                     }
@@ -322,6 +321,10 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "pause":
                 jeu.changerEtatPartie();
                 break;
+            case "AnnulerTour":
+                jeu.annulerTour();
+                ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                break;
             default:
                 return false;
         }
@@ -346,5 +349,10 @@ public class ControleurMediateur implements CollecteurEvenements {
     public void choix(int choix) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void passerSurCarte(int coupX) {
+        jeu.choisirPasserSurCarte(coupX);
     }
 }
