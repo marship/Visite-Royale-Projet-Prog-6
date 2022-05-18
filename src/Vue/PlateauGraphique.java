@@ -352,23 +352,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
     //TODO charger images depuis le fichier de configuration
-    //TODO etablir convention pour les noms des images
     private void chargementDesImages() {
-        imagePlateau = chargeImage("plateau");
+        imagePlateau = chargeImage("Plateau");
         imagePlateauDroit = chargeImage("Previsualisation_Droite");
         imagePlateauGauche = chargeImage("Previsualisation_Gauche");
 
         imageJetonGrandeCouronne = chargeImage("Jeton_Grande_CouronneV2");
         imageJetonPetiteCouronne = chargeImage("Jeton_Petite_CouronneV2");
 
-        imageJetonGardeGauche = chargeImage("jeton_Garde_Gauche");
-        imageJetonGardeDroit = chargeImage("jeton_Garde_Droit");
-        imageJetonRoi = chargeImage("jeton_Roi");
-        imageJetonFou = chargeImage("jeton_Fou");
-        imageJetonSorcier = chargeImage("jeton_Sorcier");
+        imageJetonGardeGauche = chargeImage("Jeton_Garde_Gauche");
+        imageJetonGardeDroit = chargeImage("Jeton_Garde_Droit");
+        imageJetonRoi = chargeImage("Jeton_Roi");
+        imageJetonFou = chargeImage("Jeton_Fou");
+        imageJetonSorcier = chargeImage("Jeton_Sorcier");
 
-        imageCarteErreur = chargeImage("carteErreur");
-        imageCarteVide = chargeImage("carteVide");
+        imageCarteErreur = chargeImage("Carte_Erreur");
+        imageCarteVide = chargeImage("Carte_Vide");
 
         imageDosCarte = chargeImage("Dos_2");
 
@@ -387,11 +386,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         imageCarteGardesUn = chargeImage("Garde_1");
         imageCarteGardesUnPlusUn = chargeImage("Garde_1plus1");
-        imageCarteGardesRaproche = chargeImage("Garde_Raproche");
+        imageCarteGardesRaproche = chargeImage("Garde_Rapproche");
 
-        imageBandeauTour = chargeImage("BandeauTour");
-        imageCadreCartesPosees = chargeImage("cadreCartesPosees");
-        imageCadrePiocheDefausse = chargeImage("cadrePiocheDefausse");
+        imageBandeauTour = chargeImage("Bandeau_Tour");
+        imageCadreCartesPosees = chargeImage("Cadre_Cartes_Posees");
+        imageCadrePiocheDefausse = chargeImage("Cadre_Pioche_Defausse");
     }
 
     // ============================

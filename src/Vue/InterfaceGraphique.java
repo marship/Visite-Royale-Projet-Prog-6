@@ -95,27 +95,27 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         int borderBottom = hauteurFenetre / 10;
         int borderSides = largeurFenetre / 4;
 
-		panelMenuPrincipal = new ArrierePlan("res/Images/backgroundMenu.png");
+		panelMenuPrincipal = new ArrierePlan("res/Images/Background_Menu.png");
 		panelMenuPrincipal.setLayout(new GridLayout(0,1,0,30));
 		panelMenuPrincipal.setBorder(new EmptyBorder(borderTop,borderSides,borderBottom,borderSides));
 
-        boutonJouer = new DesignBoutons("Jouer", "res/Images/textureBouton.png");
+        boutonJouer = new DesignBoutons("Jouer", "res/Images/Texture_Bouton.png");
         boutonJouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
         panelMenuPrincipal.add(boutonJouer);
 
-        boutonCharger = new DesignBoutons("Charger une partie", "res/Images/textureBouton.png");
+        boutonCharger = new DesignBoutons("Charger une partie", "res/Images/Texture_Bouton.png");
         boutonCharger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
         panelMenuPrincipal.add(boutonCharger);
 
-        boutonRegles = new DesignBoutons("Règles du jeu", "res/Images/textureBouton.png");
+        boutonRegles = new DesignBoutons("Règles du jeu", "res/Images/Texture_Bouton.png");
         boutonRegles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
         panelMenuPrincipal.add(boutonRegles);
 
-        boutonOptions = new DesignBoutons("Options", "res/Images/textureBouton.png");
+        boutonOptions = new DesignBoutons("Options", "res/Images/Texture_Bouton.png");
         boutonOptions.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
         panelMenuPrincipal.add(boutonOptions);
 
-        boutonQuitter = new DesignBoutons("Quitter", "res/Images/textureBouton.png");
+        boutonQuitter = new DesignBoutons("Quitter", "res/Images/Texture_Bouton.png");
         boutonQuitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
         panelMenuPrincipal.add(boutonQuitter);
     } 
@@ -126,7 +126,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         int borderBottom = hauteurFenetre / 3;
         int borderSides = largeurFenetre / 3;
 
-        panelSelectionJoueurs = new ArrierePlan("res/Images/backgroundSelection.png");
+        panelSelectionJoueurs = new ArrierePlan("res/Images/Background_Selection.png");
         panelSelectionJoueurs.setLayout(new GridBagLayout());
 
         panelSelectionJoueurs.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
@@ -194,13 +194,13 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridy = 3;
         gbc.weightx = 0.5;
 
-        DesignBoutons valider = new DesignBoutons("Valider", "res/Images/textureBouton.png");
+        DesignBoutons valider = new DesignBoutons("Valider", "res/Images/Texture_Bouton.png");
         valider.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
         valider.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(valider, gbc);
         
         gbc.gridx = 1;
-        DesignBoutons annuler = new DesignBoutons("Annuler", "res/Images/textureBouton.png");
+        DesignBoutons annuler = new DesignBoutons("Annuler", "res/Images/Texture_Bouton.png");
         annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
         valider.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(annuler, gbc);
@@ -223,7 +223,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHEAST;
-        boutonOptionsJeu = new DesignBoutons("Options", "res/Images/texturePetitBouton.png");
+        boutonOptionsJeu = new DesignBoutons("Options", "res/Images/Texture_Petit_Bouton.png");
         //boutonOptionsJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "OptionsJeu"));
         plateauGraphique.add(boutonOptionsJeu, gbc);
 
@@ -231,7 +231,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.SOUTHWEST;
-        boutonAnnulerJeu = new DesignBoutons("Annuler", "res/Images/texturePetitBouton.png");
+        boutonAnnulerJeu = new DesignBoutons("Annuler", "res/Images/Texture_Petit_Bouton.png");
         //boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
         plateauGraphique.add(boutonAnnulerJeu, gbc);
 
@@ -240,7 +240,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.SOUTHEAST;
-        boutonHistorique = new DesignBoutons("Historique", "res/Images/texturePetitBouton.png");
+        boutonHistorique = new DesignBoutons("Historique", "res/Images/Texture_Petit_Bouton.png");
         //boutonHistorique.addActionListener(new AdaptateurCommande(collecteurEvenements, "Historique"));
         plateauGraphique.add(boutonHistorique, gbc);
                 
@@ -249,7 +249,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridy = 1;
         //gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(180, 0, 0, 0);
-        boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/texturePetitBouton.png");
+        boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/Texture_Petit_Bouton.png");
         //boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
         plateauGraphique.add(boutonFinDeTour, gbc);
 
@@ -273,7 +273,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         int borderBottom = hauteurFenetre / 10;
         int borderSides = largeurFenetre / 3;
 
-        panelOptions = new ArrierePlan("res/Images/backgroundOptions.png");
+        panelOptions = new ArrierePlan("res/Images/Background_Options.png");
         panelOptions.setLayout(new GridLayout(0, 1, 0, 30));
         panelOptions.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
 
@@ -306,15 +306,15 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     
         panelOptions.add(sonBox);
 
-        boutonCredits = new DesignBoutons("Crédits", "res/Images/textureBouton.png");
+        boutonCredits = new DesignBoutons("Crédits", "res/Images/Texture_Bouton.png");
         boutonCredits.addActionListener(new AdaptateurCommande(collecteurEvenements, "Credits"));
         panelOptions.add(boutonCredits);
 
-        boutonConfirmer = new DesignBoutons("Confirmer les Options", "res/Images/textureBouton.png");
+        boutonConfirmer = new DesignBoutons("Confirmer les Options", "res/Images/Texture_Bouton.png");
         boutonConfirmer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Confirmation"));
         panelOptions.add(boutonConfirmer);
 
-        boutonRetourAccueil = new DesignBoutons("Retour à l'accueil", "res/Images/textureBouton.png");
+        boutonRetourAccueil = new DesignBoutons("Retour à l'accueil", "res/Images/Texture_Bouton.png");
         boutonRetourAccueil.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
         panelOptions.add(boutonRetourAccueil);
     }
