@@ -10,6 +10,7 @@ public class DesignBoutons extends JButton {
 
     public DesignBoutons(String txt, String icon, String iconHover) {
         super(txt);
+
         setForeground(Color.BLACK);
 
         setOpaque(false);

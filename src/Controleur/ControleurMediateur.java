@@ -1,7 +1,5 @@
 package Controleur;
 
-import java.util.Random;
-
 import Global.Configuration;
 import Global.Element;
 import Global.InfoJeu;
@@ -10,15 +8,32 @@ import Joueur.JoueurHumain;
 import Joueur.JoueurIAAleatoire;
 import Joueur.JoueurIAExperte;
 import Modele.Jeu;
-import Pattern.Observable;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
 
 public class ControleurMediateur implements CollecteurEvenements {
 
-    static final int TEMPS_ATTENTE = 50;
+    // ==================
+    // ===== JOUEUR =====
+    // ==================
+    static final int JOUEUR_GAUCHE = 0;
+    static final int JOUEUR_DROIT = 1;
     static final int NOMBRE_JOUEUR = 2;
     static final int NOMBRE_TYPE_JOUEUR = 3;
+
+    static final int JOUEUR_HUMAIN = 0;
+    static final int JOUEUR_IAALEATOIRE = 1;
+    static final int JOUEUR_IAEXPERTE = 2;
+
+    // =================
+    // ===== TIMER =====
+    // =================
+    static final int TEMPS_ATTENTE = 50;
+    static final int LENTEUR_ATTENTE = 50;
+    
+    // ====================
+    // ===== ETAT JEU =====
+    // ====================
     static InfoJeu ETAT_JEU = InfoJeu.DEBUT_TOUR;
 
     Jeu jeu;
@@ -28,30 +43,47 @@ public class ControleurMediateur implements CollecteurEvenements {
     int[] typeJoueur;
     int joueurCourant;
 
-    int carteActuelle; // Sert pour se souvenir de quelle carte est choisie pour le moment
+    int decompteTimer;
+    int carteActuelle; // Quelle carte est choisie actuellement
 
-    final int lenteurAttente = 200;
+    int valeurLargeurPrevisualisation = 0;
+    int valeurHauteurPrevisualisation = 0;
 
-    int decompteTimer = lenteurAttente;
+    int debutZoneCartesX = 0;
+    int debutZoneCartesY = 0;
 
-    @Override
-    public InfoJeu getInfoJeu() {
-        return ETAT_JEU;
-    }
+    /////////////////////////////////////////////////////////////////////////
 
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     public ControleurMediateur(Jeu j) {
         jeu = j;
         joueurs = new Joueur[NOMBRE_JOUEUR][NOMBRE_TYPE_JOUEUR];
         typeJoueur = new int[NOMBRE_TYPE_JOUEUR];
+
         for (int i = 0; i < joueurs.length; i++) {
-            joueurs[i][0] = new JoueurHumain(i, jeu);
-            joueurs[i][1] = new JoueurIAAleatoire(i, jeu);
-            joueurs[i][2] = new JoueurIAExperte(i, jeu);
+            joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
+            joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoire(i, jeu);
+            joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
-        typeJoueur[0] = 0;
-        typeJoueur[1] = 0;
+
+        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_HUMAIN);
+        
         carteActuelle = 8;
         joueurCourant = jeu.joueurCourant();
+    }
+
+    void choixTypeJoueur(int joueur, int typeDuJoueur) {
+        if (jeu.numeroJoueurValide(joueur)) {
+            typeJoueur[joueur] = typeDuJoueur;
+        }
+    }
+
+    @Override
+    public InfoJeu getInfoJeu() {
+        return ETAT_JEU;
     }
 
     @Override
@@ -194,14 +226,47 @@ public class ControleurMediateur implements CollecteurEvenements {
                     }
                 }
                 break;
-
             default:
                 break;
         }
     }
 
     @Override
-    public void traqueSouris(int coupX, int coupY) {
+    public void traquePlateau(int coupX, int coupY) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void traqueCarte(int positionSourisX, int positionSourisY) {
+        switch (ETAT_JEU) {
+            case DEBUT_TOUR:
+            case APRES_UNE_CARTE:
+                System.out.println("X: " + positionSourisX + ", Y: " + positionSourisY);
+                // gestionPrevisualisationCoup(positionSourisX, positionSourisY);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void setDebutZoneCartesX(int dZoneCartesX) {
+        valeurHauteurPrevisualisation = dZoneCartesX;
+    }
+
+    @Override
+    public void setDebutZoneCartesY(int dZoneCartesY) {
+        valeurHauteurPrevisualisation = dZoneCartesY;
+    }
+
+    @Override
+    public void setValeurHauteurPrevisualisation(int vHauteurPrevisualisation) {
+        valeurHauteurPrevisualisation = vHauteurPrevisualisation;
+    }
+
+    @Override
+    public void setValeurLargeurPrevisualisation(int vLargeurPrevisualisation) {
+        valeurLargeurPrevisualisation = vLargeurPrevisualisation;
     }
 
     @Override
@@ -216,7 +281,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 } else {
                     // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
                     // l'attend.
-                    decompteTimer = lenteurAttente;
+                    decompteTimer = LENTEUR_ATTENTE;
                 }
             } else {
                 decompteTimer--;
@@ -226,7 +291,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     public void changerJoueurCourant() {
         joueurCourant = (joueurCourant + 1) % joueurs.length;
-        decompteTimer = lenteurAttente;
+        decompteTimer = LENTEUR_ATTENTE;
     }
 
     @Override
@@ -285,5 +350,4 @@ public class ControleurMediateur implements CollecteurEvenements {
         // TODO Auto-generated method stub
 
     }
-
 }

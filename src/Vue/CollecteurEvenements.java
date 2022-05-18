@@ -4,7 +4,8 @@ import Global.InfoJeu;
 
 public interface CollecteurEvenements {
     
-    void traqueSouris(int coupX, int coupY);
+    void traquePlateau(int coupX, int coupY);
+    void traqueCarte(int positionSourisX, int positionSourisY);
     void tictac();
 	void changerJoueurCourant(int numeroJoueur, int typeJoueur);
 	boolean commande(String com);
@@ -13,4 +14,8 @@ public interface CollecteurEvenements {
     InfoJeu getInfoJeu();
     void clicPlateau(int coupX, int coupY);
     void clicCarte(int coupX);
+    void setDebutZoneCartesX(int debutZoneCartesX);
+    void setDebutZoneCartesY(int debutZoneCartesX);
+    void setValeurHauteurPrevisualisation(int i);
+    void setValeurLargeurPrevisualisation(int i);
 }

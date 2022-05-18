@@ -402,4 +402,10 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     public void afficherPanneau(String nomPanneau) {
         // Inutile dans l'interfaceTextuelle !!
     }
+
+    @Override
+    public void previsualisation(int coupX, int coupY, int largeurPreselection, int hauteurPreselection) {
+        // TODO Auto-generated method stub
+        
+    }
 }
