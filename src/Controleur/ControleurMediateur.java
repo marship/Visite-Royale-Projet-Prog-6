@@ -67,8 +67,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
 
-        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
-        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_IAALEATOIRE);
+        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         carteActuelle = 8;
         joueurCourant = jeu.joueurCourant();
@@ -316,8 +316,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 finDeTour();
                 break;
             case "MenuEnJeu":
-                break;
-            case "JouerCarte":
                 break;
             case "PouvoirFou":
                 break;

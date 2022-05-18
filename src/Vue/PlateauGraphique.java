@@ -97,8 +97,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
         tracerPlateau();
         afficherCartesAutreJoueur();
         afficherZoneCartesJouees();
+        afficherPioche();
         afficherCartesJoueurCourant();
     }
+
 
     // =======================
     // ===== MISE A JOUR =====
@@ -335,6 +337,19 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
     }
 
+    private void afficherPioche() {
+        int debutPiocheX = largeurFenetre/32;
+        int debutPiocheY = 18 * hauteurFenetre / 28;
+        if(jeu.plateau().paquet.pioche().taille() != 0){
+            tracerImage(imageDosCarte, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
+        }else{
+            tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
+        }
+        String msg = jeu.plateau().paquet.pioche().taille() + " cartes restantes";
+        tracerLabel(msg, debutPiocheX, debutPiocheY+hauteurCarte);
+        
+    }
+
     public int positionJeton(int positionElement) {
         return (positionElement + taillePlateau / 2) * largeurCasePlateau;
     }
@@ -351,6 +366,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public void tracerImage(ImagePlateau image, int x, int y, int largeurCase, int hauteurCase) {
         dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
+
+    public void tracerLabel(String texte, int x, int y) {
+        Font fonte = new Font(" TimesRoman ",Font.BOLD, 16);
+        dessinable.setFont(fonte);
+        dessinable.setColor(Color.white);
+        dessinable.drawString(texte, x, y);
+    }
+
     //TODO charger images depuis le fichier de configuration
     private void chargementDesImages() {
         imagePlateau = chargeImage("Plateau");

@@ -44,6 +44,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	public void run() {
 
 		fenetre = new JFrame("Visite Royale");
+        //TODO Definir la taille de la fenetre ailleurs,, dans config par exemple
         fenetre.setSize(1280, 720);
         hauteurFenetre = fenetre.getHeight();
         largeurFenetre = fenetre.getWidth();
@@ -250,7 +251,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         //gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(180, 0, 0, 0);
         boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/Texture_Petit_Bouton.png");
-        //boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
+        boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
         plateauGraphique.add(boutonFinDeTour, gbc);
 
 
