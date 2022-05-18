@@ -240,7 +240,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (ETAT_JEU) {
             case DEBUT_TOUR:
             case APRES_UNE_CARTE:
-                System.out.println("X: " + positionSourisX + ", Y: " + positionSourisY);
+                //System.out.println("X: " + positionSourisX + ", Y: " + positionSourisY);
                 // gestionPrevisualisationCoup(positionSourisX, positionSourisY);
                 break;
             default:

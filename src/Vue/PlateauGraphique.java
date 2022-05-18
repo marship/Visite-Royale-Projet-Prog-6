@@ -155,6 +155,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public void afficherCartesJoueurCourant() {
+        
+        if(jeu.estPartieTerminee()){
+            return;
+        }
 
         Carte[] cartesJoueurCourant = jeu.recupererMainJoueur(jeu.joueurCourant());
         ImagePlateau image;
