@@ -17,6 +17,7 @@ public class Jeu extends Observable {
     int nombreTour; // TODO nombre Tour de jeu
     boolean partieEnCours = false;
     boolean partieTerminee = false;
+    public boolean teleportationFaite = false;
     public Element dernierTypeDePersonnageJouer;
     public Element personnageManipulerParLeFou;
 
@@ -352,6 +353,7 @@ public class Jeu extends Observable {
         }
         personnageManipulerParLeFou(FOU);
         initialiserDernierTypeDePersonnageJouer();
+        teleportationFaite = false;
         metAJour();
     }
 
@@ -884,14 +886,17 @@ public class Jeu extends Observable {
             switch (element) {
                 case ROI:
                     plateau.roi.deplacerPersonnage(distanceTeleportation);
+                    teleportationFaite = true;
                     break;
 
                 case GARDE_GAUCHE:
                     plateau.gardeGauche.deplacerPersonnage(distanceTeleportation);
+                    teleportationFaite = true;
                     break;
 
                 case GARDE_DROIT:
                     plateau.gardeDroit.deplacerPersonnage(distanceTeleportation);
+                    teleportationFaite = true;
                     break;
 
                 default:

@@ -48,8 +48,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][1] = new JoueurIAAleatoire(i, jeu);
             joueurs[i][2] = new JoueurIAExperte(i, jeu);
         }
-        typeJoueur[0] = 1;
-        typeJoueur[1] = 1;
+        typeJoueur[0] = 0;
+        typeJoueur[1] = 0;
         carteActuelle = 8;
         joueurCourant = jeu.joueurCourant();
     }
@@ -113,22 +113,19 @@ public class ControleurMediateur implements CollecteurEvenements {
                     case ROI:
                         if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
                             jeu.teleportationPouvoirSorcier(Element.ROI);
-                            jeu.finDeTour();
-                            changerJoueurCourant();
+                            finDeTour();
                         }
                         break;
                     case GARDE_GAUCHE:
                         if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
                             jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
-                            jeu.finDeTour();
-                            changerJoueurCourant();
+                            finDeTour();
                         }
                         break;
                     case GARDE_DROIT:
                         if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
                             jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
-                            jeu.finDeTour();
-                            changerJoueurCourant();
+                            finDeTour();
                         }
                         break;
                     default:
@@ -189,10 +186,10 @@ public class ControleurMediateur implements CollecteurEvenements {
                 if (carteActuelle == coupX) {
                     carteActuelle = 8;
                 } else {
-                    if(jeu.listeCarteJouable()[coupX] != 0){
+                    if (jeu.listeCarteJouable()[coupX] != 0) {
                         carteActuelle = coupX;
-                    }
-                    else{
+                        System.out.println(jeu.recupererMainJoueur(joueurCourant)[coupX].personnage() + " " + jeu.recupererMainJoueur(joueurCourant)[coupX].deplacement());
+                    } else {
                         Configuration.instance().logger().info("Carte non identique");
                     }
                 }
@@ -253,13 +250,15 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "FinDeTour":
                 finDeTour();
-                interfaceUtilisateur.miseAJourFinDeTour();
                 break;
             case "MenuEnJeu":
                 break;
             case "JouerCarte":
                 break;
             case "PouvoirFou":
+                break;
+            case "pause":
+                jeu.changerEtatPartie();
                 break;
             default:
                 return false;
@@ -268,10 +267,11 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     private void finDeTour() {
-        if (jeu.dernierTypeDePersonnageJouer != Element.VIDE) {
+        if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
             jeu.finDeTour();
             ETAT_JEU = InfoJeu.DEBUT_TOUR;
             changerJoueurCourant();
+            interfaceUtilisateur.miseAJourFinDeTour();
         }
     }
 

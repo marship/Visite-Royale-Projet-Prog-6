@@ -56,6 +56,9 @@ public class AdaptateurClavier extends KeyAdapter {
             case KeyEvent.VK_BACK_SPACE:
                 collecteurEvenements.commande("Retour");
                 break;
+            case KeyEvent.VK_W:
+                collecteurEvenements.commande("pause");
+                break;
             default:
                 break;
         }
