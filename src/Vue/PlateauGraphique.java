@@ -133,6 +133,24 @@ public class PlateauGraphique extends JPanel implements Observateur {
         tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroit);
         tracerImageElement(Element.FOU, imageJetonFou);
         tracerImageElement(Element.SORCIER, imageJetonSorcier);
+
+        tracerChoix();
+    }
+
+    void tracerChoix(){
+        if(jeu.carteActuelle() == 8){
+            return;
+        }
+        Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
+        int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(), carte.deplacement());
+        int i = 0;
+        while(i < 17){
+            if(listeDeplacementPossiblesAvecCarte[i] == 1){
+                dessinable.setColor(new Color(255,255,0));
+                dessinable.fillOval(i*largeurCasePlateau + 20, 3*quartHauteurPlateau, 20, 20);
+            }
+            i++;
+        }
     }
 
     void tracerImageElement(Element element, ImagePlateau imageElement) {
@@ -168,6 +186,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         debutCartesX = largeurFenetre / 16;
         debutCartesY = 6 * hauteurFenetre / 7;
+
+        int[] carteFaisables = jeu.listeCarteJouable();
 
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
             switch (cartesJoueurCourant[i].personnage()) {
@@ -243,6 +263,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 dessinable.setColor(new Color(255,255,0));
                 dessinable.setStroke(new BasicStroke(5f));
                 dessinable.drawRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            }
+            if(carteFaisables[i] == 0){
+                dessinable.setColor(new Color(150,150,150));
+                dessinable.fillRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
             if(jeu.carteActuelle() == i){
                 dessinable.setColor(new Color(255,0,0));

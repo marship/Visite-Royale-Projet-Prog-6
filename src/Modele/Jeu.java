@@ -779,8 +779,15 @@ public class Jeu extends Observable {
                 break;
             case FOU:
                 switch (personnageManipulerParLeFou) {
+                    case GARDES:
+                        Element el = personnageManipulerParLeFou;
+                        personnageManipulerParLeFou(GARDE_GAUCHE);
+                        positionAccessibleAvecCarte = listeDeplacementPossiblesAvecCarte(FOU, deplace);
+                        personnageManipulerParLeFou(GARDE_DROIT);
+                        positionAccessibleAvecCarte = fustionTableau(positionAccessibleAvecCarte, listeDeplacementPossiblesAvecCarte(FOU, deplace));
+                        personnageManipulerParLeFou(el);
+                        break;
                     case GARDE_GAUCHE:
-                        System.out.println("c'est ça");
                         if (deplace == Deplacement.MILIEU) {
                             if (validationDeplacement(GARDE_GAUCHE, -obtenirPositionElement(GARDE_GAUCHE))) {
                                 positionAccessibleAvecCarte[EXTREMITE_DROITE_DU_PLATEAU] = 1;
