@@ -10,7 +10,9 @@ import org.junit.Test;
 //import Global.Deplacement;
 import Global.Element;
 import Global.InfoPlateau;
+import Modele.Carte;
 import Modele.Jeu;
+//import Modele.Carte;
 //import Modele.Plateau;
 //import Modele.Personnage;
 
@@ -219,7 +221,7 @@ public class TestPlateau {
 
     @Test
     public void testObtenirElementPosition() {
-        // Fnctionne (a revoir)
+        // Fonctionne (a revoir)
 
         assertEquals(Element.GARDE_GAUCHE, jeu.obtenirElementPosition(-2));
         assertEquals(Element.FOU, jeu.obtenirElementPosition(-1));
@@ -349,6 +351,34 @@ public class TestPlateau {
         jeu.deplacerElement(Element.GARDE_GAUCHE,-1);
         jeu.finDeTour();
         assertEquals(0,jeu.joueurCourant());
+        jeu.changerJoueurCourant();
+        assertEquals(1,jeu.joueurCourant());
+
+    }
+
+    @Test
+    public void testJoueurGagnant() {
+        // Fonctionne
+
+        jeu.deplacerCouronne(8);;
+        jeu.finDeTour();
+        assertEquals(1,jeu.joueurGagnant());
+
+        jeu = new Jeu();
+        jeu.deplacerElement(Element.GARDE_GAUCHE,-6);;
+        jeu.finDeTour();
+        jeu.deplacerElement(Element.ROI,-7);;
+        jeu.finDeTour();
+        assertEquals(0,jeu.joueurGagnant());
+
+        jeu = new Jeu();
+        jeu.deplacerElement(Element.GARDE_DROIT,6);;
+        jeu.finDeTour();
+        jeu.deplacerElement(Element.SORCIER,2);;
+        jeu.finDeTour();
+        jeu.deplacerElement(Element.ROI,7);;
+        jeu.finDeTour();
+        assertEquals(1,jeu.joueurGagnant());
 
     }
 
@@ -398,7 +428,7 @@ public class TestPlateau {
         jeu.traiterGagnant();
         assertTrue(jeu.estPartieTerminee());
         assertFalse(jeu.estPartieEnCours());
-        assertEquals(0, jeu.joueurGagnant);
+        assertEquals(0, jeu.joueurGagnant());
 
         jeu = new Jeu(); 
         jeu.deplacerCouronne(8);
@@ -406,7 +436,7 @@ public class TestPlateau {
         jeu.traiterGagnant();
         assertTrue(jeu.estPartieTerminee());
         assertFalse(jeu.estPartieEnCours());
-        assertEquals(1, jeu.joueurGagnant);
+        assertEquals(1, jeu.joueurGagnant());
 
     }
 
@@ -451,10 +481,13 @@ public class TestPlateau {
     @Test
     public void testJouerCarte() {
         // (à revoir)
-        jeu.recupererMainJoueur(jeu.joueurCourant());
 
-        jeu.jouerCarte(Element.GARDE_GAUCHE, -3, 5);
-        assertEquals(-3, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));        
+        
+        //jeu.jouerCarte(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage(), jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[3].deplacement().getValeurDeplacement(), 3);
+        //assertEquals(jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[3].deplacement().getValeurDeplacement(), jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage()));
+        
+        jeu.jouerCarte(Element.SORCIER, 4, 5);
+        assertEquals(4, jeu.obtenirPositionElement(Element.SORCIER)); 
 
         jeu.jouerCarte(Element.SORCIER, 4, 5);
         assertEquals(4, jeu.obtenirPositionElement(Element.SORCIER)); 
@@ -479,18 +512,70 @@ public class TestPlateau {
     }
 
     @Test
+    public void testDeplacerCour() {
+        // Fonctionne
+
+        int[] cartes = new int[2]; // Tableau de carte au pif
+        jeu.deplacerCour(0, cartes);
+        assertEquals(-3, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(-1, jeu.obtenirPositionElement(Element.ROI));
+        assertEquals(1, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+
+        jeu.deplacerCour(1, cartes);
+        assertEquals(-2, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(0, jeu.obtenirPositionElement(Element.ROI));
+        assertEquals(2, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+
+    }
+
+    @Test
+    public void testUnPlusUn() {
+        // Fonctionne
+
+        int carte = 5; // Carte au pif
+        jeu.unPlusUn(0, carte);
+        assertEquals(-3, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(1, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+
+        jeu.unPlusUn(1, carte);
+        assertEquals(-2, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(2, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+
+    }
+
+    @Test
+    public void testRapproche() {
+        // Fonctionne
+
+        int carte = 5; // Carte au pif
+        jeu.rapproche(carte);
+        assertEquals(-1, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(1, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+
+        jeu.deplacerElement(Element.GARDE_GAUCHE, -5);
+        jeu.deplacerElement(Element.GARDE_DROIT, 7);
+        jeu.deplacerElement(Element.ROI, 5);
+        jeu.rapproche(carte);
+        assertEquals(4, jeu.obtenirPositionElement(Element.GARDE_GAUCHE));
+        assertEquals(6, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+
+    }
+
+    @Test
     public void testPoserCarte() {
         // (à revoir)
 
-        jeu.recupererMainJoueur(jeu.joueurCourant());
+        //jeu.recupererMainJoueur(jeu.joueurCourant())[1];
+
 
     }
 
     @Test
     public void testRecupererMainJoueur() {
 
-
-
+        /*jeu.recupererMainJoueur(jeu.joueurCourant());
+        assertEquals(jeu.plateau().paquet.mainJoueur(jeu.joueurCourant()),);*/
+        
     }
 
     @Test
@@ -506,9 +591,11 @@ public class TestPlateau {
     public void testMajDernierTypeDePersonnageJouer() {
         // (à revoir)
 
-        jeu.recupererMainJoueur(jeu.joueurCourant());
-        //jeu.majDernierTypeDePersonnageJouer();
-        assertEquals(jeu.recupererMainJoueur(jeu.joueurCourant())[5], jeu.dernierTypeDePersonnageJouer);
+        //jeu.jouerCarte(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage(), 3, 5);
+        //jeu.majDernierTypeDePersonnageJouer(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage());
+        jeu.majDernierTypeDePersonnageJouer(Element.SORCIER);
+        //assertEquals(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage(), jeu.dernierTypeDePersonnageJouer);
+        assertEquals(Element.SORCIER, jeu.dernierTypeDePersonnageJouer);
 
     }
 
@@ -527,37 +614,108 @@ public class TestPlateau {
     }
 
     @Test
+    public void testListeDeplacementPossiblesAvecPerso() {
+
+
+
+    }
+
+    @Test
+    public void testSelonLePersoMaisEnRecurcifPersoBase() {
+
+
+
+    }
+
+    @Test
+    public void testSelonLePersoMaisEnRecurcifPersoGardes() {
+
+
+
+    }
+
+    @Test
     public void testPositionPlus8() {
+        // Fonctionne
 
+        assertEquals(6, jeu.positionPlus8(jeu.obtenirPositionElement(Element.GARDE_GAUCHE)));
+        assertEquals(10, jeu.positionPlus8(jeu.obtenirPositionElement(Element.GARDE_DROIT)));
+        assertEquals(8, jeu.positionPlus8(jeu.obtenirPositionElement(Element.ROI)));
+        assertEquals(7, jeu.positionPlus8(jeu.obtenirPositionElement(Element.FOU)));
+        assertEquals(9, jeu.positionPlus8(jeu.obtenirPositionElement(Element.SORCIER)));
 
+        jeu.deplacerElement(Element.GARDE_DROIT,6);
+        jeu.finDeTour();
+        assertEquals(16, jeu.positionPlus8(jeu.obtenirPositionElement(Element.GARDE_DROIT)));
+
+        jeu.deplacerElement(Element.GARDE_GAUCHE,-6);
+        jeu.finDeTour();
+        assertEquals(0, jeu.positionPlus8(jeu.obtenirPositionElement(Element.GARDE_GAUCHE)));
 
     }
 
     @Test
     public void testPositionsPourCour() {
+        // Fonctionne
 
-
+        assertEquals(0, jeu.positionsPourCour());
+        jeu.deplacerElement(Element.GARDE_DROIT,6);
+        jeu.finDeTour();
+        assertEquals(1, jeu.positionsPourCour());
+        jeu.deplacerElement(Element.GARDE_GAUCHE,-6);
+        jeu.finDeTour();
+        assertEquals(3, jeu.positionsPourCour());
+        jeu.deplacerElement(Element.GARDE_DROIT,-3);
+        jeu.finDeTour();
+        assertEquals(2, jeu.positionsPourCour());
 
     }
+
 
     @Test
     public void testListeDeplacementPossiblesAvecCarte() {
 
-
+        
 
     }
 
     @Test
     public void testPersonnageManipulerParLeFou() {
+        // Fonctionne
 
+        assertEquals(Element.FOU, jeu.personnageManipulerParLeFou);
 
+        jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
+        assertEquals(Element.GARDE_GAUCHE, jeu.personnageManipulerParLeFou);
+
+        jeu.personnageManipulerParLeFou(Element.GARDE_DROIT);
+        assertEquals(Element.GARDE_DROIT, jeu.personnageManipulerParLeFou);
+
+        jeu.personnageManipulerParLeFou(Element.ROI);
+        assertEquals(Element.ROI, jeu.personnageManipulerParLeFou);
+
+        jeu.personnageManipulerParLeFou(Element.SORCIER);
+        assertEquals(Element.SORCIER, jeu.personnageManipulerParLeFou);
+
+        jeu.personnageManipulerParLeFou(Element.FOU);
+        assertEquals(Element.FOU, jeu.personnageManipulerParLeFou);
 
     }
 
     @Test
     public void testEstPouvoirFouActivable() {
+        // Fonctionne
 
-
+        assertFalse(jeu.estPouvoirFouActivable());
+        jeu.deplacerElement(Element.ROI,1);
+        jeu.finDeTour();
+        assertTrue(jeu.estPouvoirFouActivable());
+        jeu.deplacerElement(Element.FOU,5);
+        jeu.finDeTour();
+        assertTrue(jeu.estPouvoirFouActivable());
+        jeu.deplacerElement(Element.ROI,-1);
+        jeu.finDeTour();
+        assertFalse(jeu.estPouvoirFouActivable());
 
     }
 
@@ -656,10 +814,10 @@ public class TestPlateau {
 
         jeu.deplacerElement(Element.GARDE_GAUCHE,-5);
         jeu.finDeTour();
-        jeu.deplacerElement(Element.SORCIER,-5 );
+        jeu.deplacerElement(Element.SORCIER,-1);
         jeu.finDeTour();
-        assertEquals(-4,jeu.calculerTeleportation(Element.ROI));
-        assertEquals(3,jeu.calculerTeleportation(Element.GARDE_GAUCHE));
+        assertEquals(-6,jeu.calculerTeleportation(Element.ROI));
+        assertEquals(7,jeu.calculerTeleportation(Element.GARDE_GAUCHE));
 
     }
 
@@ -694,6 +852,8 @@ public class TestPlateau {
         assertTrue(jeu.getEtatCouronne());
         jeu.changerEtatCouronne();
         assertFalse(jeu.getEtatCouronne());
+        jeu.changerEtatCouronne();
+        assertTrue(jeu.getEtatCouronne());
 
     }
     

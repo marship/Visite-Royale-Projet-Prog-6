@@ -12,8 +12,6 @@ import Structures.Sequence;
 public class Jeu extends Observable {
 
     Plateau plateau;
-    int joueurGagnant = 0;
-    int joueurCourant;
     int nombreTour; // TODO nombre Tour de jeu
     boolean partieEnCours = false;
     boolean partieTerminee = false;
@@ -50,9 +48,10 @@ public class Jeu extends Observable {
     // ===========================
     // ===== VALEURS GAGNANT =====
     // ===========================
-    final int AUCUN_GAGNANT = 0;
-    final int ROI_GAGNANT = 1;
-    final int COURONNE_GAGNANTE = 2;
+    static final int AUCUN_GAGNANT = 0;
+    static final int ROI_GAGNANT = 1;
+    static final int COURONNE_GAGNANTE = 2;
+    static final int MEULE_GAGNANTE = 3;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -294,18 +293,22 @@ public class Jeu extends Observable {
             case COURONNE_GAGNANTE:
                 partieTerminee = true;
                 partieEnCours = false;
-                joueurGagnant = plateau().joueurGagnant;
-                Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec la couronne !!");
+                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " avec la couronne !!");
                 break;
             case ROI_GAGNANT:
                 partieTerminee = true;
                 partieEnCours = false;
-                joueurGagnant = plateau().joueurGagnant;
-                Configuration.instance().logger().info("Victoire du joueur " + joueurGagnant + " avec le roi !!");
+                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " avec le roi !!");
                 break;
             default:
-                Configuration.instance().logger().warning("Condition de victoire inconnue !!");
                 break;
+        }
+        if (plateau().joueurGagnant != -1) {
+            partieTerminee = true;
+            partieEnCours = false;
+            Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la meule !!");
+        } else {
+            Configuration.instance().logger().warning("Condition de victoire inconnue !!");
         }
         metAJour();
     }
@@ -319,35 +322,16 @@ public class Jeu extends Observable {
             traiterGagnant();
         } else {
             plateau().paquet.viderCartePoser();
-            if (plateau().paquet.resteAssezCarteDansPioche(plateau().paquet.nombreCarteManquante(plateau().joueurCourant))) {
+            if (plateau().paquet
+                    .resteAssezCarteDansPioche(plateau().paquet.nombreCarteManquante(plateau().joueurCourant))) {
                 plateau().paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
-                Configuration.instance().logger().info("Il reste " + plateau().paquet.pioche().taille() + " cartes dans la pioche");
+                Configuration.instance().logger()
+                        .info("Il reste " + plateau().paquet.pioche().taille() + " cartes dans la pioche");
             } else {
-                if (getEtatCouronne()) {
-                    plateau().paquet.melangerDefausse();
-                    plateau().paquet.remplirMain(plateau().joueurCourant);
-                    changerEtatCouronne();
-                    changerJoueurCourant();
-                    Configuration.instance().logger().info("La pioche se recharge pour la première fois !");
-                } else {
-                    if (obtenirPositionElement(ROI) == 0) {
-                        plateau().paquet.melangerDefausse();
-                        plateau().paquet.remplirMain(plateau().joueurCourant);
-                        changerJoueurCourant();
-                        Configuration.instance().logger().info("Le roi est au centre, la partie continue !");
-                    } else {
-                        if (obtenirPositionElement(ROI) > 0) {
-                            joueurGagnant = JOUEUR_DROIT;
-                            plateau().joueurGagnant = JOUEUR_DROIT;
-                        } else {
-                            joueurGagnant = JOUEUR_GAUCHE;
-                            plateau().joueurGagnant = JOUEUR_GAUCHE;
-                        }
-                        traiterGagnant();
-                    }
-                }
+                plateau().joueurGagnant = JOUEUR_GAUCHE;
             }
+            traiterGagnant();
         }
         personnageManipulerParLeFou(FOU);
         initialiserDernierTypeDePersonnageJouer();
@@ -401,42 +385,45 @@ public class Jeu extends Observable {
     }
 
     public void deplacerCour(int direction, int[] cartes) {
-        int i = 0;
-        while (i != cartes.length) {
-            poserCarte(cartes[i]);
-            i++;
-        }
-        majDernierTypeDePersonnageJouer(ROI);
-        if (direction == 0) { // Gauche
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
-            obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
-        } else { // Droit
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
-            obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+        if (actionAutoriser()) {
+            int i = 0;
+            while (i != cartes.length) {
+                poserCarte(cartes[i]);
+                i++;
+            }
+            if (direction == 0) { // Gauche
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
+                obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
+            } else { // Droit
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+                obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+            }
         }
         metAJour();
     }
 
     public void unPlusUn(int direction, int carte) {
-        poserCarte(carte);
-        majDernierTypeDePersonnageJouer(Element.GARDES);
-        if (direction == 0) { // Gauche
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
-        } else {
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+        if (actionAutoriser()) {
+            poserCarte(carte);
+            if (direction == 0) { // Gauche
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
+            } else {
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+            }
         }
         metAJour();
     }
 
     public void rapproche(int carte) {
-        poserCarte(carte);
-        majDernierTypeDePersonnageJouer(Element.GARDES);
-        obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
-        obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+        if (actionAutoriser()) {
+            poserCarte(carte);
+            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
+            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+        }
         metAJour();
     }
 
@@ -526,8 +513,7 @@ public class Jeu extends Observable {
         return positionAccessibleAvecPerso;
     }
 
-    public int[] selonLePersoMaisEnRecurcifPersoBase(Element perso, Carte[] listeCarte, int[] positions,
-            int positionRelatif) {
+    public int[] selonLePersoMaisEnRecurcifPersoBase(Element perso, Carte[] listeCarte, int[] positions, int positionRelatif) {
         int i = 0;
         Carte vide = new Carte(VIDE, Deplacement.VIDE);
         while (i < 8) {
@@ -628,13 +614,14 @@ public class Jeu extends Observable {
     }
 
     public int positionsPourCour() {
-        if(obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU && obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU){
+        if (obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU
+                && obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU) {
             return 3; // Les deux impossible
         }
-        if(obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU){ 
+        if (obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU) {
             return 1; // Droit impossible
         }
-        if(obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU){
+        if (obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU) {
             return 2; // Gauche impossible
         }
         return 0; // Tout possible

@@ -28,7 +28,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // =================
     // ===== TIMER =====
     // =================
-    static final int LENTEUR_ATTENTE = 30;
+    static final int LENTEUR_ATTENTE = 100;
     
     // ====================
     // ===== ETAT JEU =====
