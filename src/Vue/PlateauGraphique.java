@@ -26,7 +26,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ==========================
     // ===== IMAGES PLATEAU =====
     // ==========================
-    ImagePlateau imagePlateau, imageBandeauTour, imageCadreCartesPosees, imageCadrePiocheDefausse;
+    ImagePlateau imagePlateau, imagePlateauGauche, imagePlateauDroit, imageBandeauTour, imageCadreCartesPosees, imageCadrePiocheDefausse;
 
     // =========================
     // ===== IMAGES JETONS =====
@@ -90,6 +90,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
         quartHauteurPlateau = hauteurCasePlateau / 4;
 
         dessinable.clearRect(0, 0, largeurFenetre, hauteurFenetre);
+        dessinable.setColor(new Color(23, 74, 11)); //TODO choisir couleur
+        dessinable.fillRect(0, 0, largeurFenetre, hauteurFenetre);
 
         tracerPlateau();
         afficherCartesAutreJoueur();
@@ -112,9 +114,19 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===========================
     public void tracerPlateau() {
 
-        tracerImage(imagePlateau, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
+        if(jeu.joueurCourant() == 1){
+            tracerImage(imagePlateauDroit, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
+        }
+        else{
+            tracerImage(imagePlateauGauche, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
+        }
 
-        tracerImageElement(Element.COURONNE, imageJetonGrandeCouronne);
+        if(jeu.getEtatCouronne()){
+            tracerImageElement(Element.COURONNE, imageJetonGrandeCouronne);
+        }
+        else{
+            tracerImageElement(Element.COURONNE, imageJetonPetiteCouronne);
+        }
         tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGauche);
         tracerImageElement(Element.ROI, imageJetonRoi);
         tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroit);
@@ -264,6 +276,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
     //TODO etablir convention pour les noms des images
     private void chargementDesImages() {
         imagePlateau = chargeImage("plateau");
+        imagePlateauDroit = chargeImage("droite");
+        imagePlateauGauche = chargeImage("gauche");
 
         imageJetonGrandeCouronne = chargeImage("jeton_Grande_Couronne");
         imageJetonPetiteCouronne = chargeImage("jeton_Petite_Couronne");

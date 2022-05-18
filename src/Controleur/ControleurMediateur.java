@@ -1,5 +1,6 @@
 package Controleur;
 
+import Global.Configuration;
 import Global.Element;
 import Global.InfoJeu;
 import Joueur.Joueur;
@@ -170,14 +171,13 @@ public class ControleurMediateur implements CollecteurEvenements {
             }
             if (ETAT_JEU == InfoJeu.CHOIX_ROI) {
                 int possible = jeu.positionsPourCour();
-                System.out.println(possible);
                 if (coupX == jeu.obtenirPositionElement(Element.ROI) - 1 && (possible == 1 || possible == 0)) {
                     int[] cartes = new int[2];
                     cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
                     cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
                     jeu.deplacerCour(0, cartes);
                 }
-                if (coupX == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 1 || possible == 0)) {
+                if (coupX == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 2 || possible == 0)) {
                     int[] cartes = new int[2];
                     cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
                     cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
@@ -201,7 +201,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                         }
                         break;
                     case SORCIER:
-                        ETAT_JEU = InfoJeu.CHOIX_SORCIER;
+                        if (jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
+                            ETAT_JEU = InfoJeu.CHOIX_SORCIER;
+                        }
                         break;
                     default:
                         break;
@@ -219,7 +221,12 @@ public class ControleurMediateur implements CollecteurEvenements {
                 if (carteActuelle == coupX) {
                     carteActuelle = 8;
                 } else {
-                    carteActuelle = coupX;
+                    if(jeu.listeCarteJouable()[coupX] != 0){
+                        carteActuelle = coupX;
+                    }
+                    else{
+                        Configuration.instance().logger().info("Carte non identique");
+                    }
                 }
                 break;
             default:
