@@ -32,7 +32,6 @@ public class JoueurHumain extends Joueur {
 		}
 
 		if (carteChoisie.personnage() == Element.FOU) {
-			System.out.println(jeu.personnageManipulerParLeFou);
 			int[] a = jeu.listeDeplacementPossiblesAvecCarte(jeu.personnageManipulerParLeFou, carteChoisie.deplacement());
 			if (a[caseChoisie + 8] == 0) {
 				return false;
@@ -80,7 +79,6 @@ public class JoueurHumain extends Joueur {
 		}
 
 		if (carteChoisie.personnage() == Element.FOU) {
-			System.out.println("WESH,,,,,,,,,,,,,,,,,");
 			if (jeu.personnageManipulerParLeFou == Element.GARDES) {
 				if (jeu.validationDeplacement(Element.GARDE_GAUCHE, caseChoisie)) {
 					jeu.jouerCarte(Element.GARDE_GAUCHE, caseChoisie, positionCarteDansLaMain);

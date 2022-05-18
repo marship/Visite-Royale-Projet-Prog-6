@@ -47,10 +47,10 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][1] = new JoueurIAAleatoire(i, jeu);
             joueurs[i][2] = new JoueurIAExperte(i, jeu);
         }
-        typeJoueur[0] = 1;
-        typeJoueur[1] = 1;
+        typeJoueur[0] = 0;
+        typeJoueur[1] = 0;
         carteActuelle = 8;
-        joueurCourant = 0;
+        joueurCourant = jeu.joueurCourant();
     }
 
     @Override
@@ -164,7 +164,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                         }
                         break;
                     case FOU:
-                        if (jeu.estPouvoirFouActivable()) {
+                        if (jeu.estPouvoirFouActivable() && jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
                             ETAT_JEU = InfoJeu.CHOIX_FOU;
                         }
                         break;
@@ -194,7 +194,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             default:
                 break;
         }
-
     }
 
     @Override
@@ -209,7 +208,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 // Lorsque le temps est écoulé on le transmet au joueur courant.
                 // Si un coup a été joué (IA) on change de joueur.
                 if (joueurs[joueurCourant][type].tempsEcoule()) {
-                    changerJoueurCourant();
+                    finDeTour();
                 } else {
                     // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
                     // l'attend.

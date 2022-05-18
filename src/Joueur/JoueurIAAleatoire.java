@@ -34,11 +34,15 @@ public class JoueurIAAleatoire extends Joueur {
 			}
 			// Activer le fou
 			if (choix >= 65 && choix < 85) {
-				activerFou();
+				if(nbActions != 0){
+					activerFou();
+				}
 			}
 			// Activer le sorcier
 			if (choix >= 85) {
-				activerSorcier();
+				if(nbActions != 0){
+					activerSorcier();
+				}
 			}
 		} while (!fin());
 		nbActions = 0;
