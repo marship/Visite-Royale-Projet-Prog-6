@@ -250,7 +250,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         //gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(180, 0, 0, 0);
         boutonFinDeTour = new DesignBoutons("Fin de tour", "res/Images/Texture_Petit_Bouton.png");
-        //boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
+        boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
         plateauGraphique.add(boutonFinDeTour, gbc);
 
 

@@ -28,7 +28,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // =================
     // ===== TIMER =====
     // =================
-    static final int LENTEUR_ATTENTE = 30;
+    static final int LENTEUR_ATTENTE = 100;
     
     // ====================
     // ===== ETAT JEU =====
@@ -67,8 +67,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
 
-        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
-        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_IAALEATOIRE);
+        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         carteActuelle = 8;
         joueurCourant = jeu.joueurCourant();

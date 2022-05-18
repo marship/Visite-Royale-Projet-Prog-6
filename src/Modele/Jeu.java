@@ -319,10 +319,12 @@ public class Jeu extends Observable {
             traiterGagnant();
         } else {
             plateau().paquet.viderCartePoser();
-            if (plateau().paquet.resteAssezCarteDansPioche(plateau().paquet.nombreCarteManquante(plateau().joueurCourant))) {
+            if (plateau().paquet
+                    .resteAssezCarteDansPioche(plateau().paquet.nombreCarteManquante(plateau().joueurCourant))) {
                 plateau().paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
-                Configuration.instance().logger().info("Il reste " + plateau().paquet.pioche().taille() + " cartes dans la pioche");
+                Configuration.instance().logger()
+                        .info("Il reste " + plateau().paquet.pioche().taille() + " cartes dans la pioche");
             } else {
                 if (getEtatCouronne()) {
                     plateau().paquet.melangerDefausse();
@@ -401,42 +403,45 @@ public class Jeu extends Observable {
     }
 
     public void deplacerCour(int direction, int[] cartes) {
-        int i = 0;
-        while (i != cartes.length) {
-            poserCarte(cartes[i]);
-            i++;
-        }
-        majDernierTypeDePersonnageJouer(ROI);
-        if (direction == 0) { // Gauche
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
-            obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
-        } else { // Droit
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
-            obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+        if (actionAutoriser()) {
+            int i = 0;
+            while (i != cartes.length) {
+                poserCarte(cartes[i]);
+                i++;
+            }
+            if (direction == 0) { // Gauche
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
+                obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
+            } else { // Droit
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+                obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+            }
         }
         metAJour();
     }
 
     public void unPlusUn(int direction, int carte) {
-        poserCarte(carte);
-        majDernierTypeDePersonnageJouer(Element.GARDES);
-        if (direction == 0) { // Gauche
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
-        } else {
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+        if (actionAutoriser()) {
+            poserCarte(carte);
+            if (direction == 0) { // Gauche
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
+            } else {
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) + 1);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) + 1);
+            }
         }
         metAJour();
     }
 
     public void rapproche(int carte) {
-        poserCarte(carte);
-        majDernierTypeDePersonnageJouer(Element.GARDES);
-        obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
-        obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+        if (actionAutoriser()) {
+            poserCarte(carte);
+            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
+            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(ROI) + 1);
+        }
         metAJour();
     }
 
@@ -526,8 +531,7 @@ public class Jeu extends Observable {
         return positionAccessibleAvecPerso;
     }
 
-    public int[] selonLePersoMaisEnRecurcifPersoBase(Element perso, Carte[] listeCarte, int[] positions,
-            int positionRelatif) {
+    public int[] selonLePersoMaisEnRecurcifPersoBase(Element perso, Carte[] listeCarte, int[] positions, int positionRelatif) {
         int i = 0;
         Carte vide = new Carte(VIDE, Deplacement.VIDE);
         while (i < 8) {
@@ -628,13 +632,14 @@ public class Jeu extends Observable {
     }
 
     public int positionsPourCour() {
-        if(obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU && obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU){
+        if (obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU
+                && obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU) {
             return 3; // Les deux impossible
         }
-        if(obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU){ 
+        if (obtenirPositionElement(GARDE_DROIT) == EXTREMITE_DROITE_DU_PLATEAU) {
             return 1; // Droit impossible
         }
-        if(obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU){
+        if (obtenirPositionElement(GARDE_GAUCHE) == EXTREMITE_GAUCHE_DU_PLATEAU) {
             return 2; // Gauche impossible
         }
         return 0; // Tout possible
