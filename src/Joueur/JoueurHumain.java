@@ -32,7 +32,8 @@ public class JoueurHumain extends Joueur {
 		}
 
 		if (carteChoisie.personnage() == Element.FOU) {
-			int[] a = jeu.listeDeplacementPossiblesAvecCarte(jeu.personnageManipulerParLeFou, carteChoisie.deplacement());
+			int[] a = jeu.listeDeplacementPossiblesAvecCarte(jeu.personnageManipulerParLeFou,
+					carteChoisie.deplacement());
 			if (a[caseChoisie + 8] == 0) {
 				return false;
 			}
@@ -80,11 +81,21 @@ public class JoueurHumain extends Joueur {
 
 		if (carteChoisie.personnage() == Element.FOU) {
 			if (jeu.personnageManipulerParLeFou == Element.GARDES) {
-				if (jeu.validationDeplacement(Element.GARDE_GAUCHE, caseChoisie)) {
+				jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
+				int[] a = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU,carteChoisie.deplacement());
+				int i = 0;
+				while(i < 17){
+					System.out.print(a[i] + " ");
+					i++;
+				}
+				System.out.println(caseChoisie + 8);
+				if (a[caseChoisie + 8] == 1) {
 					jeu.jouerCarte(Element.GARDE_GAUCHE, caseChoisie, positionCarteDansLaMain);
-				} else {
+				}
+				else {
 					jeu.jouerCarte(Element.GARDE_DROIT, caseChoisie, positionCarteDansLaMain);
 				}
+				jeu.personnageManipulerParLeFou(Element.GARDES);
 			} else {
 				jeu.jouerCarte(jeu.personnageManipulerParLeFou, caseChoisie, positionCarteDansLaMain);
 			}
