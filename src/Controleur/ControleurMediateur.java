@@ -28,8 +28,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // =================
     // ===== TIMER =====
     // =================
-    static final int TEMPS_ATTENTE = 50;
-    static final int LENTEUR_ATTENTE = 50;
+    static final int LENTEUR_ATTENTE = 30;
     
     // ====================
     // ===== ETAT JEU =====
@@ -43,7 +42,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     int[] typeJoueur;
     int joueurCourant;
 
-    int decompteTimer;
+    int decompteTimer = LENTEUR_ATTENTE;
     int carteActuelle; // Quelle carte est choisie actuellement
 
     int valeurLargeurPrevisualisation = 0;
@@ -68,8 +67,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
 
-        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
-        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_HUMAIN);
+        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
+        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_IAALEATOIRE);
         
         carteActuelle = 8;
         joueurCourant = jeu.joueurCourant();
@@ -241,7 +240,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (ETAT_JEU) {
             case DEBUT_TOUR:
             case APRES_UNE_CARTE:
-                System.out.println("X: " + positionSourisX + ", Y: " + positionSourisY);
+                //System.out.println("X: " + positionSourisX + ", Y: " + positionSourisY);
                 // gestionPrevisualisationCoup(positionSourisX, positionSourisY);
                 break;
             default:

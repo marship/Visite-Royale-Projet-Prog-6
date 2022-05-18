@@ -251,7 +251,7 @@ public class Paquet {
         tourActuel.insereQueue(main);
     }
 
-    public void viderCartePosee() {
+    public void viderCartePoser() {
         while (!tourActuel.estVide()) {
             defausse.insereTete(tourActuel.extraitTete());
         }

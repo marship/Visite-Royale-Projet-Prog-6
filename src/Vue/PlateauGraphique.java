@@ -98,8 +98,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         afficherCartesAutreJoueur();
         afficherZoneCartesJouees();
         afficherCartesJoueurCourant();
-
-        tracerPrevisualisation();
     }
 
     // =======================
@@ -158,6 +156,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public void afficherCartesJoueurCourant() {
+        
+        if(jeu.estPartieTerminee()){
+            return;
+        }
 
         Carte[] cartesJoueurCourant = jeu.recupererMainJoueur(jeu.joueurCourant());
         ImagePlateau image;
@@ -356,8 +358,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imagePlateauDroit = chargeImage("Previsualisation_Droite");
         imagePlateauGauche = chargeImage("Previsualisation_Gauche");
 
-        imageJetonGrandeCouronne = chargeImage("jeton_Grande_Couronne");
-        imageJetonPetiteCouronne = chargeImage("jeton_Petite_Couronne");
+        imageJetonGrandeCouronne = chargeImage("Jeton_Grande_CouronneV2");
+        imageJetonPetiteCouronne = chargeImage("Jeton_Petite_CouronneV2");
 
         imageJetonGardeGauche = chargeImage("jeton_Garde_Gauche");
         imageJetonGardeDroit = chargeImage("jeton_Garde_Droit");
@@ -368,7 +370,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageCarteErreur = chargeImage("carteErreur");
         imageCarteVide = chargeImage("carteVide");
 
-        imageDosCarte = chargeImage("dosCarte");
+        imageDosCarte = chargeImage("Dos_2");
 
         imageCarteRoi = chargeImage("Roi_1");
 
@@ -404,10 +406,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
         dessinable.drawRect(x * debutZoneCartesX(), y * debutZoneCartesY(), largeurCarte(), hauteurCarte());
         System.out.println("x = " + x * debutZoneCartesX() + ", y = " + debutZoneCartesY() + ", larg = " + largeurCarte() + ", haut = " + hauteurCarte());
-    }
-
-    public void tracerPrevisualisation() {
-        //tracerRectangle(jeu.previsualisationX(), jeu.previsualisationY(), jeu.largeurPrevisualisation(), jeu.hauteurPrevisualisation());
     }
 
     public boolean masquerPrevisualisation() {
