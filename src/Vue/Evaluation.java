@@ -1,4 +1,5 @@
 package Vue;
+
 import Modele.Plateau;
 
 public class Evaluation {
@@ -13,462 +14,432 @@ public class Evaluation {
     static int positionSorcier;
     static int positionCouronne;
 
-        Evaluation(Plateau p){
-            positionGardeGauche = p.gardeGauche.positionPersonnage();
-            positionGardeDroit = p.gardeDroit.positionPersonnage();
-            positionRoi = p.roi.positionPersonnage();
-            positionFou = p.fou.positionPersonnage();
-            positionSorcier = p.sorcier.positionPersonnage();
-            positionCouronne = p.couronne.positionCouronne();
+    // ==================
+    // ===== JOUEUR =====
+    // ==================
+    final int JOUEUR_GAUCHE = 0;
+    final int JOUEUR_DROIT = 1;
+
+    public Evaluation(Plateau p) {
+        positionGardeGauche = p.gardeGauche.positionPersonnage();
+        positionGardeDroit = p.gardeDroit.positionPersonnage();
+        positionRoi = p.roi.positionPersonnage();
+        positionFou = p.fou.positionPersonnage();
+        positionSorcier = p.sorcier.positionPersonnage();
+        positionCouronne = p.couronne.positionCouronne();
+    }
+
+    public double note(int joueur) {
+        double note = 0;
+        boolean calcul;
+        if (joueur == JOUEUR_DROIT) {
+            calcul = true;
+        } else {
+            calcul = false;
         }
 
-        double note(int joueur){
-            double note = 0;
-            boolean calcul;
-            if(joueur == 1){
-                calcul = true;
-            }
-            else{
-                calcul = false;
-            }
-            
-            // Sorcier
-            double resSorcierGentil = calculSorcier(calcul);
-            double resSorcierMechant = calculSorcier(!calcul);
-            double noteSorcier = 0;
-            if(resSorcierGentil > resSorcierMechant){
-                noteSorcier = ( (resSorcierGentil + resSorcierMechant) / 2 );
-            }
-            else{
-                if(resSorcierGentil < resSorcierMechant){
-                    noteSorcier = - ( (resSorcierGentil + resSorcierMechant) / 2 );
-                }
-            }
-            System.out.println(resSorcierGentil);
-            System.out.println(resSorcierMechant);
-            System.out.println(noteSorcier);
-            // NbPièces
-            double resNbPiècesGentil = calculPiece(calcul);
-            double resNbPiècesMechant = calculPiece(!calcul);
-            double notePiece = 0;
-            if(resNbPiècesGentil > resNbPiècesMechant){
-                notePiece = ( (resNbPiècesGentil + resNbPiècesMechant) / 2 );
-            }
-            else{
-                if(resNbPiècesGentil < resNbPiècesMechant){
-                    notePiece = - ( (resNbPiècesGentil + resNbPiècesMechant) / 2 );
-                }
-            }
-            // Chateau
-            double resNbPiècesChateauGentil = calculChateau(calcul);
-            double resNbPiècesChateauMechant = calculChateau(!calcul);
-            double noteChateau = 0;
-            if(resNbPiècesChateauGentil > resNbPiècesChateauMechant){
-                noteChateau = ( (resNbPiècesChateauGentil + resNbPiècesChateauMechant) / 2 );
-            }
-            else{
-                if(resNbPiècesChateauGentil < resNbPiècesMechant){
-                    noteChateau = - ( (resNbPiècesChateauGentil + resNbPiècesChateauMechant) / 2 );
-                }
-            }
-            // Roi
-            double noteRoi = calculRoi(calcul);
-            // Couronne
-            double noteCouronne = calculCouronne(calcul);
-            // Gardes
-            /*
-            double resGardeGentil = calculGarde(calcul);
-            double resGardeMechant = calculGarde(!calcul);
-            double noteGarde = 0;
-            if(resGardeGentil > resGardeMechant){
-                noteGarde = ( (resGardeGentil + resGardeMechant) / 2 );
-            }
-            else{
-                if(resGardeGentil < resNbPiècesMechant){
-                    noteGarde = - ( (resGardeGentil + resGardeMechant) / 2 );
-                }
-            }
-            System.out.println(noteGarde);
-            */
-            // Fou
-            double resFouGentil = calculFou(calcul);
-            double resFouMechant = calculFou(!calcul);
-            double noteFou = 0;
-            if(resFouGentil > resSorcierMechant){
-                noteFou = ( ((resFouGentil + resFouMechant) / 2) / 2 );
-            }
-            else{
-                noteFou = - ( ((resFouGentil + resFouMechant) / 2) / 2 );
-            }
-            note = noteChateau + noteCouronne + noteFou + notePiece + noteRoi + noteSorcier;
-            return note;
+        // Sorcier
+        double resSorcierGentil = calculSorcier(calcul);
+        double resSorcierMechant = calculSorcier(!calcul);
+        double noteSorcier = 0;
+        noteSorcier = (((resSorcierGentil) - resSorcierMechant) / 2);
+        // NbPièces
+        double resNbPiècesGentil = calculPiece(calcul);
+        double resNbPiècesMechant = calculPiece(!calcul);
+        double notePiece = 0;
+        notePiece = (((resNbPiècesGentil) - resNbPiècesMechant) / 2);
+        // Chateau
+        double resNbPiècesChateauGentil = calculChateau(calcul);
+        double resNbPiècesChateauMechant = calculChateau(!calcul);
+        double noteChateau = 0;
+        noteChateau = (((resNbPiècesChateauGentil) - resNbPiècesChateauMechant) / 2);
+        // Roi
+        double noteRoi = calculRoi(calcul);
+        // Couronne
+        double noteCouronne = calculCouronne(calcul);
+
+        // Gardes
+        double resGardeGentil = calculGarde(calcul);
+        double resGardeMechant = calculGarde(!calcul);
+        double noteGarde = 0;
+        noteGarde = (((resGardeGentil) - resGardeMechant) / 2);
+
+        // Fou
+        double resFouGentil = calculFou(calcul);
+        double resFouMechant = calculFou(!calcul);
+        double noteFou = 0;
+        noteFou = (((resFouGentil) - resFouMechant) / 2) / 2;
+
+        System.out.println("###############################################");
+        System.out.println("Note chateau : " + noteChateau);
+        System.out.println("Note Couronne : " + noteCouronne);
+        System.out.println("Note Fou : " + noteFou);
+        System.out.println("Note Piece : " + notePiece);
+        System.out.println("Note Sorcier : " + noteSorcier);
+        System.out.println("Note Gardes : " + noteGarde);
+        
+        note = noteChateau + noteCouronne + noteFou + notePiece + noteRoi + noteSorcier + noteGarde;
+        System.out.println("Note finale : " + note);
+        System.out.println("###############################################");
+        return note;
+    }
+    // ===============
+    // Théorème Sorcier
+    // ===============
+
+    double calculSorcier(boolean joueurCourant) {
+        double resSorcier = 0;
+        if (!((positionGardeGauche < positionSorcier) && (positionSorcier < positionGardeDroit))
+                && !sorcierChezNous(joueurCourant)) {
+            resSorcier = resSorcier - 1;
         }
-        // ===============
-        // Théorème Sorcier
-        // ===============
 
-        double calculSorcier(boolean joueurCourant){
-            double resSorcier = 0;
-            if (!((positionGardeGauche < positionSorcier) && (positionSorcier < positionGardeDroit)) && !sorcierChezNous(joueurCourant)) {
-                resSorcier = resSorcier - 1;
-            }
+        if (sorcierDansChateau(joueurCourant) && tpGardePossible(joueurCourant)) {
+            resSorcier = resSorcier + 3;
+        }
 
-            if (sorcierDansChateau(joueurCourant) && tpGardePossible(joueurCourant)) {
-                resSorcier = resSorcier + 3;
-            }
+        if (configSorcierVainqueur(joueurCourant)) {
+            resSorcier = resSorcier + 6;
+        }
 
-            if (configSorcierVainqueur(joueurCourant)) {
-                resSorcier = resSorcier + 6;
-            }
+        if (sortirPersonnageChateauAdverse(joueurCourant)) {
+            resSorcier = resSorcier + 1.5;
+        }
 
-            if (sortirPersonnageChateauAdverse(joueurCourant)) {
-                resSorcier = resSorcier + 1.5;
-            }
+        if (!(!((positionGardeGauche < positionSorcier) && (positionSorcier < positionGardeDroit))
+                && !sorcierChezNous(joueurCourant))) {
+            Double distMax = (double) 0;
+            if (joueurCourant) {
+                if ((positionGardeDroit != positionSorcier) && positionRoi < positionSorcier) {
+                    // TP GARDE DROIT
+                    int distGardeDroit = positionSorcier - positionGardeDroit;
+                    distGardeDroit = Math.abs(distGardeDroit);
+                    distMax = Math.max(distMax, distGardeDroit);
+                }
 
-            if (!(!((positionGardeGauche < positionSorcier) && (positionSorcier < positionGardeDroit)) && !sorcierChezNous(joueurCourant))) {
-                Double distMax = (double) 0;
-                if (joueurCourant) {
-                    if((positionGardeDroit != positionSorcier) && positionRoi < positionSorcier){
-                        // TP GARDE DROIT
-                        int distGardeDroit = positionSorcier - positionGardeDroit;
-                        distGardeDroit = Math.abs(distGardeDroit);
-                        distMax = Math.max(distMax, distGardeDroit);
+                if ((positionGardeGauche != positionSorcier) && positionRoi > positionSorcier) {
+                    // TP GARDE GAUCHE
+                    int distGardeGauche = positionSorcier - positionGardeGauche;
+                    distGardeGauche = Math.abs(distGardeGauche);
+                    distMax = Math.max(distMax, distGardeGauche);
+                }
+
+                if ((positionGardeGauche < positionSorcier) && (positionGardeDroit > positionSorcier)) {
+                    // TP ROI
+                    if (positionRoi < positionSorcier) {
+                        int distRoi = positionSorcier - positionRoi;
+                        distRoi = Math.abs(distRoi);
+                        distMax = Math.max(distMax, distRoi);
                     }
+                }
+            } else {
+                if ((positionGardeDroit != positionSorcier) && positionRoi < positionSorcier) {
+                    // TP GARDE DROIT
+                    int distGardeDroit = positionSorcier - positionGardeDroit;
+                    distGardeDroit = Math.abs(distGardeDroit);
+                    distMax = Math.max(distMax, distGardeDroit);
+                }
 
-                    if((positionGardeGauche != positionSorcier) && positionRoi > positionSorcier){
-                        // TP GARDE GAUCHE
-                        int distGardeGauche = positionSorcier - positionGardeGauche;
-                        distGardeGauche = Math.abs(distGardeGauche);
-                        distMax = Math.max(distMax, distGardeGauche);
-                    }
+                if ((positionGardeGauche != positionSorcier) && positionRoi > positionSorcier) {
+                    // TP GARDE GAUCHE
+                    int distGardeGauche = positionSorcier - positionGardeGauche;
+                    distGardeGauche = Math.abs(distGardeGauche);
+                    distMax = Math.max(distMax, distGardeGauche);
+                }
 
-                    if( (positionGardeGauche < positionSorcier) && (positionGardeDroit > positionSorcier)){
-                        // TP ROI
-                        if(positionRoi < positionSorcier){
-                            int distRoi = positionSorcier - positionRoi;
-                            distRoi = Math.abs(distRoi);
-                            distMax = Math.max(distMax, distRoi);
-                        }
+                if ((positionGardeGauche < positionSorcier) && (positionGardeDroit > positionSorcier)) {
+                    // TP ROI
+                    if (positionRoi > positionSorcier) {
+                        int distRoi = positionSorcier - positionRoi;
+                        distRoi = Math.abs(distRoi);
+                        distMax = Math.max(distMax, distRoi);
                     }
+                }
+            }
+            distMax = distMax / 2;
+            resSorcier = resSorcier + distMax;
+        }
+        return resSorcier;
+    }
+
+    // ===============
+    // Théorème NBPièce
+    // ===============
+    double calculPiece(boolean joueurCourant) {
+        double resNbPièces = 0;
+        if (joueurCourant) {
+            if (positionRoi > 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionGardeDroit > 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionGardeGauche > 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionFou > 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionSorcier > 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+        } else {
+            if (positionRoi < 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionGardeDroit < 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionGardeGauche < 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionFou < 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+            if (positionSorcier < 0) {
+                resNbPièces = resNbPièces + 1;
+            }
+        }
+        return resNbPièces;
+    }
+
+    // ==========================
+    // Théorème NBPièceDansChateau
+    // ==========================
+    double calculChateau(boolean joueurCourant) {
+        double resNbPiècesChateau = 0;
+        if (joueurCourant) {
+            if (positionRoi > 6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionGardeDroit > 6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionGardeGauche > 6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionFou > 6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionSorcier > 6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+        } else {
+            if (positionRoi < -6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionGardeDroit < -6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionGardeGauche < -6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionFou < -6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+            if (positionSorcier < -6) {
+                resNbPiècesChateau = resNbPiècesChateau + 1;
+            }
+        }
+        resNbPiècesChateau = resNbPiècesChateau * 2;
+        return resNbPiècesChateau;
+    }
+
+    // ===========
+    // Théorème Roi
+    // ===========
+    double calculRoi(boolean joueurCourant) {
+        double resRoi = 0;
+        if (joueurCourant) {
+            resRoi = positionRoi;
+        } else {
+            resRoi = -positionRoi;
+        }
+        return resRoi;
+    }
+
+    // =================
+    // Théorème Couronne
+    // =================
+    double calculCouronne(boolean joueurCourant) {
+        double resCouronne = 0;
+        if (joueurCourant) {
+            if (positionCouronne > -3 && positionCouronne < 3) {
+                if (positionCouronne > 0) {
+                    resCouronne = resCouronne + 1;
                 } else {
-                    if((positionGardeDroit != positionSorcier) && positionRoi < positionSorcier){
-                        // TP GARDE DROIT
-                        int distGardeDroit = positionSorcier - positionGardeDroit;
-                        distGardeDroit = Math.abs(distGardeDroit);
-                        distMax = Math.max(distMax, distGardeDroit);
-                    }
-
-                    if((positionGardeGauche != positionSorcier) && positionRoi > positionSorcier){
-                        // TP GARDE GAUCHE
-                        int distGardeGauche = positionSorcier - positionGardeGauche;
-                        distGardeGauche = Math.abs(distGardeGauche);
-                        distMax = Math.max(distMax, distGardeGauche);
-                    }
-
-                    if( (positionGardeGauche < positionSorcier) && (positionGardeDroit > positionSorcier)){
-                        // TP ROI
-                        if(positionRoi > positionSorcier){
-                            int distRoi = positionSorcier - positionRoi;
-                            distRoi = Math.abs(distRoi);
-                            distMax = Math.max(distMax, distRoi);
-                        }
-                    }
-                }
-                distMax = distMax / 2;
-                resSorcier = resSorcier + distMax;
-            }
-            return resSorcier;
-        }
-
-        // ===============
-        // Théorème NBPièce
-        // ===============
-        double calculPiece(boolean joueurCourant){
-            double resNbPièces = 0;
-            if (joueurCourant) {
-                if (positionRoi > 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionGardeDroit > 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionGardeGauche > 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionFou > 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionSorcier > 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-            } else {
-                if (positionRoi < 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionGardeDroit < 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionGardeGauche < 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionFou < 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-                if (positionSorcier < 0) {
-                    resNbPièces = resNbPièces + 1;
-                }
-            }
-            return resNbPièces;
-        }
-
-        // ==========================
-        // Théorème NBPièceDansChateau
-        // ==========================
-        double calculChateau(boolean joueurCourant){
-            double resNbPiècesChateau = 0;
-            if (joueurCourant) {
-                if (positionRoi > 6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionGardeDroit > 6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionGardeGauche > 6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionFou > 6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionSorcier > 6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-            } else {
-                if (positionRoi < -6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionGardeDroit < -6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionGardeGauche < -6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionFou < -6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-                if (positionSorcier < -6) {
-                    resNbPiècesChateau = resNbPiècesChateau + 1;
-                }
-            }
-            resNbPiècesChateau = resNbPiècesChateau * 2;
-            return resNbPiècesChateau;
-        }
-
-        // ===========
-        // Théorème Roi
-        // ===========
-        double calculRoi(boolean joueurCourant){
-            double resRoi = 0;
-            if (joueurCourant) {
-                resRoi = positionRoi;
-            } else {
-                resRoi = -positionRoi;
-            }
-            return resRoi;
-        }
-
-        // =================
-        // Théorème Couronne
-        // =================
-        double calculCouronne(boolean joueurCourant){
-            double resCouronne = 0;
-            if (joueurCourant) {
-                if(positionCouronne > -3 && positionCouronne < 3){
-                    if(positionCouronne > 0){
-                        resCouronne = resCouronne + 1;
-                    }
-                    else{
-                        if(positionCouronne < 0){
-                            resCouronne = resCouronne - 1;
-                        }
-                        else{
-                            resCouronne = resCouronne + 0;
-                        }
-                    }
-                }
-                else{
-                    if(positionCouronne > 2){
-                        resCouronne = resCouronne + positionCouronne - 1;
-                    }
-                    else{
-                        resCouronne = resCouronne + positionCouronne + 1;
-                    }
-                }
-            } else {
-                if(positionCouronne > -3 && positionCouronne < 3){
-                    if(positionCouronne > 0){
+                    if (positionCouronne < 0) {
                         resCouronne = resCouronne - 1;
-                    }
-                    else{
-                        if(positionCouronne < 0){
-                            resCouronne = resCouronne + 1;
-                        }
-                        else{
-                            resCouronne = resCouronne + 0;
-                        }
+                    } else {
+                        resCouronne = resCouronne + 0;
                     }
                 }
-                else{
-                    if(positionCouronne > 2){
-                        resCouronne = resCouronne - positionCouronne + 1;
-                    }
-                    else{
-                        resCouronne = resCouronne - positionCouronne - 1;
-                    }
-                }
-            }
-            if (joueurCourant) {
-                if( ((positionCouronne == 6) && (calculChateau(joueurCourant) >= 4)) || ((positionCouronne == 5) && (calculChateau(joueurCourant) >= 6)) ){
-                    resCouronne = resCouronne + 6;
-                }
-            }
-            else{
-                if( ((positionCouronne == -6) && (calculChateau(joueurCourant) >= 4)) || ((positionCouronne == -5) && (calculChateau(joueurCourant) >= 6))) {
-                    System.out.println(resCouronne);
-                    resCouronne = resCouronne + 6;
-                }
-            }
-            return resCouronne;
-        }
-
-        // ===========
-        // Théorème Fou
-        // ===========
-
-        double calculFou(boolean joueurCourant){
-            double resFou = 0;
-            if (!fouUtilisable(joueurCourant)) {
-                resFou = resFou + 0;
             } else {
-                if (joueurCourant) {
-                    double somme = 0.0;
-                    int nbChateau = 2;
-                    if (!gardeDroitDansChateau(joueurCourant)) {
-                        double deplacementGardeDroit = 8 - positionGardeDroit;
-                        deplacementGardeDroit = Math.abs(deplacementGardeDroit);
-                        double res = Math.round(deplacementGardeDroit / 3.14);
-                        deplacementGardeDroit = multipliCoeff(res, deplacementGardeDroit);
-                        somme += deplacementGardeDroit;
-                        nbChateau++;
-                    }
-
-                    if(!sorcierDansChateau(joueurCourant)){
-                        double deplacementSorcier = 8 - positionSorcier;
-                        deplacementSorcier = Math.abs(deplacementSorcier);
-                        double res = Math.round(deplacementSorcier / 3.14);
-                        deplacementSorcier = multipliCoeff(res, deplacementSorcier);
-                        somme += deplacementSorcier;
-                        nbChateau++;
-                    }
-
-                    double deplacementRoi = tpRoi(joueurCourant);
-                    deplacementRoi = Math.abs(deplacementRoi);
-                    double res = Math.round(deplacementRoi / 3.14);
-                    deplacementRoi = multipliCoeff(res, deplacementRoi);
-                    somme += deplacementRoi;
-
-                    
-
-                    double deplacementGardeGauche = tpGardeGauche();
-                    deplacementGardeGauche = Math.abs(deplacementGardeGauche);
-                    res = Math.round(deplacementGardeGauche / 3.14);
-                    deplacementGardeGauche = multipliCoeff(res, deplacementGardeGauche);
-                    somme += deplacementGardeGauche;
-
-                    somme = somme / nbChateau;
-
-                    resFou = resFou + somme;
-
-                    if( (positionFou > positionRoi) && (positionGardeDroit == 8) && (positionFou + 4 >= 7) ){
-                        resFou = resFou + 6;
-                    }
-
+                if (positionCouronne > 2) {
+                    resCouronne = resCouronne + positionCouronne - 1;
                 } else {
-
-                    double somme = 0.0;
-                    int nbChateau = 2;
-                    if (!gardeGaucheDansChateau(joueurCourant)) {
-                        double deplacementGardeGauche = -8 - positionGardeGauche;
-                        deplacementGardeGauche = Math.abs(deplacementGardeGauche);
-                        double res = Math.round(deplacementGardeGauche / 3.14);
-                        deplacementGardeGauche = multipliCoeff(res, deplacementGardeGauche);
-                        somme += deplacementGardeGauche;
-                        nbChateau++;
+                    resCouronne = resCouronne + positionCouronne + 1;
+                }
+            }
+        } else {
+            if (positionCouronne > -3 && positionCouronne < 3) {
+                if (positionCouronne > 0) {
+                    resCouronne = resCouronne - 1;
+                } else {
+                    if (positionCouronne < 0) {
+                        resCouronne = resCouronne + 1;
+                    } else {
+                        resCouronne = resCouronne + 0;
                     }
+                }
+            } else {
+                if (positionCouronne > 2) {
+                    resCouronne = resCouronne - positionCouronne + 1;
+                } else {
+                    resCouronne = resCouronne - positionCouronne - 1;
+                }
+            }
+        }
+        if (joueurCourant) {
+            if (((positionCouronne == 6) && (calculChateau(joueurCourant) >= 4))
+                    || ((positionCouronne == 5) && (calculChateau(joueurCourant) >= 6))) {
+                resCouronne = resCouronne + 6;
+            }
+        } else {
+            if (((positionCouronne == -6) && (calculChateau(joueurCourant) >= 4))
+                    || ((positionCouronne == -5) && (calculChateau(joueurCourant) >= 6))) {
+                resCouronne = resCouronne + 6;
+            }
+        }
+        return resCouronne;
+    }
 
-                    if(!sorcierDansChateau(joueurCourant)){
-                        double deplacementSorcier = -8 - positionSorcier;
-                        deplacementSorcier = Math.abs(deplacementSorcier);
-                        double res = Math.round(deplacementSorcier / 3.14);
-                        deplacementSorcier = multipliCoeff(res, deplacementSorcier);
-                        somme += deplacementSorcier;
-                        nbChateau++;
-                    }
+    // ===========
+    // Théorème Fou
+    // ===========
 
-                    double deplacementRoi = tpRoi(joueurCourant);
-                    deplacementRoi = Math.abs(deplacementRoi);
-                    double res = Math.round(deplacementRoi / 3.14);
-                    deplacementRoi = multipliCoeff(res, deplacementRoi);
-                    somme += deplacementRoi;
-
-                    double deplacementGardeDroit = tpGardeDroit();
+    double calculFou(boolean joueurCourant) {
+        double resFou = 0;
+        if (!fouUtilisable(joueurCourant)) {
+            resFou = resFou + 0;
+        } else {
+            if (joueurCourant) {
+                double somme = 0.0;
+                int nbChateau = 2;
+                if (!gardeDroitDansChateau(joueurCourant)) {
+                    double deplacementGardeDroit = 8 - positionGardeDroit;
                     deplacementGardeDroit = Math.abs(deplacementGardeDroit);
-                    res = Math.round(deplacementGardeDroit / 3.14);
+                    double res = Math.round(deplacementGardeDroit / 3.14);
                     deplacementGardeDroit = multipliCoeff(res, deplacementGardeDroit);
                     somme += deplacementGardeDroit;
-
-                    somme = somme / nbChateau;
-
-                    resFou = resFou + somme;
-
-                    if( (positionFou < positionRoi) && (positionGardeGauche == -8) && (positionFou - 4 <= -7) ){
-                        resFou = resFou + 6;
-                    }
+                    nbChateau++;
                 }
-            }
-            return resFou;
-        }
 
-
-        // ==============
-        // Théorème Gardes
-        // ==============
-        double calculGarde(boolean joueurCourant){
-            double resGardes = 0;
-            if (joueurCourant) {
-                if (positionGardeDroit == 8) {
-                    resGardes = resGardes + 2;
-                } else if (positionGardeDroit == 7) {
-                    resGardes = resGardes + 0;
-                } else {
-                    resGardes = resGardes - 2;
-                    for (int i = 6; i > positionGardeDroit; i--) {
-                        resGardes = resGardes - 1;
-                    }
+                if (!sorcierDansChateau(joueurCourant)) {
+                    double deplacementSorcier = 8 - positionSorcier;
+                    deplacementSorcier = Math.abs(deplacementSorcier);
+                    double res = Math.round(deplacementSorcier / 3.14);
+                    deplacementSorcier = multipliCoeff(res, deplacementSorcier);
+                    somme += deplacementSorcier;
+                    nbChateau++;
                 }
+
+                double deplacementRoi = tpRoi(joueurCourant);
+                deplacementRoi = Math.abs(deplacementRoi);
+                double res = Math.round(deplacementRoi / 3.14);
+                deplacementRoi = multipliCoeff(res, deplacementRoi);
+                somme += deplacementRoi;
+
+                double deplacementGardeGauche = tpGardeGauche();
+                deplacementGardeGauche = Math.abs(deplacementGardeGauche);
+                res = Math.round(deplacementGardeGauche / 3.14);
+                deplacementGardeGauche = multipliCoeff(res, deplacementGardeGauche);
+                somme += deplacementGardeGauche;
+
+                somme = somme / nbChateau;
+
+                resFou = resFou + somme;
+
+                if ((positionFou > positionRoi) && (positionGardeDroit == 8) && (positionFou + 4 >= 7)) {
+                    resFou = resFou + 6;
+                }
+
             } else {
-                if (positionGardeGauche == -8) {
-                    resGardes = resGardes + 2;
-                } else if (positionGardeGauche == -7) {
-                    resGardes = resGardes + 0;
-                } else {
-                    resGardes = resGardes - 2;
-                    for (int i = -6; i < positionGardeGauche; i++) {
-                        resGardes = resGardes - 1;
-                    }
+
+                double somme = 0.0;
+                int nbChateau = 2;
+                if (!gardeGaucheDansChateau(joueurCourant)) {
+                    double deplacementGardeGauche = -8 - positionGardeGauche;
+                    deplacementGardeGauche = Math.abs(deplacementGardeGauche);
+                    double res = Math.round(deplacementGardeGauche / 3.14);
+                    deplacementGardeGauche = multipliCoeff(res, deplacementGardeGauche);
+                    somme += deplacementGardeGauche;
+                    nbChateau++;
+                }
+
+                if (!sorcierDansChateau(joueurCourant)) {
+                    double deplacementSorcier = -8 - positionSorcier;
+                    deplacementSorcier = Math.abs(deplacementSorcier);
+                    double res = Math.round(deplacementSorcier / 3.14);
+                    deplacementSorcier = multipliCoeff(res, deplacementSorcier);
+                    somme += deplacementSorcier;
+                    nbChateau++;
+                }
+
+                double deplacementRoi = tpRoi(joueurCourant);
+                deplacementRoi = Math.abs(deplacementRoi);
+                double res = Math.round(deplacementRoi / 3.14);
+                deplacementRoi = multipliCoeff(res, deplacementRoi);
+                somme += deplacementRoi;
+
+                double deplacementGardeDroit = tpGardeDroit();
+                deplacementGardeDroit = Math.abs(deplacementGardeDroit);
+                res = Math.round(deplacementGardeDroit / 3.14);
+                deplacementGardeDroit = multipliCoeff(res, deplacementGardeDroit);
+                somme += deplacementGardeDroit;
+
+                somme = somme / nbChateau;
+
+                resFou = resFou + somme;
+
+                if ((positionFou < positionRoi) && (positionGardeGauche == -8) && (positionFou - 4 <= -7)) {
+                    resFou = resFou + 6;
                 }
             }
-            return resGardes;
         }
+        return resFou;
+    }
+
+    // ==============
+    // Théorème Gardes
+    // ==============
+    double calculGarde(boolean joueurCourant) {
+        double resGardes = 0;
+        if (joueurCourant) {
+            if (positionGardeDroit == 8) {
+                resGardes = resGardes + 2;
+            } else if (positionGardeDroit == 7) {
+                resGardes = resGardes + 0;
+            } else {
+                resGardes = resGardes - 2;
+                for (int i = 6; i > positionGardeDroit; i--) {
+                    resGardes = resGardes - 1;
+                }
+            }
+        } else {
+            if (positionGardeGauche == -8) {
+                resGardes = resGardes + 2;
+            } else if (positionGardeGauche == -7) {
+                resGardes = resGardes + 0;
+            } else {
+                resGardes = resGardes - 2;
+                for (int i = -6; i < positionGardeGauche; i++) {
+                    resGardes = resGardes - 1;
+                }
+            }
+        }
+        return resGardes;
+    }
 
     private static double tpGardeDroit() {
         double res = positionGardeDroit - positionRoi;
@@ -498,7 +469,7 @@ public class Evaluation {
 
         double resGarde = positionGardeGauche - positionRoi + 1;
         resGarde = Math.abs(resGarde);
-        
+
         return Math.min(res, resGarde);
     }
 
@@ -523,7 +494,7 @@ public class Evaluation {
             case 4:
                 deplacementGardeGauche = deplacementGardeGauche * 0.5;
                 break;
-        
+
             default:
                 deplacementGardeGauche = deplacementGardeGauche * 0.25;
                 break;

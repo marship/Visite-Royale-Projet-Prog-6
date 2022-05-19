@@ -6,9 +6,11 @@ import Global.InfoJeu;
 import Joueur.Joueur;
 import Joueur.JoueurHumain;
 import Joueur.JoueurIAAleatoire;
+import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIAExperte;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
+import Vue.Evaluation;
 import Vue.InterfaceUtilisateur;
 
 public class ControleurMediateur implements CollecteurEvenements {
@@ -19,11 +21,12 @@ public class ControleurMediateur implements CollecteurEvenements {
     static final int JOUEUR_GAUCHE = 0;
     static final int JOUEUR_DROIT = 1;
     static final int NOMBRE_JOUEUR = 2;
-    static final int NOMBRE_TYPE_JOUEUR = 3;
+    static final int NOMBRE_TYPE_JOUEUR = 4;
 
     static final int JOUEUR_HUMAIN = 0;
     static final int JOUEUR_IAALEATOIRE = 1;
-    static final int JOUEUR_IAEXPERTE = 2;
+    static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 2;
+    static final int JOUEUR_IAEXPERTE = 3;
 
     // =================
     // ===== TIMER =====
@@ -64,11 +67,12 @@ public class ControleurMediateur implements CollecteurEvenements {
         for (int i = 0; i < joueurs.length; i++) {
             joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoire(i, jeu);
+            joueurs[i][JOUEUR_IAALEATOIRE_INTELLIGENTE] = new JoueurIAAleatoireIntelligente(i, jeu);
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
 
-        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
-        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_HUMAIN);
+        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
+        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_IAALEATOIRE_INTELLIGENTE);
         
         //jeu.changeCarteActuelle(8);
         joueurCourant = jeu.joueurCourant();
