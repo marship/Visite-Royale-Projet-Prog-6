@@ -60,7 +60,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ===========================
     // ===== VALEURS GAGNANT =====
     // ===========================
-    static final int AUCUN_GAGNANT = -1;
+    static final int AUCUN_GAGNANT = 0;
     static final int ROI_GAGNANT = 1;
     static final int COURONNE_GAGNANTE = 2;
     static final int MEULE_GAGNANTE_GAUCHE = 3;
@@ -135,6 +135,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
             joueurGagnant = JOUEUR_GAUCHE;
             return ROI_GAGNANT;
         }
+        /*
         if(joueurGagnant == MEULE_GAGNANTE_DROITE) {
             joueurGagnant = JOUEUR_DROIT;
             return MEULE_GAGNANTE_DROITE;
@@ -143,6 +144,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
             joueurGagnant = JOUEUR_GAUCHE;
             return MEULE_GAGNANTE_GAUCHE;
         }
+        */
         return AUCUN_GAGNANT;
     }
 
