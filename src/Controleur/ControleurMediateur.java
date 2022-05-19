@@ -109,7 +109,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ================
     @Override
     public void clicPlateau(int clicX, int clicY) {
-        System.out.println(ETAT_JEU);
         if (jeu.carteActuelle() != 8) {
             if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(clicX, jeu.carteActuelle())) {
                 jeu.changeCarteActuelle(8);

@@ -36,6 +36,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ==============================
     public int joueurCourant = JOUEUR_DROIT;
     public int joueurGagnant = AUCUN_GAGNANT;
+    public boolean victoirePioche = false;
 
     // ====================
     // ===== ELEMENTS =====

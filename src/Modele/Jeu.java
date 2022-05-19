@@ -347,21 +347,15 @@ public class Jeu extends Observable {
                 partieEnCours = false;
                 Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " avec le roi !!");
                 break;
-                /*
-            case MEULE_GAGNANTE_GAUCHE:
-                partieTerminee = true;
-                partieEnCours = false;
-                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la meule !!");
-                break;
-            case MEULE_GAGNANTE_DROITE:
-                partieTerminee = true;
-                partieEnCours = false;
-                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la meule !!");
-                break;
-                */
             default:
                 Configuration.instance().logger().warning("Condition de victoire inconnue !!");
                 break;
+        }
+        if(plateau().victoirePioche){
+            partieTerminee = true;
+            partieEnCours = false;
+            Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la pioche !!");
+                
         }
         metAJour();
     }
@@ -400,6 +394,7 @@ public class Jeu extends Observable {
                         } else {
                             plateau().joueurGagnant = JOUEUR_GAUCHE;
                         }
+                        plateau().victoirePioche = true;
                         traiterGagnant();
                     }
                 }
