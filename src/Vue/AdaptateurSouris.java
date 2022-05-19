@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 
 public class AdaptateurSouris extends MouseAdapter {
 
+    static final int MILIEU_PLATEAU = 8;
+
     PlateauGraphique plateauGraphique;
     CollecteurEvenements collecteurEvenements;
 
@@ -15,20 +17,34 @@ public class AdaptateurSouris extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int coupX = e.getX();
-        int coupY = e.getY();
-        if (coupX >= plateauGraphique.debutPlateauX() && coupX <= plateauGraphique.largeurPlateau()
-                && coupY >= plateauGraphique.debutPlateauY() && coupY <= plateauGraphique.hauteurPlateau()) {
-            coupX = e.getX() / plateauGraphique.largeurCasePlateau() - 8;
-            coupY = e.getY() / plateauGraphique.quartHauteurPlateau() - 1;
-            collecteurEvenements.clicPlateau(coupX, coupY);
+
+        int clicX = e.getX();
+        int clicY = e.getY();
+
+        if (estClicSurPlateau(clicX, clicY)) {
+
+            clicX = conversionCoordonnee(clicX, true);
+            clicY = conversionCoordonnee(clicY, false);
+
+            collecteurEvenements.clicPlateau(clicX, clicY);
+
         } else {
-            if (coupX >= plateauGraphique.debutZoneCartesX() && coupX <= plateauGraphique.finZoneCartesX()
-                    && coupY >= plateauGraphique.debutZoneCartesY() && coupY <= plateauGraphique.finZoneCartesY()) {
-                        
-                coupX = e.getX() / plateauGraphique.largeurCarte() - 4;
-                collecteurEvenements.clicCarte(coupX);
+            if (clicX >= plateauGraphique.debutZoneCartesX() && clicX <= plateauGraphique.finZoneCartesX() && clicY >= plateauGraphique.debutZoneCartesY() && clicY <= plateauGraphique.finZoneCartesY()) {
+                clicX = e.getX() / plateauGraphique.largeurCarte() - 4;
+                collecteurEvenements.clicCarte(clicX);
             }
+        }
+    }
+
+    boolean estClicSurPlateau(int clicX, int clicY) {
+        return (((clicX >= plateauGraphique.debutPlateauX()) && (clicX <= plateauGraphique.largeurPlateau())) && ((clicY >= plateauGraphique.debutPlateauY()) && (clicY <= plateauGraphique.hauteurPlateau())));
+    }
+
+    int conversionCoordonnee(int clic, Boolean estCoordonneeX) {
+        if (estCoordonneeX) {
+            return (clic / plateauGraphique.largeurCasePlateau() - MILIEU_PLATEAU);
+        } else {
+            return (clic / plateauGraphique.quartHauteurPlateau() - 1);
         }
     }
 }
