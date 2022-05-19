@@ -60,9 +60,9 @@ public class AdaptateurSouris extends MouseAdapter {
             case COORDONNEE_PLATEAU_X:
                 return (clic / plateauGraphique.largeurCasePlateau() - MILIEU_PLATEAU);
             case COORDONNEE_PLATEAU_Y:
-                return (clic / plateauGraphique.largeurCarte() - 4);
+                return (clic / plateauGraphique.quartHauteurPlateau() - 1);  
             case COORDONNEE_MAIN_X:
-                return (clic / plateauGraphique.quartHauteurPlateau() - 1);       
+                return (clic / plateauGraphique.largeurCarte() - 4);     
             default:
                 Configuration.instance().logger().warning("Option Invalide !!");
                 return AUCUNE_OPTION;
