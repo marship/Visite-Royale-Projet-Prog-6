@@ -54,7 +54,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         creerPlateauJeu();
 		panelCourant.add(plateauGraphique, "Plateau");
-		creerMenuPrincipal();
+        creerMenuPrincipal();
         panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
         creerSelectionJoueurs();
 		panelCourant.add(panelSelectionJoueurs, "Jouer");
@@ -206,7 +206,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         panelSelectionJoueurs.add(annuler, gbc);
 
 
-
+        
     }
 
     //Crée le JPanel du plateau de jeu

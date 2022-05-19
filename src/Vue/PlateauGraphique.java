@@ -109,7 +109,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         afficherCartesJoueurCourant();
     }
 
-
     // =======================
     // ===== MISE A JOUR =====
     // =======================

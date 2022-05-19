@@ -19,9 +19,9 @@ public class ImageGrise extends ImagePlateau{
             System.exit(1);
         }
         //convert to grayscale
-        for(int y = 0; y < bufImg.getHeight(); y++){
-            for(int x = 0; x < bufImg.getWidth(); x++){
-                int p = bufImg.getRGB(x,y);
+        for(int i = 0; i < bufImg.getHeight(); i++){
+            for(int j = 0; j < bufImg.getWidth(); j++){
+                int p = bufImg.getRGB(j,i);
         
                 int a = (p>>24)&0xff;
                 int r = (p>>16)&0xff;
@@ -34,7 +34,7 @@ public class ImageGrise extends ImagePlateau{
                 //replace RGB value with avg
                 p = (a<<24) | (avg<<16) | (avg<<8) | avg;
         
-                bufImg.setRGB(x, y, p);
+                bufImg.setRGB(j, i, p);
             }
         }
     }
