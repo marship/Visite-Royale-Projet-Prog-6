@@ -543,6 +543,13 @@ public class Jeu extends Observable {
         return resultat;
     }
 
+    public boolean carteJouable(Carte carteCourante) {
+        if(carteCourante.personnage() == dernierTypeDePersonnageJouer || dernierTypeDePersonnageJouer == VIDE){
+            return true;
+        }
+        return false;
+    }
+
     public int[] initialiserTableau(int taille, int valeurDefaut) {
         int[] tableau = new int[taille];
         int i = 0;
