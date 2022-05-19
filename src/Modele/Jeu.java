@@ -370,21 +370,17 @@ public class Jeu extends Observable {
                     .resteAssezCarteDansPioche(plateau.paquet.nombreCarteManquante(plateau().joueurCourant))) {
                 plateau.paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
-                Configuration.instance().logger()
-                        .info("Il reste " + plateau.paquet.pioche().taille() + " cartes dans la pioche");
             } else {
                 if (getEtatCouronne()) {
                     plateau.paquet.melangerDefausse();
                     plateau.paquet.remplirMain(plateau().joueurCourant);
                     changerEtatCouronne();
                     changerJoueurCourant();
-                    Configuration.instance().logger().info("La pioche se recharge pour la première fois !");
                 } else {
                     if (obtenirPositionElement(ROI) == 0) {
                         plateau.paquet.melangerDefausse();
                         plateau.paquet.remplirMain(plateau().joueurCourant);
                         changerJoueurCourant();
-                        Configuration.instance().logger().info("Le roi est au centre, la partie continue !");
                     } else {
                         if (obtenirPositionElement(ROI) > 0) {
                             plateau().joueurGagnant = JOUEUR_DROIT;

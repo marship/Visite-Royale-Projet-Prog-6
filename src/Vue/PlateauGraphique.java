@@ -134,7 +134,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
         tracerImageElement(Element.FOU, imageJetonFou);
         tracerImageElement(Element.SORCIER, imageJetonSorcier);
 
+        tracerChoixPreView();
         tracerChoix();
+        
     }
 
     void tracerChoix(){
@@ -142,6 +144,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
             return;
         }
         Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
+        int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(), carte.deplacement());
+        int i = 0;
+        while(i < 17){
+            if(listeDeplacementPossiblesAvecCarte[i] == 1){
+                dessinable.setColor(new Color(255,0,0));
+                dessinable.fillOval(i*largeurCasePlateau + 20, 3*quartHauteurPlateau, 20, 20);
+            }
+            i++;
+        }
+    }
+
+    void tracerChoixPreView(){
+        if(jeu.cartePasse() == 8){
+            return;
+        }
+        Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.cartePasse()];
         int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(), carte.deplacement());
         int i = 0;
         while(i < 17){

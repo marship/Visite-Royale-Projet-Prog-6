@@ -69,18 +69,8 @@ public class Evaluation {
         double resFouMechant = calculFou(!calcul);
         double noteFou = 0;
         noteFou = (((resFouGentil) - resFouMechant) / 2) / 2;
-
-        System.out.println("###############################################");
-        System.out.println("Note chateau : " + noteChateau);
-        System.out.println("Note Couronne : " + noteCouronne);
-        System.out.println("Note Fou : " + noteFou);
-        System.out.println("Note Piece : " + notePiece);
-        System.out.println("Note Sorcier : " + noteSorcier);
-        System.out.println("Note Gardes : " + noteGarde);
         
         note = noteChateau + noteCouronne + noteFou + notePiece + noteRoi + noteSorcier + noteGarde;
-        System.out.println("Note finale : " + note);
-        System.out.println("###############################################");
         return note;
     }
     // ===============
