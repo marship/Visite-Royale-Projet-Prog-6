@@ -305,7 +305,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.SOUTHWEST;
         boutonAnnulerJeu = new DesignBoutons("Annuler", "Texture_Petit_Bouton");
-        //boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
+        boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
         plateauGraphique.add(boutonAnnulerJeu, gbc);
 
 

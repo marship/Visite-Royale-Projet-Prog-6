@@ -79,8 +79,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_IAALEATOIRE);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         joueurCourant = jeu.joueurCourant();
     }
@@ -109,6 +109,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ================
     @Override
     public void clicPlateau(int clicX, int clicY) {
+        System.out.println(ETAT_JEU);
         if (jeu.carteActuelle() != 8) {
             if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(clicX, jeu.carteActuelle())) {
                 jeu.changeCarteActuelle(8);
@@ -321,6 +322,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                     interfaceUtilisateur.afficherPanneau("Plateau");
                 }
                 jeu.changerEtatPartie();
+                ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Charger":
