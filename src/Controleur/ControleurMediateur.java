@@ -10,7 +10,6 @@ import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIAExperte;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
-import Vue.Evaluation;
 import Vue.InterfaceUtilisateur;
 
 public class ControleurMediateur implements CollecteurEvenements {
@@ -18,15 +17,29 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ==================
     // ===== JOUEUR =====
     // ==================
-    static final int JOUEUR_GAUCHE = 0;
-    static final int JOUEUR_DROIT = 1;
     static final int NOMBRE_JOUEUR = 2;
     static final int NOMBRE_TYPE_JOUEUR = 4;
+
+    static final int JOUEUR_GAUCHE = 0;
+    static final int JOUEUR_DROIT = 1;
 
     static final int JOUEUR_HUMAIN = 0;
     static final int JOUEUR_IAALEATOIRE = 1;
     static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 2;
     static final int JOUEUR_IAEXPERTE = 3;
+
+    // ===================
+    // ===== PLATEAU =====
+    // ===================
+    static final int LIGNE_PLATEAU_FOU = 2;
+    static final int LIGNE_PLATEAU_COUR = 3;
+    static final int LIGNE_PLATEAU_SORCIER = 4;
+
+    // =====================
+    // ===== DIRECTION =====
+    // =====================
+    static final int GAUCHE = 0;
+    static final int DROITE = 1;
 
     // =================
     // ===== TIMER =====
@@ -48,12 +61,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     int decompteTimer = LENTEUR_ATTENTE;
     int carteActuelle; // Quelle carte est choisie actuellement
 
-    int valeurLargeurPrevisualisation = 0;
-    int valeurHauteurPrevisualisation = 0;
-
-    int debutZoneCartesX = 0;
-    int debutZoneCartesY = 0;
-
     /////////////////////////////////////////////////////////////////////////
 
     // ========================
@@ -71,146 +78,167 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
 
-        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE_INTELLIGENTE);
-        choixTypeJoueur(JOUEUR_DROIT, JOUEUR_IAALEATOIRE_INTELLIGENTE);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_IAALEATOIRE);
         
-        //jeu.changeCarteActuelle(8);
         joueurCourant = jeu.joueurCourant();
     }
 
-    void choixTypeJoueur(int joueur, int typeDuJoueur) {
-        if (jeu.numeroJoueurValide(joueur)) {
-            typeJoueur[joueur] = typeDuJoueur;
+    // ==================
+    // ===== JOUEUR =====
+    // ==================
+    @Override
+    public void changerJoueurCourant(int numeroJoueur, int typeDuJoueur) {
+        if (jeu.numeroJoueurValide(numeroJoueur)) {
+            Configuration.instance().logger().info("Type de joueur : " + typeJoueur + " | Joueur : " + numeroJoueur);
+            typeJoueur[numeroJoueur] = typeDuJoueur;
         }
     }
 
+    // =====================
+    // ===== INFOS JEU =====
+    // =====================
     @Override
     public InfoJeu getInfoJeu() {
         return ETAT_JEU;
     }
 
+    // ================
+    // ===== CLIC =====
+    // ================
     @Override
-    public void changerJoueurCourant(int numeroJoueur, int typeDuJoueur) {
-        System.out.println("Nouveau type " + typeJoueur + " pour le joueur " + numeroJoueur);
-        typeJoueur[numeroJoueur] = typeDuJoueur;
-    }
-
-    @Override
-    public void clicPlateau(int coupX, int coupY) {
+    public void clicPlateau(int clicX, int clicY) {
         if (jeu.carteActuelle() != 8) {
-            if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(coupX, jeu.carteActuelle())) {
+            if (joueurs[joueurCourant][typeJoueur[joueurCourant]].jeu(clicX, jeu.carteActuelle())) {
                 jeu.changeCarteActuelle(8);
             }
         } else {
-            Element el = Element.VIDE;
-            switch (coupY) {
-                case 2:
-                    if (jeu.obtenirPositionElement(Element.FOU) == coupX) {
-                        el = Element.FOU;
+            Element elementChoisi = selectionElementPlateau(clicX, clicY);
+            switch (ETAT_JEU) {
+                case CHOIX_FOU:
+                    switch (elementChoisi) {
+                        case ROI:
+                        case SORCIER:
+                            jeu.personnageManipulerParLeFou(elementChoisi);
+                            break;
+                        case GARDE_GAUCHE:
+                        case GARDE_DROIT:
+                            jeu.personnageManipulerParLeFou(Element.GARDES);
+                            break;
+                        default:
+                            jeu.personnageManipulerParLeFou(Element.FOU);
+                            break;
                     }
+                    ETAT_JEU = InfoJeu.DEBUT_TOUR;
                     break;
-                case 3:
-                    if (jeu.obtenirPositionElement(Element.ROI) == coupX) {
-                        el = Element.ROI;
+                case CHOIX_SORCIER:
+                    switch (elementChoisi) {
+                        case ROI:
+                        case GARDE_GAUCHE:
+                        case GARDE_DROIT:
+                            teleportationElement(elementChoisi);
+                            break;
+                        default:
+                            break;
                     }
-                    if (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) == coupX) {
-                        el = Element.GARDE_GAUCHE;
+                    ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                    return;
+                case CHOIX_ROI:
+                    int possible = jeu.positionsPourCour();
+                    if ((clicX == jeu.obtenirPositionElement(Element.ROI) - 1) && ((possible == 1) || (possible == 0))) {
+                        selectionRoi(GAUCHE);
+                    } else if ((clicX == jeu.obtenirPositionElement(Element.ROI) + 1) && ((possible == 2) || (possible == 0))) {
+                        selectionRoi(DROITE);
                     }
-                    if (jeu.obtenirPositionElement(Element.GARDE_DROIT) == coupX) {
-                        el = Element.GARDE_DROIT;
+                    ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                    return;
+                case DEBUT_TOUR:
+                    switch (elementChoisi) {
+                        case ROI:
+                            if (jeu.plateau().paquet.nombreCartesElement(joueurCourant, Element.ROI, 0) >= 2 && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                                ETAT_JEU = InfoJeu.CHOIX_ROI;
+                            }
+                            break;
+                        case FOU:
+                            if (jeu.estPouvoirFouActivable() && jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
+                                ETAT_JEU = InfoJeu.CHOIX_FOU;
+                            }
+                            break;
+                        case SORCIER:
+                            if (jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
+                                ETAT_JEU = InfoJeu.CHOIX_SORCIER;
+                            }
+                            break;
+                        default:
+                            break;
                     }
+                    return;
+                default:
+                    Configuration.instance().logger().warning("Echec de la selection !!");
                     break;
-                case 4:
-                    if (jeu.obtenirPositionElement(Element.SORCIER) == coupX) {
-                        el = Element.SORCIER;
-                    }
-                    break;
-            }
-            if (ETAT_JEU == InfoJeu.CHOIX_FOU) {
-                switch (el) {
-                    case ROI:
-                    case SORCIER:
-                        jeu.personnageManipulerParLeFou(el);
-                        break;
-                    case GARDE_GAUCHE:
-                    case GARDE_DROIT:
-                        jeu.personnageManipulerParLeFou(Element.GARDES);
-                        break;
-                    default:
-                        jeu.personnageManipulerParLeFou(Element.FOU);
-                        break;
-                }
-                ETAT_JEU = InfoJeu.DEBUT_TOUR;
-                return;
-            }
-            if (ETAT_JEU == InfoJeu.CHOIX_SORCIER) {
-                switch (el) {
-                    case ROI:
-                        if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
-                            jeu.teleportationPouvoirSorcier(Element.ROI);
-                            finDeTour();
-                        }
-                        break;
-                    case GARDE_GAUCHE:
-                        if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
-                            jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
-                            finDeTour();
-                        }
-                        break;
-                    case GARDE_DROIT:
-                        if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
-                            jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
-                            finDeTour();
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                ETAT_JEU = InfoJeu.DEBUT_TOUR;
-                return;
-            }
-            if (ETAT_JEU == InfoJeu.CHOIX_ROI) {
-                int possible = jeu.positionsPourCour();
-                if (coupX == jeu.obtenirPositionElement(Element.ROI) - 1 && (possible == 1 || possible == 0)) {
-                    int[] cartes = new int[2];
-                    cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
-                    cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
-                    jeu.deplacerCour(0, cartes);
-                }
-                if (coupX == jeu.obtenirPositionElement(Element.ROI) + 1 && (possible == 2 || possible == 0)) {
-                    int[] cartes = new int[2];
-                    cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
-                    cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
-                    jeu.deplacerCour(1, cartes);
-                }
-                ETAT_JEU = InfoJeu.DEBUT_TOUR;
-                return;
-            }
-            if (ETAT_JEU == InfoJeu.DEBUT_TOUR) {
-                switch (el) {
-                    case ROI:
-                        if (jeu.plateau().paquet.nombreCartesElement(joueurCourant, Element.ROI, 0) >= 2
-                                && (jeu.dernierTypeDePersonnageJouer == Element.ROI
-                                        || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
-                            ETAT_JEU = InfoJeu.CHOIX_ROI;
-                        }
-                        break;
-                    case FOU:
-                        if (jeu.estPouvoirFouActivable() && jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
-                            ETAT_JEU = InfoJeu.CHOIX_FOU;
-                        }
-                        break;
-                    case SORCIER:
-                        if (jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
-                            ETAT_JEU = InfoJeu.CHOIX_SORCIER;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                return;
             }
         }
+    }
+
+    private void selectionRoi(int direction) {
+        int[] cartes = new int[2];
+        cartes[0] = jeu.plateau().paquet.trouverRoi(joueurCourant, 0);
+        cartes[1] = jeu.plateau().paquet.trouverRoi(joueurCourant, 1);
+        jeu.deplacerCour(direction, cartes);
+    }
+
+    void teleportationElement(Element element) {
+        if (jeu.estPouvoirSorcierActivable(element)) {
+            jeu.teleportationPouvoirSorcier(element);
+            finDeTour();
+        }
+    }
+
+    private Element selectionElementPlateau(int selectionPlateauX, int selectionPlateauY) {
+        Element elementSelectione = Element.VIDE;
+        switch (selectionPlateauY) {
+            case LIGNE_PLATEAU_FOU:
+                if (jeu.obtenirPositionElement(Element.FOU) == selectionPlateauX) {
+                    elementSelectione = Element.FOU;
+                }
+                return elementSelectione;
+            case LIGNE_PLATEAU_COUR:
+                if (jeu.obtenirPositionElement(Element.ROI) == selectionPlateauX) {
+                    elementSelectione = Element.ROI;
+                } else if (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) == selectionPlateauX) {
+                    elementSelectione = Element.GARDE_GAUCHE;
+                } else if (jeu.obtenirPositionElement(Element.GARDE_DROIT) == selectionPlateauX) {
+                    elementSelectione = Element.GARDE_DROIT;
+                }
+                return elementSelectione;
+            case LIGNE_PLATEAU_SORCIER:
+                if (jeu.obtenirPositionElement(Element.SORCIER) == selectionPlateauX) {
+                    elementSelectione = Element.SORCIER;
+                }
+                return elementSelectione;
+            default:
+                return elementSelectione;
+        }
+    }
+
+    // TODO NETTOYAGE VVVVVVVV
+
+    void annule() {
+        /*
+        jeu.annule();
+        interfaceGraphique.miseAJourTableauScore();
+        interfaceGraphique.miseAJourCouleurJoueurCourant(1, 0, false);
+        jeu.nbCoupMoins();
+        interfaceGraphique.miseAJourNbCoup();
+        */
+    }
+
+    void refaire() {
+        /*
+        jeu.refaire();
+        jeu.nbCoupPlus();
+        interfaceGraphique.miseAJourNbCoup();
+        */
     }
 
     @Override
@@ -249,26 +277,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             default:
                 break;
         }
-    }
-
-    @Override
-    public void setDebutZoneCartesX(int dZoneCartesX) {
-        valeurHauteurPrevisualisation = dZoneCartesX;
-    }
-
-    @Override
-    public void setDebutZoneCartesY(int dZoneCartesY) {
-        valeurHauteurPrevisualisation = dZoneCartesY;
-    }
-
-    @Override
-    public void setValeurHauteurPrevisualisation(int vHauteurPrevisualisation) {
-        valeurHauteurPrevisualisation = vHauteurPrevisualisation;
-    }
-
-    @Override
-    public void setValeurLargeurPrevisualisation(int vLargeurPrevisualisation) {
-        valeurLargeurPrevisualisation = vLargeurPrevisualisation;
     }
 
     @Override

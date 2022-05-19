@@ -24,12 +24,15 @@ public class Jeu extends Observable {
     // ===============================
     // ===== INFORMATION PLATEAU =====
     // ===============================
-    final int TAILLE_DU_PLATEAU = 17;
-    final int CENTRE_DU_PLATEAU = 0;
-    final int EXTREMITE_GAUCHE_DU_PLATEAU = -8;
-    final int EXTREMITE_DROITE_DU_PLATEAU = 8;
-    final int ENTREE_CHATEAU_GAUCHE = -6;
-    final int ENTREE_CHATEAU_DROIT = 6;
+    static final int TAILLE_DU_PLATEAU = 17;
+    static final int CENTRE_DU_PLATEAU = 0;
+    static final int EXTREMITE_GAUCHE_DU_PLATEAU = -8;
+    static final int EXTREMITE_DROITE_DU_PLATEAU = 8;
+    static final int ENTREE_CHATEAU_GAUCHE = -6;
+    static final int ENTREE_CHATEAU_DROIT = 6;
+
+    static final int GAUCHE = 0;
+    static final int DROITE = 1;
 
     int POSITION_DEBUT_TOUR_ROI = 0;
     int POSITION_DEBUT_TOUR_FOU = -1;
@@ -131,6 +134,7 @@ public class Jeu extends Observable {
                             && (nouvellePositionElement < obtenirPositionElement(ROI))) {
                         return true;
                     } else {
+                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
                         return false;
                     }
                 case GARDE_DROIT:
@@ -138,6 +142,7 @@ public class Jeu extends Observable {
                             && (nouvellePositionElement > obtenirPositionElement(ROI))) {
                         return true;
                     } else {
+                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
                         return false;
                     }
                 case ROI:
@@ -145,6 +150,7 @@ public class Jeu extends Observable {
                             && (nouvellePositionElement < obtenirPositionElement(GARDE_DROIT))) {
                         return true;
                     } else {
+                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
                         return false;
                     }
                 case FOU:
@@ -152,6 +158,7 @@ public class Jeu extends Observable {
                             && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
                         return true;
                     } else {
+                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
                         return false;
                     }
                 case SORCIER:
@@ -159,9 +166,11 @@ public class Jeu extends Observable {
                             && (nouvellePositionElement <= EXTREMITE_DROITE_DU_PLATEAU)) {
                         return true;
                     } else {
+                        Configuration.instance().logger().info("Deplacement " + element.name() + " impossible !!");
                         return false;
                     }
                 default:
+                    Configuration.instance().logger().warning("Element " + element.name() + " inconnu !!");
                     return false;
             }
         } else {
@@ -370,17 +379,21 @@ public class Jeu extends Observable {
                     .resteAssezCarteDansPioche(plateau.paquet.nombreCarteManquante(plateau().joueurCourant))) {
                 plateau.paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
+                Configuration.instance().logger()
+                        .info("Il reste " + plateau.paquet.pioche().taille() + " cartes dans la pioche");
             } else {
                 if (getEtatCouronne()) {
                     plateau.paquet.melangerDefausse();
                     plateau.paquet.remplirMain(plateau().joueurCourant);
                     changerEtatCouronne();
                     changerJoueurCourant();
+                    Configuration.instance().logger().info("La pioche se recharge pour la première fois !");
                 } else {
                     if (obtenirPositionElement(ROI) == 0) {
                         plateau.paquet.melangerDefausse();
                         plateau.paquet.remplirMain(plateau().joueurCourant);
                         changerJoueurCourant();
+                        Configuration.instance().logger().info("Le roi est au centre, la partie continue !");
                     } else {
                         if (obtenirPositionElement(ROI) > 0) {
                             plateau().joueurGagnant = JOUEUR_DROIT;
@@ -460,7 +473,7 @@ public class Jeu extends Observable {
                 poserCarte(cartes[i]);
                 i++;
             }
-            if (direction == 0) { // Gauche
+            if (direction == GAUCHE) { // Gauche
                 obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
                 obtenirPersonnageElement(ROI).positionnerPersonnage(obtenirPositionElement(ROI) - 1);
                 obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
@@ -476,7 +489,7 @@ public class Jeu extends Observable {
     public void unPlusUn(int direction, int carte) {
         if (actionAutoriser()) {
             poserCarte(carte);
-            if (direction == 0) { // Gauche
+            if (direction == GAUCHE) { // Gauche
                 obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(obtenirPositionElement(GARDE_GAUCHE) - 1);
                 obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(obtenirPositionElement(GARDE_DROIT) - 1);
             } else {
@@ -964,6 +977,7 @@ public class Jeu extends Observable {
                     break;
             }
         } else {
+            Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
         }
         metAJour();
     }
@@ -974,6 +988,7 @@ public class Jeu extends Observable {
             metAJour();
             return true;
         } else {
+            Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
             metAJour();
             return false;
         }
@@ -989,6 +1004,32 @@ public class Jeu extends Observable {
         int positionElement = obtenirPositionElement(element);
         teleporter = positionSorcier - positionElement;
         return teleporter;
+    }
+
+    // ======================
+    // ===== HISTORIQUE =====
+    // ======================
+    public Plateau annule() {
+        if(estPartieTerminee()){
+            plateau().joueurGagnant = AUCUN_GAGNANT;
+        }
+        // Plateau plateau = plateau().annuler();
+        metAJour();
+        return plateau;
+    }
+
+    public Plateau refaire() {
+        // Plateau plateau = plateau().refaire();
+        metAJour();
+        return plateau;
+    }
+
+    public void viderHistorique() {
+        plateau().viderHistorique();
+    }
+
+    public int tailleHistoirique() {
+        return plateau().tailleHistoire();
     }
 
     // ================
