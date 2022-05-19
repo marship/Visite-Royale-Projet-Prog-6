@@ -1,6 +1,7 @@
 package Modele;
 
 import Pattern.Commande;
+import Structures.Iterateur;
 import Structures.Sequence;
 import Global.Configuration;
 
@@ -25,25 +26,31 @@ public class Coup extends Commande {
         return sequenceEtatPlateau;
     }
 
-    void X() {
-        // Iterateur<Point> iterateur = bouchee.iterateur();
-        // while (iterateur.aProchain()) {
-            // Point pointcourant = (Point) iterateur.prochain();
-            // pointcourant.x =
-            // pointcourant.y =
-        // }
-    }
-
     @Override
     public void execute() {
-        X();
+        // appliquer(0, 1);
     }
 
     @Override
     public void desexecute() {
-        X();
+        // desappliquer(1, 0);
     }
 
-    
-    
+    // Utilisation pour Historique de coups (executer)
+    void appliquer(int X, int Y) {
+        Iterateur<Plateau> iterateur = sequenceEtatPlateau.iterateur();
+        while (iterateur.aProchain()) {
+            Plateau p = (Plateau) iterateur.prochain();
+            // plateau.jouerCoupPlateau(p.positionX, p.positionY);
+        }
+    }
+
+    // Utilisation pour Historique de coups (desexecute)
+    void desappliquer(int X, int Y) {
+        Iterateur<Plateau> iterateur = sequenceEtatPlateau.iterateur();
+        while (iterateur.aProchain()) {
+            Plateau p = (Plateau) iterateur.prochain();
+            // plateau.dejouerCoupPlateau(p.positionX, p.positionY);
+        }
+    } 
 }

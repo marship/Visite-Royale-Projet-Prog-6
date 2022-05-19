@@ -14,9 +14,5 @@ public interface CollecteurEvenements {
     InfoJeu getInfoJeu();
     void clicPlateau(int coupX, int coupY);
     void clicCarte(int coupX);
-    void setDebutZoneCartesX(int debutZoneCartesX);
-    void setDebutZoneCartesY(int debutZoneCartesX);
-    void setValeurHauteurPrevisualisation(int i);
-    void setValeurLargeurPrevisualisation(int i);
     void passerSurCarte(int coupX);
 }

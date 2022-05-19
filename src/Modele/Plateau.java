@@ -2,6 +2,7 @@ package Modele;
 
 import Global.Configuration;
 import Global.Element;
+import Structures.Sequence;
 
 public class Plateau extends Historique<Coup> implements Cloneable {
 
@@ -75,7 +76,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         initialisation();
     }
 
-    void initialisation() {
+    public void initialisation() {
         joueurCourant = JOUEUR_DROIT;
 
         gardeGauche = new Personnage(GARDE_GAUCHE, POSITION_BASE_GARDE_GAUCHE);
@@ -237,6 +238,71 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     void echangerFouSorcier() {
         fou.positionnerPersonnage(POSITION_BASE_SORCIER);
         sorcier.positionnerPersonnage(POSITION_BASE_FOU);
+    }
+
+    // ================================
+    // ========== HISTORIQUE ==========
+    // ================================
+    public void jouerCoupPlateau(Plateau p) {
+        
+        Plateau plateau = p;
+        changerJoueurCourant();
+    }
+
+    public void dejouerCoupGaufre(int positionX, int positionY) {
+        /*
+        // Annulation de la case sélectionnée
+        if(grilleGaufre[positionY][positionX] == 2) {
+            grilleGaufre[positionY][positionX] = 1;
+        } else {
+            grilleGaufre[positionY][positionX] = 0;
+        }
+
+        // Reset des zones mangées sauf les cases sélectionnées
+        for (int i = 0; i < grilleGaufre.length; i++) {
+            for (int j = 0; j < grilleGaufre[i].length; j++) {
+                if(grilleGaufre[i][j] == -1) {
+                    grilleGaufre[i][j] = 0;
+                }
+            }
+        }
+
+        // Retracer les prévisualisation précédentes grâce aux cases sélectionnées
+        for (int i = 0; i < grilleGaufre.length; i++) {
+            for (int j = 0; j < grilleGaufre[i].length; j++) {
+                if(grilleGaufre[i][j] == 3) {
+                    ajoutPrevisualisation(j, i);
+                }
+            }
+        }
+        changerJoueur();
+        */
+    }
+
+    public int tailleHistoire() {
+        
+        int res = 0;
+        /*
+        Sequence<Plateau> sequencePlateau = Configuration.instance().nouvelleSequence();
+        while(!passe.estVide()) {
+            sequencePlateau.insereQueue(passe.extraitTete());
+            res++;
+        }
+        while(!sequencePlateau.estVide()) {
+            passe.insereQueue(sequencePlateau.extraitTete());
+        }
+        
+        sequencePlateau = Configuration.instance().nouvelleSequence();
+        while(!futur.estVide()) {
+            sequencePlateau.insereQueue(futur.extraitTete());
+            res++;
+        } 
+        while(!sequencePlateau.estVide()) {
+            futur.insereQueue(sequencePlateau.extraitTete());
+        }
+        */
+        return res;
+        
     }
 
     // =====================

@@ -50,4 +50,9 @@ public class Historique<E extends Commande> {
             return null;
         }
     }
+
+    public void viderHistorique() {
+        passe = Configuration.instance().nouvelleSequence();
+        futur = Configuration.instance().nouvelleSequence();
+    }
 }
