@@ -25,7 +25,6 @@ public class JoueurIAAleatoireIntelligente extends Joueur {
 
 		Evaluation eval = new Evaluation(jeu.plateau());
 		note = eval.note(jeu.joueurCourant());
-		System.out.println("Note de base : " + note);
 		nbActions = 0;
 		boolean avantage = false;
 		while (!avantage) {
@@ -62,7 +61,6 @@ public class JoueurIAAleatoireIntelligente extends Joueur {
 			}
 			nbActions = 0;
 		}
-		System.out.println("Nouvele note : " + nouvelleNote);
 		return true;
 	}
 

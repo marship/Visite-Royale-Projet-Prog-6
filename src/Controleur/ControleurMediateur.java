@@ -71,7 +71,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
         }
 
-        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
+        choixTypeJoueur(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE_INTELLIGENTE);
         choixTypeJoueur(JOUEUR_DROIT, JOUEUR_IAALEATOIRE_INTELLIGENTE);
         
         //jeu.changeCarteActuelle(8);

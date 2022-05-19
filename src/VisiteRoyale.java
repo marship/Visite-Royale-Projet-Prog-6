@@ -13,9 +13,7 @@ public class VisiteRoyale {
     // ===== MAIN =====
     // ================
     public static void main(String[] args) throws Exception {
-
         try {
-
             Jeu jeu = new Jeu();
             CollecteurEvenements controleurMediateur = new ControleurMediateur(jeu);
 
@@ -29,7 +27,6 @@ public class VisiteRoyale {
                 default:
                     Configuration.instance().logger().severe("Interface inconnue !!");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
