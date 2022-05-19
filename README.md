@@ -2,7 +2,7 @@
 
 ## Membres du groupe
 
-BALSA Raphaël
+BALSSA Raphaël
 CASAGRANDE Dorian
 FAURE-JEUNOT Paul
 FAURIE Alban
