@@ -50,6 +50,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ===== ETAT JEU =====
     // ====================
     static InfoJeu ETAT_JEU = InfoJeu.DEBUT_TOUR;
+    InfoJeu preOptions;
 
     Jeu jeu;
     InterfaceUtilisateur interfaceUtilisateur;
@@ -308,16 +309,26 @@ public class ControleurMediateur implements CollecteurEvenements {
     public boolean commande(String commande) {
         switch (commande) {
             case "Jouer":
-                interfaceUtilisateur.afficherPanneau("Jouer");
+                ETAT_JEU = InfoJeu.SELECTION_JOUEURS;
+                interfaceUtilisateur.afficherPanneau("SelectionJoueur");
                 break;
             case "MenuPrincipal":
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
+                break;
+            case "Valider":
+                if(!jeu.estPartieEnCours()){
+                    jeu.plateau().initialisation();
+                    interfaceUtilisateur.afficherPanneau("Plateau");
+                }
+                jeu.changerEtatPartie();
+                interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Charger":
                 break;
             case "Regles":
                 break;
             case "Options":
+                ETAT_JEU = InfoJeu.OPTIONS_MENU;
                 interfaceUtilisateur.afficherPanneau("Options");
                 break;
             case "Quitter":
@@ -332,6 +343,29 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "pause":
                 jeu.changerEtatPartie();
+                break;
+            case "OptionsJeu":
+                preOptions = ETAT_JEU;
+                ETAT_JEU = InfoJeu.OPTIONS_JEU;
+                interfaceUtilisateur.afficherPanneau("OptionsJeu");
+                break;
+                
+            case "Recommencer":
+                if(jeu.estPartieEnCours()) {
+                    jeu.plateau().initialisation();
+                    interfaceUtilisateur.afficherPanneau("Plateau");
+                } else {
+                    System.out.println("On recommence la partie de zéro");
+                }
+                break;
+            case "SauvegarderQuitter":
+                //jeu.changerEtatPartie();
+                ETAT_JEU = InfoJeu.MENU_PRINCIPAL;
+                interfaceUtilisateur.afficherPanneau("MenuPrincipal");
+                break;
+            case "RetourJeu":
+                ETAT_JEU = preOptions;
+                interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "AnnulerTour":
                 jeu.annulerTour();

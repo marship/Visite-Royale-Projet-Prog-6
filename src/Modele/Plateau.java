@@ -76,7 +76,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         initialisation();
     }
 
-    void initialisation() {
+    public void initialisation() {
         joueurCourant = JOUEUR_DROIT;
 
         gardeGauche = new Personnage(GARDE_GAUCHE, POSITION_BASE_GARDE_GAUCHE);

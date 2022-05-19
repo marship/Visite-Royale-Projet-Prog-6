@@ -8,8 +8,8 @@ import Modele.Jeu;
 
 public class JoueurHumain extends Joueur {
 
-	static final InfoJeu MENU_PRICIPAL = InfoJeu.MENU_PRICIPAL;
-	static final InfoJeu OPTIONS = InfoJeu.OPTIONS;
+	static final InfoJeu MENU_PRICIPAL = InfoJeu.MENU_PRINCIPAL;
+	static final InfoJeu OPTIONS = InfoJeu.OPTIONS_MENU;
 	static final InfoJeu DEBUT_TOUR = InfoJeu.DEBUT_TOUR;
 	static final InfoJeu CHOIX_GARDE = InfoJeu.CHOIX_GARDE;
 	static final InfoJeu CHOIX_FOU = InfoJeu.CHOIX_FOU;

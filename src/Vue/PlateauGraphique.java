@@ -45,6 +45,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
     ImagePlateau imageCarteSorcierUn, imageCarteSorcierDeux, imageCarteSorcierTrois;
     ImagePlateau imageCarteGardesUn, imageCarteGardesUnPlusUn, imageCarteGardesRaproche;
 
+    // =========================
+    // = IMAGES CARTES GRISES ==
+    // =========================
+    ImagePlateau imageCarteRoiGrise;
+    ImagePlateau imageCarteFouUnGrise, imageCarteFouDeuxGrise, imageCarteFouTroisGrise, imageCarteFouQuatreGrise, imageCarteFouCinqGrise, imageCarteFouMGrise;
+    ImagePlateau imageCarteSorcierUnGrise, imageCarteSorcierDeuxGrise, imageCarteSorcierTroisGrise; 
+    ImagePlateau imageCarteGardesUnGrise, imageCarteGardesUnPlusUnGrise, imageCarteGardesRaprocheGrise;
+
     // =============================================
     // ===== INFO POSITIONS ELEMENTS GRAPHIQUE =====
     // =============================================
@@ -200,40 +208,45 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
 
         Carte[] cartesJoueurCourant = jeu.recupererMainJoueur(jeu.joueurCourant());
-        ImagePlateau image;
+        ImagePlateau image = imageCarteErreur;
+        ImagePlateau imageGrise = imageCarteErreur;
 
         debutCartesX = largeurFenetre / 16;
         debutCartesY = 6 * hauteurFenetre / 7;
-
-        int[] carteFaisables = jeu.listeCarteJouable();
 
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
             switch (cartesJoueurCourant[i].personnage()) {
                 case ROI:
                     image = imageCarteRoi;
+                    imageGrise = imageCarteRoiGrise;
                     break;
                 case FOU:
                     switch (cartesJoueurCourant[i].deplacement()) {
                         case UN:
                             image = imageCarteFouUn;
+                            imageGrise = imageCarteFouUnGrise;
                             break;
                         case DEUX:
                             image = imageCarteFouDeux;
+                            imageGrise = imageCarteFouDeuxGrise;
                             break;
                         case TROIS:
                             image = imageCarteFouTrois;
+                            imageGrise = imageCarteFouTroisGrise;
                             break;
                         case QUATRE:
                             image = imageCarteFouQuatre;
+                            imageGrise = imageCarteFouQuatreGrise;
                             break;
                         case CINQ:
                             image = imageCarteFouCinq;
+                            imageGrise = imageCarteFouCinqGrise;
                             break;
                         case MILIEU:
                             image = imageCarteFouM;
+                            imageGrise = imageCarteFouMGrise;
                             break;
                         default:
-                            image = imageCarteErreur;
                             break;
                     }
                     break;
@@ -241,15 +254,17 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     switch (cartesJoueurCourant[i].deplacement()) {
                         case UN:
                             image = imageCarteSorcierUn;
+                            imageGrise = imageCarteSorcierUnGrise;
                             break;
                         case DEUX:
                             image = imageCarteSorcierDeux;
+                            imageGrise = imageCarteSorcierDeuxGrise;
                             break;
                         case TROIS:
                             image = imageCarteSorcierTrois;
+                            imageGrise = imageCarteSorcierTroisGrise;
                             break;
                         default:
-                            image = imageCarteErreur;
                             break;
                     }
                     break;
@@ -257,34 +272,35 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     switch (cartesJoueurCourant[i].deplacement()) {
                         case UN:
                             image = imageCarteGardesUn;
+                            imageGrise = imageCarteGardesUnGrise;
                             break;
                         case UN_PLUS_UN:
                             image = imageCarteGardesUnPlusUn;
+                            imageGrise = imageCarteGardesUnPlusUnGrise;
                             break;
                         case RAPPROCHE:
                             image = imageCarteGardesRaproche;
+                            imageGrise = imageCarteGardesRaprocheGrise;
                             break;
                         default:
-                            image = imageCarteErreur;
                             break;
                     }
                     break;
                 case VIDE:
-                    image = imageCarteVide;
+                    imageGrise = imageCarteVide;
                     break;
                 default:
-                    image = imageCarteErreur;
                     break;
             }
-            tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            if(jeu.carteJouable(cartesJoueurCourant[i])){
+                tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            }else{
+                tracerImage(imageGrise, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            }
             if(jeu.cartePasse() == i){
                 dessinable.setColor(new Color(255,255,0));
                 dessinable.setStroke(new BasicStroke(5f));
                 dessinable.drawRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
-            }
-            if(carteFaisables[i] == 0){
-                dessinable.setColor(new Color(150,150,150));
-                dessinable.fillRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
             if(jeu.carteActuelle() == i){
                 dessinable.setColor(new Color(255,0,0));
@@ -415,6 +431,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
         return ImagePlateau.getImage(in);
     }
 
+    private ImagePlateau chargeImageGrise(String nomImage) {
+        System.out.println("Chargement de l'image : " + nomImage);
+        InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
+        return ImagePlateau.getImageGrise(in);
+    }
+
     public void tracerImage(ImagePlateau image, int x, int y, int largeurCase, int hauteurCase) {
         dessinable.drawImage(image.image(), x, y, largeurCase, hauteurCase, null);
     }
@@ -466,6 +488,25 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageBandeauTour = chargeImage("Bandeau_Tour");
         imageCadreCartesPosees = chargeImage("Cadre_Cartes_Posees");
         imageCadrePiocheDefausse = chargeImage("Cadre_Pioche_Defausse");
+
+
+        imageCarteRoiGrise = chargeImageGrise("Roi_1");
+
+        imageCarteFouUnGrise = chargeImageGrise("Fou_1");
+        imageCarteFouDeuxGrise = chargeImageGrise("Fou_2");
+        imageCarteFouTroisGrise = chargeImageGrise("Fou_3");
+        imageCarteFouQuatreGrise = chargeImageGrise("Fou_4");
+        imageCarteFouCinqGrise = chargeImageGrise("Fou_5");
+        imageCarteFouMGrise = chargeImageGrise("Fou_M");
+
+        imageCarteSorcierUnGrise = chargeImageGrise("Sorcier_1");
+        imageCarteSorcierDeuxGrise = chargeImageGrise("Sorcier_2");
+        imageCarteSorcierTroisGrise = chargeImageGrise("Sorcier_3");
+
+        imageCarteGardesUnGrise = chargeImageGrise("Garde_1");
+        imageCarteGardesUnPlusUnGrise = chargeImageGrise("Garde_1plus1");
+        imageCarteGardesRaprocheGrise = chargeImageGrise("Garde_Rapproche");
+
     }
 
     // ============================

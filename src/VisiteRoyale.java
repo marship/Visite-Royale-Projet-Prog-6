@@ -22,7 +22,9 @@ public class VisiteRoyale {
                     InterfaceTextuelle.demarrer(jeu, controleurMediateur);
                     break;
                 case "Graphique":
+                    jeu.changerEtatPartie();
                     InterfaceGraphique.demarrer(jeu, controleurMediateur);
+                    
                     break;
                 default:
                     Configuration.instance().logger().severe("Interface inconnue !!");
