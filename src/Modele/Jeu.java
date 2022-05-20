@@ -11,7 +11,7 @@ import Structures.Sequence;
 
 public class Jeu extends Observable {
 
-    Plateau plateau;
+    public Plateau plateau;
     int nombreTour; // TODO nombre Tour de jeu
     boolean partieEnCours = false;
     boolean partieTerminee = false;

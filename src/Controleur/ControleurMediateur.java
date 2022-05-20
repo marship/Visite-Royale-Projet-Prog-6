@@ -8,6 +8,7 @@ import Joueur.JoueurHumain;
 import Joueur.JoueurIAAleatoire;
 import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIAExperte;
+import Joueur.JoueurIAnastasia;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
@@ -76,11 +77,11 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoire(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE_INTELLIGENTE] = new JoueurIAAleatoireIntelligente(i, jeu);
-            joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAExperte(i, jeu);
+            joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAnastasia(i, jeu);
         }
 
         changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE_INTELLIGENTE);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_IAALEATOIRE);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         joueurCourant = jeu.joueurCourant();
     }
