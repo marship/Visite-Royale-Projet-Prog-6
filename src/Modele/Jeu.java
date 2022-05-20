@@ -16,6 +16,7 @@ public class Jeu extends Observable {
     boolean partieEnCours = false;
     boolean partieTerminee = false;
     public boolean teleportationFaite = false;
+    public boolean mainJoueurSecondaireVisible = false;
     public Element dernierTypeDePersonnageJouer;
     public Element personnageManipulerParLeFou;
     public int carteActuelle = 8;
@@ -104,6 +105,11 @@ public class Jeu extends Observable {
         } else {
             return false;
         }
+    }
+
+    public void mainJoueurSecondaireVisible(){
+        mainJoueurSecondaireVisible = !mainJoueurSecondaireVisible;
+        metAJour();
     }
 
     // ====================
@@ -309,6 +315,13 @@ public class Jeu extends Observable {
 
     public int joueurCourant() {
         return plateau().joueurCourant;
+    }
+
+    public int joueurSecondaire() {
+        if(plateau().joueurCourant == 0){
+            return 1;
+        }
+        return 0;
     }
 
     public int joueurGagnant() {

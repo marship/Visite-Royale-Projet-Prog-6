@@ -135,6 +135,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         } else {
             tracerImageElement(Element.COURONNE, imageJetonPetiteCouronne);
         }
+       
         tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGauche);
         tracerImageElement(Element.ROI, imageJetonRoi);
         tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroit);
@@ -322,10 +323,83 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         debutCartesX = largeurFenetre / 16;
         debutCartesY = 0;
-
-        for (int i = 0; i < 8; i++) {
-            tracerImage(imageDosCarte, (4 + i) * debutCartesX, 0, largeurCarte, hauteurCarte);
+        ImagePlateau image = imageDosCarte;
+        if(!jeu.mainJoueurSecondaireVisible){
+            for (int i = 0; i < 8; i++) {
+                tracerImage(image, (4 + i) * debutCartesX, 0, largeurCarte, hauteurCarte);
+            }
         }
+        else{
+            Carte[] cartesJoueurSecondaire = jeu.recupererMainJoueur(jeu.joueurSecondaire());
+            for (int i = 0; i < cartesJoueurSecondaire.length; i++) {
+                switch (cartesJoueurSecondaire[i].personnage()) {
+                    case ROI:
+                        image = imageCarteRoi;
+                        break;
+                    case FOU:
+                        switch (cartesJoueurSecondaire[i].deplacement()) {
+                            case UN:
+                                image = imageCarteFouUn;
+                                break;
+                            case DEUX:
+                                image = imageCarteFouDeux;
+                                break;
+                            case TROIS:
+                                image = imageCarteFouTrois;
+                                break;
+                            case QUATRE:
+                                image = imageCarteFouQuatre;
+                                break;
+                            case CINQ:
+                                image = imageCarteFouCinq;
+                                break;
+                            case MILIEU:
+                                image = imageCarteFouM;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case SORCIER:
+                        switch (cartesJoueurSecondaire[i].deplacement()) {
+                            case UN:
+                                image = imageCarteSorcierUn;
+                                break;
+                            case DEUX:
+                                image = imageCarteSorcierDeux;
+                                break;
+                            case TROIS:
+                                image = imageCarteSorcierTrois;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case GARDES:
+                        switch (cartesJoueurSecondaire[i].deplacement()) {
+                            case UN:
+                                image = imageCarteGardesUn;
+                                break;
+                            case UN_PLUS_UN:
+                                image = imageCarteGardesUnPlusUn;
+                                break;
+                            case RAPPROCHE:
+                                image = imageCarteGardesRaproche;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case VIDE:
+                        break;
+                    default:
+                        break;
+                }
+                tracerImage(image, (4 + i) * debutCartesX, 0, largeurCarte, hauteurCarte);
+            }
+        }
+
+        
     }
 
     public void afficherZoneCartesJouees() {
