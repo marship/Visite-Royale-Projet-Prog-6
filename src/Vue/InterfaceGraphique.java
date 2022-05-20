@@ -9,6 +9,8 @@ import java.io.IOException;
 
 import javax.swing.border.EmptyBorder;
 
+import Global.InfoJeu;
+
 
 public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUtilisateur, Observateur{
 	
@@ -21,8 +23,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
                 boutonRetourArriere, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
                     
 	CardLayout layout; 
-    JPanel panelCourant, panelMenuPrincipal, panelPlateau, panelSelectionJoueurs;
-	ArrierePlan panelOptions, panelOptionsJeu;
+    JPanel panelCourant, panelMenuPrincipal, panelOptions, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
+	 
     JFrame fenetre;
 
     private int hauteurFenetre;
@@ -105,7 +107,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         int borderBottom = hauteurFenetre / 10;
         int borderSides = largeurFenetre / 4;
 
-		panelMenuPrincipal = new ArrierePlan("res/Images/Background_Menu.png");
+		panelMenuPrincipal = new MenuGraphique(InfoJeu.MENU_PRINCIPAL);
 		panelMenuPrincipal.setLayout(new GridLayout(0,1,0,30));
 		panelMenuPrincipal.setBorder(new EmptyBorder(borderTop,borderSides,borderBottom,borderSides));
 
@@ -136,7 +138,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         int borderBottom = hauteurFenetre / 3;
         int borderSides = largeurFenetre / 3;
 
-        panelSelectionJoueurs = new ArrierePlan("res/Images/Background_Selection.png");
+        panelSelectionJoueurs = new MenuGraphique(InfoJeu.SELECTION_JOUEURS);
         panelSelectionJoueurs.setLayout(new GridBagLayout());
 
         panelSelectionJoueurs.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
@@ -236,7 +238,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         int borderBottom = hauteurFenetre / 10;
         int borderSides = largeurFenetre / 3;
 
-        panelOptions = new ArrierePlan("res/Images/Background_Options.png");
+        panelOptions = new MenuGraphique(InfoJeu.OPTIONS_MENU);
         panelOptions.setLayout(new GridLayout(0, 1, 0, 30));
         panelOptions.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
 
@@ -246,11 +248,12 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         musique.setMinorTickSpacing(5);
         musique.setOpaque(false);
         musique.setPaintLabels(true);
+        musique.setMaximumSize(new Dimension(200, 30));
     
         
         Container musiqueBox = Box.createHorizontalBox();
         musiqueBox.add(musique);
-        musiqueBox.add(Box.createHorizontalGlue());
+        //musiqueBox.add(Box.createHorizontalGlue());
         musiqueBox.add(txtMusique);
     
         panelOptions.add(musiqueBox);
@@ -336,7 +339,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         int borderBottom = hauteurFenetre / 10;
         int borderSides = largeurFenetre / 3;
 
-        panelOptionsJeu = new ArrierePlan("res/Images/Background_Options.png");
+        panelOptionsJeu = new MenuGraphique(InfoJeu.OPTIONS_JEU);
         panelOptionsJeu.setLayout(new GridLayout(0, 1, 0, 30));
         panelOptionsJeu.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
 
@@ -393,6 +396,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     @Override
     public void miseAJour() {
         fenetre.repaint();
+        hauteurFenetre = fenetre.getHeight();
+        largeurFenetre = fenetre.getWidth();
     }
 
     @Override
