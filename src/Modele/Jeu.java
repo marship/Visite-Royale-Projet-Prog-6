@@ -41,7 +41,6 @@ public class Jeu extends Observable {
     int POSITION_DEBUT_TOUR_GARDE_SORCIER = 1;
     int JOUEUR_DEBUT_TOUR = 1;
 
-
     // ==================
     // ===== JOUEUR =====
     // ==================
@@ -247,20 +246,20 @@ public class Jeu extends Observable {
         }
     }
 
-    public int carteActuelle(){
+    public int carteActuelle() {
         return carteActuelle;
     }
 
-    public void changeCarteActuelle(int i){
+    public void changeCarteActuelle(int i) {
         carteActuelle = i;
         metAJour();
     }
 
-    public int cartePasse(){
+    public int cartePasse() {
         return cartePassee;
     }
 
-    public void choisirPasserSurCarte(int i){
+    public void choisirPasserSurCarte(int i) {
         cartePassee = i;
         metAJour();
     }
@@ -269,7 +268,7 @@ public class Jeu extends Observable {
         plateau().echangerFouSorcier();
     }
 
-    public void annulerTour(){
+    public void annulerTour() {
         obtenirPersonnageElement(ROI).positionnerPersonnage(POSITION_DEBUT_TOUR_ROI);
         obtenirPersonnageElement(FOU).positionnerPersonnage(POSITION_DEBUT_TOUR_FOU);
         obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(POSITION_DEBUT_TOUR_GARDE_DROIT);
@@ -278,7 +277,7 @@ public class Jeu extends Observable {
         plateau().paquet.completerCartesEnMain(joueurCourant());
         personnageManipulerParLeFou = FOU;
         dernierTypeDePersonnageJouer = VIDE;
-        if(joueurCourant() != JOUEUR_DEBUT_TOUR){
+        if (joueurCourant() != JOUEUR_DEBUT_TOUR) {
             plateau().joueurCourant = JOUEUR_DEBUT_TOUR;
         }
         metAJour();
@@ -335,22 +334,23 @@ public class Jeu extends Observable {
             case COURONNE_GAGNANTE:
                 partieTerminee = true;
                 partieEnCours = false;
-                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " avec la couronne !!");
+                Configuration.instance().logger()
+                        .info("Victoire du joueur " + plateau().joueurGagnant + " avec la couronne !!");
                 break;
             case ROI_GAGNANT:
                 partieTerminee = true;
                 partieEnCours = false;
-                Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " avec le roi !!");
+                Configuration.instance().logger()
+                        .info("Victoire du joueur " + plateau().joueurGagnant + " avec le roi !!");
                 break;
             default:
                 Configuration.instance().logger().warning("Condition de victoire inconnue !!");
                 break;
         }
-        if(plateau().victoirePioche){
+        if (plateau().victoirePioche) {
             partieTerminee = true;
             partieEnCours = false;
             Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la pioche !!");
-                
         }
         metAJour();
     }
@@ -402,7 +402,7 @@ public class Jeu extends Observable {
         metAJour();
     }
 
-    void fixerPositions(){
+    void fixerPositions() {
         POSITION_DEBUT_TOUR_FOU = obtenirPositionElement(FOU);
         POSITION_DEBUT_TOUR_GARDE_DROIT = obtenirPositionElement(GARDE_DROIT);
         POSITION_DEBUT_TOUR_GARDE_GAUCHE = obtenirPositionElement(GARDE_GAUCHE);
@@ -547,7 +547,7 @@ public class Jeu extends Observable {
     }
 
     public boolean carteJouable(Carte carteCourante) {
-        if(carteCourante.personnage() == dernierTypeDePersonnageJouer || dernierTypeDePersonnageJouer == VIDE){
+        if (carteCourante.personnage() == dernierTypeDePersonnageJouer || dernierTypeDePersonnageJouer == VIDE) {
             return true;
         }
         return false;
@@ -568,22 +568,20 @@ public class Jeu extends Observable {
         Carte[] listeCarte = plateau().paquet.carteSelonPerso(plateau().joueurCourant, perso);
         int positionDeBase = obtenirPositionElement(perso);
         if (perso == GARDE_GAUCHE || perso == GARDE_DROIT) {
-            listeCarte = plateau().paquet.carteSelonPerso(plateau().joueurCourant, Element.GARDES);
-            Element[] per = new Element[2];
-            int[] base = new int[2];
-            per[0] = perso;
-            base[0] = obtenirPositionElement(perso);
+            Carte[] listeCarte2 = plateau().paquet.carteSelonPerso(plateau().joueurCourant, Element.GARDES);
             if (perso == GARDE_GAUCHE) {
-                per[1] = GARDE_DROIT;
-                base[1] = obtenirPositionElement(GARDE_DROIT);
+                int pos2 = obtenirPositionElement(GARDE_DROIT);
+                positionAccessibleAvecPerso = selonLePersoMaisEnRecurcifPersoGardes(GARDE_GAUCHE, GARDE_DROIT,
+                        listeCarte2, positionAccessibleAvecPerso, positionDeBase, pos2);
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(positionDeBase);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(pos2);
             } else {
-                per[1] = GARDE_GAUCHE;
-                base[1] = obtenirPositionElement(GARDE_GAUCHE);
+                int pos2 = obtenirPositionElement(GARDE_GAUCHE);
+                positionAccessibleAvecPerso = selonLePersoMaisEnRecurcifPersoGardes(GARDE_DROIT, GARDE_GAUCHE,
+                        listeCarte2, positionAccessibleAvecPerso, positionDeBase, pos2);
+                obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(positionDeBase);
+                obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(pos2);
             }
-            positionAccessibleAvecPerso = selonLePersoMaisEnRecurcifPersoGardes(per, listeCarte,
-                    positionAccessibleAvecPerso, base);
-            obtenirPersonnageElement(per[0]).positionnerPersonnage(base[0]);
-            obtenirPersonnageElement(per[1]).positionnerPersonnage(base[1]);
             return positionAccessibleAvecPerso;
         }
         positionAccessibleAvecPerso = selonLePersoMaisEnRecurcifPersoBase(perso, listeCarte,
@@ -592,7 +590,8 @@ public class Jeu extends Observable {
         return positionAccessibleAvecPerso;
     }
 
-    public int[] selonLePersoMaisEnRecurcifPersoBase(Element perso, Carte[] listeCarte, int[] positions, int positionRelatif) {
+    public int[] selonLePersoMaisEnRecurcifPersoBase(Element perso, Carte[] listeCarte, int[] positions,
+            int positionRelatif) {
         int i = 0;
         Carte vide = new Carte(VIDE, Deplacement.VIDE);
         while (i < 8) {
@@ -616,58 +615,70 @@ public class Jeu extends Observable {
         return positions;
     }
 
-    public int[] selonLePersoMaisEnRecurcifPersoGardes(Element[] perso, Carte[] listeCarte, int[] positions,
-            int[] positionRelatif) {
+    public int[] selonLePersoMaisEnRecurcifPersoGardes(Element perso1, Element perso2, Carte[] listeCarte,
+            int[] positions, int positionRelatif1, int positionRelatif2) {
         int i = 0;
         Carte vide = new Carte(VIDE, Deplacement.VIDE);
         while (i < 8) {
-            obtenirPersonnageElement(perso[0]).positionnerPersonnage(positionRelatif[0]);
-            obtenirPersonnageElement(perso[1]).positionnerPersonnage(positionRelatif[1]);
+            obtenirPersonnageElement(perso1).positionnerPersonnage(positionRelatif1);
+            obtenirPersonnageElement(perso2).positionnerPersonnage(positionRelatif2);
             Carte carte = listeCarte[i];
             Carte[] sansLaCarte = Arrays.copyOf(listeCarte, 8);
             sansLaCarte[i] = vide;
             if (!carte.estIdentique(vide)) {
-                int[] deplacementRelatif = listeDeplacementPossiblesAvecCarte(perso[0], carte.deplacement());
+                int[] deplacementRelatif = listeDeplacementPossiblesAvecCarte(perso1, carte.deplacement());
                 positions = fustionTableau(positions, deplacementRelatif);
                 int j = 0;
                 while (j < TAILLE_DU_PLATEAU) {
-                    System.out.println(j);
                     if (deplacementRelatif[j] == 1) {
                         if (carte.deplacement() == Deplacement.UN_PLUS_UN) {
-                            if (perso[0] == GARDE_GAUCHE) {
-                                if (j == obtenirPositionElement(GARDE_GAUCHE) - 1) {
-                                    positionRelatif[0] = j - 8;
-                                    positionRelatif[1] = obtenirPositionElement(GARDE_DROIT) - 1;
+                            if (perso1 == GARDE_GAUCHE) {
+                                if (j == positionRelatif1 - 2) {
+                                    positionRelatif1 = j - 8;
                                 }
-                                if (j == obtenirPositionElement(GARDE_GAUCHE) + 1) {
-                                    positionRelatif[0] = j - 8;
-                                    positionRelatif[1] = obtenirPositionElement(GARDE_DROIT) + 1;
+                                if (j == positionRelatif1 - 1) {
+                                    positionRelatif1 = j - 8;
+                                    positionRelatif2 = positionRelatif2 - 1;
+                                }
+                                if (j == positionRelatif1 + 1) {
+                                    positionRelatif1 = j - 8;
+                                    positionRelatif2 = positionRelatif2 + 1;
+                                }
+                                if (j == positionRelatif1 + 2) {
+                                    positionRelatif1 = j - 8;
                                 }
                             } else {
-                                if (j == obtenirPositionElement(GARDE_DROIT) - 1) {
-                                    positionRelatif[0] = j - 8;
-                                    positionRelatif[1] = obtenirPositionElement(GARDE_GAUCHE) - 1;
+                                if (j == positionRelatif1 - 2) {
+                                    positionRelatif1 = j - 8;
                                 }
-                                if (j == obtenirPositionElement(GARDE_DROIT) + 1) {
-                                    positionRelatif[0] = j - 8;
-                                    positionRelatif[1] = obtenirPositionElement(GARDE_GAUCHE) - 1;
+                                if (j == positionRelatif1 - 1) {
+                                    positionRelatif1 = j - 8;
+                                    positionRelatif2 = positionRelatif2 - 1;
+                                }
+                                if (j == positionRelatif1 + 1) {
+                                    positionRelatif1 = j - 8;
+                                    positionRelatif2 = positionRelatif2 - 1;
+                                }
+                                if (j == positionRelatif1 + 2) {
+                                    positionRelatif1 = j - 8;
                                 }
                             }
                         }
                         if (carte.deplacement() == Deplacement.RAPPROCHE) {
-                            if (perso[0] == GARDE_GAUCHE) {
-                                positionRelatif[0] = obtenirPositionElement(ROI) - 1;
-                                positionRelatif[1] = obtenirPositionElement(ROI) + 1;
+                            if (perso1 == GARDE_GAUCHE) {
+                                positionRelatif1 = obtenirPositionElement(ROI) - 1;
+                                positionRelatif2 = obtenirPositionElement(ROI) + 1;
                             } else {
-                                positionRelatif[0] = obtenirPositionElement(ROI) + 1;
-                                positionRelatif[1] = obtenirPositionElement(ROI) - 1;
+                                positionRelatif1 = obtenirPositionElement(ROI) + 1;
+                                positionRelatif2 = obtenirPositionElement(ROI) - 1;
                             }
-                        } else {
-                            positionRelatif[0] = j - 8;
                         }
-                        positions = selonLePersoMaisEnRecurcifPersoGardes(perso, sansLaCarte, positions,
-                                positionRelatif);
+                        if (carte.deplacement() == Deplacement.UN) {
+                            positionRelatif1 = j - 8;
+                        }
                     }
+                    positions = selonLePersoMaisEnRecurcifPersoGardes(perso1, perso2, sansLaCarte, positions,
+                            positionRelatif1, positionRelatif2);
                     j++;
                 }
             }
@@ -815,7 +826,8 @@ public class Jeu extends Observable {
                         personnageManipulerParLeFou(GARDE_GAUCHE);
                         positionAccessibleAvecCarte = listeDeplacementPossiblesAvecCarte(FOU, deplace);
                         personnageManipulerParLeFou(GARDE_DROIT);
-                        positionAccessibleAvecCarte = fustionTableau(positionAccessibleAvecCarte, listeDeplacementPossiblesAvecCarte(FOU, deplace));
+                        positionAccessibleAvecCarte = fustionTableau(positionAccessibleAvecCarte,
+                                listeDeplacementPossiblesAvecCarte(FOU, deplace));
                         personnageManipulerParLeFou(el);
                         break;
                     case GARDE_GAUCHE:
@@ -1007,7 +1019,7 @@ public class Jeu extends Observable {
     // ===== HISTORIQUE =====
     // ======================
     public Plateau annule() {
-        if(estPartieTerminee()){
+        if (estPartieTerminee()) {
             plateau().joueurGagnant = AUCUN_GAGNANT;
         }
         // Plateau plateau = plateau().annuler();
