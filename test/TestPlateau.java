@@ -306,6 +306,20 @@ public class TestPlateau {
     }
 
     @Test
+    public void testAnnulerTour() {
+        // NON
+
+        /*Carte[] cartes = jeu.recupererMainJoueur(jeu.joueurCourant());
+        jeu.jouerCarte(Element.GARDE_GAUCHE,jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[0].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[0].deplacement().getValeurDeplacement(), 0);
+        jeu.annulerTour();
+        assertEquals(jeu.obtenirPositionElement(Element.GARDE_GAUCHE) , jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[0].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[0].deplacement().getValeurDeplacement());
+        assertEquals(Element.FOU, jeu.personnageManipulerParLeFou);
+        assertEquals(Element.VIDE, jeu.dernierTypeDePersonnageJouer);
+        assertEquals(cartes[0],jeu.recupererMainJoueur(jeu.joueurCourant())[0]);*/
+
+    }
+
+    @Test
     public void testChoixPremierJoueur() {
         // Fonctionne
 
@@ -315,7 +329,7 @@ public class TestPlateau {
         jeu.choixPremierJoueur(0);
         assertEquals(0,jeu.plateau().joueurCourant);
         assertEquals(-1,jeu.obtenirPositionElement(Element.SORCIER));
-        assertEquals(1,jeu.obtenirPositionElement(Element.FOU));
+        assertEquals(1,jeu.obtenirPositionElement(Element.FOU));     
 
     }
 
@@ -589,13 +603,25 @@ public class TestPlateau {
 
     @Test
     public void testMajDernierTypeDePersonnageJouer() {
-        // (à revoir)
+        // Fonctionne
 
         //jeu.jouerCarte(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage(), 3, 5);
         //jeu.majDernierTypeDePersonnageJouer(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage());
-        jeu.majDernierTypeDePersonnageJouer(Element.SORCIER);
         //assertEquals(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage(), jeu.dernierTypeDePersonnageJouer);
+        jeu.majDernierTypeDePersonnageJouer(Element.SORCIER);
         assertEquals(Element.SORCIER, jeu.dernierTypeDePersonnageJouer);
+
+        jeu.majDernierTypeDePersonnageJouer(Element.FOU);
+        assertEquals(Element.FOU, jeu.dernierTypeDePersonnageJouer);
+
+        jeu.majDernierTypeDePersonnageJouer(Element.ROI);
+        assertEquals(Element.ROI, jeu.dernierTypeDePersonnageJouer);
+
+        jeu.majDernierTypeDePersonnageJouer(Element.GARDE_DROIT);
+        assertEquals(Element.GARDE_DROIT, jeu.dernierTypeDePersonnageJouer);
+
+        jeu.majDernierTypeDePersonnageJouer(Element.GARDE_GAUCHE);
+        assertEquals(Element.GARDE_GAUCHE, jeu.dernierTypeDePersonnageJouer);
 
     }
 
