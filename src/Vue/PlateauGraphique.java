@@ -158,7 +158,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
             while (i < 17) {
                 if (listeDeplacementPossiblesAvecCarte[i] == 1) {
                     dessinable.setColor(new Color(255, 0, 0));
-                    dessinable.fillOval(i * largeurCasePlateau + 20, 3 * quartHauteurPlateau, 20, 20);
+                    dessinable.setStroke(new BasicStroke(5f));
+                    dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
                 }
                 i++;
             }
@@ -177,7 +178,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
             while (i < 17) {
                 if (listeDeplacementPossiblesAvecCarte[i] == 1) {
                     dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(i * largeurCasePlateau + 20, 3 * quartHauteurPlateau, 20, 20);
+                    dessinable.setStroke(new BasicStroke(5f));
+                    dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
                 }
                 i++;
             }
