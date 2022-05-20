@@ -3,7 +3,6 @@ package Vue;
 import Global.Configuration;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 

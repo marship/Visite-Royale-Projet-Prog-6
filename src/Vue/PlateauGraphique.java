@@ -27,7 +27,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ==========================
     // ===== IMAGES PLATEAU =====
     // ==========================
-    ImagePlateau imagePlateau, imagePlateauGauche, imagePlateauDroit, imageBandeauTour, imageCadreCartesPosees, imageCadrePiocheDefausse;
+    ImagePlateau imagePlateau, imagePlateauGauche, imagePlateauDroit, imageBandeauTour, imageCadreCartesPosees,
+            imageCadrePiocheDefausse;
 
     // =========================
     // ===== IMAGES JETONS =====
@@ -49,8 +50,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // = IMAGES CARTES GRISES ==
     // =========================
     ImagePlateau imageCarteRoiGrise;
-    ImagePlateau imageCarteFouUnGrise, imageCarteFouDeuxGrise, imageCarteFouTroisGrise, imageCarteFouQuatreGrise, imageCarteFouCinqGrise, imageCarteFouMGrise;
-    ImagePlateau imageCarteSorcierUnGrise, imageCarteSorcierDeuxGrise, imageCarteSorcierTroisGrise; 
+    ImagePlateau imageCarteFouUnGrise, imageCarteFouDeuxGrise, imageCarteFouTroisGrise, imageCarteFouQuatreGrise,
+            imageCarteFouCinqGrise, imageCarteFouMGrise;
+    ImagePlateau imageCarteSorcierUnGrise, imageCarteSorcierDeuxGrise, imageCarteSorcierTroisGrise;
     ImagePlateau imageCarteGardesUnGrise, imageCarteGardesUnPlusUnGrise, imageCarteGardesRaprocheGrise;
 
     // =============================================
@@ -99,7 +101,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         quartHauteurPlateau = hauteurCasePlateau / 4;
 
         dessinable.clearRect(0, 0, largeurFenetre, hauteurFenetre);
-        dessinable.setColor(new Color(23, 74, 11)); //TODO choisir couleur
+        dessinable.setColor(new Color(23, 74, 11)); // TODO choisir couleur
         dessinable.fillRect(0, 0, largeurFenetre, hauteurFenetre);
 
         tracerPlateau();
@@ -122,17 +124,15 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===========================
     public void tracerPlateau() {
 
-        if(jeu.joueurCourant() == 1){
+        if (jeu.joueurCourant() == 1) {
             tracerImage(imagePlateauDroit, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
-        }
-        else{
+        } else {
             tracerImage(imagePlateauGauche, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
         }
 
-        if(jeu.getEtatCouronne()){
+        if (jeu.getEtatCouronne()) {
             tracerImageElement(Element.COURONNE, imageJetonGrandeCouronne);
-        }
-        else{
+        } else {
             tracerImageElement(Element.COURONNE, imageJetonPetiteCouronne);
         }
         tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGauche);
@@ -143,38 +143,44 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         tracerChoixPreView();
         tracerChoix();
-        
+
     }
 
-    void tracerChoix(){
-        if(jeu.carteActuelle() == 8){
-            return;
-        }
-        Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
-        int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(), carte.deplacement());
-        int i = 0;
-        while(i < 17){
-            if(listeDeplacementPossiblesAvecCarte[i] == 1){
-                dessinable.setColor(new Color(255,0,0));
-                dessinable.fillOval(i*largeurCasePlateau + 20, 3*quartHauteurPlateau, 20, 20);
+    void tracerChoix() {
+        if (jeu.actionAutoriser()) {
+            if (jeu.carteActuelle() == 8) {
+                return;
             }
-            i++;
+            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
+            int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(),
+                    carte.deplacement());
+            int i = 0;
+            while (i < 17) {
+                if (listeDeplacementPossiblesAvecCarte[i] == 1) {
+                    dessinable.setColor(new Color(255, 0, 0));
+                    dessinable.fillOval(i * largeurCasePlateau + 20, 3 * quartHauteurPlateau, 20, 20);
+                }
+                i++;
+            }
         }
     }
 
-    void tracerChoixPreView(){
-        if(jeu.cartePasse() == 8){
-            return;
-        }
-        Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.cartePasse()];
-        int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(), carte.deplacement());
-        int i = 0;
-        while(i < 17){
-            if(listeDeplacementPossiblesAvecCarte[i] == 1){
-                dessinable.setColor(new Color(255,255,0));
-                dessinable.fillOval(i*largeurCasePlateau + 20, 3*quartHauteurPlateau, 20, 20);
+    void tracerChoixPreView() {
+        if (jeu.actionAutoriser()) {
+            if (jeu.cartePasse() == 8) {
+                return;
             }
-            i++;
+            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.cartePasse()];
+            int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(),
+                    carte.deplacement());
+            int i = 0;
+            while (i < 17) {
+                if (listeDeplacementPossiblesAvecCarte[i] == 1) {
+                    dessinable.setColor(new Color(255, 255, 0));
+                    dessinable.fillOval(i * largeurCasePlateau + 20, 3 * quartHauteurPlateau, 20, 20);
+                }
+                i++;
+            }
         }
     }
 
@@ -197,12 +203,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
             default:
                 break;
         }
-        tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement, largeurCasePlateau, quartHauteurPlateau);
+        tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement,
+                largeurCasePlateau, quartHauteurPlateau);
     }
 
     public void afficherCartesJoueurCourant() {
-        
-        if(jeu.estPartieTerminee()){
+
+        if (jeu.estPartieTerminee()) {
             return;
         }
 
@@ -291,20 +298,20 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 default:
                     break;
             }
-            if(jeu.carteJouable(cartesJoueurCourant[i])){
+            if (jeu.carteJouable(cartesJoueurCourant[i])) {
                 tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
-            }else{
+            } else {
                 tracerImage(imageGrise, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
-            if(jeu.cartePasse() == i){
-                dessinable.setColor(new Color(255,255,0));
+            if (jeu.cartePasse() == i) {
+                dessinable.setColor(new Color(255, 255, 0));
                 dessinable.setStroke(new BasicStroke(5f));
-                dessinable.drawRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+                dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
-            if(jeu.carteActuelle() == i){
-                dessinable.setColor(new Color(255,0,0));
+            if (jeu.carteActuelle() == i) {
+                dessinable.setColor(new Color(255, 0, 0));
                 dessinable.setStroke(new BasicStroke(5f));
-                dessinable.drawRect((4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+                dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
         }
     }
@@ -324,8 +331,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
         ImagePlateau image;
         debutCartesX = largeurFenetre / 16;
         debutCartesY = 18 * hauteurFenetre / 28;
-        tracerImage(imageCadreCartesPosees, 4*debutCartesX, debutCartesY, 8*largeurCarte, hauteurCarte);
-        Sequence <Carte> cartesJouees = Configuration.instance().nouvelleSequence();; 
+        tracerImage(imageCadreCartesPosees, 4 * debutCartesX, debutCartesY, 8 * largeurCarte, hauteurCarte);
+        Sequence<Carte> cartesJouees = Configuration.instance().nouvelleSequence();
+        ;
         cartesJouees = jeu.plateau().paquet.copieSequence(jeu.plateau().paquet.tourActuel());
         Carte carte;
         int i = 0;
@@ -399,22 +407,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     image = imageCarteErreur;
                     break;
             }
-            tracerImage(image, (4+i)*debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
+            tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             i++;
         }
     }
 
     private void afficherPioche() {
-        int debutPiocheX = largeurFenetre/32;
+        int debutPiocheX = largeurFenetre / 32;
         int debutPiocheY = 18 * hauteurFenetre / 28;
-        if(jeu.plateau().paquet.pioche().taille() != 0){
+        if (jeu.plateau().paquet.pioche().taille() != 0) {
             tracerImage(imageDosCarte, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
-        }else{
+        } else {
             tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         }
         String msg = jeu.plateau().paquet.pioche().taille() + " cartes restantes";
-        tracerLabel(msg, debutPiocheX, debutPiocheY+hauteurCarte);
-        
+        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte);
+
     }
 
     public int positionJeton(int positionElement) {
@@ -441,13 +449,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public void tracerLabel(String texte, int x, int y) {
-        Font fonte = new Font(" TimesRoman ",Font.BOLD, 16);
+        Font fonte = new Font(" TimesRoman ", Font.BOLD, 16);
         dessinable.setFont(fonte);
         dessinable.setColor(Color.white);
         dessinable.drawString(texte, x, y);
     }
 
-    //TODO charger images depuis le fichier de configuration
+    // TODO charger images depuis le fichier de configuration
     private void chargementDesImages() {
         imagePlateau = chargeImage("Plateau");
         imagePlateauDroit = chargeImage("Previsualisation_Droite");
@@ -488,7 +496,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageCadreCartesPosees = chargeImage("Cadre_Cartes_Posees");
         imageCadrePiocheDefausse = chargeImage("Cadre_Pioche_Defausse");
 
-
         imageCarteRoiGrise = chargeImageGrise("Roi_1");
 
         imageCarteFouUnGrise = chargeImageGrise("Fou_1");
@@ -516,10 +523,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
         if (masquerPrevisualisation()) {
             dessinable.setColor(Color.BLACK);
         } else {
-            dessinable.setColor(Color.BLACK);  // YELLOW
+            dessinable.setColor(Color.BLACK); // YELLOW
         }
         dessinable.drawRect(x * debutZoneCartesX(), y * debutZoneCartesY(), largeurCarte(), hauteurCarte());
-        System.out.println("x = " + x * debutZoneCartesX() + ", y = " + debutZoneCartesY() + ", larg = " + largeurCarte() + ", haut = " + hauteurCarte());
+        System.out.println("x = " + x * debutZoneCartesX() + ", y = " + debutZoneCartesY() + ", larg = "
+                + largeurCarte() + ", haut = " + hauteurCarte());
     }
 
     public boolean masquerPrevisualisation() {
@@ -527,10 +535,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     /*
-    public boolean masquerPrevisualisationDebut() {
-        return jeu.estAuDebut();
-    }
-    */
+     * public boolean masquerPrevisualisationDebut() {
+     * return jeu.estAuDebut();
+     * }
+     */
 
     public boolean masquerPrevisualisationNonAutorisee() {
         return !jeu.actionAutoriser();
@@ -587,7 +595,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         return hauteurCarte;
     }
 
-    public int quartHauteurPlateau(){
+    public int quartHauteurPlateau() {
         return quartHauteurPlateau;
     }
 }

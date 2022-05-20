@@ -11,8 +11,6 @@ import java.io.InputStream;
 
 import javax.swing.SwingConstants;
 import Global.Configuration;
-import Global.Element;
-import Global.InfoPlateau;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,6 +1,5 @@
 package Joueur;
 
-import Global.InfoJeu;
 import Modele.Jeu;
 
 // Classe commune à tous les joueurs : IA ou humain

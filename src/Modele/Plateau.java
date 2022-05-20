@@ -2,7 +2,6 @@ package Modele;
 
 import Global.Configuration;
 import Global.Element;
-import Structures.Sequence;
 
 public class Plateau extends Historique<Coup> implements Cloneable {
 

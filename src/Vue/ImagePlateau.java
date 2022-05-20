@@ -1,7 +1,6 @@
 package Vue;
 
 import java.io.InputStream;
-import java.io.File;
 
 
 public abstract class ImagePlateau {
