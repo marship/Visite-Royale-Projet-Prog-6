@@ -24,8 +24,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
                     
 	CardLayout layout; 
     JPanel panelCourant, panelMenuPrincipal, panelOptions, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
-	 
-    JFrame fenetre;
+	
+    public JFrame fenetre;
 
     private int hauteurFenetre;
     private int largeurFenetre;
@@ -412,5 +412,10 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     public void previsualisation(int coupX, int coupY, int largeurPreselection, int hauteurPreselection) {
         plateauGraphique.tracerRectangle(coupX, coupY, largeurPreselection, hauteurPreselection);
         ((Component) plateauGraphique).repaint();
+    }
+
+    @Override
+    public JFrame fenetre(){
+        return fenetre;
     }
 }

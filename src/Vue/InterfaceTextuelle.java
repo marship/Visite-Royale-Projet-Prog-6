@@ -1,6 +1,9 @@
 package Vue;
 
 import java.util.Scanner;
+
+import javax.swing.JFrame;
+
 import Global.Configuration;
 import Global.Deplacement;
 import Global.Element;
@@ -407,5 +410,11 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     public void previsualisation(int coupX, int coupY, int largeurPreselection, int hauteurPreselection) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public JFrame fenetre() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

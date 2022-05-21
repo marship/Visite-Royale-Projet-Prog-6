@@ -13,7 +13,9 @@ import Structures.FAPListe;
 
 public class Paquet {
 
-    Sequence<Carte> pioche, defausse, tourActuel;
+    public Sequence<Carte> pioche;
+    Sequence<Carte> defausse;
+    Sequence<Carte> tourActuel;
     Object[][] mainJoueurs;
 
     // ===============================
@@ -515,7 +517,7 @@ public class Paquet {
     public Paquet clone() {
         Paquet res = null;
         try {
-            res = (Paquet) super.clone();
+            res = new Paquet();
             res.pioche = copieSequence(pioche);
             res.defausse = copieSequence(defausse);
             res.mainJoueurs[0] = copieTableau(0);

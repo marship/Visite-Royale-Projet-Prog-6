@@ -1,5 +1,6 @@
 package Joueur;
 
+import Global.Configuration;
 import Global.Element;
 import Modele.Carte;
 import Modele.Jeu;
@@ -17,10 +18,12 @@ public class JoueurIAnastasia extends Joueur {
     @Override
 	public boolean tempsEcoule() {
 
-
-        ListePlateaux lP = new ListePlateaux(jeu);
+        Sequence<Carte> pioche = jeu.plateau().paquet.copieSequence(jeu.plateau().paquet.pioche());
+        ListePlateaux lP = new ListePlateaux(jeu.plateau());
 
         Sequence<TroupleAtteindrePlateau> liste = lP.constructionListePlateau();
+
+        jeu.plateau().paquet.pioche = pioche;
 
         Evaluation eval = new Evaluation(jeu.plateau());
 		Double noteMax = eval.note(jeu.joueurCourant());
@@ -39,7 +42,7 @@ public class JoueurIAnastasia extends Joueur {
             }
         }
 
-        jeu.plateau = winner.gPlateau();
+        jeu = new Jeu(jeu.plateau());
         int i = 0;
         while(i < 8){
             Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[i];

@@ -1,5 +1,10 @@
 package Controleur;
 
+import java.io.File;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 import Global.Configuration;
 import Global.Element;
 import Global.InfoJeu;
@@ -326,6 +331,10 @@ public class ControleurMediateur implements CollecteurEvenements {
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Charger":
+                charge();
+                jeu.changerEtatPartie();
+                ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Regles":
                 break;
@@ -361,9 +370,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                 }
                 break;
             case "SauvegarderQuitter":
-                //jeu.changerEtatPartie();
-                ETAT_JEU = InfoJeu.MENU_PRINCIPAL;
-                interfaceUtilisateur.afficherPanneau("MenuPrincipal");
+                jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);
+                //ETAT_JEU = InfoJeu.MENU_PRINCIPAL;
+                //interfaceUtilisateur.afficherPanneau("MenuPrincipal");
                 break;
             case "RetourJeu":
                 ETAT_JEU = preOptions;
@@ -402,5 +411,17 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public void passerSurCarte(int coupX) {
         jeu.choisirPasserSurCarte(coupX);
+    }
+
+    public void charge() {
+        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes");
+        int returnVal = chooser.showOpenDialog(interfaceUtilisateur.fenetre());
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            JOptionPane.showMessageDialog(null,"Vous n'avez rien selectionne");
+            return;
+        }
+        int[] type = jeu.charger(chooser.getSelectedFile().getPath());
+        typeJoueur[0] = type[0];
+        typeJoueur[1] = type[1];
     }
 }

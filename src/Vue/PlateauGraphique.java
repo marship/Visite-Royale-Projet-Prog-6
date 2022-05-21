@@ -135,7 +135,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         } else {
             tracerImageElement(Element.COURONNE, imageJetonPetiteCouronne);
         }
-       
+        
         tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGauche);
         tracerImageElement(Element.ROI, imageJetonRoi);
         tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroit);
