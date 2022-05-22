@@ -85,7 +85,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAnastasia(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE_INTELLIGENTE);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAEXPERTE);
         changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         joueurCourant = jeu.joueurCourant();

@@ -520,6 +520,7 @@ public class Paquet {
             res = new Paquet();
             res.pioche = copieSequence(pioche);
             res.defausse = copieSequence(defausse);
+            res.tourActuel = copieSequence(tourActuel);
             res.mainJoueurs[0] = copieTableau(0);
             res.mainJoueurs[1] = copieTableau(1);
             return res;

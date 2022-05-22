@@ -72,7 +72,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ========================
     // ===== CONSTRUCTEUR =====
     // ========================
-    Plateau() {
+    public Plateau() {
         initialisation();
     }
 

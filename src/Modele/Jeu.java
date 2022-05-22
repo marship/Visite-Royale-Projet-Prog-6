@@ -830,7 +830,6 @@ public class Jeu extends Observable {
                         break;
                 }
                 break;
-
             case ROI:
                 if (validationDeplacement(ROI, deplacementCarte)) {
                     positionAccessibleAvecCarte[positionPlus8(obtenirPositionElement(ROI)) + deplacementCarte] = 1;
