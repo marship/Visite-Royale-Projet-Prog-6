@@ -7,12 +7,12 @@ import Global.Element;
 import Modele.Carte;
 import Modele.Jeu;
 
-public class JoueurIAAleatoire extends Joueur {
+public class JoueurIAAleatoireQuiEssaye extends Joueur {
 
 	Random random;
 	int nbActions;
 
-	public JoueurIAAleatoire(int numeroJoueurCourant, Jeu jeu) {
+	public JoueurIAAleatoireQuiEssaye(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
 		random = new Random();
 	}

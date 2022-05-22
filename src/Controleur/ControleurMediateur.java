@@ -10,9 +10,10 @@ import Global.Element;
 import Global.InfoJeu;
 import Joueur.Joueur;
 import Joueur.JoueurHumain;
-import Joueur.JoueurIAAleatoire;
+import Joueur.JoueurIAAleatoireQuiEssaye;
 import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIAExperte;
+import Joueur.JoueurIARandom;
 import Joueur.JoueurIAnastasia;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
@@ -24,15 +25,16 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ===== JOUEUR =====
     // ==================
     static final int NOMBRE_JOUEUR = 2;
-    static final int NOMBRE_TYPE_JOUEUR = 4;
+    static final int NOMBRE_TYPE_JOUEUR = 5;
 
     static final int JOUEUR_GAUCHE = 0;
     static final int JOUEUR_DROIT = 1;
 
     static final int JOUEUR_HUMAIN = 0;
     static final int JOUEUR_IAALEATOIRE = 1;
-    static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 2;
-    static final int JOUEUR_IAEXPERTE = 3;
+    static final int JOUEUR_IAALEATOIRE_TOTALE = 2;
+    static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 3;
+    static final int JOUEUR_IAEXPERTE = 4;
 
     // ===================
     // ===== PLATEAU =====
@@ -80,13 +82,14 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         for (int i = 0; i < joueurs.length; i++) {
             joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
-            joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoire(i, jeu);
+            joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoireQuiEssaye(i, jeu);
+            joueurs[i][JOUEUR_IAALEATOIRE_TOTALE] = new JoueurIARandom(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE_INTELLIGENTE] = new JoueurIAAleatoireIntelligente(i, jeu);
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAnastasia(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_IAEXPERTE);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE_TOTALE);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         joueurCourant = jeu.joueurCourant();
     }
