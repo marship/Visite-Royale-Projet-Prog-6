@@ -65,10 +65,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         try {
             creerMenuPrincipal();
             panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
-        
-            creerSelectionJoueurs();
-            panelCourant.add(panelSelectionJoueurs, "SelectionJoueur");
-
             creerOptions();
             panelCourant.add(panelOptions, "Options");
             creerPlateauJeu();
@@ -82,8 +78,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
             e.printStackTrace();
         }
 		
-        
-
         // Garde à jour l'interface graphique du controleur
         collecteurEvenements.ajouteInterfaceUtilisateur(this);
 
@@ -99,49 +93,16 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
  
 	}
 
-
 	//Crée le JPanel du menu principal
 	public void creerMenuPrincipal() throws IOException{
 
-        int borderTop = hauteurFenetre / 3;
+        int borderTop = hauteurFenetre / 8;
         int borderBottom = hauteurFenetre / 10;
         int borderSides = largeurFenetre / 4;
 
 		panelMenuPrincipal = new MenuGraphique(InfoJeu.MENU_PRINCIPAL);
-		panelMenuPrincipal.setLayout(new GridLayout(0,1,0,30));
+		panelMenuPrincipal.setLayout(new GridBagLayout());
 		panelMenuPrincipal.setBorder(new EmptyBorder(borderTop,borderSides,borderBottom,borderSides));
-
-        boutonJouer = new DesignBoutons("Jouer", "Texture_Bouton");
-        boutonJouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
-        panelMenuPrincipal.add(boutonJouer);
-
-        boutonCharger = new DesignBoutons("Charger une partie", "Texture_Bouton");
-        boutonCharger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
-        panelMenuPrincipal.add(boutonCharger);
-
-        boutonRegles = new DesignBoutons("Règles du jeu", "Texture_Bouton");
-        boutonRegles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
-        panelMenuPrincipal.add(boutonRegles);
-
-        boutonOptions = new DesignBoutons("Options", "Texture_Bouton");
-        boutonOptions.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
-        panelMenuPrincipal.add(boutonOptions);
-
-        boutonQuitter = new DesignBoutons("Quitter", "Texture_Bouton");
-        boutonQuitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
-        panelMenuPrincipal.add(boutonQuitter);
-    } 
-
-    public void creerSelectionJoueurs() throws IOException{
-
-        int borderTop = hauteurFenetre / 2;
-        int borderBottom = hauteurFenetre / 3;
-        int borderSides = largeurFenetre / 3;
-
-        panelSelectionJoueurs = new MenuGraphique(InfoJeu.SELECTION_JOUEURS);
-        panelSelectionJoueurs.setLayout(new GridBagLayout());
-
-        panelSelectionJoueurs.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
         GridBagConstraints gbc = new GridBagConstraints();
 
         String[] choixComboBox = {
@@ -151,75 +112,91 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         };
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.33;
         gbc.insets = new Insets(10,0,0,10);  //top padding
 
         JLabel nomJoueur1 = new JLabel("Nom du Joueur 1");
-        gbc.weightx = 0.5;
         gbc.gridx = 0;
         gbc.gridy = 0;  
-        panelSelectionJoueurs.add(nomJoueur1, gbc);
-
+        panelMenuPrincipal.add(nomJoueur1, gbc);
 
         JTextField valeurNomJoueur1 = new JTextField();
         gbc.gridx = 0;
         gbc.gridy = 1;  
-        panelSelectionJoueurs.add(valeurNomJoueur1, gbc);
-
+        valeurNomJoueur1.setText("Joueur1");
+        panelMenuPrincipal.add(valeurNomJoueur1, gbc);
 
         JComboBox<String> comboBoxJoueur1 = new JComboBox<>();
         for(int i = 0; i < choixComboBox.length; i++){
             comboBoxJoueur1.addItem(choixComboBox[i]);
         }
         comboBoxJoueur1.setFocusable(false);
-        //comboBox.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
-        gbc.ipady = 0;
+        comboBoxJoueur1.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panelSelectionJoueurs.add(comboBoxJoueur1, gbc);
+        panelMenuPrincipal.add(comboBoxJoueur1, gbc);
 
-        gbc.insets = new Insets(10,10,0,10);  //top padding
+        gbc.insets = new Insets(10,largeurFenetre/10,0,0);  //top padding
 
         JLabel nomJoueur2 = new JLabel("Nom du Joueur 2");
         gbc.gridx = 1;
         gbc.gridy = 0;  
-        panelSelectionJoueurs.add(nomJoueur2, gbc);
+        panelMenuPrincipal.add(nomJoueur2, gbc);
 
         JTextField valeurNomJoueur2 = new JTextField();
         gbc.gridx = 1;
         gbc.gridy = 1;  
-        panelSelectionJoueurs.add(valeurNomJoueur2, gbc);
+        valeurNomJoueur2.setText("Joueur2");
+        panelMenuPrincipal.add(valeurNomJoueur2, gbc);
 
         JComboBox<String> comboBoxJoueur2 = new JComboBox<>();
         for(int i = 0; i < choixComboBox.length; i++){
             comboBoxJoueur2.addItem(choixComboBox[i]);
         }
         comboBoxJoueur2.setFocusable(false);
-        //comboBox.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        comboBoxJoueur2.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
         
         gbc.gridx = 1;
         gbc.gridy = 2;
-        panelSelectionJoueurs.add(comboBoxJoueur2, gbc);
-        
-        gbc.anchor = GridBagConstraints.PAGE_END;
-        gbc.insets = new Insets(50,20,0,20);
+        panelMenuPrincipal.add(comboBoxJoueur2, gbc);
+
+        gbc.weighty = 0.15;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(70,0,0,0);  
+        boutonJouer = new DesignBoutons("Jouer", "Texture_Bouton");
+        boutonJouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.weightx = 0.5;
+        panelMenuPrincipal.add(boutonJouer, gbc);
 
-        DesignBoutons valider = new DesignBoutons("Valider", "Texture_Bouton");
-        valider.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
-        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelSelectionJoueurs.add(valider, gbc);
-        
-        gbc.gridx = 1;
-        DesignBoutons annuler = new DesignBoutons("Annuler", "Texture_Bouton");
-        annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
-        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelSelectionJoueurs.add(annuler, gbc);
+        gbc.insets = new Insets(20,0,0,0); 
+        boutonCharger = new DesignBoutons("Charger une partie", "Texture_Bouton");
+        boutonCharger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        panelMenuPrincipal.add(boutonCharger, gbc);
+
+        boutonRegles = new DesignBoutons("Règles du jeu", "Texture_Bouton");
+        boutonRegles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        panelMenuPrincipal.add(boutonRegles, gbc);
+
+        boutonOptions = new DesignBoutons("Options", "Texture_Bouton");
+        boutonOptions.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        panelMenuPrincipal.add(boutonOptions, gbc);
+
+        boutonQuitter = new DesignBoutons("Quitter", "Texture_Bouton");
+        boutonQuitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        panelMenuPrincipal.add(boutonQuitter, gbc);
 
 
-        
-    }
+    } 
 
     public void miseAJourFinDeTour() {
         fenetre.repaint();
@@ -331,7 +308,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
 
     } 
-
 
     public void creerOptionsJeu() throws IOException{
 
