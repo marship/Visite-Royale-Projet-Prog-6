@@ -133,10 +133,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===========================
     public void tracerPlateau() {
 
+        tracerImage(imagePlateau, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
+
         if (jeu.joueurCourant() == 1) {
-            tracerImage(imagePlateauDroit, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
+            tracerTorches(imageTorcheEteint, imageTorcheAllumee);
         } else {
-            tracerImage(imagePlateauGauche, debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau);
+            tracerTorches(imageTorcheAllumee, imageTorcheEteint);
         }
 
         if (jeu.getEtatCouronne()) {
@@ -247,6 +249,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         tracerChoixPreView();
         tracerChoix();
+
+    }
+
+    private void tracerTorches(ImagePlateau imageTorcheGauche, ImagePlateau imageTorcheDroite) {
+        //debutPlateauY = 4 * hauteurFenetre / 28;
+        //largeurPlateau = largeurFenetre;
+        //hauteurPlateau = 3 * hauteurFenetre / 7;
+
+        //largeurCarte = largeurFenetre / 16;
+        //hauteurCarte = hauteurFenetre / 7;
+
+
+        tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 28, largeurCasePlateau(), hauteurCasePlateau()/4);
+        tracerLabel("Joueur Gauche", largeurCasePlateau(), 5 * hauteurFenetre / 28);
+        tracerImage(imageTorcheDroite, 15*largeurCasePlateau(), 2 * hauteurFenetre / 28, largeurCasePlateau(), hauteurCasePlateau()/4);
+        tracerLabel("Joueur Gauche", 15*largeurCasePlateau(), 5 * hauteurFenetre / 28);
 
     }
 
@@ -514,7 +532,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
 
     }
-
+    
     public void afficherZoneCartesJouees() {
 
         ImagePlateau image;
