@@ -263,10 +263,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
         //hauteurCarte = hauteurFenetre / 7;
 
 
-        tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 28, largeurCasePlateau(), hauteurCasePlateau()/4);
-        tracerLabel("Joueur Gauche", largeurCasePlateau(), 5 * hauteurFenetre / 28);
-        tracerImage(imageTorcheDroite, 15*largeurCasePlateau(), 2 * hauteurFenetre / 28, largeurCasePlateau(), hauteurCasePlateau()/4);
-        tracerLabel("Joueur Gauche", 15*largeurCasePlateau(), 5 * hauteurFenetre / 28);
+        tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
+        tracerLabel("Joueur Gauche", largeurCasePlateau(), 5 * hauteurFenetre / 30);
+        tracerImage(imageTorcheDroite, 15*largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
+        tracerLabel("Joueur Droit", 15*largeurCasePlateau(), 5 * hauteurFenetre / 30);
 
     }
 
