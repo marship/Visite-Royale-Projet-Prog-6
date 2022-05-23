@@ -327,9 +327,15 @@ public class PlateauGraphique extends JPanel implements Observateur {
         ImagePlateau imageGrise = imageCarteErreur;
 
         debutCartesX = largeurFenetre / 16;
-        debutCartesY = 6 * hauteurFenetre / 7;
+        
 
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
+            if(i != jeu.carteActuelle()){
+                debutCartesY = 6 * hauteurFenetre / 7;
+            }
+            else{
+                debutCartesY = 11 * hauteurFenetre / 14;
+            }
             switch (cartesJoueurCourant[i].personnage()) {
                 case ROI:
                     image = imageCarteRoi;
