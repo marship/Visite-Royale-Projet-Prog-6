@@ -305,6 +305,22 @@ public class Paquet {
         return nbVoulu;
     }
 
+    public int nombreCartesDeplacement(int joueur, Deplacement voulu, int ignore){
+        int nbVoulu = 0;
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
+            Carte main = (Carte) mainJoueurs[joueur][i];
+            if (main.deplacement() == voulu) {
+                if(ignore != 0){
+                    ignore--;
+                }
+                else{
+                    nbVoulu++;
+                }
+            }
+        }
+        return nbVoulu;
+    }
+
     public int nombreCarteManquante(int joueur) {
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);
         int nbVide = 0;

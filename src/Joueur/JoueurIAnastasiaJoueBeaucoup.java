@@ -7,9 +7,9 @@ import Modele.CoupleAtteindrePlateau;
 import Modele.Evaluation;
 import Structures.Sequence;
 
-public class JoueurIAnastasia extends Joueur {
+public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
 
-    public JoueurIAnastasia(int numeroJoueurCourant, Jeu jeu) {
+    public JoueurIAnastasiaJoueBeaucoup(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
 	}
 
@@ -19,6 +19,44 @@ public class JoueurIAnastasia extends Joueur {
         jeu.obtenirPersonnageElement(Element.GARDE_DROIT).positionnerPersonnage(positions[2]);
         jeu.obtenirPersonnageElement(Element.FOU).positionnerPersonnage(positions[3]);
         jeu.obtenirPersonnageElement(Element.SORCIER).positionnerPersonnage(positions[4]);
+    }
+
+    double coeffCartes(int[] cartes){
+        double coeff = 1;
+        int i = 0;
+        int nb = 0;
+        while(i < 8){
+            if(cartes[i] == 1){
+                nb++;
+            }
+            i++;
+        }
+        switch (nb) {
+            case 0:
+                coeff = 1;
+                break;
+
+            case 1:
+                coeff = 1.2;
+                break;
+
+            case 2:
+                coeff = 1.4;
+                break;
+
+            case 3:
+                coeff = 1.6;
+                break;
+
+            case 4:
+                coeff = 1.8;
+                break;
+        
+            default:
+                coeff = 2;
+                break;
+        }
+        return coeff;
     }
 
     void poserLesCartes(int[] cartes){
@@ -56,7 +94,7 @@ public class JoueurIAnastasia extends Joueur {
             test = liste.extraitTete();
             mettreLesPositions(test.positions());
             eval = new Evaluation(jeu.plateau().clone());
-            noteCourrente = eval.note(jeu.joueurCourant());
+            noteCourrente = eval.note(jeu.joueurCourant()) * coeffCartes(test.cartes());
             if(noteCourrente > noteMax){
                 winner = test;
                 noteMax = noteCourrente;

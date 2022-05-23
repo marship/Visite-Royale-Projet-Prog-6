@@ -11,6 +11,7 @@ import java.util.Scanner;
 import Global.Configuration;
 import Global.Deplacement;
 import Global.Element;
+import Global.InfoJeu;
 import Global.InfoPlateau;
 import Pattern.Observable;
 import Structures.Iterateur;
@@ -48,6 +49,8 @@ public class Jeu extends Observable {
     int POSITION_DEBUT_TOUR_GARDE_DROIT = 2;
     int POSITION_DEBUT_TOUR_GARDE_SORCIER = 1;
     int JOUEUR_DEBUT_TOUR = 1;
+
+    InfoJeu ETAT_JEU = InfoJeu.DEBUT_TOUR;
 
     // ==================
     // ===== JOUEUR =====
@@ -125,6 +128,14 @@ public class Jeu extends Observable {
     public void mainJoueurSecondaireVisible(){
         mainJoueurSecondaireVisible = !mainJoueurSecondaireVisible;
         metAJour();
+    }
+
+    public void changerEtatJeu(InfoJeu etatJeu){
+        ETAT_JEU = etatJeu;
+    }
+
+    public InfoJeu getEtatJeu(){
+        return ETAT_JEU;
     }
 
     // ====================

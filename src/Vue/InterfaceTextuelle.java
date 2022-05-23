@@ -8,6 +8,7 @@ import Global.Configuration;
 import Global.Deplacement;
 import Global.Element;
 import Modele.Carte;
+import Modele.Evaluation;
 import Modele.Jeu;
 import Pattern.Observateur;
 import Structures.Sequence;

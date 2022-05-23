@@ -1,6 +1,4 @@
-package Vue;
-
-import Modele.Plateau;
+package Modele;
 
 public class Evaluation {
 
@@ -13,6 +11,8 @@ public class Evaluation {
     static int positionFou;
     static int positionSorcier;
     static int positionCouronne;
+    static int taillePioche;
+    static boolean etatCouronne;
 
     // ==================
     // ===== JOUEUR =====
@@ -27,6 +27,8 @@ public class Evaluation {
         positionFou = p.fou.positionPersonnage();
         positionSorcier = p.sorcier.positionPersonnage();
         positionCouronne = p.couronne.positionCouronne();
+        taillePioche = p.paquet.pioche().taille();
+        etatCouronne = p.couronne.etatCouronne;
     }
 
     public double note(int joueur) {
@@ -240,10 +242,14 @@ public class Evaluation {
     // ===========
     double calculRoi(boolean joueurCourant) {
         double resRoi = 0;
+        double coeff = 1;
+        if(taillePioche <= 15 && !etatCouronne){
+            coeff = 2;
+        }
         if (joueurCourant) {
-            resRoi = positionRoi;
+            resRoi = positionRoi * coeff;
         } else {
-            resRoi = -positionRoi;
+            resRoi = -positionRoi * coeff;
         }
         return resRoi;
     }

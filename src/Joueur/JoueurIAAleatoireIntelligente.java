@@ -5,8 +5,8 @@ import java.util.Random;
 import Global.Deplacement;
 import Global.Element;
 import Modele.Carte;
+import Modele.Evaluation;
 import Modele.Jeu;
-import Vue.Evaluation;
 
 // aka agnès
 public class JoueurIAAleatoireIntelligente extends Joueur {

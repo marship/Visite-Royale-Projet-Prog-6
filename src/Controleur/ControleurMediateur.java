@@ -21,6 +21,7 @@ import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIAExperte;
 import Joueur.JoueurIARandom;
 import Joueur.JoueurIAnastasia;
+import Joueur.JoueurIAnastasiaJoueBeaucoup;
 import Modele.Jeu;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
@@ -31,7 +32,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ===== JOUEUR =====
     // ==================
     static final int NOMBRE_JOUEUR = 2;
-    static final int NOMBRE_TYPE_JOUEUR = 5;
+    static final int NOMBRE_TYPE_JOUEUR = 6;
 
     static final int JOUEUR_GAUCHE = 0;
     static final int JOUEUR_DROIT = 1;
@@ -41,6 +42,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     static final int JOUEUR_IAALEATOIRE_TOTALE = 2;
     static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 3;
     static final int JOUEUR_IAEXPERTE = 4;
+    static final int JOUEUR_ANASTASIA_DEUX = 5;
 
     // ===================
     // ===== PLATEAU =====
@@ -100,9 +102,10 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAALEATOIRE_TOTALE] = new JoueurIARandom(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE_INTELLIGENTE] = new JoueurIAAleatoireIntelligente(i, jeu);
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAnastasia(i, jeu);
+            joueurs[i][JOUEUR_ANASTASIA_DEUX] = new JoueurIAnastasiaJoueBeaucoup(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE_TOTALE);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
         changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         joueurCourant = jeu.joueurCourant();

@@ -2,9 +2,7 @@ package Joueur;
 
 import java.util.Random;
 
-import Global.Deplacement;
 import Global.Element;
-import Modele.Carte;
 import Modele.CoupleAtteindrePlateau;
 import Modele.Jeu;
 import Modele.ListePlateaux;
