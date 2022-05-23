@@ -606,15 +606,15 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageJetonFou = chargeImage("Jeton_Fou");
         imageJetonSorcier = chargeImage("Jeton_Sorcier");
 
-        imageJetonGardeGaucheSelection = chargeImage("Jeton_Garde_Gauche");
-        imageJetonGardeDroitSelection = chargeImage("Jeton_Garde_Droit");
-        imageJetonRoiSelection = chargeImage("Jeton_Roi");
-        imageJetonFouSelection = chargeImage("Jeton_Fou");
-        imageJetonSorcierSelection = chargeImage("Jeton_Sorcier");
+        imageJetonGardeGaucheSelection = chargeImage("Jeton_Garde_Gauche_Selection");
+        imageJetonGardeDroitSelection = chargeImage("Jeton_Garde_Droit_Selection");
+        imageJetonRoiSelection = chargeImage("Jeton_Roi_Selection");
+        imageJetonFouSelection = chargeImage("Jeton_Fou_Selection");
+        imageJetonSorcierSelection = chargeImage("Jeton_Sorcier_Selection");
 
-        imageJetonRoiPouvoir = chargeImage("Jeton_Roi");
-        imageJetonFouPouvoir = chargeImage("Jeton_Fou");
-        imageJetonSorcierPouvoir = chargeImage("Jeton_Sorcier");
+        imageJetonRoiPouvoir = chargeImage("Jeton_Roi_Pouvoir");
+        imageJetonFouPouvoir = chargeImage("Jeton_Fou_Pouvoir");
+        imageJetonSorcierPouvoir = chargeImage("Jeton_Sorcier_Pouvoir");
 
         imageJetonGardeGaucheGrise = chargeImageGrise("Jeton_Garde_Gauche");
         imageJetonGardeDroitGrise = chargeImageGrise("Jeton_Garde_Droit");
