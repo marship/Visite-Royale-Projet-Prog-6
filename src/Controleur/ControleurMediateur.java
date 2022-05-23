@@ -1,10 +1,16 @@
 package Controleur;
 
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import Audio.LecteurAudio;
 import Global.Configuration;
 import Global.Element;
 import Global.InfoJeu;
@@ -53,6 +59,11 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ===== TIMER =====
     // =================
     static final int LENTEUR_ATTENTE = 100;
+
+    // =================
+    // ===== AUDIO =====
+    // =================
+    int optionAudio = 0;
     
     // ====================
     // ===== ETAT JEU =====
@@ -79,6 +90,9 @@ public class ControleurMediateur implements CollecteurEvenements {
         jeu = j;
         joueurs = new Joueur[NOMBRE_JOUEUR][NOMBRE_TYPE_JOUEUR];
         typeJoueur = new int[NOMBRE_TYPE_JOUEUR];
+
+        String nomFichierAudio = "the-weeknd-medieval";
+        lancerAudio(nomFichierAudio);
 
         for (int i = 0; i < joueurs.length; i++) {
             joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
@@ -231,7 +245,35 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
     }
 
+    // SON
+    void lancerAudio(String nomFichierAudio) {
+        try {
+            LecteurAudio lecteurAudio = new LecteurAudio(nomFichierAudio);
+            lecteurAudio.play();
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+            Configuration.instance().logger().severe("Erreur au lancement de l'audio !!");
+            e.printStackTrace();
+        }
+    }
+
+    void optionAudio(LecteurAudio lecteurAudio, int option) {
+        try {
+            lecteurAudio.gotoChoice(option);
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+
+
     // TODO NETTOYAGE VVVVVVVV
+
+    
 
     void annule() {
         /*

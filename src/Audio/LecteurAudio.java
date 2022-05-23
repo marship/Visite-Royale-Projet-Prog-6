@@ -20,34 +20,32 @@ public class LecteurAudio {
     // get the clip status
     String etatClip;
 
-    float gainAmount = 0;
+    float gererVolume = 0;
     FloatControl volume;
 
-    AudioInputStream audioStream;
-    static String thePath;
+    AudioInputStream audioInputStream;
+    static final String CHEMIN_FICHIER_AUDIO = "res/Audios/";
+    static final String EXTENSION_FICHIER_AUDIO = ".wav";
+
+    String nomFichierAudio = "the-weeknd-medieval";
 
     // initialize both the clip and streams
-    public LecteurAudio() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public LecteurAudio(String nomFichierAudio) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         
-        // the input stream object
-        audioStream = AudioSystem.getAudioInputStream(new File(thePath));
+        audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
         
-        // the reference to the clip
         clip = AudioSystem.getClip();
-
-        clip.open(audioStream);
-
+        clip.open(audioInputStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public static void main(String[] args) {
         try {
-            // add the path to the audio file
-            thePath = "res/Audios/the-weeknd-medieval.wav";
 
-            LecteurAudio simpleSoundPlayer = new LecteurAudio();
+            String nomFichierAudio = "the-weeknd-medieval";
+            LecteurAudio lecteurAudio = new LecteurAudio(nomFichierAudio);
+            lecteurAudio.play();
 
-            simpleSoundPlayer.play();
             Scanner scanned = new Scanner(System.in);
 
             // show the options
@@ -60,7 +58,7 @@ public class LecteurAudio {
                 System.out.println("6. Volume --");
                 System.out.println("7. Volume ++");
                 int a = scanned.nextInt();
-                simpleSoundPlayer.gotoChoice(a);
+                lecteurAudio.gotoChoice(a);
                 if (a == 4)
                     break;
             }
@@ -73,9 +71,7 @@ public class LecteurAudio {
         }
     }
 
-    // operation is now as per the user's choice
-
-    private void gotoChoice(int a)
+    public void gotoChoice(int a)
             throws IOException, LineUnavailableException, UnsupportedAudioFileException {
         switch (a) {
             case 1:
@@ -91,31 +87,26 @@ public class LecteurAudio {
                 stop();
                 break;
             case 5:
-                if (thePath == "res/Audios/gangstas-paradise-medieval.wav") {
+                if (audioInputStream.toString() == "res/Audios/gangstas-paradise-medieval.wav") {
                     stop();
-                    thePath = "res/Audios/the-weeknd-medieval.wav";
-                    // the input stream object
-                    audioStream = AudioSystem.getAudioInputStream(new File(thePath));
+                    audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + "gangstas-paradise-medieval" + EXTENSION_FICHIER_AUDIO));
         
                     // the reference to the clip
                     clip = AudioSystem.getClip();
 
-                    clip.open(audioStream);
+                    clip.open(audioInputStream);
 
                     clip.loop(Clip.LOOP_CONTINUOUSLY);
                     restart();
 
                 } else {
                     stop();
-                    thePath = "res/Audios/gangstas-paradise-medieval.wav";
-
-                    // the input stream object
-                    audioStream = AudioSystem.getAudioInputStream(new File(thePath));
+                    audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + "the-weeknd-medieval" + EXTENSION_FICHIER_AUDIO));
         
                     // the reference to the clip
                     clip = AudioSystem.getClip();
 
-                    clip.open(audioStream);
+                    clip.open(audioInputStream);
 
                     clip.loop(Clip.LOOP_CONTINUOUSLY);
                     restart();
@@ -123,36 +114,34 @@ public class LecteurAudio {
                 break;
             case 6:
                 // 1.0 => 0.1
-                gainAmount = (float) (gainAmount - 1.0);
+                gererVolume = (float) (gererVolume - 1.0);
                 volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                if (gainAmount >= volume.getMinimum()) {
-                    volume.setValue(gainAmount);
+                if (gererVolume >= volume.getMinimum()) {
+                    volume.setValue(gererVolume);
                 } else {
                     System.out.println("Volume au minimum !!");
-                    gainAmount = (float) (gainAmount + 1.0);
+                    gererVolume = (float) (gererVolume + 1.0);
                 }
                 break;
             case 7:
-                gainAmount = (float) (gainAmount + 1.0);
+                gererVolume = (float) (gererVolume + 1.0);
                 volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                if (gainAmount <= volume.getMaximum()) {
-                    volume.setValue(gainAmount);
+                if (gererVolume <= volume.getMaximum()) {
+                    volume.setValue(gererVolume);
                 } else {
                     System.out.println("Volume au maximum !!");
-                    gainAmount = (float) (gainAmount - 1.0);
+                    gererVolume = (float) (gererVolume - 1.0);
                 }
                 break;
         }
     }
 
-    // play
     public void play() {
         // start the clip
         clip.start();
         etatClip = "play";
     }
 
-    // Pause audio
     public void pause() {
         if (etatClip.equals("paused")) {
             System.out.println("L'audio est en pause !");
@@ -163,7 +152,6 @@ public class LecteurAudio {
         etatClip = "paused";
     }
 
-    // resume audio
     public void resumeAudio() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (etatClip.equals("play")) {
             System.out.println("L'audio demarre !");
@@ -175,7 +163,6 @@ public class LecteurAudio {
         this.play();
     }
 
-    // restart audio
     public void restart() throws IOException, LineUnavailableException, UnsupportedAudioFileException {
         clip.close();
         resetAudioStream();
@@ -183,17 +170,15 @@ public class LecteurAudio {
         this.play();
     }
 
-    // stop audio
     public void stop() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         momentActuel = 0L;
         clip.stop();
         clip.close();
     }
 
-    // reset the audio stream
     public void resetAudioStream() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        audioStream = AudioSystem.getAudioInputStream(new File(thePath));
-        clip.open(audioStream);
+        audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
+        clip.open(audioInputStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 }
