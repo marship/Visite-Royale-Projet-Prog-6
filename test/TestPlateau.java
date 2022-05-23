@@ -10,7 +10,7 @@ import org.junit.Test;
 //import Global.Deplacement;
 import Global.Element;
 import Global.InfoPlateau;
-import Modele.Carte;
+//import Modele.Carte;
 import Modele.Jeu;
 //import Modele.Carte;
 //import Modele.Plateau;
@@ -456,8 +456,23 @@ public class TestPlateau {
 
     @Test
     public void testFinDeTour() {
+        // 
         
-        
+        jeu.deplacerElement(Element.GARDE_DROIT,6);
+        jeu.finDeTour();
+        assertEquals(1, jeu.obtenirPositionElement(Element.COURONNE));
+        assertFalse(jeu.estGagnant());
+        assertEquals(0, jeu.joueurCourant());
+        assertEquals(Element.FOU, jeu.personnageManipulerParLeFou);
+        assertEquals(Element.VIDE, jeu.dernierTypeDePersonnageJouer);
+        assertFalse(jeu.teleportationFaite);
+        assertEquals(8, jeu.obtenirPositionElement(Element.GARDE_DROIT));
+
+        jeu.deplacerElement(Element.ROI,7);
+        jeu.finDeTour();
+        //assertEquals(2, jeu.obtenirPositionElement(Element.COURONNE));
+        assertTrue(jeu.estGagnant()); 
+        assertEquals(1, jeu.joueurGagnant());      
 
     }    
 
