@@ -149,6 +149,39 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroit);
                 tracerImageElement(Element.FOU, imageJetonFou);
                 tracerImageElement(Element.SORCIER, imageJetonSorcier);
+                if (jeu.carteActuelle() != 8) {
+                    switch (jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle()].personnage()) {
+                        case ROI:
+                            tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                            tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                            tracerImageElement(Element.FOU, imageJetonFouGrise);
+                            tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
+                            break;
+
+                        case GARDES:
+                            tracerImageElement(Element.ROI, imageJetonRoiGrise);
+                            tracerImageElement(Element.FOU, imageJetonFouGrise);
+                            tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
+                            break;
+
+                        case FOU:
+                            tracerImageElement(Element.ROI, imageJetonRoiGrise);
+                            tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                            tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                            tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
+                            break;
+
+                        case SORCIER:
+                            tracerImageElement(Element.ROI, imageJetonRoiGrise);
+                            tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                            tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                            tracerImageElement(Element.FOU, imageJetonFouGrise);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
                 break;
 
             case CHOIX_FOU:
@@ -190,15 +223,19 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 int d = jeu.positionsPourCour();
                 if (d == 1 || d == 0) {
                     dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau + largeurCasePlateau/3,
+                    dessinable.fillOval(
+                            positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau
+                                    + largeurCasePlateau / 3,
                             quartHauteurPlateau * 4,
-                            30,30);
+                            30, 30);
                 }
                 if (d == 2 || d == 0) {
                     dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau + largeurCasePlateau/3,
+                    dessinable.fillOval(
+                            positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau
+                                    + largeurCasePlateau / 3,
                             quartHauteurPlateau * 4,
-                            30,30);
+                            30, 30);
                 }
 
             default:
@@ -221,7 +258,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             int i = 0;
             while (i < 17) {
                 if (listeDeplacementPossiblesAvecCarte[i] == 1) {
-                    dessinable.setColor(new Color(255, 0, 0));
+                    dessinable.setColor(new Color(0, 150, 255));
                     dessinable.setStroke(new BasicStroke(5f));
                     dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
                 }
@@ -376,7 +413,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
             if (jeu.carteActuelle() == i) {
-                dessinable.setColor(new Color(255, 0, 0));
+                dessinable.setColor(new Color(0, 150, 255));
                 dessinable.setStroke(new BasicStroke(5f));
                 dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
