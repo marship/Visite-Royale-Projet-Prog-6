@@ -191,13 +191,15 @@ public class ControleurMediateur implements CollecteurEvenements {
                         case ROI:
                             if (jeu.plateau().paquet.nombreCartesElement(joueurCourant, Element.ROI, 0) >= 2
                                     && (jeu.dernierTypeDePersonnageJouer == Element.ROI
-                                            || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                                            || jeu.dernierTypeDePersonnageJouer == Element.VIDE)
+                                    && !jeu.teleportationFaite) {
                                 jeu.changerEtatJeu(InfoJeu.CHOIX_ROI);
                                 ETAT_JEU = InfoJeu.CHOIX_ROI;
                             }
                             break;
                         case FOU:
-                            if (jeu.estPouvoirFouActivable() && jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
+                            if (jeu.estPouvoirFouActivable() && jeu.dernierTypeDePersonnageJouer == Element.VIDE
+                                    && !jeu.teleportationFaite) {
                                 jeu.changerEtatJeu(InfoJeu.CHOIX_FOU);
                                 ETAT_JEU = InfoJeu.CHOIX_FOU;
                             }
@@ -229,7 +231,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     void teleportationElement(Element element) {
         if (jeu.estPouvoirSorcierActivable(element)) {
             jeu.teleportationPouvoirSorcier(element);
-            finDeTour();
         }
     }
 
@@ -315,13 +316,15 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (ETAT_JEU) {
             case DEBUT_TOUR:
             case APRES_UNE_CARTE:
-                if (jeu.carteActuelle() == coupX) {
-                    jeu.changeCarteActuelle(8);
-                } else {
-                    if (jeu.listeCarteJouable()[coupX] != 0) {
-                        jeu.changeCarteActuelle(coupX);
+                if (!jeu.teleportationFaite) {
+                    if (jeu.carteActuelle() == coupX) {
+                        jeu.changeCarteActuelle(8);
                     } else {
-                        Configuration.instance().logger().info("Carte non identique");
+                        if (jeu.listeCarteJouable()[coupX] != 0) {
+                            jeu.changeCarteActuelle(coupX);
+                        } else {
+                            Configuration.instance().logger().info("Carte non identique");
+                        }
                     }
                 }
                 break;

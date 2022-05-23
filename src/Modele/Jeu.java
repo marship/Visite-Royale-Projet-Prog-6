@@ -314,6 +314,7 @@ public class Jeu extends Observable {
         plateau().paquet.completerCartesEnMain(joueurCourant());
         personnageManipulerParLeFou = FOU;
         dernierTypeDePersonnageJouer = VIDE;
+        teleportationFaite = false;
         if (joueurCourant() != JOUEUR_DEBUT_TOUR) {
             plateau().joueurCourant = JOUEUR_DEBUT_TOUR;
         }
