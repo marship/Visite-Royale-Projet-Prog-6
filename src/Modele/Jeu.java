@@ -442,7 +442,7 @@ public class Jeu extends Observable {
         metAJour();
     }
 
-    void fixerPositions() {
+    public void fixerPositions() {
         POSITION_DEBUT_TOUR_FOU = obtenirPositionElement(FOU);
         POSITION_DEBUT_TOUR_GARDE_DROIT = obtenirPositionElement(GARDE_DROIT);
         POSITION_DEBUT_TOUR_GARDE_GAUCHE = obtenirPositionElement(GARDE_GAUCHE);
