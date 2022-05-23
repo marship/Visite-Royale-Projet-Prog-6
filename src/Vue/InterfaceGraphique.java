@@ -89,8 +89,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         fenetre.setFocusable(true);
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenetre.setVisible(true);
-
- 
 	}
 
 	//Crée le JPanel du menu principal

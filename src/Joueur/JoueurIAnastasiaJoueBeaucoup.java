@@ -9,6 +9,8 @@ import Structures.Sequence;
 
 public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
 
+    Element jouee = Element.VIDE;
+
     public JoueurIAnastasiaJoueBeaucoup(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
 	}
@@ -63,6 +65,7 @@ public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
         int i = 0;
         while(i < 8){
             if(cartes[i] == 1){
+                jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
                 jeu.poserCarte(i);
             }
             i++;
@@ -104,7 +107,7 @@ public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
         mettreLesPositions(winner.positions());
         poserLesCartes(winner.cartes());
 
-        jeu.majDernierTypeDePersonnageJouer(Element.ROI);
+        jeu.majDernierTypeDePersonnageJouer(jouee);
 
         return true;
     }

@@ -374,7 +374,7 @@ public class ListePlateaux {
                         }
                         if (carte.deplacement() == Deplacement.UN_PLUS_UN) {
 
-                            if (nbUnPlusUnFait > 4) {
+                            if (nbUnPlusUnFait < 4) {
 
                                 // Garde Gauche, 2 deplacement
                                 if ((base[1] - 2 == j - 8 || base[1] + 2 == j - 8) && (base[0] > j - 8)) {

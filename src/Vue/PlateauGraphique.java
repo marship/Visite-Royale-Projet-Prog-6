@@ -117,7 +117,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
         //afficherInfoTour();
         afficherPioche();
         afficherDefausse();
-        afficherCartesJoueurCourant();
+        if(jeu.actionAutoriser()){
+            afficherCartesJoueurCourant();
+        }
     }
 
     // =======================
@@ -462,7 +464,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerImage(image, (4 + i) * debutCartesX, 0, largeurCarte, hauteurCarte);
             }
         } else {
-            Carte[] cartesJoueurSecondaire = jeu.recupererMainJoueur(jeu.joueurSecondaire());
+            Carte[] cartesJoueurSecondaire = jeu.recupererMainJoueur(0);
             for (int i = 0; i < cartesJoueurSecondaire.length; i++) {
                 switch (cartesJoueurSecondaire[i].personnage()) {
                     case ROI:
@@ -523,6 +525,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                         }
                         break;
                     case VIDE:
+                        image = imageDosCarte;
                         break;
                     default:
                         break;

@@ -13,6 +13,7 @@ public class AdaptateurClavier extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
         switch (e.getKeyCode()) {
             case KeyEvent.VK_S:
                 System.out.println("Sorcier");
@@ -58,6 +59,9 @@ public class AdaptateurClavier extends KeyAdapter {
                 break;
             case KeyEvent.VK_W:
                 collecteurEvenements.commande("pause");
+                break;
+            case KeyEvent.VK_X:
+                collecteurEvenements.commande("visible");
                 break;
             default:
                 break;

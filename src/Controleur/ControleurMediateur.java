@@ -84,6 +84,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     int decompteTimer = LENTEUR_ATTENTE;
     int carteActuelle; // Quelle carte est choisie actuellement
+    boolean attenteCarte;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -97,7 +98,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         // String nomFichierAudio = "the-weeknd-medieval";
         String nomFichierAudio = "gangstas-paradise-medieval";
-        lancerAudio(nomFichierAudio);
+        //lancerAudio(nomFichierAudio);
 
         for (int i = 0; i < joueurs.length; i++) {
             joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
@@ -108,10 +109,11 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_ANASTASIA_DEUX] = new JoueurIAnastasiaJoueBeaucoup(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAEXPERTE);
         changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
 
         joueurCourant = jeu.joueurCourant();
+        attenteCarte = false;
     }
 
     // ==================
@@ -359,12 +361,20 @@ public class ControleurMediateur implements CollecteurEvenements {
                 int type = typeJoueur[joueurCourant];
                 // Lorsque le temps est écoulé on le transmet au joueur courant.
                 // Si un coup a été joué (IA) on change de joueur.
-                if (joueurs[joueurCourant][type].tempsEcoule()) {
+                if(attenteCarte){
                     finDeTour();
-                } else {
-                    // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
-                    // l'attend.
                     decompteTimer = LENTEUR_ATTENTE;
+                    attenteCarte = false;
+                }
+                else{
+                    if (joueurs[joueurCourant][type].tempsEcoule()) {
+                        attenteCarte = true;
+                        decompteTimer = LENTEUR_ATTENTE * 6;
+                    } else {
+                        // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
+                        // l'attend.
+                        decompteTimer = LENTEUR_ATTENTE;
+                    }
                 }
             } else {
                 decompteTimer--;
@@ -452,6 +462,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                 jeu.changeCarteActuelle(8);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                break;
+            case "visible":
+                jeu.mainJoueurSecondaireVisible();
                 break;
             default:
                 return false;
