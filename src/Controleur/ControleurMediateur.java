@@ -95,7 +95,8 @@ public class ControleurMediateur implements CollecteurEvenements {
         joueurs = new Joueur[NOMBRE_JOUEUR][NOMBRE_TYPE_JOUEUR];
         typeJoueur = new int[NOMBRE_TYPE_JOUEUR];
 
-        String nomFichierAudio = "the-weeknd-medieval";
+        // String nomFichierAudio = "the-weeknd-medieval";
+        String nomFichierAudio = "gangstas-paradise-medieval";
         lancerAudio(nomFichierAudio);
 
         for (int i = 0; i < joueurs.length; i++) {
@@ -107,7 +108,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_ANASTASIA_DEUX] = new JoueurIAnastasiaJoueBeaucoup(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAALEATOIRE);
         changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
 
         joueurCourant = jeu.joueurCourant();

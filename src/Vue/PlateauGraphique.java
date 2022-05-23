@@ -56,6 +56,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // = IMAGES CARTES GRISES ==
     // =========================
     ImagePlateau imageCarteRoiGrise;
+    ImagePlateau imageTorcheAllumee, imageTorcheEteint;
     ImagePlateau imageCarteFouUnGrise, imageCarteFouDeuxGrise, imageCarteFouTroisGrise, imageCarteFouQuatreGrise,
             imageCarteFouCinqGrise, imageCarteFouMGrise;
     ImagePlateau imageCarteSorcierUnGrise, imageCarteSorcierDeuxGrise, imageCarteSorcierTroisGrise;
@@ -645,6 +646,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // TODO charger images depuis le fichier de configuration
     private void chargementDesImages() {
         imagePlateau = chargeImage("Plateau");
+
+        imageTorcheAllumee = chargeImage("Torche_On");
+        imageTorcheEteint = chargeImage("Torche_Off");
+
         imagePlateauDroit = chargeImage("Previsualisation_Droite");
         imagePlateauGauche = chargeImage("Previsualisation_Gauche");
 
