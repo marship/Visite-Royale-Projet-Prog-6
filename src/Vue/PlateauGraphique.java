@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import Global.Configuration;
 import Global.Element;
+import Global.InfoJeu;
 import Global.InfoPlateau;
 
 import java.awt.*;
@@ -363,7 +364,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 default:
                     break;
             }
-            if (jeu.carteJouable(cartesJoueurCourant[i])) {
+            InfoJeu etat = jeu.getEtatJeu();
+            if (jeu.carteJouable(cartesJoueurCourant[i]) && etat == InfoJeu.DEBUT_TOUR) {
                 tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             } else {
                 tracerImage(imageGrise, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
