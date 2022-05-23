@@ -113,6 +113,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         tracerPlateau();
         afficherCartesAutreJoueur();
         afficherZoneCartesJouees();
+        //afficherInfoTour();
         afficherPioche();
         afficherCartesJoueurCourant();
     }
@@ -308,6 +309,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
         tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement,
                 largeurCasePlateau, quartHauteurPlateau);
+    }
+
+    public void afficherInfoTour() {
+        String msg = "Tour de " + jeu.nomJoueurCourant();
+        tracerLabel(msg, 100, hauteurCarte);
     }
 
     public void afficherCartesJoueurCourant() {

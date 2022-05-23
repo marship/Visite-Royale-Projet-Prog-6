@@ -139,6 +139,10 @@ public class Jeu extends Observable {
         return ETAT_JEU;
     }
 
+    public String nomJoueurCourant(){
+        return "";
+    }
+
     // ====================
     // ===== ELEMENTS =====
     // ====================
