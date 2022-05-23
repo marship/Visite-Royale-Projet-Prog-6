@@ -23,6 +23,8 @@ import Joueur.JoueurIARandom;
 import Joueur.JoueurIAnastasia;
 import Joueur.JoueurIAnastasiaJoueBeaucoup;
 import Modele.Jeu;
+import Modele.Plateau;
+import Modele.PlateauHistorique;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
 
@@ -105,7 +107,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_ANASTASIA_DEUX] = new JoueurIAnastasiaJoueBeaucoup(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAEXPERTE);
         changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
         
         joueurCourant = jeu.joueurCourant();
@@ -282,7 +284,16 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     // TODO NETTOYAGE VVVVVVVV
 
-    
+    void plateauHistorique(Plateau p) {
+        PlateauHistorique plateauHistorique = jeu.determinerPlateauHistorique(p);
+        if (plateauHistorique != null) {
+            sauvegarderPlateauHistorique(plateauHistorique);
+        }
+    }
+
+    void sauvegarderPlateauHistorique(PlateauHistorique pHistorique) {
+        jeu.sauvegarderPlateauHistorique(pHistorique);
+    }
 
     void annule() {
         /*
@@ -449,6 +460,10 @@ public class ControleurMediateur implements CollecteurEvenements {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
             jeu.finDeTour();
             jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
+            
+            plateauHistorique(jeu.plateau());
+            System.out.println("Taille de l'historique : " + jeu.tailleHistoirique());
+
             ETAT_JEU = InfoJeu.DEBUT_TOUR;
             changerJoueurCourant();
             interfaceUtilisateur.miseAJourFinDeTour();

@@ -2,8 +2,9 @@ package Modele;
 
 import Global.Configuration;
 import Global.Element;
+import Structures.Sequence;
 
-public class Plateau extends Historique<Coup> implements Cloneable {
+public class Plateau extends Historique<PlateauHistorique> implements Cloneable {
 
     // ===============================
     // ===== INFORMATION PLATEAU =====
@@ -243,10 +244,15 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ================================
     // ========== HISTORIQUE ==========
     // ================================
-    public void jouerCoupPlateau(Plateau p) {
-        
-        Plateau plateau = p;
-        changerJoueurCourant();
+    PlateauHistorique determinerPlateauHistorique(Plateau plateau) {
+        PlateauHistorique plateauHistorique = new PlateauHistorique();
+        plateauHistorique.ajouterEtatPlateau(plateau);
+        return plateauHistorique;
+    }
+
+    public void sauvegarderPlateauHistorique(PlateauHistorique pHistorique) {
+        pHistorique.fixerPlateau(this);
+        nouveau(pHistorique);
     }
 
     public void dejouerCoupGaufre(int positionX, int positionY) {
@@ -279,14 +285,13 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         */
     }
 
-    public int tailleHistoire() {
+    public int tailleHistorique() {
         
-        int res = 0;
-        /*
-        Sequence<Plateau> sequencePlateau = Configuration.instance().nouvelleSequence();
+        int tailleHistorique = 0;
+        Sequence<PlateauHistorique> sequencePlateau = Configuration.instance().nouvelleSequence();
         while(!passe.estVide()) {
             sequencePlateau.insereQueue(passe.extraitTete());
-            res++;
+            tailleHistorique ++;
         }
         while(!sequencePlateau.estVide()) {
             passe.insereQueue(sequencePlateau.extraitTete());
@@ -295,14 +300,12 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         sequencePlateau = Configuration.instance().nouvelleSequence();
         while(!futur.estVide()) {
             sequencePlateau.insereQueue(futur.extraitTete());
-            res++;
+            tailleHistorique ++;
         } 
         while(!sequencePlateau.estVide()) {
             futur.insereQueue(sequencePlateau.extraitTete());
         }
-        */
-        return res;
-        
+        return tailleHistorique;
     }
 
     // =====================

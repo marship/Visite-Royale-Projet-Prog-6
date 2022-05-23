@@ -1056,6 +1056,19 @@ public class Jeu extends Observable {
     // ======================
     // ===== HISTORIQUE =====
     // ======================
+    public PlateauHistorique determinerPlateauHistorique(Plateau p) {
+        return plateau.determinerPlateauHistorique(p);
+    }
+
+    public void sauvegarderPlateauHistorique(PlateauHistorique pHistorique) {
+        if (pHistorique == null) {
+            Configuration.instance().logger().warning("Plateau Historique Null !!");
+        } else {
+            plateau.sauvegarderPlateauHistorique(pHistorique);
+            metAJour();
+        }
+    }
+
     public Plateau annule() {
         if (estPartieTerminee()) {
             plateau().joueurGagnant = AUCUN_GAGNANT;
@@ -1076,7 +1089,8 @@ public class Jeu extends Observable {
     }
 
     public int tailleHistoirique() {
-        return plateau().tailleHistoire();
+        return plateau().tailleHistorique();
+        // TODO ADRIEN !!!!
     }
 
     // ======================

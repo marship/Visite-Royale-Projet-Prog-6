@@ -5,12 +5,12 @@ import Structures.Iterateur;
 import Structures.Sequence;
 import Global.Configuration;
 
-public class Coup extends Commande {
+public class PlateauHistorique extends Commande {
 
     Sequence<Plateau> sequenceEtatPlateau;
     Plateau plateau;
 
-    Coup() {
+    public PlateauHistorique() {
         sequenceEtatPlateau = Configuration.instance().nouvelleSequence();
     }
 
