@@ -181,7 +181,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 break;
 
             case CHOIX_ROI:
-                tracerImageElement(Element.ROI, imageJetonRoiSelection);
+                tracerImageElement(Element.ROI, imageJetonRoiPouvoir);
                 tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
                 tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
                 tracerImageElement(Element.FOU, imageJetonFouGrise);
@@ -189,14 +189,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 int d = jeu.positionsPourCour();
                 if (d == 1 || d == 0) {
                     dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau,
-                            quartHauteurPlateau * 3,
+                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau + largeurCasePlateau/3,
+                            quartHauteurPlateau * 4,
                             30,30);
                 }
                 if (d == 2 || d == 0) {
                     dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau,
-                            quartHauteurPlateau * 3,
+                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau + largeurCasePlateau/3,
+                            quartHauteurPlateau * 4,
                             30,30);
                 }
 

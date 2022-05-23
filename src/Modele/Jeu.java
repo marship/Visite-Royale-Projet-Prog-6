@@ -132,6 +132,7 @@ public class Jeu extends Observable {
 
     public void changerEtatJeu(InfoJeu etatJeu){
         ETAT_JEU = etatJeu;
+        metAJour();
     }
 
     public InfoJeu getEtatJeu(){
@@ -1024,7 +1025,6 @@ public class Jeu extends Observable {
                     break;
             }
         } else {
-            Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
         }
         metAJour();
     }
@@ -1035,7 +1035,6 @@ public class Jeu extends Observable {
             metAJour();
             return true;
         } else {
-            Configuration.instance().logger().info("Teleportation " + element.name() + " impossible !!");
             metAJour();
             return false;
         }
