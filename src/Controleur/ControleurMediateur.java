@@ -156,6 +156,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                             jeu.personnageManipulerParLeFou(Element.FOU);
                             break;
                     }
+                    jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                     ETAT_JEU = InfoJeu.DEBUT_TOUR;
                     break;
                 case CHOIX_SORCIER:
@@ -168,6 +169,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                         default:
                             break;
                     }
+                    jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                     ETAT_JEU = InfoJeu.DEBUT_TOUR;
                     return;
                 case CHOIX_ROI:
@@ -177,22 +179,26 @@ public class ControleurMediateur implements CollecteurEvenements {
                     } else if ((clicX == jeu.obtenirPositionElement(Element.ROI) + 1) && ((possible == 2) || (possible == 0))) {
                         selectionRoi(DROITE);
                     }
+                    jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                     ETAT_JEU = InfoJeu.DEBUT_TOUR;
                     return;
                 case DEBUT_TOUR:
                     switch (elementChoisi) {
                         case ROI:
                             if (jeu.plateau().paquet.nombreCartesElement(joueurCourant, Element.ROI, 0) >= 2 && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                                jeu.changerEtatJeu(InfoJeu.CHOIX_ROI);
                                 ETAT_JEU = InfoJeu.CHOIX_ROI;
                             }
                             break;
                         case FOU:
                             if (jeu.estPouvoirFouActivable() && jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
+                                jeu.changerEtatJeu(InfoJeu.CHOIX_FOU);
                                 ETAT_JEU = InfoJeu.CHOIX_FOU;
                             }
                             break;
                         case SORCIER:
                             if (jeu.dernierTypeDePersonnageJouer == Element.VIDE) {
+                                jeu.changerEtatJeu(InfoJeu.CHOIX_SORCIER);
                                 ETAT_JEU = InfoJeu.CHOIX_SORCIER;
                             }
                             break;
@@ -368,6 +374,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                     interfaceUtilisateur.afficherPanneau("Plateau");
                 }
                 jeu.changerEtatPartie();
+                jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
@@ -377,12 +384,14 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "Charger":
                 charge();
                 jeu.changerEtatPartie();
+                jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Regles":
                 break;
             case "Options":
+                jeu.changerEtatJeu(InfoJeu.OPTIONS_MENU);
                 ETAT_JEU = InfoJeu.OPTIONS_MENU;
                 interfaceUtilisateur.afficherPanneau("Options");
                 break;
@@ -401,6 +410,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "OptionsJeu":
                 preOptions = ETAT_JEU;
+                jeu.changerEtatJeu(InfoJeu.OPTIONS_JEU);
                 ETAT_JEU = InfoJeu.OPTIONS_JEU;
                 interfaceUtilisateur.afficherPanneau("OptionsJeu");
                 break;
@@ -419,11 +429,14 @@ public class ControleurMediateur implements CollecteurEvenements {
                 //interfaceUtilisateur.afficherPanneau("MenuPrincipal");
                 break;
             case "RetourJeu":
+                jeu.changerEtatJeu(preOptions);
                 ETAT_JEU = preOptions;
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "AnnulerTour":
                 jeu.annulerTour();
+                jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
+                jeu.changeCarteActuelle(8);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 break;
             default:
@@ -435,6 +448,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     private void finDeTour() {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
             jeu.finDeTour();
+            jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
             ETAT_JEU = InfoJeu.DEBUT_TOUR;
             changerJoueurCourant();
             interfaceUtilisateur.miseAJourFinDeTour();

@@ -188,16 +188,16 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
                 int d = jeu.positionsPourCour();
                 if (d == 1 || d == 0) {
-                    dessinable.drawOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau,
-                            quartHauteurPlateau,
-                            positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau + 10,
-                            quartHauteurPlateau + 10);
+                    dessinable.setColor(new Color(255, 255, 0));
+                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau,
+                            quartHauteurPlateau * 3,
+                            30,30);
                 }
                 if (d == 2 || d == 0) {
-                    dessinable.drawOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau,
-                            quartHauteurPlateau,
-                            positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau + 10,
-                            quartHauteurPlateau + 10);
+                    dessinable.setColor(new Color(255, 255, 0));
+                    dessinable.fillOval(positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau,
+                            quartHauteurPlateau * 3,
+                            30,30);
                 }
 
             default:
@@ -606,21 +606,21 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageJetonFou = chargeImage("Jeton_Fou");
         imageJetonSorcier = chargeImage("Jeton_Sorcier");
 
-        imageJetonGardeGaucheSelection = chargeImage("Jeton_Garde_Gauche_Selection");
-        imageJetonGardeDroitSelection = chargeImage("Jeton_Garde_Droit_Selection");
-        imageJetonRoiSelection = chargeImage("Jeton_Roi_Selection");
-        imageJetonFouSelection = chargeImage("Jeton_Fou_Selection");
-        imageJetonSorcierSelection = chargeImage("Jeton_Sorcier_Selection");
+        imageJetonGardeGaucheSelection = chargeImage("Jeton_Garde_Gauche");
+        imageJetonGardeDroitSelection = chargeImage("Jeton_Garde_Droit");
+        imageJetonRoiSelection = chargeImage("Jeton_Roi");
+        imageJetonFouSelection = chargeImage("Jeton_Fou");
+        imageJetonSorcierSelection = chargeImage("Jeton_Sorcier");
 
-        imageJetonRoiPouvoir = chargeImage("Jeton_Roi_Pouvoir");
-        imageJetonFouPouvoir = chargeImage("Jeton_Fou_Pouvoir");
-        imageJetonSorcierPouvoir = chargeImage("Jeton_Sorcier_Pouvoir");
+        imageJetonRoiPouvoir = chargeImage("Jeton_Roi");
+        imageJetonFouPouvoir = chargeImage("Jeton_Fou");
+        imageJetonSorcierPouvoir = chargeImage("Jeton_Sorcier");
 
-        imageJetonGardeGaucheGrise = chargeImage("Jeton_Garde_Gauche");
-        imageJetonGardeDroitGrise = chargeImage("Jeton_Garde_Droit");
-        imageJetonRoiGrise = chargeImage("Jeton_Roi");
-        imageJetonFouGrise = chargeImage("Jeton_Fou");
-        imageJetonSorcierGrise = chargeImage("Jeton_Sorcier");
+        imageJetonGardeGaucheGrise = chargeImageGrise("Jeton_Garde_Gauche");
+        imageJetonGardeDroitGrise = chargeImageGrise("Jeton_Garde_Droit");
+        imageJetonRoiGrise = chargeImageGrise("Jeton_Roi");
+        imageJetonFouGrise = chargeImageGrise("Jeton_Fou");
+        imageJetonSorcierGrise = chargeImageGrise("Jeton_Sorcier");
 
         imageCarteErreur = chargeImage("Carte_Erreur");
         imageCarteVide = chargeImage("Carte_Vide");
