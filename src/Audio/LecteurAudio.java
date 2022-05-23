@@ -13,11 +13,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class LecteurAudio {
 
-    // define storage for start position
     Long momentActuel;
     Clip clip;
 
-    // get the clip status
     String etatClip;
 
     float gererVolume = 0;
@@ -29,7 +27,9 @@ public class LecteurAudio {
 
     String nomFichierAudio = "the-weeknd-medieval";
 
-    // initialize both the clip and streams
+    // =========================
+    // ===== CONSTRUCTEUR  =====
+    // =========================
     public LecteurAudio(String nomFichierAudio) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         
         audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
@@ -39,6 +39,9 @@ public class LecteurAudio {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
+    // ======================
+    // ===== MAIN TEST  =====
+    // ======================
     public static void main(String[] args) {
         try {
 

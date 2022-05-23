@@ -37,23 +37,23 @@ public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
                 break;
 
             case 1:
-                coeff = 1.2;
+                coeff = 1.3;
                 break;
 
             case 2:
-                coeff = 1.4;
-                break;
-
-            case 3:
                 coeff = 1.6;
                 break;
 
+            case 3:
+                coeff = 1.9;
+                break;
+
             case 4:
-                coeff = 1.8;
+                coeff = 2.2;
                 break;
         
             default:
-                coeff = 2;
+                coeff = 2.5;
                 break;
         }
         return coeff;

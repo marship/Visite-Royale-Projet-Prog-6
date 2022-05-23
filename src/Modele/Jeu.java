@@ -1094,7 +1094,6 @@ public class Jeu extends Observable {
 
     public int tailleHistoirique() {
         return plateau().tailleHistorique();
-        // TODO ADRIEN !!!!
     }
 
     // ======================
