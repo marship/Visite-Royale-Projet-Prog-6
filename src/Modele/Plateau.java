@@ -305,6 +305,7 @@ public class Plateau extends Historique<PlateauHistorique> implements Cloneable 
         while(!sequencePlateau.estVide()) {
             futur.insereQueue(sequencePlateau.extraitTete());
         }
+        
         return tailleHistorique;
     }
 
