@@ -404,6 +404,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "Valider":
                 if (!jeu.estPartieEnCours()) {
+                    initInfoJoueurs();
                     jeu.plateau().initialisation();
                     interfaceUtilisateur.afficherPanneau("Plateau");
                 }
@@ -480,6 +481,32 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
         return true;
     }
+
+    private void initInfoJoueurs() {
+        int infoJoueurGauche = getInfoJoueur(JOUEUR_GAUCHE);
+        System.out.println("Joueur de gauche : " + infoJoueurGauche + " | Joueur de droite : " + infoJoueurGauche);
+        int infoJoueurDroite = getInfoJoueur(JOUEUR_DROIT);
+        changerJoueurCourant(JOUEUR_GAUCHE, infoJoueurGauche);
+        changerJoueurCourant(JOUEUR_DROIT, infoJoueurDroite);
+        jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueur(JOUEUR_GAUCHE), interfaceUtilisateur.getNomJoueur(JOUEUR_DROIT));
+
+
+    }
+    //TODO rajouter des case pour plus d'IA
+    private int getInfoJoueur(int coteJoueur){
+        System.out.println(interfaceUtilisateur.getInfoJoueur(coteJoueur));
+        switch(interfaceUtilisateur.getInfoJoueur(coteJoueur)){
+            case("Humain"):
+                return JOUEUR_HUMAIN;
+            case("IAfacile"):
+                return JOUEUR_IAALEATOIRE_INTELLIGENTE;
+            case("IAexperte"):
+                return JOUEUR_AMEL;
+            default:
+                return -1;
+        }
+        
+    };
 
     private void finDeTour() {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
