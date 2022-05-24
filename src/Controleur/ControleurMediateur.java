@@ -16,7 +16,7 @@ import Global.Element;
 import Global.InfoJeu;
 import Joueur.Joueur;
 import Joueur.JoueurHumain;
-import Joueur.JoueurIAAleatoireQuiEssaye;
+import Joueur.JoueurIAAleatoire;
 import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIAExperte;
 import Joueur.JoueurIARandom;
@@ -102,7 +102,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         for (int i = 0; i < joueurs.length; i++) {
             joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
-            joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoireQuiEssaye(i, jeu);
+            joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoire(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE_TOTALE] = new JoueurIARandom(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE_INTELLIGENTE] = new JoueurIAAleatoireIntelligente(i, jeu);
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAnastasia(i, jeu);
@@ -110,7 +110,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
 
         changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_IAEXPERTE);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_ANASTASIA_DEUX);
 
         joueurCourant = jeu.joueurCourant();
         attenteCarte = false;
@@ -369,7 +369,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 else{
                     if (joueurs[joueurCourant][type].tempsEcoule()) {
                         attenteCarte = true;
-                        decompteTimer = LENTEUR_ATTENTE * 6;
+                        decompteTimer = LENTEUR_ATTENTE;
                     } else {
                         // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
                         // l'attend.

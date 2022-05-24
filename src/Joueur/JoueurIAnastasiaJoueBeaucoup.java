@@ -1,5 +1,8 @@
 package Joueur;
 
+import java.util.Random;
+
+import Global.Configuration;
 import Global.Element;
 import Modele.Jeu;
 import Modele.ListePlateaux;
@@ -78,6 +81,7 @@ public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
         ListePlateaux lP = new ListePlateaux(jeu);
 
         Sequence<CoupleAtteindrePlateau> liste = lP.constructionListePlateau();
+        Sequence<CoupleAtteindrePlateau> lesWINNER = Configuration.instance().nouvelleSequence();
 
         int[] positions = new int[5];
         positions[0] = jeu.obtenirPositionElement(Element.ROI);
@@ -87,7 +91,7 @@ public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
         positions[4] = jeu.obtenirPositionElement(Element.SORCIER);
 
         Evaluation eval = new Evaluation(jeu.plateau().clone());
-		double noteMax = eval.note(jeu.joueurCourant());
+		double noteMax = -10000;
         double noteCourrente;
 
         CoupleAtteindrePlateau winner = new CoupleAtteindrePlateau(positions, positions);
@@ -98,11 +102,22 @@ public class JoueurIAnastasiaJoueBeaucoup extends Joueur {
             mettreLesPositions(test.positions());
             eval = new Evaluation(jeu.plateau().clone());
             noteCourrente = eval.note(jeu.joueurCourant()) * coeffCartes(test.cartes());
+            if(noteCourrente == noteMax){
+                lesWINNER.insereQueue(test);
+            }
             if(noteCourrente > noteMax){
-                winner = test;
+                lesWINNER = Configuration.instance().nouvelleSequence();
+                lesWINNER.insereQueue(test);
                 noteMax = noteCourrente;
             }
         }
+
+        Random r = new Random();
+        int i = r.nextInt(lesWINNER.taille() + 1);
+        do {
+            winner = lesWINNER.extraitTete();
+            i--;
+        } while (i > 0);
 
         mettreLesPositions(winner.positions());
         poserLesCartes(winner.cartes());

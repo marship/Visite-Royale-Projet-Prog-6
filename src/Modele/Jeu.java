@@ -464,6 +464,10 @@ public class Jeu extends Observable {
         metAJour();
     }
 
+    public void poserCouronne(int nouvellePosition){
+        plateau().couronne.positionnerCouronne(nouvellePosition);
+    }
+
     public void changerEtatCouronne() {
         if (actionAutoriser()) {
             plateau().changerEtatCouronne();

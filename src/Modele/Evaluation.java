@@ -247,9 +247,19 @@ public class Evaluation {
             coeff = 2;
         }
         if (joueurCourant) {
-            resRoi = positionRoi * coeff;
+            if(positionRoi > 6){
+                resRoi = 1000;
+            }
+            else{
+                resRoi = positionRoi * coeff;
+            }
         } else {
-            resRoi = -positionRoi * coeff;
+            if(positionRoi < -6){
+                resRoi = 1000;
+            }
+            else{
+                resRoi = -positionRoi * coeff;
+            }
         }
         return resRoi;
     }
@@ -301,10 +311,16 @@ public class Evaluation {
                     || ((positionCouronne == 5) && (calculChateau(joueurCourant) >= 6))) {
                 resCouronne = resCouronne + 6;
             }
+            if(positionCouronne == 7 || positionCouronne == 8){
+                resCouronne = resCouronne + 1000;
+            }
         } else {
             if (((positionCouronne == -6) && (calculChateau(joueurCourant) >= 4))
                     || ((positionCouronne == -5) && (calculChateau(joueurCourant) >= 6))) {
                 resCouronne = resCouronne + 6;
+            }
+            if(positionCouronne == -7 || positionCouronne == -8){
+                resCouronne = resCouronne + 1000;
             }
         }
         return resCouronne;

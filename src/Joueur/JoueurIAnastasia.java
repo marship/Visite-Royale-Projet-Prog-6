@@ -1,5 +1,8 @@
 package Joueur;
 
+import java.util.Random;
+
+import Global.Configuration;
 import Global.Element;
 import Modele.Jeu;
 import Modele.ListePlateaux;
@@ -40,6 +43,7 @@ public class JoueurIAnastasia extends Joueur {
         ListePlateaux lP = new ListePlateaux(jeu);
 
         Sequence<CoupleAtteindrePlateau> liste = lP.constructionListePlateau();
+        Sequence<CoupleAtteindrePlateau> lesWINNER = Configuration.instance().nouvelleSequence();
 
         int[] positions = new int[5];
         positions[0] = jeu.obtenirPositionElement(Element.ROI);
@@ -52,19 +56,30 @@ public class JoueurIAnastasia extends Joueur {
 		double noteMax = eval.note(jeu.joueurCourant());
         double noteCourrente;
 
-        CoupleAtteindrePlateau winner = new CoupleAtteindrePlateau(positions, positions);
         CoupleAtteindrePlateau test = new CoupleAtteindrePlateau(positions, positions);
+        CoupleAtteindrePlateau winner = new CoupleAtteindrePlateau(positions, positions);
         
         while(!liste.estVide()){
             test = liste.extraitTete();
             mettreLesPositions(test.positions());
             eval = new Evaluation(jeu.plateau().clone());
             noteCourrente = eval.note(jeu.joueurCourant());
+            if(noteCourrente == noteMax){
+                lesWINNER.insereQueue(test);
+            }
             if(noteCourrente > noteMax){
-                winner = test;
+                lesWINNER = Configuration.instance().nouvelleSequence();
+                lesWINNER.insereQueue(test);
                 noteMax = noteCourrente;
             }
         }
+
+        Random r = new Random();
+        int i = r.nextInt(lesWINNER.taille() + 1);
+        do {
+            winner = lesWINNER.extraitTete();
+            i--;
+        } while (i > 0);
 
         mettreLesPositions(winner.positions());
         poserLesCartes(winner.cartes());
