@@ -1,15 +1,19 @@
-package Vue;
+package Adaptateur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import Audio.Son;
+import Vue.CollecteurEvenements;
 
 public class AdaptateurCommande implements ActionListener {
 
     CollecteurEvenements collecteurEvenements;
     String nomSonAudio = "Son_Bouton";
     String commande;
+    Son son;
 
-    AdaptateurCommande(CollecteurEvenements cEvenements, String com) {
+    public AdaptateurCommande(CollecteurEvenements cEvenements, String com) {
         collecteurEvenements = cEvenements;
         commande = com;
     }
@@ -17,6 +21,7 @@ public class AdaptateurCommande implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         collecteurEvenements.commande(commande);
-        collecteurEvenements.lancerAudioSon(nomSonAudio);
+        son = new Son();
+        son.moyenVolume();
     }
 }

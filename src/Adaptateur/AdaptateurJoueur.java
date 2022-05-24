@@ -1,6 +1,9 @@
-package Vue;
+package Adaptateur;
 
 import javax.swing.*;
+
+import Vue.CollecteurEvenements;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

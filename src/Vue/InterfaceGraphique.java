@@ -8,10 +8,14 @@ import java.awt.*;
 import java.io.IOException;
 
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import Audio.LecteurAudio;
+import Adaptateur.AdaptateurBoutonGlissant;
+import Adaptateur.AdaptateurClavier;
+import Adaptateur.AdaptateurCommande;
+import Adaptateur.AdaptateurSouris;
+import Adaptateur.AdaptateurSourisMouvement;
+import Adaptateur.AdaptateurTemps;
+import Audio.Son;
 import Global.InfoJeu;
 
 
@@ -23,11 +27,10 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     String sonAudio = "Son_Bouton";
     String musiqueAudio = "the-weeknd-medieval";
     // String musiqueAudio = "gangstas-paradise-medieval";
-    LecteurAudio lecteurAudio;
 	CollecteurEvenements collecteurEvenements;
 
     PlateauGraphique plateauGraphique;
-    JSlider boutonGlissantSon, boutonGlissantMusique;
+    JSlider boutonGlissantMusique;
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
                 boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonAnnulerJeu, boutonOptionsJeu, boutonFinDeTour, boutonHistorique,
                 boutonRetourArriere, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
@@ -46,7 +49,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
 		jeu = j;
 		collecteurEvenements = cEvenements;
-        son = new Son(sonAudio);
         musique = new Son(musiqueAudio);
 	}
 
@@ -296,23 +298,23 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridy = 0;
         panelOptions.add(test, gbc);
 
-        JSlider musique = new JSlider(0, 100, 100);
-        musique.setMajorTickSpacing(25);
-        musique.setMinorTickSpacing(5);
-        musique.setOpaque(false);
-        musique.setPaintLabels(true);
+        boutonGlissantMusique = new JSlider(-24, 6);
+        boutonGlissantMusique.addChangeListener(new AdaptateurBoutonGlissant(musique, boutonGlissantMusique));
+        boutonGlissantMusique.setOpaque(false);
+        boutonGlissantMusique.setPaintLabels(true);
+
 
         JLabel txtMusique = new JLabel("Volume musique");
 
         Container musiqueBox = Box.createHorizontalBox();
-        musiqueBox.add(musique);
+        musiqueBox.add(boutonGlissantMusique);
         musiqueBox.add(Box.createRigidArea(new Dimension(20, 20)));
         musiqueBox.add(txtMusique);
         gbc.gridx = 0;
         gbc.gridy++;
     
         panelOptions.add(musiqueBox, gbc);
- 
+
         boutonCredits = new DesignBoutons("Crédits", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonCredits.addActionListener(new AdaptateurCommande(collecteurEvenements, "Credits"));
         gbc.gridy++;
@@ -397,19 +399,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         musiqueBox.add(txtMusique);
 
         panelOptionsJeu.add(musiqueBox);
-    
-        JLabel txtSon = new JLabel("Volume son");
-        boutonGlissantSon = new JSlider(-24, 6);
-        boutonGlissantSon.addChangeListener(new AdaptateurBoutonGlissant(son, boutonGlissantSon));
-        boutonGlissantSon.setOpaque(false);
-        boutonGlissantSon.setPaintLabels(true);
-    
-        Container sonBox = Box.createHorizontalBox();
-        sonBox.add(boutonGlissantSon);
-        sonBox.add(Box.createHorizontalGlue());
-        sonBox.add(txtSon);
-    
-        panelOptionsJeu.add(sonBox);
 
         boutonAide = new DesignBoutons("Aide", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonAide.addActionListener(new AdaptateurCommande(collecteurEvenements, "Aide"));

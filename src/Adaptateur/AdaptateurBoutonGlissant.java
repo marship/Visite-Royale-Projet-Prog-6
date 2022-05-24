@@ -1,8 +1,10 @@
-package Vue;
+package Adaptateur;
 
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import Audio.Son;
 
 public class AdaptateurBoutonGlissant implements ChangeListener {
 
@@ -14,7 +16,7 @@ public class AdaptateurBoutonGlissant implements ChangeListener {
     // ========================
     // ===== CONSTRUCTEUR =====
     // ========================
-    AdaptateurBoutonGlissant(Son a, JSlider bGlissantAudio) {
+    public AdaptateurBoutonGlissant(Son a, JSlider bGlissantAudio) {
         audio = a;
         boutonGlissantAudio = bGlissantAudio;
     }
@@ -28,7 +30,6 @@ public class AdaptateurBoutonGlissant implements ChangeListener {
         if (audio.volumeCourant == -24) {
             audio.volumeCourant = -80;
         }
-        System.out.println("Volume : " + audio.volumeCourant);
         audio.floatControl.setValue(audio.volumeCourant);
     }
 }

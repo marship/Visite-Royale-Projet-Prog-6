@@ -1,16 +1,10 @@
 package Controleur;
 
-import java.io.IOException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import Audio.LecteurAudio;
 import Global.Configuration;
 import Global.Element;
 import Global.InfoJeu;
@@ -64,13 +58,6 @@ public class ControleurMediateur implements CollecteurEvenements {
     // =================
     static final int LENTEUR_ATTENTE = 100;
 
-    // =================
-    // ===== AUDIO =====
-    // =================
-    LecteurAudio lecteurAudioMusique;
-    LecteurAudio lecteurAudioSon;
-    int optionAudio = 0;
-
     // ====================
     // ===== ETAT JEU =====
     // ====================
@@ -99,7 +86,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         typeJoueur = new int[NOMBRE_TYPE_JOUEUR];
 
         // String nomFichierAudio = "gangstas-paradise-medieval";
-        String nomFichierAudio = "the-weeknd-medieval";
+        // String nomFichierAudio = "the-weeknd-medieval";
         // lancerAudioMusique(nomFichierAudio);
 
         for (int i = 0; i < joueurs.length; i++) {
@@ -255,50 +242,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return elementSelectione;
             default:
                 return elementSelectione;
-        }
-    }
-
-    // =================
-    // ===== AUDIO =====
-    // =================
-    void lancerAudioMusique(String nomFichierAudio) {
-        try {
-            lecteurAudioMusique = new LecteurAudio(nomFichierAudio, true);
-            lecteurAudioMusique.play();
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            Configuration.instance().logger().severe("Erreur au lancement de la musique !!");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void lancerAudioSon(String nomFichierAudio) {
-        try {
-            lecteurAudioSon = new LecteurAudio(nomFichierAudio, false);
-            lecteurAudioSon.play();
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            Configuration.instance().logger().severe("Erreur au lancement du son !!");
-            e.printStackTrace();
-        }
-    }
-
-    /*
-    @Override
-    public void gestionVolume(float valeurVolume, boolean gestionMusique) {
-        if (gestionMusique) {
-            lecteurAudioMusique.gererVolume(valeurVolume);
-        } else {
-            lecteurAudioSon.gererVolume(valeurVolume);
-        }
-    }
-    */
-
-    // TODO Not Use !!!
-    void optionAudio(int option) {
-        try {
-            lecteurAudioMusique.gotoChoice(option);
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            e.printStackTrace();
         }
     }
 

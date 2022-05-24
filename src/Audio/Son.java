@@ -1,4 +1,4 @@
-package Vue;
+package Audio;
 
 import java.io.File;
 
@@ -12,8 +12,8 @@ public class Son {
     
     Clip clip;
     float volumePrecedent = -9;
-    float volumeCourant = -9;
-    FloatControl floatControl;
+    public float volumeCourant = -9;
+    public FloatControl floatControl;
     boolean estMuter = false;
     AudioInputStream audioInputStream;
 
@@ -23,10 +23,15 @@ public class Son {
     static final String CHEMIN_FICHIER_AUDIO = "res/Audios/";
     static final String EXTENSION_FICHIER_AUDIO = ".wav";
 
-    Son(String nomFichierAudio) {
+    public Son(String nomFichierAudio) {
         setFichier(nomFichierAudio);
         jouer();
         boucle();
+    }
+
+    public Son() {
+        setFichier("Son_Bouton");
+        jouer();
     }
 
     public void setFichier(String nomFichierAudio) {
@@ -55,9 +60,13 @@ public class Son {
         clip.stop();
     }
 
+    public void moyenVolume() {
+        volumeCourant = -9.0f;
+        floatControl.setValue(volumeCourant);
+    }
+
     public void augmenterVolume() {
         volumeCourant = volumeCourant + 1.0f;
-        System.out.println("Volume : " + volumeCourant);
         if (volumeCourant > 6.0f) {
             volumeCourant = 6.0f;
         }
@@ -66,7 +75,6 @@ public class Son {
 
     public void diminuerVolume() {
         volumeCourant = volumeCourant - 1.0f;
-        System.out.println("Volume : " + volumeCourant);
         if (volumeCourant < - 80.0f) {
             volumeCourant = - 80.0f;
         }
@@ -76,7 +84,6 @@ public class Son {
     public void muterVolume(JSlider boutonGlissant) {
         if (estMuter == false) {
             volumePrecedent = volumeCourant;
-            System.out.println("Volume : " + volumeCourant);
             volumeCourant = - 80.0f;
             floatControl.setValue(volumeCourant);
             estMuter = true;
@@ -85,7 +92,6 @@ public class Son {
         } else if (estMuter == true) {
             volumeCourant = volumePrecedent;
             boutonGlissant.setValue((int) volumeCourant);
-            System.out.println("Volume : " + volumeCourant);
             floatControl.setValue(volumeCourant);
             estMuter = false;
         }

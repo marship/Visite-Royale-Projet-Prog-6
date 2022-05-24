@@ -1,13 +1,15 @@
-package Vue;
+package Adaptateur;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
+import Vue.CollecteurEvenements;
 
 public class AdaptateurClavier extends KeyAdapter {
 
     CollecteurEvenements collecteurEvenements;
 
-    AdaptateurClavier(CollecteurEvenements cEvenements) {
+    public AdaptateurClavier(CollecteurEvenements cEvenements) {
         collecteurEvenements = cEvenements;
     }
 

@@ -1,9 +1,11 @@
-package Vue;
+package Adaptateur;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import Global.Configuration;
+import Vue.CollecteurEvenements;
+import Vue.PlateauGraphique;
 
 public class AdaptateurSouris extends MouseAdapter {
 
@@ -22,7 +24,7 @@ public class AdaptateurSouris extends MouseAdapter {
     // ========================
     // ===== CONSTRUCTEUR =====
     // ========================
-    AdaptateurSouris(PlateauGraphique pGraphique, CollecteurEvenements cEvenements) {
+    public AdaptateurSouris(PlateauGraphique pGraphique, CollecteurEvenements cEvenements) {
         plateauGraphique = pGraphique;
         collecteurEvenements = cEvenements;
     }

@@ -1,6 +1,10 @@
-package Vue;
+package Adaptateur;
 
 import java.awt.event.MouseMotionListener;
+
+import Vue.CollecteurEvenements;
+import Vue.PlateauGraphique;
+
 import java.awt.event.MouseEvent;
 
 public class AdaptateurSourisMouvement implements MouseMotionListener {
