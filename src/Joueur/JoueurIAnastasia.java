@@ -13,12 +13,14 @@ import Structures.Sequence;
 public class JoueurIAnastasia extends Joueur {
 
     Element jouee = Element.VIDE;
+    int baseCouronne;
 
     public JoueurIAnastasia(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
 	}
 
     void mettreLesPositions(int[] positions){
+        jeu.plateau().couronne.positionnerCouronne(baseCouronne);
         jeu.obtenirPersonnageElement(Element.ROI).positionnerPersonnage(positions[0]);
         jeu.obtenirPersonnageElement(Element.GARDE_GAUCHE).positionnerPersonnage(positions[1]);
         jeu.obtenirPersonnageElement(Element.GARDE_DROIT).positionnerPersonnage(positions[2]);
@@ -52,6 +54,8 @@ public class JoueurIAnastasia extends Joueur {
         positions[3] = jeu.obtenirPositionElement(Element.FOU);
         positions[4] = jeu.obtenirPositionElement(Element.SORCIER);
 
+        baseCouronne = jeu.getPositionCouronne();
+
         Evaluation eval = new Evaluation(jeu.plateau().clone());
 		double noteMax = eval.note(jeu.joueurCourant());
         double noteCourrente;
@@ -62,6 +66,7 @@ public class JoueurIAnastasia extends Joueur {
         while(!liste.estVide()){
             test = liste.extraitTete();
             mettreLesPositions(test.positions());
+            jeu.deplacerCouronne(jeu.plateau().valeurDeplacementCouronne());
             eval = new Evaluation(jeu.plateau().clone());
             noteCourrente = eval.note(jeu.joueurCourant());
             if(noteCourrente == noteMax){

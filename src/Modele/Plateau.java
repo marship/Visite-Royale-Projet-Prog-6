@@ -168,7 +168,7 @@ public class Plateau extends Historique<PlateauHistorique> implements Cloneable 
         couronne.changerEtatCouronne();
     }
 
-    int valeurDeplacementCouronne() {
+    public int valeurDeplacementCouronne() {
         int valeurDeplacementCouronne = 0;
         switch (joueurCourant) {
             case JOUEUR_GAUCHE:
