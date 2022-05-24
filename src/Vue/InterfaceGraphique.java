@@ -95,110 +95,43 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	//Crée le JPanel du menu principal
 	public void creerMenuPrincipal() throws IOException{
 
-        int borderTop = hauteurFenetre / 8;
-        int borderBottom = hauteurFenetre / 10;
-        int borderSides = largeurFenetre / 4;
+        int borderTop = hauteurFenetre / 6;
+        int borderBottom = hauteurFenetre / 8;
+        int borderSides = largeurFenetre / 3;
 
 		panelMenuPrincipal = new MenuGraphique(InfoJeu.MENU_PRINCIPAL);
 		panelMenuPrincipal.setLayout(new GridBagLayout());
 		panelMenuPrincipal.setBorder(new EmptyBorder(borderTop,borderSides,borderBottom,borderSides));
         GridBagConstraints gbc = new GridBagConstraints();
 
-        String[] choixComboBox = {
-            "Humain",
-            "IA Aléatoire",
-            "IA experte"
-        };
-
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.33;
-        gbc.insets = new Insets(10,0,0,10);  //top padding
+        gbc.insets = new Insets(20,0,0,0); 
 
-        JLabel nomJoueur1 = new JLabel("Nom du Joueur 1");
-        gbc.gridx = 0;
-        gbc.gridy = 0;  
-        panelMenuPrincipal.add(nomJoueur1, gbc);
-
-        gbc.ipady = 10;
-        JTextField valeurNomJoueur1 = new JTextField();
-        gbc.gridx = 0;
-        gbc.gridy = 1;  
-        valeurNomJoueur1.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
-        valeurNomJoueur1.setText("Joueur1");
-        panelMenuPrincipal.add(valeurNomJoueur1, gbc);
-
-        JComboBox<String> comboBoxJoueur1 = new JComboBox<>();
-        for(int i = 0; i < choixComboBox.length; i++){
-            comboBoxJoueur1.addItem(choixComboBox[i]);
-        }
-        comboBoxJoueur1.setFocusable(false);
-        comboBoxJoueur1.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
-        
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panelMenuPrincipal.add(comboBoxJoueur1, gbc);
-
-        gbc.insets = new Insets(10,largeurFenetre/10,0,0);  //padding elements Joueur2
-
-        gbc.ipady = 0;
-        JLabel nomJoueur2 = new JLabel("Nom du Joueur 2");
-        gbc.gridx = 1;
-        gbc.gridy = 0; 
-        panelMenuPrincipal.add(nomJoueur2, gbc);
-
-        gbc.ipady = 10;
-        JTextField valeurNomJoueur2 = new JTextField();
-        gbc.gridx = 1;
-        gbc.gridy = 1;  
-        valeurNomJoueur2.setText("Joueur2");
-        valeurNomJoueur2.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
-        panelMenuPrincipal.add(valeurNomJoueur2, gbc);
-
-        
-        JComboBox<String> comboBoxJoueur2 = new JComboBox<>();
-        for(int i = 0; i < choixComboBox.length; i++){
-            comboBoxJoueur2.addItem(choixComboBox[i]);
-        }
-        comboBoxJoueur2.setFocusable(false);
-        comboBoxJoueur2.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
-        
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        panelMenuPrincipal.add(comboBoxJoueur2, gbc);
-
-        gbc.ipady = 0;
-        gbc.weighty = 0.15;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(70,0,0,0);  
+        gbc.weighty = 0.2; 
         boutonJouer = new DesignBoutons("Jouer", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonJouer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 0;
         panelMenuPrincipal.add(boutonJouer, gbc);
 
-        gbc.insets = new Insets(20,0,0,0); 
         boutonCharger = new DesignBoutons("Charger une partie", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonCharger.addActionListener(new AdaptateurCommande(collecteurEvenements, "Charger"));
-        gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy++;
         panelMenuPrincipal.add(boutonCharger, gbc);
 
         boutonRegles = new DesignBoutons("Règles du jeu", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonRegles.addActionListener(new AdaptateurCommande(collecteurEvenements, "Regles"));
-        gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy++;
         panelMenuPrincipal.add(boutonRegles, gbc);
 
         boutonOptions = new DesignBoutons("Options", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonOptions.addActionListener(new AdaptateurCommande(collecteurEvenements, "Options"));
-        gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy++;
         panelMenuPrincipal.add(boutonOptions, gbc);
 
         boutonQuitter = new DesignBoutons("Quitter", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonQuitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
-        gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy++;
         panelMenuPrincipal.add(boutonQuitter, gbc);
 
 
