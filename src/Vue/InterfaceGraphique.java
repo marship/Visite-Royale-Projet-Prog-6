@@ -69,7 +69,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
             panelCourant.add(panelOptions, "Options");
             creerPlateauJeu();
             panelCourant.add(plateauGraphique, "Plateau");
-
+            creerSelectionJoueurs();
+            panelCourant.add(panelSelectionJoueurs, "SelectionJoueur");
             creerOptionsJeu();
             panelCourant.add(panelOptionsJeu, "OptionsJeu");
 
@@ -202,6 +203,100 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
 
     } 
+
+    public void creerSelectionJoueurs() throws IOException{
+
+        int borderTop = hauteurFenetre / 3;
+        int borderBottom = hauteurFenetre / 3;
+        int borderSides = largeurFenetre / 3;
+
+        panelSelectionJoueurs = new MenuGraphique(InfoJeu.SELECTION_JOUEURS);
+        panelSelectionJoueurs.setLayout(new GridBagLayout());
+        panelSelectionJoueurs.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        String[] choixComboBox = {
+            "Humain",
+            "IA Aléatoire",
+            "IA experte"
+        };
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.33;
+        gbc.insets = new Insets(10,0,0,10);  //top padding
+
+        JLabel nomJoueur1 = new JLabel("Nom du Joueur 1");
+        gbc.gridx = 0;
+        gbc.gridy = 0;  
+        panelSelectionJoueurs.add(nomJoueur1, gbc);
+
+        gbc.ipady = 10;
+        JTextField valeurNomJoueur1 = new JTextField();
+        gbc.gridx = 0;
+        gbc.gridy = 1;  
+        valeurNomJoueur1.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
+        valeurNomJoueur1.setText("Joueur1");
+        panelSelectionJoueurs.add(valeurNomJoueur1, gbc);
+
+        JComboBox<String> comboBoxJoueur1 = new JComboBox<>();
+        for(int i = 0; i < choixComboBox.length; i++){
+            comboBoxJoueur1.addItem(choixComboBox[i]);
+        }
+        comboBoxJoueur1.setFocusable(false);
+        comboBoxJoueur1.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panelSelectionJoueurs.add(comboBoxJoueur1, gbc);
+
+        gbc.insets = new Insets(10,30,0,0);  //padding elements Joueur2
+
+        gbc.ipady = 0;
+        JLabel nomJoueur2 = new JLabel("Nom du Joueur 2");
+        gbc.gridx = 1;
+        gbc.gridy = 0; 
+        panelSelectionJoueurs.add(nomJoueur2, gbc);
+
+        gbc.ipady = 10;
+        JTextField valeurNomJoueur2 = new JTextField();
+        gbc.gridx = 1;
+        gbc.gridy = 1;  
+        valeurNomJoueur2.setText("Joueur2");
+        valeurNomJoueur2.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
+        panelSelectionJoueurs.add(valeurNomJoueur2, gbc);
+
+
+        JComboBox<String> comboBoxJoueur2 = new JComboBox<>();
+        for(int i = 0; i < choixComboBox.length; i++){
+            comboBoxJoueur2.addItem(choixComboBox[i]);
+        }
+        comboBoxJoueur2.setFocusable(false);
+        comboBoxJoueur2.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panelSelectionJoueurs.add(comboBoxJoueur2, gbc);
+
+
+        gbc.insets = new Insets(70,0,0,0); 
+        gbc.gridx = 0;
+        gbc.gridy = 3; 
+
+        DesignBoutons valider = new DesignBoutons("Valider", "Texture_Moyen_Bouton", 15);
+        valider.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
+        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSelectionJoueurs.add(valider, gbc);
+
+        gbc.gridx = 1;
+        DesignBoutons annuler = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", 15);
+        annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSelectionJoueurs.add(annuler, gbc);
+
+        
+    }
+
+    
 
     public void miseAJourFinDeTour() {
         fenetre.repaint();

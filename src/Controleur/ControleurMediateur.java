@@ -390,7 +390,14 @@ public class ControleurMediateur implements CollecteurEvenements {
     @Override
     public boolean commande(String commande) {
         switch (commande) {
-            case "Jouer":
+            case "Jouer": 
+                ETAT_JEU = InfoJeu.SELECTION_JOUEURS;
+                interfaceUtilisateur.afficherPanneau("SelectionJoueur");
+                break;
+            case "MenuPrincipal":
+                interfaceUtilisateur.afficherPanneau("MenuPrincipal");
+                break;
+            case "Valider":
                 if (!jeu.estPartieEnCours()) {
                     jeu.plateau().initialisation();
                     interfaceUtilisateur.afficherPanneau("Plateau");
@@ -399,9 +406,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 interfaceUtilisateur.afficherPanneau("Plateau");
-                break;
-            case "MenuPrincipal":
-                interfaceUtilisateur.afficherPanneau("MenuPrincipal");
                 break;
             case "Charger":
                 charge();
