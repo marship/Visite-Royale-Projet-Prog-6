@@ -487,6 +487,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
 
     }
+    //TODO rajouter des case pour plus d'IA
     private int getInfoJoueur(int coteJoueur){
         System.out.println(interfaceUtilisateur.getInfoJoueur(coteJoueur));
         switch(interfaceUtilisateur.getInfoJoueur(coteJoueur)){
