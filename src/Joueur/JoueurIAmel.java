@@ -216,18 +216,14 @@ public class JoueurIAmel extends Joueur {
             mettreLesPositions(test.positions());
             jeu.deplacerCouronne(jeu.plateau().valeurDeplacementCouronne());
             eval = new Evaluation(jeu.plateau().clone());
-            noteCourrente = eval.note(jeu.joueurCourant());
-            if(noteCourrente < 0){
-                noteCourrente = noteCourrente * coeffCartesNegatif(test.cartes()) * poidsDesCartesNegatif(test.cartes());
-            }
-            else{
-                noteCourrente = noteCourrente * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes());
-            }
+            noteCourrente = eval.note(jeu.joueurCourant()) * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes());
             if (noteCourrente == noteMax) {
                 lesWINNER.insereQueue(test);
             }
             if (noteCourrente > noteMax) {
-                lesWINNER = Configuration.instance().nouvelleSequence();
+                while(!lesWINNER.estVide()){
+                    lesWINNER.extraitTete();
+                }
                 lesWINNER.insereQueue(test);
                 noteMax = noteCourrente;
             }

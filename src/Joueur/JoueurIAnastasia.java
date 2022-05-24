@@ -73,7 +73,9 @@ public class JoueurIAnastasia extends Joueur {
                 lesWINNER.insereQueue(test);
             }
             if(noteCourrente > noteMax){
-                lesWINNER = Configuration.instance().nouvelleSequence();
+                while(!lesWINNER.estVide()){
+                    lesWINNER.extraitTete();
+                }
                 lesWINNER.insereQueue(test);
                 noteMax = noteCourrente;
             }
