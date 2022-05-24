@@ -44,7 +44,7 @@ public class JoueurIAmel extends Joueur {
                         coeff = coeff * 0.7;
                     }
                     else{
-                        return -10;
+                        return -100;
                     }
                 }
                 if(main[i].deplacement() == Deplacement.RAPPROCHE){
@@ -53,7 +53,7 @@ public class JoueurIAmel extends Joueur {
                         coeff = coeff * 0.7;
                     }
                     else{
-                        return -10;
+                        return -100;
                     }
                 }
                 if(main[i].deplacement() == Deplacement.CINQ){
@@ -79,7 +79,7 @@ public class JoueurIAmel extends Joueur {
                         coeff = coeff * 1.3;
                     }
                     else{
-                        return 10;
+                        return 100;
                     }
                 }
                 if(main[i].deplacement() == Deplacement.RAPPROCHE){
@@ -88,7 +88,7 @@ public class JoueurIAmel extends Joueur {
                         coeff = coeff * 1.3;
                     }
                     else{
-                        return 10;
+                        return 100;
                     }
                 }
                 if(main[i].deplacement() == Deplacement.CINQ){
@@ -112,7 +112,7 @@ public class JoueurIAmel extends Joueur {
         }
         switch (nb) {
             case 0:
-                coeff = 1;
+                coeff = 1.6;
                 break;
 
             case 1:
@@ -154,23 +154,23 @@ public class JoueurIAmel extends Joueur {
                 break;
 
             case 1:
-                coeff = 0.7;
+                coeff = 1.3;
                 break;
 
             case 2:
-                coeff = 0.4;
+                coeff = 1;
                 break;
 
             case 3:
-                coeff = 0.1;
+                coeff = 0.7;
                 break;
 
             case 4:
-                coeff = -0.2;
+                coeff = 0.4;
                 break;
 
             default:
-                coeff = -0.5;
+                coeff = 0.1;
                 break;
         }
         return coeff;
@@ -219,7 +219,7 @@ public class JoueurIAmel extends Joueur {
             noteCourrente = eval.note(jeu.joueurCourant());
             if(noteCourrente < 0){
                 noteCourrente = noteCourrente * coeffCartesNegatif(test.cartes()) * poidsDesCartesNegatif(test.cartes());
-            }
+            } 
             else{
                 noteCourrente = noteCourrente * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes());
             }
@@ -227,7 +227,9 @@ public class JoueurIAmel extends Joueur {
                 lesWINNER.insereQueue(test);
             }
             if (noteCourrente > noteMax) {
-                lesWINNER = Configuration.instance().nouvelleSequence();
+                while(!lesWINNER.estVide()){
+                    lesWINNER.extraitTete();
+                }
                 lesWINNER.insereQueue(test);
                 noteMax = noteCourrente;
             }

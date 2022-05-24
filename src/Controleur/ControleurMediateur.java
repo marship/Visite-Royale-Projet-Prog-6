@@ -110,7 +110,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
 
         changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_AMEL);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_IAEXPERTE);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_AMEL);
 
         joueurCourant = jeu.joueurCourant();
         attenteCarte = false;
