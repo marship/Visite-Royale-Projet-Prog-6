@@ -21,7 +21,7 @@ import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIAExperte;
 import Joueur.JoueurIARandom;
 import Joueur.JoueurIAnastasia;
-import Joueur.JoueurIAnastasiaJoueBeaucoup;
+import Joueur.JoueurIAmel;
 import Modele.Jeu;
 import Modele.Plateau;
 import Modele.PlateauHistorique;
@@ -44,7 +44,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     static final int JOUEUR_IAALEATOIRE_TOTALE = 2;
     static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 3;
     static final int JOUEUR_IAEXPERTE = 4;
-    static final int JOUEUR_ANASTASIA_DEUX = 5;
+    static final int JOUEUR_AMEL = 5;
 
     // ===================
     // ===== PLATEAU =====
@@ -106,11 +106,11 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_IAALEATOIRE_TOTALE] = new JoueurIARandom(i, jeu);
             joueurs[i][JOUEUR_IAALEATOIRE_INTELLIGENTE] = new JoueurIAAleatoireIntelligente(i, jeu);
             joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAnastasia(i, jeu);
-            joueurs[i][JOUEUR_ANASTASIA_DEUX] = new JoueurIAnastasiaJoueBeaucoup(i, jeu);
+            joueurs[i][JOUEUR_AMEL] = new JoueurIAmel(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_ANASTASIA_DEUX);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_ANASTASIA_DEUX);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_AMEL);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_IAEXPERTE);
 
         joueurCourant = jeu.joueurCourant();
         attenteCarte = false;
@@ -369,7 +369,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 else{
                     if (joueurs[joueurCourant][type].tempsEcoule()) {
                         attenteCarte = true;
-                        decompteTimer = LENTEUR_ATTENTE;
+                        decompteTimer = LENTEUR_ATTENTE * 2;
                     } else {
                         // Sinon on indique au joueur qui ne réagit pas au temps (humain) qu'on
                         // l'attend.
