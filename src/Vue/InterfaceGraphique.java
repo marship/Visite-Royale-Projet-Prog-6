@@ -24,6 +24,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
                     
 	CardLayout layout; 
     JPanel panelCourant, panelMenuPrincipal, panelOptions, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
+
+    JComboBox<String> comboBoxJoueurGauche, comboBoxJoueurDroite;
+    JTextField valeurNomJoueurGauche, valeurNomJoueurDroite;
 	
     public JFrame fenetre;
 
@@ -150,7 +153,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         String[] choixComboBox = {
             "Humain",
-            "IA Aléatoire",
+            "IA facile",
             "IA experte"
         };
 
@@ -158,57 +161,57 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.weightx = 0.33;
         gbc.insets = new Insets(10,0,0,10);  //top padding
 
-        JLabel nomJoueur1 = new JLabel("Nom du Joueur 1");
+        JLabel nomJoueurGauche = new JLabel("Joueur Gauche");
         gbc.gridx = 0;
         gbc.gridy = 0;  
-        panelSelectionJoueurs.add(nomJoueur1, gbc);
+        panelSelectionJoueurs.add(nomJoueurGauche, gbc);
 
         gbc.ipady = 10;
-        JTextField valeurNomJoueur1 = new JTextField();
+        valeurNomJoueurGauche = new JTextField();
         gbc.gridx = 0;
         gbc.gridy = 1;  
-        valeurNomJoueur1.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
-        valeurNomJoueur1.setText("Joueur1");
-        panelSelectionJoueurs.add(valeurNomJoueur1, gbc);
+        valeurNomJoueurGauche.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
+        valeurNomJoueurGauche.setText("Joueur 1");
+        panelSelectionJoueurs.add(valeurNomJoueurGauche, gbc);
 
-        JComboBox<String> comboBoxJoueur1 = new JComboBox<>();
+        comboBoxJoueurGauche = new JComboBox<>();
         for(int i = 0; i < choixComboBox.length; i++){
-            comboBoxJoueur1.addItem(choixComboBox[i]);
+            comboBoxJoueurGauche.addItem(choixComboBox[i]);
         }
-        comboBoxJoueur1.setFocusable(false);
-        comboBoxJoueur1.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        comboBoxJoueurGauche.setFocusable(false);
+        comboBoxJoueurGauche.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueurGauche.getSelectedItem().toString()));
         
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panelSelectionJoueurs.add(comboBoxJoueur1, gbc);
+        panelSelectionJoueurs.add(comboBoxJoueurGauche, gbc);
 
         gbc.insets = new Insets(10,30,0,0);  //padding elements Joueur2
 
         gbc.ipady = 0;
-        JLabel nomJoueur2 = new JLabel("Nom du Joueur 2");
+        JLabel nomJoueurDroite = new JLabel("Joueur Droite");
         gbc.gridx = 1;
         gbc.gridy = 0; 
-        panelSelectionJoueurs.add(nomJoueur2, gbc);
+        panelSelectionJoueurs.add(nomJoueurDroite, gbc);
 
         gbc.ipady = 10;
-        JTextField valeurNomJoueur2 = new JTextField();
+        valeurNomJoueurDroite = new JTextField();
         gbc.gridx = 1;
         gbc.gridy = 1;  
-        valeurNomJoueur2.setText("Joueur2");
-        valeurNomJoueur2.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
-        panelSelectionJoueurs.add(valeurNomJoueur2, gbc);
+        valeurNomJoueurDroite.setText("Joueur 2");
+        valeurNomJoueurDroite.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
+        panelSelectionJoueurs.add(valeurNomJoueurDroite, gbc);
 
 
-        JComboBox<String> comboBoxJoueur2 = new JComboBox<>();
+        comboBoxJoueurDroite = new JComboBox<>();
         for(int i = 0; i < choixComboBox.length; i++){
-            comboBoxJoueur2.addItem(choixComboBox[i]);
+            comboBoxJoueurDroite.addItem(choixComboBox[i]);
         }
-        comboBoxJoueur2.setFocusable(false);
-        comboBoxJoueur2.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueur1.getSelectedItem().toString()));
+        comboBoxJoueurDroite.setFocusable(false);
+        comboBoxJoueurDroite.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueurDroite.getSelectedItem().toString()));
         
         gbc.gridx = 1;
         gbc.gridy = 2;
-        panelSelectionJoueurs.add(comboBoxJoueur2, gbc);
+        panelSelectionJoueurs.add(comboBoxJoueurDroite, gbc);
 
 
         gbc.insets = new Insets(70,0,0,0); 
@@ -230,7 +233,27 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     }
 
     
+    public String getInfoJoueur(int coteJoueur) {
+        String joueur;
+        if(coteJoueur == 1){
+            joueur = comboBoxJoueurDroite.getSelectedItem().toString();
+            return joueur.replaceAll(" ", "");
+        }else{
+            joueur = comboBoxJoueurGauche.getSelectedItem().toString();
+            return joueur.replaceAll(" ", "");
+        }
+        
+    } 
 
+    public String getNomJoueur(int coteJoueur) {
+        if(coteJoueur == 1){
+            return valeurNomJoueurDroite.getText();
+        }else{
+            return valeurNomJoueurGauche.getText();
+        }
+        
+    } 
+    
     public void miseAJourFinDeTour() {
         fenetre.repaint();
     }

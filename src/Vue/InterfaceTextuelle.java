@@ -418,4 +418,16 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getNomJoueur(int coteJoueur) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getInfoJoueur(int coteJoueur) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

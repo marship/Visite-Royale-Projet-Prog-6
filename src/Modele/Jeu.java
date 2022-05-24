@@ -55,6 +55,7 @@ public class Jeu extends Observable {
     // ==================
     // ===== JOUEUR =====
     // ==================
+    String nomJoueurGauche, nomJoueurDroite;
     final int JOUEUR_GAUCHE = 0;
     final int JOUEUR_DROIT = 1;
 
@@ -141,6 +142,10 @@ public class Jeu extends Observable {
 
     public String nomJoueurCourant(){
         return "";
+    }
+    public void initNomJoueurs(String joueurGauche, String joueurDroite){
+        nomJoueurGauche = joueurGauche;
+        nomJoueurDroite = joueurGauche;
     }
 
     // ====================
