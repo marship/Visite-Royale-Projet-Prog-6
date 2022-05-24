@@ -98,6 +98,13 @@ public class Evaluation {
             resSorcier = resSorcier + 1.5;
         }
 
+        if(joueurCourant){
+            resSorcier = resSorcier + (positionSorcier * 0.2);
+        }
+        else{
+            resSorcier = resSorcier + (-positionSorcier * 0.2);
+        }
+
         if (!(!((positionGardeGauche < positionSorcier) && (positionSorcier < positionGardeDroit))
                 && !sorcierChezNous(joueurCourant))) {
             Double distMax = (double) 0;
@@ -418,6 +425,12 @@ public class Evaluation {
                     resFou = resFou + 6;
                 }
             }
+        }
+        if(joueurCourant){
+            resFou = resFou + (positionFou * 0.2);
+        }
+        else{
+            resFou = resFou + (-positionFou * 0.2);
         }
         return resFou;
     }

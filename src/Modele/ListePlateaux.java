@@ -215,8 +215,10 @@ public class ListePlateaux {
 
         // Jouer deux cartes pour bouger la cour
         if (nbRoi >= 2) {
-            if (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) != -8
-                    || jeu.obtenirPositionElement(Element.GARDE_DROIT) != 8) {
+            if ( (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) != -8
+                    || jeu.obtenirPositionElement(Element.GARDE_DROIT) != 8) && 
+                    (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) != -8
+                    && jeu.obtenirPositionElement(Element.GARDE_DROIT) != 8) ) {
 
                 // Deplacement à gauche possible
                 if (jeu.obtenirPositionElement(Element.GARDE_GAUCHE) != -8) {
