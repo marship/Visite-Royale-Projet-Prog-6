@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class AdaptateurCommande implements ActionListener {
 
     CollecteurEvenements collecteurEvenements;
+    String nomSonAudio = "Son_Bouton";
     String commande;
 
     AdaptateurCommande(CollecteurEvenements cEvenements, String com) {
@@ -16,6 +17,6 @@ public class AdaptateurCommande implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         collecteurEvenements.commande(commande);
+        collecteurEvenements.lancerAudioSon(nomSonAudio);
     }
-    
 }

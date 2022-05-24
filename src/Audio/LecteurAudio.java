@@ -18,8 +18,13 @@ public class LecteurAudio {
 
     String etatClip;
 
+    public int volumeCourantMusique = 0;
+    public int volumeCourantSon = 0;
+
+    public FloatControl floatControlMusique;
+    public FloatControl floatControlSon;
+
     float gererVolume = 0;
-    FloatControl volume;
 
     AudioInputStream audioInputStream;
     static final String CHEMIN_FICHIER_AUDIO = "res/Audios/";
@@ -30,13 +35,16 @@ public class LecteurAudio {
     // =========================
     // ===== CONSTRUCTEUR  =====
     // =========================
-    public LecteurAudio(String nomFichierAudio) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public LecteurAudio(String nomFichierAudio, boolean audioBoucle) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         
         audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
         
         clip = AudioSystem.getClip();
         clip.open(audioInputStream);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        
+        if (audioBoucle) {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
     }
 
     // ======================
@@ -46,7 +54,7 @@ public class LecteurAudio {
         try {
 
             String nomFichierAudio = "the-weeknd-medieval";
-            LecteurAudio lecteurAudio = new LecteurAudio(nomFichierAudio);
+            LecteurAudio lecteurAudio = new LecteurAudio(nomFichierAudio, true);
             lecteurAudio.play();
 
             Scanner scanned = new Scanner(System.in);
@@ -118,9 +126,9 @@ public class LecteurAudio {
             case 6:
                 // 1.0 => 0.1
                 gererVolume = (float) (gererVolume - 1.0);
-                volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                if (gererVolume >= volume.getMinimum()) {
-                    volume.setValue(gererVolume);
+                floatControlMusique = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                if (gererVolume >= floatControlMusique.getMinimum()) {
+                    floatControlMusique.setValue(gererVolume);
                 } else {
                     System.out.println("Volume au minimum !!");
                     gererVolume = (float) (gererVolume + 1.0);
@@ -128,9 +136,9 @@ public class LecteurAudio {
                 break;
             case 7:
                 gererVolume = (float) (gererVolume + 1.0);
-                volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                if (gererVolume <= volume.getMaximum()) {
-                    volume.setValue(gererVolume);
+                floatControlMusique = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                if (gererVolume <= floatControlMusique.getMaximum()) {
+                    floatControlMusique.setValue(gererVolume);
                 } else {
                     System.out.println("Volume au maximum !!");
                     gererVolume = (float) (gererVolume - 1.0);
@@ -184,4 +192,20 @@ public class LecteurAudio {
         clip.open(audioInputStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
+
+    /*
+    public void gererVolume(float valeurVolume) {
+        
+        // 1.0 => 0.1
+        gererVolume = valeurVolume;
+
+        if ((gererVolume >= volume.getMinimum()) && (gererVolume <= volume.getMaximum())) {
+                System.out.println("Volume : (gerer volume) " + gererVolume);
+                volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                volume.setValue(gererVolume);
+        } else {
+            System.out.println("Volume sur une extremite !!");
+        }
+    }
+    */
 }

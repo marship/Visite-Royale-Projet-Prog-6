@@ -67,6 +67,8 @@ public class ControleurMediateur implements CollecteurEvenements {
     // =================
     // ===== AUDIO =====
     // =================
+    LecteurAudio lecteurAudioMusique;
+    LecteurAudio lecteurAudioSon;
     int optionAudio = 0;
 
     // ====================
@@ -96,9 +98,9 @@ public class ControleurMediateur implements CollecteurEvenements {
         joueurs = new Joueur[NOMBRE_JOUEUR][NOMBRE_TYPE_JOUEUR];
         typeJoueur = new int[NOMBRE_TYPE_JOUEUR];
 
-        // String nomFichierAudio = "the-weeknd-medieval";
-        String nomFichierAudio = "gangstas-paradise-medieval";
-        //lancerAudio(nomFichierAudio);
+        // String nomFichierAudio = "gangstas-paradise-medieval";
+        String nomFichierAudio = "the-weeknd-medieval";
+        // lancerAudioMusique(nomFichierAudio);
 
         for (int i = 0; i < joueurs.length; i++) {
             joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
@@ -109,8 +111,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[i][JOUEUR_AMEL] = new JoueurIAmel(i, jeu);
         }
 
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_AMEL);
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_AMEL);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
 
         joueurCourant = jeu.joueurCourant();
         attenteCarte = false;
@@ -125,14 +127,6 @@ public class ControleurMediateur implements CollecteurEvenements {
             Configuration.instance().logger().info("Type de joueur : " + typeJoueur + " | Joueur : " + numeroJoueur);
             typeJoueur[numeroJoueur] = typeDuJoueur;
         }
-    }
-
-    // =====================
-    // ===== INFOS JEU =====
-    // =====================
-    @Override
-    public InfoJeu getInfoJeu() {
-        return ETAT_JEU;
     }
 
     // ================
@@ -264,24 +258,53 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
     }
 
-    // SON
-    void lancerAudio(String nomFichierAudio) {
+    // =================
+    // ===== AUDIO =====
+    // =================
+    void lancerAudioMusique(String nomFichierAudio) {
         try {
-            LecteurAudio lecteurAudio = new LecteurAudio(nomFichierAudio);
-            lecteurAudio.play();
+            lecteurAudioMusique = new LecteurAudio(nomFichierAudio, true);
+            lecteurAudioMusique.play();
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            Configuration.instance().logger().severe("Erreur au lancement de l'audio !!");
+            Configuration.instance().logger().severe("Erreur au lancement de la musique !!");
             e.printStackTrace();
         }
     }
 
-    void optionAudio(LecteurAudio lecteurAudio, int option) {
+    @Override
+    public void lancerAudioSon(String nomFichierAudio) {
         try {
-            lecteurAudio.gotoChoice(option);
+            lecteurAudioSon = new LecteurAudio(nomFichierAudio, false);
+            lecteurAudioSon.play();
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+            Configuration.instance().logger().severe("Erreur au lancement du son !!");
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    @Override
+    public void gestionVolume(float valeurVolume, boolean gestionMusique) {
+        if (gestionMusique) {
+            lecteurAudioMusique.gererVolume(valeurVolume);
+        } else {
+            lecteurAudioSon.gererVolume(valeurVolume);
+        }
+    }
+    */
+
+    // TODO Not Use !!!
+    void optionAudio(int option) {
+        try {
+            lecteurAudioMusique.gotoChoice(option);
         } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
     }
+
+
+
+
 
     // TODO NETTOYAGE VVVVVVVV
 
@@ -330,24 +353,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                         }
                     }
                 }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void traquePlateau(int coupX, int coupY) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void traqueCarte(int positionSourisX, int positionSourisY) {
-        switch (ETAT_JEU) {
-            case DEBUT_TOUR:
-            case APRES_UNE_CARTE:
-                // System.out.println("X: " + positionSourisX + ", Y: " + positionSourisY);
-                // gestionPrevisualisationCoup(positionSourisX, positionSourisY);
                 break;
             default:
                 break;

@@ -8,16 +8,26 @@ import java.awt.*;
 import java.io.IOException;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import Audio.LecteurAudio;
 import Global.InfoJeu;
 
 
 public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUtilisateur, Observateur{
 	
     Jeu jeu;
+    Son son;
+    Son musique;
+    String sonAudio = "Son_Bouton";
+    String musiqueAudio = "the-weeknd-medieval";
+    // String musiqueAudio = "gangstas-paradise-medieval";
+    LecteurAudio lecteurAudio;
 	CollecteurEvenements collecteurEvenements;
 
     PlateauGraphique plateauGraphique;
+    JSlider boutonGlissantSon, boutonGlissantMusique;
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
                 boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonAnnulerJeu, boutonOptionsJeu, boutonFinDeTour, boutonHistorique,
                 boutonRetourArriere, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
@@ -33,6 +43,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
 		jeu = j;
 		collecteurEvenements = cEvenements;
+        son = new Son(sonAudio);
+        musique = new Son(musiqueAudio);
 	}
 
 	public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
@@ -46,7 +58,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	//TODO Rajouter dans panel courant: panelOption, panelRegles
 	@Override
 	public void run() {
-
 
         fenetre = new JFrame("Visite Royale");
         fenetre.setSize(1280, 720);
@@ -425,29 +436,27 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         panelOptionsJeu.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
 
         JLabel txtMusique = new JLabel("Volume musique");
-        JSlider musique = new JSlider(0, 100, 100);
-        musique.setMajorTickSpacing(25);
-        musique.setMinorTickSpacing(5);
-        musique.setOpaque(false);
-        musique.setPaintLabels(true);
+        boutonGlissantMusique = new JSlider(-24, 6);
+        boutonGlissantMusique.addChangeListener(new AdaptateurBoutonGlissant(musique, boutonGlissantMusique));
+        boutonGlissantMusique.setOpaque(false);
+        boutonGlissantMusique.setPaintLabels(true);
     
         
         Container musiqueBox = Box.createHorizontalBox();
-        musiqueBox.add(musique);
+        musiqueBox.add(boutonGlissantMusique);
         musiqueBox.add(Box.createHorizontalGlue());
         musiqueBox.add(txtMusique);
     
         panelOptionsJeu.add(musiqueBox);
     
         JLabel txtSon = new JLabel("Volume son");
-        JSlider son = new JSlider(0, 100, 100);
-        son.setMajorTickSpacing(25);
-        son.setMinorTickSpacing(5);
-        son.setOpaque(false);
-        son.setPaintLabels(true);
+        boutonGlissantSon = new JSlider(-24, 6);
+        boutonGlissantSon.addChangeListener(new AdaptateurBoutonGlissant(son, boutonGlissantSon));
+        boutonGlissantSon.setOpaque(false);
+        boutonGlissantSon.setPaintLabels(true);
     
         Container sonBox = Box.createHorizontalBox();
-        sonBox.add(son);
+        sonBox.add(boutonGlissantSon);
         sonBox.add(Box.createHorizontalGlue());
         sonBox.add(txtSon);
     
