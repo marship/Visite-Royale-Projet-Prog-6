@@ -258,7 +258,7 @@ public class Evaluation {
                 resRoi = 1000;
             }
             else{
-                resRoi = -positionRoi * -coeff;
+                resRoi = -positionRoi * coeff;
             }
         }
         return resRoi;
