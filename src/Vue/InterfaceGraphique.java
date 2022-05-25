@@ -32,8 +32,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     PlateauGraphique plateauGraphique;
     JSlider boutonGlissantMusique;
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
-                boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, boutonAnnulerJeu, boutonOptionsJeu, boutonFinDeTour, boutonHistorique,
-                boutonRetourArriere, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
+                boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, 
+                boutonHistoriqueArriere, boutonHistoriqueAvant, boutonOptionsJeu, boutonFinDeTour, 
+                boutonRetourMenu, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
                     
 	CardLayout layout; 
     JPanel panelCourant, panelMenuPrincipal, panelOptions, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
@@ -338,40 +339,44 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.weightx = 0.5;
         gbc.weighty = 0.33;
         // Top/right
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         boutonOptionsJeu = new DesignBoutons("Menu", "Texture_Petit_Bouton", "Texture_Petit_Bouton_Clique",15);
         boutonOptionsJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "OptionsJeu"));
         plateauGraphique.add(boutonOptionsJeu, gbc);
 
-        // bottom/left
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.SOUTHWEST;
-        boutonAnnulerJeu = new DesignBoutons("Annuler tour", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
-        plateauGraphique.add(boutonAnnulerJeu, gbc);
 
-
-        // bottom/right
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.SOUTHEAST;
-        boutonHistorique = new DesignBoutons("Recommencer partie", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
-        boutonHistorique.addActionListener(new AdaptateurCommande(collecteurEvenements, "Recommencer"));
-        //boutonHistorique = new DesignBoutons("Recommencer partie", "Texture_Moyen_Bouton", 12);
-        //boutonHistorique.addActionListener(new AdaptateurCommande(collecteurEvenements, "Historique"));
-        plateauGraphique.add(boutonHistorique, gbc);
-                
         // middle/right
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        //gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(180, 0, 0, 0);
-        boutonFinDeTour = new DesignBoutons("Fin de tour", "Texture_Petit_Bouton", "Texture_Petit_Bouton_Clique", 15);
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(300, 0, 2, 0);
+        boutonFinDeTour = new DesignBoutons("Fin de tour", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 20);
         boutonFinDeTour.addActionListener(new AdaptateurCommande(collecteurEvenements, "FinDeTour"));
         plateauGraphique.add(boutonFinDeTour, gbc);
+
+
+
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.SOUTHEAST;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        JLabel historique = new JLabel("Historique");
+        historique.setForeground(Color.WHITE);
+        historique.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 20));
+        historique.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+
+        boutonHistoriqueArriere = new DesignBoutons("←", "Texture_Petit_Bouton_Moitie", "Texture_Petit_Bouton_Moitie_Clique", 30);
+        boutonHistoriqueAvant = new DesignBoutons("→", "Texture_Petit_Bouton_Moitie", "Texture_Petit_Bouton_Moitie_Clique", 30);
+        Container historiqueAvantArriere = Box.createHorizontalBox();
+        historiqueAvantArriere.add(boutonHistoriqueArriere);
+        historiqueAvantArriere.add(boutonHistoriqueAvant);
+
+        Container historiqueBox = Box.createVerticalBox();
+        
+        historiqueBox.add(historique);
+        historiqueBox.add(historiqueAvantArriere);
+
+        plateauGraphique.add(historiqueBox, gbc);
 
 
     } 
@@ -412,9 +417,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         boutonSauvegarderEtQuitter.addActionListener(new AdaptateurCommande(collecteurEvenements, "SauvegarderQuitter"));
         panelOptionsJeu.add(boutonSauvegarderEtQuitter);
 
-        boutonRetourArriere = new DesignBoutons("Retour au menu ", "Texture_Bouton", "Texture_Bouton_Clique", 25);
-        boutonRetourArriere.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
-        panelOptionsJeu.add(boutonRetourArriere);
+        boutonRetourMenu = new DesignBoutons("Retour au menu ", "Texture_Bouton", "Texture_Bouton_Clique", 25);
+        boutonRetourMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
+        panelOptionsJeu.add(boutonRetourMenu);
 
         boutonRetourJeu = new DesignBoutons("Retour au jeu", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonRetourJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
