@@ -339,7 +339,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.weightx = 0.5;
         gbc.weighty = 0.33;
         // Top/right
-        gbc.gridx = 0;
+        //gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         boutonOptionsJeu = new DesignBoutons("Menu", "Texture_Petit_Bouton", "Texture_Petit_Bouton_Clique",15);
@@ -378,6 +379,12 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         plateauGraphique.add(historiqueBox, gbc);
 
+
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        DesignBoutons boutonAnnulerJeu = new DesignBoutons("Annuler tour", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
+        plateauGraphique.add(boutonAnnulerJeu, gbc);
 
     } 
 
