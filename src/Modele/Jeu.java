@@ -381,30 +381,29 @@ public class Jeu extends Observable {
         return plateau().estGagnant() != AUCUN_GAGNANT;
     }
 
-    public void traiterGagnant() {
+    public String traiterGagnant() {
         switch (plateau().estGagnant()) {
             case COURONNE_GAGNANTE:
                 partieTerminee = true;
                 partieEnCours = false;
-                Configuration.instance().logger()
-                        .info("Victoire du joueur " + plateau().joueurGagnant + " avec la couronne !!");
-                break;
+                metAJour();
+                return "Victoire du joueur " +  plateau().joueurGagnant + " avec la couronne !!";
             case ROI_GAGNANT:
                 partieTerminee = true;
                 partieEnCours = false;
-                Configuration.instance().logger()
-                        .info("Victoire du joueur " + plateau().joueurGagnant + " avec le roi !!");
-                break;
+                metAJour();
+                return "Victoire du joueur " +  plateau().joueurGagnant + " avec le roi !!";
             default:
-                Configuration.instance().logger().warning("Condition de victoire inconnue !!");
                 break;
         }
         if (plateau().victoirePioche) {
             partieTerminee = true;
             partieEnCours = false;
-            Configuration.instance().logger().info("Victoire du joueur " + plateau().joueurGagnant + " a la pioche !!");
+            metAJour();
+            return "Victoire du joueur " +  plateau().joueurGagnant + " à la pioche !!";
         }
-        metAJour();
+
+        return "";
     }
 
     // =======================

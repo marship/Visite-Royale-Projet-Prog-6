@@ -112,14 +112,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.fillRect(0, 0, largeurFenetre, hauteurFenetre);
 
         tracerPlateau();
-        afficherCartesAutreJoueur();
-        afficherZoneCartesJouees();
-        //afficherInfoTour();
-        afficherPioche();
-        afficherDefausse();
-        if(jeu.actionAutoriser()){
-            afficherCartesJoueurCourant();
+
+        if(!jeu.estPartieTerminee()){
+
+            afficherCartesAutreJoueur();
+            afficherZoneCartesJouees();
+            //afficherInfoTour();
+            afficherPioche();
+            afficherDefausse();
+            if(jeu.actionAutoriser()){
+                afficherCartesJoueurCourant();
+            }
+
+        } else {
+            // Affichage de la pop-up "Ecran de victoire"
         }
+
     }
 
     // =======================

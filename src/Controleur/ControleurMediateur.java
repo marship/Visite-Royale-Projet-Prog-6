@@ -88,18 +88,6 @@ public class ControleurMediateur implements CollecteurEvenements {
         // String nomFichierAudio = "the-weeknd-medieval";
         // lancerAudioMusique(nomFichierAudio);
 
-        for (int i = 0; i < joueurs.length; i++) {
-            joueurs[i][JOUEUR_HUMAIN] = new JoueurHumain(i, jeu);
-            joueurs[i][JOUEUR_IAALEATOIRE] = new JoueurIAAleatoire(i, jeu);
-            joueurs[i][JOUEUR_IAALEATOIRE_TOTALE] = new JoueurIARandom(i, jeu);
-            joueurs[i][JOUEUR_IAALEATOIRE_INTELLIGENTE] = new JoueurIAAleatoireIntelligente(i, jeu);
-            joueurs[i][JOUEUR_IAEXPERTE] = new JoueurIAnastasia(i, jeu);
-            joueurs[i][JOUEUR_AMEL] = new JoueurIAmel(i, jeu);
-        }
-
-        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_AMEL);
-        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
-
         joueurCourant = jeu.joueurCourant();
         attenteCarte = false;
     }
@@ -112,6 +100,28 @@ public class ControleurMediateur implements CollecteurEvenements {
         if (jeu.numeroJoueurValide(numeroJoueur)) {
             Configuration.instance().logger().info("Type de joueur : " + typeJoueur + " | Joueur : " + numeroJoueur);
             typeJoueur[numeroJoueur] = typeDuJoueur;
+
+            switch(typeDuJoueur){
+                case JOUEUR_HUMAIN :
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurHumain(numeroJoueur, jeu);
+                    break;
+                case JOUEUR_IAALEATOIRE :
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAAleatoire(numeroJoueur, jeu);
+                    break;
+                case JOUEUR_IAALEATOIRE_TOTALE :
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIARandom(numeroJoueur, jeu);
+                    break;
+                case JOUEUR_IAALEATOIRE_INTELLIGENTE :
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAAleatoireIntelligente(numeroJoueur, jeu);
+                    break;
+                case JOUEUR_IAEXPERTE :
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAnastasia(numeroJoueur, jeu);
+                    break;
+                case JOUEUR_AMEL :
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAmel(numeroJoueur, jeu);
+                    break;
+            }
+            
         }
     }
 
@@ -428,7 +438,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "refaire":
                 refaire();
                 break;
-            case "aide":
+            case "AideIA":
                 aideIA();
                 break;
             default:
