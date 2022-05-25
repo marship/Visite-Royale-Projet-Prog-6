@@ -52,6 +52,8 @@ public class Jeu extends Observable {
 
     InfoJeu ETAT_JEU = InfoJeu.DEBUT_TOUR;
 
+    Sequence<Plateau> passe, futur;
+
     // ==================
     // ===== JOUEUR =====
     // ==================
@@ -85,14 +87,10 @@ public class Jeu extends Observable {
     // ========================
     public Jeu() {
         plateau = new Plateau();
-        changerEtatPartie();
-        personnageManipulerParLeFou(FOU);
-        initialiserDernierTypeDePersonnageJouer();
-        metAJour();
-    }
 
-    public Jeu(Plateau p){
-        plateau = p;
+        passe = Configuration.instance().nouvelleSequence();
+        futur = Configuration.instance().nouvelleSequence();
+
         changerEtatPartie();
         personnageManipulerParLeFou(FOU);
         initialiserDernierTypeDePersonnageJouer();
@@ -1069,40 +1067,85 @@ public class Jeu extends Observable {
     // ======================
     // ===== HISTORIQUE =====
     // ======================
-    public PlateauHistorique determinerPlateauHistorique(Plateau p) {
-        return plateau.determinerPlateauHistorique(p);
+    void nouveau(Plateau p) {
+        passe.insereTete(p);
+        while (!futur.estVide()) {
+            futur.extraitTete();
+        }
     }
 
-    public void sauvegarderPlateauHistorique(PlateauHistorique pHistorique) {
+    void transfererPlateau(Plateau p) {
+        plateau().transfertPlateau(p);
+    }
+
+    public boolean peutAnnuler() {
+        return !passe.estVide();
+    }
+
+    public void annuler() {
+        if (peutAnnuler()) {
+            Plateau platoHisto = passe.extraitTete();
+            futur.insereTete(plateau());
+            transfererPlateau(platoHisto);
+        } else {
+            System.out.println("Annulation Impossible !!!");
+        }
+    }
+
+    public boolean peutRefaire() {
+        return !futur.estVide();
+    }
+
+    public void refaire() {
+        if (peutRefaire()) {
+            Plateau platoHisto = futur.extraitTete();
+            passe.insereTete(plateau());
+            transfererPlateau(platoHisto);
+        } else {
+            System.out.println("Refaisage Impossible !!!");
+        }
+    }
+
+    public void viderHistorique() {
+        passe = Configuration.instance().nouvelleSequence();
+        futur = Configuration.instance().nouvelleSequence();
+    }
+
+    public Plateau determinerPlateauHistorique(Plateau p) {
+        return plateau().determinerPlateauHistorique(p);
+    }
+
+    public void sauvegarderPlateauHistorique(Plateau pHistorique) {
         if (pHistorique == null) {
             Configuration.instance().logger().warning("Plateau Historique Null !!");
         } else {
-            plateau.sauvegarderPlateauHistorique(pHistorique);
+            nouveau(pHistorique);
             metAJour();
         }
     }
 
-    public Plateau annule() {
-        if (estPartieTerminee()) {
-            plateau().joueurGagnant = AUCUN_GAGNANT;
-        }
-        // Plateau plateau = plateau().annuler();
-        metAJour();
-        return plateau;
-    }
-
-    public Plateau refaire() {
-        // Plateau plateau = plateau().refaire();
-        metAJour();
-        return plateau;
-    }
-
-    public void viderHistorique() {
-        plateau().viderHistorique();
-    }
-
     public int tailleHistoirique() {
-        return plateau().tailleHistorique();
+
+        int tailleHistorique = 0;
+        Sequence<Plateau> sequencePlateauHisto = Configuration.instance().nouvelleSequence();
+        while(!passe.estVide()) {
+            sequencePlateauHisto.insereQueue(passe.extraitTete());
+            tailleHistorique ++;
+        }
+        while(!sequencePlateauHisto.estVide()) {
+            passe.insereQueue(sequencePlateauHisto.extraitTete());
+        }
+        
+        sequencePlateauHisto = Configuration.instance().nouvelleSequence();
+        while(!futur.estVide()) {
+            sequencePlateauHisto.insereQueue(futur.extraitTete());
+            tailleHistorique ++;
+        } 
+        while(!sequencePlateauHisto.estVide()) {
+            futur.insereQueue(sequencePlateauHisto.extraitTete());
+        }
+        
+        return tailleHistorique;
     }
 
     // ======================
@@ -1170,7 +1213,9 @@ public class Jeu extends Observable {
         }
     }
 
+
     public void sauvegarder(int type1, int type2){
+        /*
         try {
             annulerTour();
             // On récupère la date pour le nom de la sauvegarde
@@ -1226,6 +1271,7 @@ public class Jeu extends Observable {
         catch (Exception e) {
             System.err.println(e);
         }
+        */
     }
 
     public int[] charger(String fic){
@@ -1379,7 +1425,4 @@ public class Jeu extends Observable {
     public boolean getEtatCouronne() {
         return plateau().couronne.etatCouronne();
     }
-
-    
-
 }

@@ -18,7 +18,6 @@ import Joueur.JoueurIAnastasia;
 import Joueur.JoueurIAmel;
 import Modele.Jeu;
 import Modele.Plateau;
-import Modele.PlateauHistorique;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceUtilisateur;
 
@@ -251,20 +250,31 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     // TODO NETTOYAGE VVVVVVVV
 
-    void plateauHistorique(Plateau p) {
-        PlateauHistorique plateauHistorique = jeu.determinerPlateauHistorique(p);
+    void gestionHistorique(Plateau p) {
+        Plateau plateauHistorique = jeu.determinerPlateauHistorique(p);
         if (plateauHistorique != null) {
             sauvegarderPlateauHistorique(plateauHistorique);
+        } else {
+            System.out.println("Plateau d'historique null !!!");
         }
     }
 
-    void sauvegarderPlateauHistorique(PlateauHistorique pHistorique) {
+    void sauvegarderPlateauHistorique(Plateau pHistorique) {
         jeu.sauvegarderPlateauHistorique(pHistorique);
     }
 
+
+
+
+
+
+
+
+
+
     void annule() {
+        jeu.annuler();
         /*
-         * jeu.annule();
          * interfaceGraphique.miseAJourTableauScore();
          * interfaceGraphique.miseAJourCouleurJoueurCourant(1, 0, false);
          * jeu.nbCoupMoins();
@@ -273,8 +283,8 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     void refaire() {
+        jeu.refaire();
         /*
-         * jeu.refaire();
          * jeu.nbCoupPlus();
          * interfaceGraphique.miseAJourNbCoup();
          */
@@ -378,8 +388,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "MenuEnJeu":
                 break;
-            case "PouvoirFou":
-                break;
             case "pause":
                 jeu.changerEtatPartie();
                 break;
@@ -419,6 +427,12 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "visible":
                 jeu.mainJoueurSecondaireVisible();
                 break;
+            case "annule":
+                annule();
+                break;
+            case "refaire":
+                refaire();
+                break;
             default:
                 return false;
         }
@@ -456,7 +470,8 @@ public class ControleurMediateur implements CollecteurEvenements {
             jeu.finDeTour();
             jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
 
-            plateauHistorique(jeu.plateau());
+
+            gestionHistorique(jeu.plateau());
             System.out.println("Taille de l'historique : " + jeu.tailleHistoirique());
 
             ETAT_JEU = InfoJeu.DEBUT_TOUR;

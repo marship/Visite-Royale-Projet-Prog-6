@@ -2,9 +2,9 @@ package Modele;
 
 import Global.Configuration;
 import Global.Element;
-import Structures.Sequence;
+// import Structures.Sequence;
 
-public class Plateau extends Historique<PlateauHistorique> implements Cloneable {
+public class Plateau implements Cloneable {
 
     // ===============================
     // ===== INFORMATION PLATEAU =====
@@ -137,16 +137,6 @@ public class Plateau extends Historique<PlateauHistorique> implements Cloneable 
             joueurGagnant = JOUEUR_GAUCHE;
             return ROI_GAGNANT;
         }
-        /*
-        if(joueurGagnant == MEULE_GAGNANTE_DROITE) {
-            joueurGagnant = JOUEUR_DROIT;
-            return MEULE_GAGNANTE_DROITE;
-        }
-        if(joueurGagnant == MEULE_GAGNANTE_GAUCHE) {
-            joueurGagnant = JOUEUR_GAUCHE;
-            return MEULE_GAGNANTE_GAUCHE;
-        }
-        */
         return AUCUN_GAGNANT;
     }
 
@@ -244,47 +234,25 @@ public class Plateau extends Historique<PlateauHistorique> implements Cloneable 
     // ================================
     // ========== HISTORIQUE ==========
     // ================================
-    PlateauHistorique determinerPlateauHistorique(Plateau plateau) {
-        PlateauHistorique plateauHistorique = new PlateauHistorique();
-        plateauHistorique.ajouterEtatPlateau(plateau);
-        return plateauHistorique;
+    Plateau determinerPlateauHistorique(Plateau plateau) {
+        transfertPlateau(plateau);
+        return this;
     }
 
-    public void sauvegarderPlateauHistorique(PlateauHistorique pHistorique) {
-        pHistorique.fixerPlateau(this);
-        nouveau(pHistorique);
+    public void transfertPlateau(Plateau p) {
+        joueurCourant = p.joueurCourant;
+
+        gardeGauche.positionnerPersonnage(p.gardeGauche.positionPersonnage);
+        gardeDroit = p.gardeDroit;
+        roi = p.roi;
+        fou = p.fou;
+        sorcier = p.sorcier;
+        couronne = p.couronne;
+
+        paquet = p.paquet;
     }
 
-    public void dejouerCoupGaufre(int positionX, int positionY) {
-        /*
-        // Annulation de la case sélectionnée
-        if(grilleGaufre[positionY][positionX] == 2) {
-            grilleGaufre[positionY][positionX] = 1;
-        } else {
-            grilleGaufre[positionY][positionX] = 0;
-        }
-
-        // Reset des zones mangées sauf les cases sélectionnées
-        for (int i = 0; i < grilleGaufre.length; i++) {
-            for (int j = 0; j < grilleGaufre[i].length; j++) {
-                if(grilleGaufre[i][j] == -1) {
-                    grilleGaufre[i][j] = 0;
-                }
-            }
-        }
-
-        // Retracer les prévisualisation précédentes grâce aux cases sélectionnées
-        for (int i = 0; i < grilleGaufre.length; i++) {
-            for (int j = 0; j < grilleGaufre[i].length; j++) {
-                if(grilleGaufre[i][j] == 3) {
-                    ajoutPrevisualisation(j, i);
-                }
-            }
-        }
-        changerJoueur();
-        */
-    }
-
+    /*
     public int tailleHistorique() {
         
         int tailleHistorique = 0;
@@ -308,6 +276,7 @@ public class Plateau extends Historique<PlateauHistorique> implements Cloneable 
         
         return tailleHistorique;
     }
+    */
 
     // =====================
     // ===== AFFICHER  =====
