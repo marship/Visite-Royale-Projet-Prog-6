@@ -441,7 +441,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             } else {
                 tracerImage(imageGrise, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
-            if (jeu.cartePasse() == i) {
+            if (jeu.cartePasse() == i && cartesJoueurCourant[i].personnage() != Element.VIDE) {
                 dessinable.setColor(new Color(255, 255, 0));
                 dessinable.setStroke(new BasicStroke(5f));
                 dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
