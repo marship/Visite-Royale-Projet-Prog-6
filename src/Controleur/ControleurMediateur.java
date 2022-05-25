@@ -437,10 +437,19 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "refaire":
                 refaire();
                 break;
+            case "aide":
+                aideIA();
+                break;
             default:
                 return false;
         }
         return true;
+    }
+
+    private void aideIA(){
+        changerJoueurCourant(jeu.joueurCourant(), JOUEUR_AMEL);
+        joueurs[joueurCourant][JOUEUR_AMEL].tempsEcoule();
+        changerJoueurCourant(jeu.joueurCourant(), JOUEUR_HUMAIN);
     }
 
     private void initInfoJoueurs() {
