@@ -406,6 +406,10 @@ public class ControleurMediateur implements CollecteurEvenements {
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 jeu.changeCarteActuelle(8);
                 jeu.majDernierTypeDePersonnageJouer(Element.VIDE);
+                jeu.nonFinPartie();
+                if (!jeu.estPartieEnCours()) {
+                    jeu.changerEtatPartie();
+                }
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "SauvegarderQuitter":

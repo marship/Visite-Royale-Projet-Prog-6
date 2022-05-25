@@ -88,6 +88,7 @@ public class Plateau implements Cloneable {
         couronne = new Couronne();
 
         paquet = new Paquet();
+        System.out.println(paquet.mainJoueur(1)[0].toString());
     }
 
     // =================

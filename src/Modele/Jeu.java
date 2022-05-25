@@ -116,6 +116,10 @@ public class Jeu extends Observable {
         partieEnCours = !partieEnCours;
     }
 
+    public void nonFinPartie(){
+        partieTerminee = false;
+    }
+
     public boolean actionAutoriser() {
         if (!estPartieTerminee() && estPartieEnCours()) {
             return true;
