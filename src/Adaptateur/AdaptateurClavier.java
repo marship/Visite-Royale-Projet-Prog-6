@@ -65,6 +65,9 @@ public class AdaptateurClavier extends KeyAdapter {
             case KeyEvent.VK_X:
                 collecteurEvenements.commande("visible");
                 break;
+            case KeyEvent.VK_A:
+                collecteurEvenements.commande("aide");
+                break;
             default:
                 break;
         }

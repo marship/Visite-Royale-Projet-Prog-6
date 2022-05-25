@@ -31,10 +31,12 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
     PlateauGraphique plateauGraphique;
     JSlider boutonGlissantMusique;
+    JDialog victoire;
 	DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits, 
                 boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler, 
                 boutonHistoriqueArriere, boutonHistoriqueAvant, boutonOptionsJeu, boutonFinDeTour, 
-                boutonRetourMenu, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
+                boutonRetourMenu, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu,
+                boutonRecommencerVictoire, boutonRetourMenuVictoire, boutonQuitterVictoire;
                     
 	CardLayout layout; 
     JPanel panelCourant, panelMenuPrincipal, panelOptions, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
@@ -91,8 +93,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
             creerOptionsJeu();
             panelCourant.add(panelOptionsJeu, "OptionsJeu");
 
+
         } catch (IOException e) {
-            System.out.println("nan c'est trop j'abandonne");
+            System.out.println("Erreur d'affichage des menus ou de l'écran de victoire !!");
             e.printStackTrace();
         }
 		
@@ -339,7 +342,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.weightx = 0.5;
         gbc.weighty = 0.33;
         // Top/right
-        gbc.gridx = 0;
+        //gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         boutonOptionsJeu = new DesignBoutons("Menu", "Texture_Petit_Bouton", "Texture_Petit_Bouton_Clique",15);
@@ -372,12 +376,24 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         historiqueAvantArriere.add(boutonHistoriqueAvant);
 
         Container historiqueBox = Box.createVerticalBox();
-        
         historiqueBox.add(historique);
         historiqueBox.add(historiqueAvantArriere);
-
         plateauGraphique.add(historiqueBox, gbc);
 
+
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        DesignBoutons boutonAnnulerJeu = new DesignBoutons("Annuler", "Texture_Petit_Bouton", "Texture_Petit_Bouton_Clique", 15);
+        boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
+        plateauGraphique.add(boutonAnnulerJeu, gbc);
+
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        gbc.insets = new Insets(0, 220, 0, 0);
+        gbc.gridy = 2;
+        DesignBoutons boutonAideJeu = new DesignBoutons("Aide", "Texture_Petit_Bouton_Moitie", "Texture_Petit_Bouton_Moitie_Clique", 15);
+        boutonAideJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AideIA"));
+        plateauGraphique.add(boutonAideJeu, gbc);
 
     } 
 
@@ -424,6 +440,38 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         boutonRetourJeu = new DesignBoutons("Retour au jeu", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonRetourJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
         panelOptionsJeu.add(boutonRetourJeu);
+    }
+
+    public void AfficherEcranVictoire() throws IOException {
+        victoire = new JDialog(fenetre);
+        victoire.setBounds(500, 300, 400, 300);
+        victoire.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        victoire.setAlwaysOnTop(true);
+
+        victoire.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JLabel AnnonceVictoire = new JLabel(jeu.traiterGagnant());
+        victoire.add(AnnonceVictoire, gbc);
+
+        gbc.weighty = 0.33;
+        gbc.anchor = GridBagConstraints.PAGE_END;
+
+        gbc.gridy++;
+        gbc.gridx++;
+        boutonRecommencerVictoire = new DesignBoutons("Recommencer", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 20);
+        boutonRecommencerVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Recommencer"));
+        victoire.add(boutonRecommencerVictoire, gbc);
+
+        gbc.gridx++;
+        boutonRetourMenuVictoire = new DesignBoutons("Retour au menu", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+        boutonRetourMenuVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        victoire.add(boutonRetourMenuVictoire, gbc);
+        
+        gbc.gridx++;
+        boutonQuitterVictoire = new DesignBoutons("Quitter le jeu", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+        boutonQuitterVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
+        victoire.add(boutonQuitterVictoire, gbc);
     }
 
     @Override

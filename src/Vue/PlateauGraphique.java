@@ -112,14 +112,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.fillRect(0, 0, largeurFenetre, hauteurFenetre);
 
         tracerPlateau();
-        afficherCartesAutreJoueur();
-        afficherZoneCartesJouees();
-        //afficherInfoTour();
-        afficherPioche();
-        afficherDefausse();
-        if(jeu.actionAutoriser()){
-            afficherCartesJoueurCourant();
+
+        if(!jeu.estPartieTerminee()){
+
+            afficherCartesAutreJoueur();
+            afficherZoneCartesJouees();
+            //afficherInfoTour();
+            afficherPioche();
+            afficherDefausse();
+            if(jeu.actionAutoriser()){
+                afficherCartesJoueurCourant();
+            }
+
+        } else {
+            // Affichage de la pop-up "Ecran de victoire"
         }
+
     }
 
     // =======================
@@ -492,7 +500,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             } else {
                 tracerImage(imageGrise, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
-            if (jeu.cartePasse() == i) {
+            if (jeu.cartePasse() == i && cartesJoueurCourant[i].personnage() != Element.VIDE) {
                 dessinable.setColor(new Color(255, 255, 0));
                 dessinable.setStroke(new BasicStroke(5f));
                 dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
