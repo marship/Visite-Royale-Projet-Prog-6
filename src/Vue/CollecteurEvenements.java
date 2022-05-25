@@ -10,4 +10,5 @@ public interface CollecteurEvenements {
     void clicPlateau(int coupX, int coupY);
     void clicCarte(int coupX);
     void passerSurCarte(int coupX);
+    void passerSurCase(int coupX);
 }

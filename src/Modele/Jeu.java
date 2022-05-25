@@ -29,6 +29,7 @@ public class Jeu extends Observable {
     public Element personnageManipulerParLeFou;
     public int carteActuelle = 8;
     public int cartePassee = 8;
+    public int casePassee = -1;
 
     // ===============================
     // ===== INFORMATION PLATEAU =====
@@ -301,6 +302,15 @@ public class Jeu extends Observable {
 
     public void choisirPasserSurCarte(int i) {
         cartePassee = i;
+        metAJour();
+    }
+
+    public int casePassee() {
+        return casePassee;
+    }
+
+    public void choisirPasserSurCase(int i) {
+        casePassee = i;
         metAJour();
     }
 

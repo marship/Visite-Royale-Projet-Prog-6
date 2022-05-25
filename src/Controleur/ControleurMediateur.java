@@ -491,6 +491,10 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     }
 
+    public void passerSurCase(int coupX){
+        jeu.choisirPasserSurCase(coupX);
+    }
+
     @Override
     public void passerSurCarte(int coupX) {
         jeu.choisirPasserSurCarte(coupX);

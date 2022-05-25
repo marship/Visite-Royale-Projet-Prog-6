@@ -144,45 +144,45 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
 
         if (jeu.getEtatCouronne()) {
-            tracerImageElement(Element.COURONNE, imageJetonGrandeCouronne);
+            tracerJeton(Element.COURONNE, imageJetonGrandeCouronne);
         } else {
-            tracerImageElement(Element.COURONNE, imageJetonPetiteCouronne);
+            tracerJeton(Element.COURONNE, imageJetonPetiteCouronne);
         }
 
         switch (jeu.getEtatJeu()) {
             case DEBUT_TOUR:
-                tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGauche);
-                tracerImageElement(Element.ROI, imageJetonRoi);
-                tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroit);
-                tracerImageElement(Element.FOU, imageJetonFou);
-                tracerImageElement(Element.SORCIER, imageJetonSorcier);
+                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche);
+                tracerJeton(Element.ROI, imageJetonRoi);
+                tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit);
+                tracerJeton(Element.FOU, imageJetonFou);
+                tracerJeton(Element.SORCIER, imageJetonSorcier);
                 if (jeu.carteActuelle() != 8) {
                     switch (jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle()].personnage()) {
                         case ROI:
-                            tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
-                            tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
-                            tracerImageElement(Element.FOU, imageJetonFouGrise);
-                            tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                            tracerJeton(Element.FOU, imageJetonFouGrise);
+                            tracerJeton(Element.SORCIER, imageJetonSorcierGrise);
                             break;
 
                         case GARDES:
-                            tracerImageElement(Element.ROI, imageJetonRoiGrise);
-                            tracerImageElement(Element.FOU, imageJetonFouGrise);
-                            tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
+                            tracerJeton(Element.ROI, imageJetonRoiGrise);
+                            tracerJeton(Element.FOU, imageJetonFouGrise);
+                            tracerJeton(Element.SORCIER, imageJetonSorcierGrise);
                             break;
 
                         case FOU:
-                            tracerImageElement(Element.ROI, imageJetonRoiGrise);
-                            tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
-                            tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
-                            tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
+                            tracerJeton(Element.ROI, imageJetonRoiGrise);
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                            tracerJeton(Element.SORCIER, imageJetonSorcierGrise);
                             break;
 
                         case SORCIER:
-                            tracerImageElement(Element.ROI, imageJetonRoiGrise);
-                            tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
-                            tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
-                            tracerImageElement(Element.FOU, imageJetonFouGrise);
+                            tracerJeton(Element.ROI, imageJetonRoiGrise);
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                            tracerJeton(Element.FOU, imageJetonFouGrise);
                             break;
 
                         default:
@@ -192,41 +192,41 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 break;
 
             case CHOIX_FOU:
-                tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheSelection);
-                tracerImageElement(Element.ROI, imageJetonRoiSelection);
-                tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitSelection);
-                tracerImageElement(Element.FOU, imageJetonFouPouvoir);
-                tracerImageElement(Element.SORCIER, imageJetonSorcierSelection);
+                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheSelection);
+                tracerJeton(Element.ROI, imageJetonRoiSelection);
+                tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitSelection);
+                tracerJeton(Element.FOU, imageJetonFouPouvoir);
+                tracerJeton(Element.SORCIER, imageJetonSorcierSelection);
                 break;
 
             case CHOIX_SORCIER:
                 if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
-                    tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheSelection);
+                    tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheSelection);
                 } else {
-                    tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                    tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
                 }
 
                 if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
-                    tracerImageElement(Element.ROI, imageJetonRoiSelection);
+                    tracerJeton(Element.ROI, imageJetonRoiSelection);
                 } else {
-                    tracerImageElement(Element.ROI, imageJetonRoiGrise);
+                    tracerJeton(Element.ROI, imageJetonRoiGrise);
                 }
 
                 if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
-                    tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitSelection);
+                    tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitSelection);
                 } else {
-                    tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                    tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
                 }
-                tracerImageElement(Element.FOU, imageJetonFouGrise);
-                tracerImageElement(Element.SORCIER, imageJetonSorcierPouvoir);
+                tracerJeton(Element.FOU, imageJetonFouGrise);
+                tracerJeton(Element.SORCIER, imageJetonSorcierPouvoir);
                 break;
 
             case CHOIX_ROI:
-                tracerImageElement(Element.ROI, imageJetonRoiPouvoir);
-                tracerImageElement(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
-                tracerImageElement(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
-                tracerImageElement(Element.FOU, imageJetonFouGrise);
-                tracerImageElement(Element.SORCIER, imageJetonSorcierGrise);
+                tracerJeton(Element.ROI, imageJetonRoiPouvoir);
+                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
+                tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
+                tracerJeton(Element.FOU, imageJetonFouGrise);
+                tracerJeton(Element.SORCIER, imageJetonSorcierGrise);
                 int d = jeu.positionsPourCour();
                 if (d == 1 || d == 0) {
                     dessinable.setColor(new Color(255, 255, 0));
@@ -281,9 +281,35 @@ public class PlateauGraphique extends JPanel implements Observateur {
             int i = 0;
             while (i < 17) {
                 if (listeDeplacementPossiblesAvecCarte[i] == 1) {
-                    dessinable.setColor(new Color(0, 150, 255));
-                    dessinable.setStroke(new BasicStroke(5f));
-                    dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
+                    ImagePlateau image = imageJetonFouGrise;
+                    switch(carte.personnage()){
+                        case FOU:
+                            image = imageJetonFou;
+                            break;
+                        case SORCIER:
+                            image = imageJetonSorcier;
+                            break;
+                        //TODO afficher le/les bons gardes à deplacer
+                        case GARDES:
+                            image = imageJetonGardeDroit;
+                            break;
+                        case ROI:
+                            image = imageJetonRoi;
+                            break;
+                        default:
+                            image = imageJetonFouGrise;
+                            break;
+                    }
+                    if(jeu.casePassee() == i){
+                        tracerJeton(carte.personnage(), image, jeu.casePassee());
+                    }
+                    else{
+                        //TODO remplacer fouGrise par jetonPointille une fois image créée
+                        tracerJeton(carte.personnage(), imageJetonFouGrise, i);
+                        //dessinable.setColor(new Color(0, 150, 255));
+                        //dessinable.setStroke(new BasicStroke(5f));
+                        //dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
+                    }
                 }
                 i++;
             }
@@ -310,7 +336,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
     }
 
-    void tracerImageElement(Element element, ImagePlateau imageElement) {
+    void tracerJeton(Element element, ImagePlateau imageElement) {
         int hauteurElement = debutPlateauY;
         switch (element) {
             case COURONNE:
@@ -318,6 +344,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             case FOU:
                 hauteurElement = hauteurElement + quartHauteurPlateau;
                 break;
+            case GARDES:
             case GARDE_GAUCHE:
             case GARDE_DROIT:
             case ROI:
@@ -329,7 +356,31 @@ public class PlateauGraphique extends JPanel implements Observateur {
             default:
                 break;
         }
-        tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement,
+            tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement,
+                largeurCasePlateau, quartHauteurPlateau);
+    }
+
+    void tracerJeton(Element element, ImagePlateau imageElement, int casePlateau) {
+        int hauteurElement = debutPlateauY;
+        switch (element) {
+            case COURONNE:
+                break;
+            case FOU:
+                hauteurElement = hauteurElement + quartHauteurPlateau;
+                break;
+            case GARDES:
+            case GARDE_GAUCHE:
+            case GARDE_DROIT:
+            case ROI:
+                hauteurElement = hauteurElement + 2 * quartHauteurPlateau;
+                break;
+            case SORCIER:
+                hauteurElement = hauteurElement + 3 * quartHauteurPlateau;
+                break;
+            default:
+                break;
+        }
+            tracerImage(imageElement, casePlateau * largeurCasePlateau, hauteurElement,
                 largeurCasePlateau, quartHauteurPlateau);
     }
 

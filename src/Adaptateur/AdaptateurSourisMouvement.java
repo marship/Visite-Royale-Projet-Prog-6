@@ -34,5 +34,12 @@ public class AdaptateurSourisMouvement implements MouseMotionListener {
         else{
             collecteurEvenements.passerSurCarte(8);
         }
+        if(e.getX() >= plateauGraphique.debutPlateauX() && e.getX() <= plateauGraphique.largeurPlateau() 
+            && e.getY() >= plateauGraphique.debutPlateauY() && e.getY() <= plateauGraphique.hauteurPlateau()){
+                coupX = e.getX() / plateauGraphique.largeurCasePlateau();
+                collecteurEvenements.passerSurCase(coupX);
+        }else{
+            collecteurEvenements.passerSurCase(-1);
+        }
     }
 }
