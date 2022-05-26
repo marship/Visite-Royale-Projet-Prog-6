@@ -30,6 +30,35 @@ public class JoueurIAmel extends Joueur {
         jeu.obtenirPersonnageElement(Element.SORCIER).positionnerPersonnage(positions[4]);
     }
 
+    double counterStrikePositif(int[] cartes){
+        double coeff = 1;
+        Carte[] main = jeu.recupererMainJoueur(jeu.joueurCourant());
+        int i = 0;
+        if(jeu.typeDePersonnageJouerAuDernierTour == Element.VIDE){
+            jeu.typeDePersonnageJouerAuDernierTour = Element.SORCIER;
+        }
+        while(i < 8){
+            if(cartes[i] == 1 && (main[i].personnage() == jeu.typeDePersonnageJouerAuDernierTour)){
+                coeff = 1.2;
+            }
+            i++;
+        }
+        return coeff;
+    }
+
+    double counterStrikeNegatif(int[] cartes){
+        double coeff = 1;
+        Carte[] main = jeu.recupererMainJoueur(jeu.joueurCourant());
+        int i = 0;
+        while(i < 8){
+            if(cartes[i] == 1 && (main[i].personnage() == jeu.typeDePersonnageJouerAuDernierTour)){
+                coeff = 0.8;
+            }
+            i++;
+        }
+        return coeff;
+    }
+
     double poidsDesCartesPositif(int[] cartes) {
         double coeff = 1;
         int i = 0;
@@ -228,10 +257,10 @@ public class JoueurIAmel extends Joueur {
             eval = new Evaluation(jeu.plateau().clone());
             noteCourrente = eval.note(jeu.joueurCourant());
             if(noteCourrente < 0){
-                noteCourrente = noteCourrente * coeffCartesNegatif(test.cartes()) * poidsDesCartesNegatif(test.cartes());
+                noteCourrente = noteCourrente * coeffCartesNegatif(test.cartes()) * poidsDesCartesNegatif(test.cartes()) * counterStrikeNegatif(test.cartes());
             } 
             else{
-                noteCourrente = noteCourrente * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes());
+                noteCourrente = noteCourrente * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
             }
             if (noteCourrente == noteMax) {
                 lesWINNER.insereQueue(test);

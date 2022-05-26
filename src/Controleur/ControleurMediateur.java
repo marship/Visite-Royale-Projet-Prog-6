@@ -12,7 +12,6 @@ import Joueur.Joueur;
 import Joueur.JoueurHumain;
 import Joueur.JoueurIAAleatoire;
 import Joueur.JoueurIAAleatoireIntelligente;
-import Joueur.JoueurIAExperte;
 import Joueur.JoueurIARandom;
 import Joueur.JoueurIAnastasia;
 import Joueur.JoueurIAmel;
@@ -468,10 +467,17 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (interfaceUtilisateur.getInfoJoueur(coteJoueur)) {
             case ("Humain"):
                 return JOUEUR_HUMAIN;
+            case ("IAtrèsfacile"):
+                return JOUEUR_IAALEATOIRE;
             case ("IAfacile"):
+                return JOUEUR_IAALEATOIRE_TOTALE;
+            case ("IAnormale"):
+                return JOUEUR_IAALEATOIRE_INTELLIGENTE;
+            case ("IAdifficile"):
                 return JOUEUR_IAEXPERTE;
             case ("IAexperte"):
                 return JOUEUR_AMEL;
+
             default:
                 return -1;
         }

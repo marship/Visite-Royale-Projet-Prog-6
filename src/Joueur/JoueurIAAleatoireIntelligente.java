@@ -2,222 +2,99 @@ package Joueur;
 
 import java.util.Random;
 
-import Global.Deplacement;
 import Global.Element;
-import Modele.Carte;
+import Global.Deplacement;
+import Modele.CoupleAtteindrePlateau;
 import Modele.Evaluation;
 import Modele.Jeu;
+import Modele.ListePlateaux;
+import Structures.Couple;
+import Structures.FAP;
+import Structures.FAPListe;
+import Structures.Sequence;
 
-// aka agnès
 public class JoueurIAAleatoireIntelligente extends Joueur {
 
 	Random random;
-	int nbActions;
-	double note, nouvelleNote;
+	Element jouee = Element.VIDE;
 
 	public JoueurIAAleatoireIntelligente(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
 		random = new Random();
 	}
 
+    public Sequence<CoupleAtteindrePlateau> melanger(Sequence<CoupleAtteindrePlateau> liste) {
+        FAP<Couple<CoupleAtteindrePlateau, Integer>> fap = new FAPListe<>();
+        Random r = new Random();
+        while (!liste.estVide()) {
+            fap.insere(new Couple<CoupleAtteindrePlateau,Integer>(liste.extraitTete(), r.nextInt(10000)));
+        }
+        while (!fap.estVide()) {
+            liste.insereTete(fap.extrait().e());
+        }
+        return liste;
+    }
+
+    void mettreLesPositions(int[] positions){
+        jeu.obtenirPersonnageElement(Element.ROI).positionnerPersonnage(positions[0]);
+        jeu.obtenirPersonnageElement(Element.GARDE_GAUCHE).positionnerPersonnage(positions[1]);
+        jeu.obtenirPersonnageElement(Element.GARDE_DROIT).positionnerPersonnage(positions[2]);
+        jeu.obtenirPersonnageElement(Element.FOU).positionnerPersonnage(positions[3]);
+        jeu.obtenirPersonnageElement(Element.SORCIER).positionnerPersonnage(positions[4]);
+    }
+
+    void poserLesCartes(int[] cartes) {
+        int i = 0;
+        int nbUnPlusUn = 0;
+        while (i < 8) {
+            if (cartes[i] == 1) {
+                if(jeu.recupererMainJoueur(jeu.joueurCourant())[i].deplacement() == Deplacement.UN_PLUS_UN){
+                    if(nbUnPlusUn < 3){
+                        nbUnPlusUn++;
+                        jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
+                        jeu.poserCarte(i);
+                    }
+                }
+                else{
+                    jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
+                    jeu.poserCarte(i);
+                }
+            }
+            i++;
+        }
+    }
+
 	@Override
 	public boolean tempsEcoule() {
+        ListePlateaux lP = new ListePlateaux(jeu);
+
+        Sequence<CoupleAtteindrePlateau> liste = lP.constructionListePlateau();
+
+        liste = melanger(liste);
+
+        Random r = new Random();
 
 		Evaluation eval = new Evaluation(jeu.plateau());
-		note = eval.note(jeu.joueurCourant());
-		nbActions = 0;
-		boolean avantage = false;
-		while (!avantage) {
-			do {
-				int choix = random.nextInt(100);
-				// Jouer une carte
-				if (choix < 50) {
-					jouerCarte();
-				}
-				// Jouer deux roi
-				if (choix >= 50 && choix < 65) {
-					jouerDeuxRoi();
-				}
-				// Activer le fou
-				if (choix >= 65 && choix < 85) {
-					if (nbActions == 0) {
-						activerFou();
-					}
-				}
-				// Activer le sorcier
-				if (choix >= 85) {
-					if (nbActions == 0) {
-						activerSorcier();
-					}
-				}
-			} while (!fin());
+		double note = eval.note(jeu.joueurCourant());
+
+		double nouvelleNote = note;
+		do {
+            jeu.annulerTour();
+			int choix = r.nextInt(liste.taille());
+
+			CoupleAtteindrePlateau fin = liste.extraitTete();
+			while(choix != 0){
+				fin = liste.extraitTete();
+				liste.insereQueue(fin);
+				choix--;
+			}
+
+			poserLesCartes(fin.cartes());
+			mettreLesPositions(fin.positions());
 			eval = new Evaluation(jeu.plateau());
 			nouvelleNote = eval.note(jeu.joueurCourant());
-			if (nouvelleNote <= note) {
-				jeu.annulerTour();
-			}
-			else{
-				avantage = true;
-			}
-			nbActions = 0;
-		}
-		return true;
-	}
+		} while (note > nouvelleNote);
 
-	private void activerSorcier() {
-		int kiTP = random.nextInt(10);
-		if (kiTP < 2) {
-			if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
-				jeu.teleportationPouvoirSorcier(Element.GARDE_GAUCHE);
-				nbActions = 10;
-			}
-		}
-		if (kiTP >= 2 && kiTP < 5) {
-			if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
-				jeu.teleportationPouvoirSorcier(Element.ROI);
-				nbActions = 10;
-			}
-		}
-		if (kiTP >= 5 && kiTP < 7) {
-			if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
-				jeu.teleportationPouvoirSorcier(Element.GARDE_DROIT);
-				nbActions = 10;
-			}
-		}
-	}
-
-	private void activerFou() {
-		if (jeu.estPouvoirFouActivable()) {
-			int choix = random.nextInt(10);
-			if (choix < 2) {
-				jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
-			}
-			if (choix >= 2 && choix < 4) {
-				jeu.personnageManipulerParLeFou(Element.ROI);
-			}
-			if (choix >= 4 && choix < 6) {
-				jeu.personnageManipulerParLeFou(Element.GARDE_DROIT);
-			}
-			if (choix >= 6 && choix < 8) {
-				jeu.personnageManipulerParLeFou(Element.SORCIER);
-			}
-			if (choix >= 8) {
-				jeu.personnageManipulerParLeFou(Element.FOU);
-			}
-		}
-	}
-
-	private void jouerDeuxRoi() {
-		if (jeu.plateau().paquet.nombreCartesElement(numeroJoueurCourant, Element.ROI, 0) >= 2
-				&& (jeu.dernierTypeDePersonnageJouer == Element.ROI
-						|| jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
-			int direction = random.nextInt(3);
-			int[] cartes = new int[2];
-			cartes[0] = jeu.plateau().paquet.trouverRoi(numeroJoueurCourant, 0);
-			cartes[1] = jeu.plateau().paquet.trouverRoi(numeroJoueurCourant, 1);
-			if (direction == 0 && (jeu.positionsPourCour() == 1 || jeu.positionsPourCour() == 0)) {
-				jeu.deplacerCour(0, cartes);
-				nbActions++;
-			}
-			if (direction == 1 && (jeu.positionsPourCour() == 2 || jeu.positionsPourCour() == 0)) {
-				jeu.deplacerCour(1, cartes);
-				nbActions++;
-			}
-		}
-	}
-
-	private void jouerCarte() {
-		int choix = random.nextInt(10);
-		if (choix < 8) {
-			if (jeu.listeCarteJouable()[choix] != 0) {
-				Carte carte = jeu.plateau().paquet.mainJoueur(numeroJoueurCourant)[choix];
-				Element el = carte.personnage();
-				if (carte.personnage() == Element.GARDES) {
-					int garde = random.nextInt(2);
-					if (garde == 0) {
-						el = Element.GARDE_GAUCHE;
-					} else {
-						el = Element.GARDE_DROIT;
-					}
-				}
-				if (carte.personnage() == Element.FOU) {
-					el = jeu.personnageManipulerParLeFou;
-				}
-				if (carte.deplacement() == Deplacement.RAPPROCHE) {
-					jeu.rapproche(choix);
-					nbActions++;
-					return;
-				}
-				if (carte.deplacement() == Deplacement.UN_PLUS_UN) {
-					int taille = random.nextInt(2);
-					if (taille == 1) {
-						int direction = random.nextInt(2);
-						if (direction == 0) {
-							if (jeu.validationDeplacement(Element.GARDE_GAUCHE, -1)
-									&& jeu.validationDeplacement(Element.GARDE_DROIT, -1)) {
-								jeu.unPlusUn(direction, choix);
-								nbActions++;
-							}
-						} else {
-							if (jeu.validationDeplacement(Element.GARDE_GAUCHE, 1)
-									&& jeu.validationDeplacement(Element.GARDE_DROIT, 1)) {
-								jeu.unPlusUn(direction, choix);
-								nbActions++;
-							}
-						}
-					} else {
-						int direction = random.nextInt(2);
-						if (direction == 0) {
-							if (jeu.validationDeplacement(el, -2)) {
-								jeu.jouerCarte(el, jeu.obtenirPositionElement(el) - 2, choix);
-								nbActions++;
-							}
-						} else {
-							if (jeu.validationDeplacement(el, 2)) {
-								jeu.jouerCarte(el, jeu.obtenirPositionElement(el) + 2, choix);
-								nbActions++;
-							}
-						}
-					}
-					return;
-				}
-				if (carte.deplacement() == Deplacement.MILIEU) {
-					if (jeu.validationDeplacement(el, -jeu.obtenirPositionElement(el))) {
-						jeu.jouerCarte(el, 0, choix);
-						nbActions++;
-					}
-					return;
-				} else {
-					int direction = random.nextInt(2);
-					if (direction == 0) {
-						if (jeu.validationDeplacement(el, -carte.deplacement().getValeurDeplacement())) {
-							jeu.jouerCarte(el,
-									jeu.obtenirPositionElement(el) - carte.deplacement().getValeurDeplacement(), choix);
-							nbActions++;
-						}
-					} else {
-						if (jeu.validationDeplacement(el, carte.deplacement().getValeurDeplacement())) {
-							jeu.jouerCarte(el,
-									jeu.obtenirPositionElement(el) + carte.deplacement().getValeurDeplacement(), choix);
-							nbActions++;
-						}
-					}
-					return;
-				}
-			} else {
-
-			}
-		}
-	}
-
-	private boolean fin() {
-		if (nbActions == 0) {
-			return false;
-		}
-		if (nbActions == 10) {
-			return true;
-		}
-		int fin = random.nextInt(100);
-		return fin < 40;
-	}
+        return true;
+    }
 }

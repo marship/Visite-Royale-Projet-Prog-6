@@ -52,7 +52,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
 		jeu = j;
 		collecteurEvenements = cEvenements;
-        musique = new Son(musiqueAudio);
+        //musique = new Son(musiqueAudio);
 	}
 
 	public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
@@ -170,7 +170,10 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         String[] choixComboBox = {
             "Humain",
+            "IA très facile",
             "IA facile",
+            "IA normale",
+            "IA difficile",
             "IA experte"
         };
 

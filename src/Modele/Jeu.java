@@ -26,6 +26,7 @@ public class Jeu extends Observable {
     public boolean teleportationFaite = false;
     public boolean mainJoueurSecondaireVisible = false;
     public Element dernierTypeDePersonnageJouer;
+    public Element typeDePersonnageJouerAuDernierTour;
     public Element personnageManipulerParLeFou;
     public int carteActuelle = 8;
     public int cartePassee = 8;
@@ -89,6 +90,7 @@ public class Jeu extends Observable {
         changerEtatPartie();
         personnageManipulerParLeFou(FOU);
         initialiserDernierTypeDePersonnageJouer();
+        initialiserTypeDePersonnageJouerDernierTour();
         metAJour();
     }
 
@@ -444,6 +446,7 @@ public class Jeu extends Observable {
             }
         }
         personnageManipulerParLeFou(FOU);
+        typeDePersonnageJouerAuDernierTour = dernierTypeDePersonnageJouer;
         initialiserDernierTypeDePersonnageJouer();
         teleportationFaite = false;
         fixerPositions();
@@ -571,12 +574,20 @@ public class Jeu extends Observable {
         }
     }
 
+    public void initialiserTypeDePersonnageJouerDernierTour() {
+        typeDePersonnageJouerAuDernierTour = VIDE;
+    }
+
     public void initialiserDernierTypeDePersonnageJouer() {
         dernierTypeDePersonnageJouer = VIDE;
     }
 
     public void majDernierTypeDePersonnageJouer(Element perso) {
         dernierTypeDePersonnageJouer = perso;
+    }
+
+    public void majTypeDePersoDuDernierTour(){
+        typeDePersonnageJouerAuDernierTour = dernierTypeDePersonnageJouer;
     }
 
     public int[] listeCarteJouable() {
@@ -1176,7 +1187,7 @@ public class Jeu extends Observable {
 
     public void sauvegarderPlateau(Plateau p, BufferedWriter bw){
         try {
-            
+
             // Sauvegarde du joueur du tour 
             bw.write("" + p.joueurCourant + "\n"); 
 

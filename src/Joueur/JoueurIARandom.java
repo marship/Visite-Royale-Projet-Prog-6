@@ -3,6 +3,7 @@ package Joueur;
 import java.util.Random;
 
 import Global.Element;
+import Global.Deplacement;
 import Modele.CoupleAtteindrePlateau;
 import Modele.Jeu;
 import Modele.ListePlateaux;
@@ -14,7 +15,8 @@ import Structures.Sequence;
 public class JoueurIARandom extends Joueur {
 
 	Random random;
-	int nbActions;
+
+    Element jouee = Element.VIDE;
 
 	public JoueurIARandom(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
@@ -41,11 +43,22 @@ public class JoueurIARandom extends Joueur {
         jeu.obtenirPersonnageElement(Element.SORCIER).positionnerPersonnage(positions[4]);
     }
 
-    void poserLesCartes(int[] cartes){
+    void poserLesCartes(int[] cartes) {
         int i = 0;
-        while(i < 8){
-            if(cartes[i] == 1){
-                jeu.poserCarte(i);
+        int nbUnPlusUn = 0;
+        while (i < 8) {
+            if (cartes[i] == 1) {
+                if(jeu.recupererMainJoueur(jeu.joueurCourant())[i].deplacement() == Deplacement.UN_PLUS_UN){
+                    if(nbUnPlusUn < 3){
+                        nbUnPlusUn++;
+                        jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
+                        jeu.poserCarte(i);
+                    }
+                }
+                else{
+                    jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
+                    jeu.poserCarte(i);
+                }
             }
             i++;
         }
