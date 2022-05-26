@@ -448,9 +448,12 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     private void aideIA() {
-        changerJoueurCourant(jeu.joueurCourant(), JOUEUR_AMEL);
-        joueurs[joueurCourant][JOUEUR_AMEL].tempsEcoule();
-        changerJoueurCourant(jeu.joueurCourant(), JOUEUR_HUMAIN);
+        if(jeu.actionAutoriser()){
+            jeu.annulerTour();
+            changerJoueurCourant(jeu.joueurCourant(), JOUEUR_AMEL);
+            joueurs[joueurCourant][JOUEUR_AMEL].tempsEcoule();
+            changerJoueurCourant(jeu.joueurCourant(), JOUEUR_HUMAIN);
+        }
     }
 
     private void initInfoJoueurs() {

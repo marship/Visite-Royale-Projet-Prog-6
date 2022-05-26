@@ -1167,6 +1167,8 @@ public class Jeu extends Observable {
 
     public void sauvegarderPlateau(Plateau p, BufferedWriter bw){
         try {
+            
+            // Sauvegarde du joueur du tour 
             bw.write("" + p.joueurCourant + "\n"); 
 
             // Sauvegarde des positions
@@ -1228,7 +1230,6 @@ public class Jeu extends Observable {
 
 
     public void sauvegarder(int type1, int type2){
-        /*
         try {
             annulerTour();
             // On récupère la date pour le nom de la sauvegarde
@@ -1248,35 +1249,12 @@ public class Jeu extends Observable {
             FileWriter fw = new FileWriter(f);
             BufferedWriter bw = new BufferedWriter(fw);
 
-            // On note les type de joueurs et le joueur courant
+            // On note les type de joueurs
             bw.write("" + type1 + "\n"); 
             bw.write("" + type2 + "\n"); 
             
+            // On sauvegarde le plateau courant 
             sauvegarderPlateau(plateau(), bw);
-
-            Sequence<PlateauHistorique> sequencePlateau = Configuration.instance().nouvelleSequence();
-            while(!plateau.passe.estVide()) {
-                sequencePlateau.insereQueue(plateau.passe.extraitTete());
-            }
-            while(!sequencePlateau.estVide()) {
-                PlateauHistorique pH = sequencePlateau.extraitTete();
-                Plateau tmp = pH.sequenceEtatPlateau.extraitTete();
-                sauvegarderPlateau(tmp, bw);
-                pH.sequenceEtatPlateau().insereTete(tmp);
-                plateau.passe.insereQueue(pH);
-            }
-            
-            sequencePlateau = Configuration.instance().nouvelleSequence();
-            while(!plateau.futur.estVide()) {
-                sequencePlateau.insereQueue(plateau.futur.extraitTete());
-            } 
-            while(!sequencePlateau.estVide()) {
-                PlateauHistorique pH = sequencePlateau.extraitTete();
-                Plateau tmp = pH.sequenceEtatPlateau.extraitTete();
-                sauvegarderPlateau(tmp, bw);
-                pH.sequenceEtatPlateau().insereTete(tmp);
-                plateau.futur.insereQueue(pH);
-            }
 
             bw.close();
             Configuration.instance().logger().info("Fichier Sauvegarde !");
@@ -1284,7 +1262,6 @@ public class Jeu extends Observable {
         catch (Exception e) {
             System.err.println(e);
         }
-        */
     }
 
     public int[] charger(String fic){
