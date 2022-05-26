@@ -53,8 +53,6 @@ public class Jeu extends Observable {
 
     InfoJeu ETAT_JEU = InfoJeu.DEBUT_TOUR;
 
-    Sequence<Plateau> passe, futur;
-
     // ==================
     // ===== JOUEUR =====
     // ==================
@@ -88,10 +86,6 @@ public class Jeu extends Observable {
     // ========================
     public Jeu() {
         plateau = new Plateau();
-
-        passe = Configuration.instance().nouvelleSequence();
-        futur = Configuration.instance().nouvelleSequence();
-
         changerEtatPartie();
         personnageManipulerParLeFou(FOU);
         initialiserDernierTypeDePersonnageJouer();
@@ -375,13 +369,6 @@ public class Jeu extends Observable {
 
     public int joueurGagnant() {
         return plateau().joueurGagnant;
-    }
-
-    // TODO IA
-    // Numero : 0 = Joueur Gauche | 1 = Joueur Droit
-    // Type : 0 = Joueur Humain | 1 = Joueur IA
-    public void changerJoueurCourant(int numeroJoueur, int typeJoueur) {
-        metAJour();
     }
 
     // ===================
@@ -1080,60 +1067,81 @@ public class Jeu extends Observable {
     // ======================
     // ===== HISTORIQUE =====
     // ======================
-    void nouveau(Plateau p) {
-        passe.insereTete(p);
-        while (!futur.estVide()) {
-            futur.extraitTete();
+    public Coup creerCoup(Plateau plat) {
+        return plateau.creerCoup(plat);
+    }
+
+    public void jouerCoup(Coup coup) {
+        if (coup == null) {
+            System.out.println("Coup Vide !!");
+        } else {
+            plateau().jouerCoup(coup);
+            metAJour();
         }
     }
 
+    public Coup annule() {
+        Coup coup = plateau().annuler();
+        System.out.println("Annulation !!!");
+        // plateau().afficherPlateau();
+        metAJour();
+        return coup;
+    }
+
+    public Coup refaire() {
+        Coup coup = plateau().refaire();
+        System.out.println("Refaisage !!!");
+        // plateau().afficherPlateau();
+        metAJour();
+        return coup;
+    }
+
+    public void viderHistorique() {
+        plateau().viderHistorique();
+    }
+
+    /*
     void transfererPlateau(Plateau p) {
         plateau().transfertPlateau(p);
     }
 
-    public boolean peutAnnuler() {
-        return !passe.estVide();
-    }
-
-    public void annuler() {
-        if (peutAnnuler()) {
-            Plateau platoHisto = passe.extraitTete();
-            futur.insereTete(plateau());
-            transfererPlateau(platoHisto);
-        } else {
-            System.out.println("Annulation Impossible !!!");
-        }
-    }
-
-    public boolean peutRefaire() {
-        return !futur.estVide();
-    }
-
-    public void refaire() {
-        if (peutRefaire()) {
-            Plateau platoHisto = futur.extraitTete();
-            passe.insereTete(plateau());
-            transfererPlateau(platoHisto);
-        } else {
-            System.out.println("Refaisage Impossible !!!");
-        }
-    }
-
-    public void viderHistorique() {
-        passe = Configuration.instance().nouvelleSequence();
-        futur = Configuration.instance().nouvelleSequence();
-    }
-
     public Plateau determinerPlateauHistorique(Plateau p) {
-        return plateau().determinerPlateauHistorique(p);
+        if (actionAutoriser()) {
+            return plateau().determinerPlateauHistorique(p);
+        } else {
+            System.out.println("Partie non en cours !!");
+            return null;
+        }
     }
 
-    public void sauvegarderPlateauHistorique(Plateau pHistorique) {
+    public void jouerPlateauHistorique(Plateau pHistorique) {
         if (pHistorique == null) {
             Configuration.instance().logger().warning("Plateau Historique Null !!");
         } else {
-            nouveau(pHistorique);
+            plateau().jouerPlateauHistorique(pHistorique);
             metAJour();
+        }
+    }
+    */
+
+    /*
+    private void afficherFutur() {
+        System.out.println("FUTUR : ");
+        Iterateur<Plateau> iterateur = futur.iterateur();
+        while(iterateur.aProchain()) {
+            Plateau platoo = (Plateau) iterateur.prochain();
+            platoo.afficherPlateau();
+            // plateau().transfertPlateau(platoo);
+        }
+    }
+
+    private void afficherPasse() {
+        System.out.println("PASSE : ");
+        Iterateur<Plateau> iterateur = passe.iterateur();
+        while(iterateur.aProchain()) {
+            Plateau platoo = (Plateau) iterateur.prochain();
+            platoo.afficherPlateau();
+            // plateau().transfertPlateau(platoo);
         }
     }
 
@@ -1160,6 +1168,7 @@ public class Jeu extends Observable {
         
         return tailleHistorique;
     }
+    */
 
     // ======================
     // ===== SAUVEGARDE =====

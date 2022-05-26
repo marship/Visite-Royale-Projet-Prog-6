@@ -370,7 +370,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         historique.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
         boutonHistoriqueArriere = new DesignBoutons("←", "Texture_Petit_Bouton_Moitie", "Texture_Petit_Bouton_Moitie_Clique", 30);
+        boutonHistoriqueArriere.addActionListener(new AdaptateurCommande(collecteurEvenements, "annule"));
         boutonHistoriqueAvant = new DesignBoutons("→", "Texture_Petit_Bouton_Moitie", "Texture_Petit_Bouton_Moitie_Clique", 30);
+        boutonHistoriqueAvant.addActionListener(new AdaptateurCommande(collecteurEvenements, "refaire"));
         Container historiqueAvantArriere = Box.createHorizontalBox();
         historiqueAvantArriere.add(boutonHistoriqueArriere);
         historiqueAvantArriere.add(boutonHistoriqueAvant);

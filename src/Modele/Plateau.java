@@ -2,9 +2,11 @@ package Modele;
 
 import Global.Configuration;
 import Global.Element;
+import Structures.Iterateur;
 // import Structures.Sequence;
+import Structures.Sequence;
 
-public class Plateau implements Cloneable {
+public class Plateau extends Historique<Coup> implements Cloneable {
 
     // ===============================
     // ===== INFORMATION PLATEAU =====
@@ -67,6 +69,8 @@ public class Plateau implements Cloneable {
     static final int COURONNE_GAGNANTE = 2;
     static final int MEULE_GAGNANTE_GAUCHE = 3;
     static final int MEULE_GAGNANTE_DROITE = 4;
+
+    Sequence<Plateau> passe, futur;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -138,6 +142,10 @@ public class Plateau implements Cloneable {
             return ROI_GAGNANT;
         }
         return AUCUN_GAGNANT;
+    }
+
+    public int joueurGagnant() {
+        return joueurGagnant;
     }
 
     // ====================
@@ -223,6 +231,10 @@ public class Plateau implements Cloneable {
         }
     }
 
+    public int joueurCourant() {
+        return joueurCourant;
+    }
+
     // ====================
     // ===== ELEMENTS =====
     // ====================
@@ -234,25 +246,108 @@ public class Plateau implements Cloneable {
     // ================================
     // ========== HISTORIQUE ==========
     // ================================
-    Plateau determinerPlateauHistorique(Plateau plateau) {
-        transfertPlateau(plateau);
-        return this;
+    public Coup creerCoup(Plateau plat) {
+        Coup resultat = new Coup();
+        if (joueurGagnant() == AUCUN_GAGNANT) {
+            resultat.plateauCoup(plat);
+            return resultat;
+        } else {
+            return null;
+        }
     }
 
-    public void transfertPlateau(Plateau p) {
-        joueurCourant = p.joueurCourant;
+    public void jouerCoup(Coup coup) {
+        coup.fixerPlateau(this);
+        nouveau(coup);
+    }
 
-        gardeGauche.positionnerPersonnage(p.gardeGauche.positionPersonnage);
-        gardeDroit = p.gardeDroit;
-        roi = p.roi;
-        fou = p.fou;
-        sorcier = p.sorcier;
-        couronne = p.couronne;
+    void jouerCoupPlateau(Plateau plato) {
+        transfertPlateau(plato);
+    }
 
-        paquet = p.paquet;
+    void transfertPlateau(Plateau p) {
+
+        joueurGagnant = p.joueurGagnant;
+        joueurCourant = p.joueurCourant();
+
+        gardeGauche.positionnerPersonnage(p.gardeGauche.positionPersonnage());
+        gardeDroit.positionnerPersonnage(p.gardeDroit.positionPersonnage());
+        roi.positionnerPersonnage(p.roi.positionPersonnage());
+        fou.positionnerPersonnage(p.fou.positionPersonnage());
+        sorcier.positionnerPersonnage(p.sorcier.positionPersonnage());
+        
+        couronne.positionnerCouronne(p.couronne.positionCouronne());
+
+        System.out.println("PIOCHE !!!!");
+        paquet.afficherPioche();
+        remplacerPioche(p);
+        paquet.afficherPioche();
+        System.out.println("DEFAUSE !!!!");
+        paquet.afficherDefausse();
+        remplacerDefausse(p);
+        paquet.afficherDefausse();
+        System.out.println("MAINS !!!!");
+        paquet.afficherMain(JOUEUR_DROIT);
+        paquet.afficherMain(JOUEUR_GAUCHE);
+        remplacerMains(p);
+        paquet.afficherMain(JOUEUR_DROIT);
+        paquet.afficherMain(JOUEUR_GAUCHE);
+        
+        remplacerTourActuel();
+    }
+
+    public void remplacerPioche(Plateau p) {
+        while(!paquet.pioche.estVide()) {
+            paquet.pioche.extraitTete();
+        }
+        Sequence<Carte> liste = Configuration.instance().nouvelleSequence();
+        while(!p.paquet.pioche.estVide()){
+            liste.insereQueue(p.paquet.pioche.extraitTete());
+        }
+        while(!liste.estVide()){
+            Carte carte = liste.extraitTete();
+            paquet.pioche.insereQueue(carte);
+            p.paquet.pioche.insereQueue(carte);
+        }
+    }
+
+    public void remplacerDefausse(Plateau p) {
+        while(!paquet.defausse.estVide()){
+            paquet.defausse.extraitTete();
+        }
+        Sequence<Carte> liste = Configuration.instance().nouvelleSequence();
+        while(!p.paquet.defausse.estVide()){
+            liste.insereQueue(p.paquet.defausse.extraitTete());
+        }
+        while(!liste.estVide()){
+            Carte carte = liste.extraitTete();
+            paquet.defausse.insereQueue(carte);
+            p.paquet.defausse.insereQueue(carte);
+        }
+    }
+
+    public void remplacerMains(Plateau p) {
+        int i = 0;
+        while(i < 8 ){
+            paquet.mainJoueurs[0][i] = p.paquet.mainJoueur(0)[i];
+            paquet.mainJoueurs[1][i] = p.paquet.mainJoueur(1)[i];
+            i++;
+        }
+    }
+
+    public void remplacerTourActuel() {
+        while(!paquet.tourActuel.estVide()){
+            paquet.tourActuel.extraitTete();
+        }
     }
 
     /*
+    Plateau determinerPlateauHistorique(Plateau plateau) {
+        Plateau plateauHistorique = new Plateau();
+        plateauHistorique.transfertPlateau(plateau);
+        return plateauHistorique;
+    }
+
     public int tailleHistorique() {
         
         int tailleHistorique = 0;

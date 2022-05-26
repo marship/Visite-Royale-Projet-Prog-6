@@ -16,6 +16,7 @@ import Joueur.JoueurIAExperte;
 import Joueur.JoueurIARandom;
 import Joueur.JoueurIAnastasia;
 import Joueur.JoueurIAmel;
+import Modele.Coup;
 import Modele.Jeu;
 import Modele.Plateau;
 import Vue.CollecteurEvenements;
@@ -66,6 +67,8 @@ public class ControleurMediateur implements CollecteurEvenements {
     Jeu jeu;
     InterfaceUtilisateur interfaceUtilisateur;
 
+    Plateau plateauDebutTour;
+
     Joueur[][] joueurs;
     int[] typeJoueur;
     int joueurCourant;
@@ -83,6 +86,8 @@ public class ControleurMediateur implements CollecteurEvenements {
         jeu = j;
         joueurs = new Joueur[NOMBRE_JOUEUR][NOMBRE_TYPE_JOUEUR];
         typeJoueur = new int[NOMBRE_TYPE_JOUEUR];
+
+        plateauDebutTour = jeu.plateau().clone();
 
         // String nomFichierAudio = "gangstas-paradise-medieval";
         // String nomFichierAudio = "the-weeknd-medieval";
@@ -256,35 +261,25 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     // TODO NETTOYAGE VVVVVVVV
 
-    void gestionHistorique(Plateau p) {
-        Plateau plateauHistorique = jeu.determinerPlateauHistorique(p);
-        if (plateauHistorique != null) {
-            sauvegarderPlateauHistorique(plateauHistorique);
+    void gestionHistorique(Plateau plat) {
+        Coup coup = jeu.creerCoup(plat);
+        if (coup != null) {
+            jouerCoup(coup);
         } else {
             System.out.println("Plateau d'historique null !!!");
         }
     }
 
-    void sauvegarderPlateauHistorique(Plateau pHistorique) {
-        jeu.sauvegarderPlateauHistorique(pHistorique);
+    void jouerCoup(Coup coup) {
+        jeu.jouerCoup(coup);
     }
 
     void annule() {
-        jeu.annuler();
-        /*
-         * interfaceGraphique.miseAJourTableauScore();
-         * interfaceGraphique.miseAJourCouleurJoueurCourant(1, 0, false);
-         * jeu.nbCoupMoins();
-         * interfaceGraphique.miseAJourNbCoup();
-         */
+        jeu.annule();
     }
 
     void refaire() {
         jeu.refaire();
-        /*
-         * jeu.nbCoupPlus();
-         * interfaceGraphique.miseAJourNbCoup();
-         */
     }
 
     @Override
@@ -485,11 +480,12 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     private void finDeTour() {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
+            
+            gestionHistorique(plateauDebutTour);
+            plateauDebutTour = jeu.plateau().clone();
+
             jeu.finDeTour();
             jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
-
-            gestionHistorique(jeu.plateau());
-            System.out.println("Taille de l'historique : " + jeu.tailleHistoirique());
 
             ETAT_JEU = InfoJeu.DEBUT_TOUR;
             changerJoueurCourant();
