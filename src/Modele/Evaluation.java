@@ -1,5 +1,10 @@
 package Modele;
 
+import Global.Configuration;
+import Global.Deplacement;
+import Global.Element;
+import Structures.Sequence;
+
 public class Evaluation {
 
     // Vrai = JoueurDroite
@@ -13,6 +18,8 @@ public class Evaluation {
     static int positionCouronne;
     static int taillePioche;
     static boolean etatCouronne;
+    static double moyenneFou;
+    boolean calcul;
 
     // ==================
     // ===== JOUEUR =====
@@ -29,16 +36,108 @@ public class Evaluation {
         positionCouronne = p.couronne.positionCouronne();
         taillePioche = p.paquet.pioche().taille();
         etatCouronne = p.couronne.etatCouronne;
-    }
-
-    public double note(int joueur) {
-        double note = 0;
-        boolean calcul;
-        if (joueur == JOUEUR_DROIT) {
+        if (p.joueurCourant == JOUEUR_DROIT) {
             calcul = true;
         } else {
             calcul = false;
         }
+        moyenneFou(p, calcul);
+    }
+
+    public double valeurCarteFou(Deplacement d, Boolean joueurCourant){
+        switch (d) {
+            case UN:
+                return 1;
+            case DEUX:
+                return 2;
+            case TROIS:
+                return 3;
+            case QUATRE:
+                return 4;
+            case CINQ:
+                return 5;
+            case MILIEU:
+                if(joueurCourant){
+                    if(positionFou < positionRoi){
+                        return Math.abs(positionFou);
+                    }
+                    else{
+                        int somme = 0;
+                        int nb = 2;
+                        somme = somme + Math.abs(positionFou);
+                        somme = somme + Math.abs(positionSorcier);
+                        if(positionRoi > 0){
+                            somme = somme + Math.abs(positionGardeGauche);
+                            nb++;
+                        }
+                        if(positionRoi < 0){
+                            somme = somme + Math.abs(positionGardeDroit);
+                            nb++;
+                        }
+                        if(positionGardeGauche < 0 && positionGardeDroit > 0){
+                            somme = somme + Math.abs(positionRoi);
+                            nb++;
+                        }
+                        return somme/nb;
+                    }
+                }
+                else{
+                    if(positionFou > positionRoi){
+                        return Math.abs(positionFou);
+                    }
+                    else{
+                        int somme = 0;
+                        int nb = 2;
+                        somme = somme + Math.abs(positionFou);
+                        somme = somme + Math.abs(positionSorcier);
+                        if(positionRoi > 0){
+                            somme = somme + Math.abs(positionGardeGauche);
+                            nb++;
+                        }
+                        if(positionRoi < 0){
+                            somme = somme + Math.abs(positionGardeDroit);
+                            nb++;
+                        }
+                        if(positionGardeGauche < 0 && positionGardeDroit > 0){
+                            somme = somme + Math.abs(positionRoi);
+                            nb++;
+                        }
+                        return somme/nb;
+                    }
+                }
+            default:
+                return 0;
+        }
+    }
+
+    public void moyenneFou(Plateau p, boolean joueurCourant){
+        int nbFou = 0;
+        int i = 0;
+        double somme = 0;
+        while(i < 8){
+            if(p.paquet.mainJoueur(p.joueurCourant)[i].personnage() == Element.FOU){
+                nbFou ++;
+                somme = somme + valeurCarteFou(p.paquet.mainJoueur(p.joueurCourant)[i].deplacement(), joueurCourant);
+            }
+            i++;
+        }
+        Sequence<Carte> liste = Configuration.instance().nouvelleSequence();
+        while(!p.paquet.pioche.estVide()){
+            liste.insereQueue(p.paquet.pioche.extraitTete());
+        }
+        while(!liste.estVide()){
+            Carte carte = liste.extraitTete();
+            if(carte.personnage() == Element.FOU){
+                nbFou++;
+                somme = somme + valeurCarteFou(carte.deplacement(), joueurCourant);
+            }
+            p.paquet.pioche.insereQueue(carte);
+        }
+        moyenneFou = somme / nbFou;
+    }
+
+    public double note(int joueur) {
+        double note = 0;
 
         // Sorcier
         double resSorcierGentil = calculSorcier(calcul);
@@ -348,7 +447,7 @@ public class Evaluation {
                 if (!gardeDroitDansChateau(joueurCourant)) {
                     double deplacementGardeDroit = 8 - positionGardeDroit;
                     deplacementGardeDroit = Math.abs(deplacementGardeDroit);
-                    double res = Math.round(deplacementGardeDroit / 3.14);
+                    double res = Math.round(deplacementGardeDroit / moyenneFou);
                     deplacementGardeDroit = multipliCoeff(res, deplacementGardeDroit);
                     somme += deplacementGardeDroit;
                     nbChateau++;
@@ -357,7 +456,7 @@ public class Evaluation {
                 if (!sorcierDansChateau(joueurCourant)) {
                     double deplacementSorcier = 8 - positionSorcier;
                     deplacementSorcier = Math.abs(deplacementSorcier);
-                    double res = Math.round(deplacementSorcier / 3.14);
+                    double res = Math.round(deplacementSorcier / moyenneFou);
                     deplacementSorcier = multipliCoeff(res, deplacementSorcier);
                     somme += deplacementSorcier;
                     nbChateau++;
@@ -365,13 +464,13 @@ public class Evaluation {
 
                 double deplacementRoi = tpRoi(joueurCourant);
                 deplacementRoi = Math.abs(deplacementRoi);
-                double res = Math.round(deplacementRoi / 3.14);
+                double res = Math.round(deplacementRoi / moyenneFou);
                 deplacementRoi = multipliCoeff(res, deplacementRoi);
                 somme += deplacementRoi;
 
                 double deplacementGardeGauche = tpGardeGauche();
                 deplacementGardeGauche = Math.abs(deplacementGardeGauche);
-                res = Math.round(deplacementGardeGauche / 3.14);
+                res = Math.round(deplacementGardeGauche / moyenneFou);
                 deplacementGardeGauche = multipliCoeff(res, deplacementGardeGauche);
                 somme += deplacementGardeGauche;
 
@@ -390,7 +489,7 @@ public class Evaluation {
                 if (!gardeGaucheDansChateau(joueurCourant)) {
                     double deplacementGardeGauche = -8 - positionGardeGauche;
                     deplacementGardeGauche = Math.abs(deplacementGardeGauche);
-                    double res = Math.round(deplacementGardeGauche / 3.14);
+                    double res = Math.round(deplacementGardeGauche / moyenneFou);
                     deplacementGardeGauche = multipliCoeff(res, deplacementGardeGauche);
                     somme += deplacementGardeGauche;
                     nbChateau++;
@@ -399,7 +498,7 @@ public class Evaluation {
                 if (!sorcierDansChateau(joueurCourant)) {
                     double deplacementSorcier = -8 - positionSorcier;
                     deplacementSorcier = Math.abs(deplacementSorcier);
-                    double res = Math.round(deplacementSorcier / 3.14);
+                    double res = Math.round(deplacementSorcier / moyenneFou);
                     deplacementSorcier = multipliCoeff(res, deplacementSorcier);
                     somme += deplacementSorcier;
                     nbChateau++;
@@ -407,13 +506,13 @@ public class Evaluation {
 
                 double deplacementRoi = tpRoi(joueurCourant);
                 deplacementRoi = Math.abs(deplacementRoi);
-                double res = Math.round(deplacementRoi / 3.14);
+                double res = Math.round(deplacementRoi / moyenneFou);
                 deplacementRoi = multipliCoeff(res, deplacementRoi);
                 somme += deplacementRoi;
 
                 double deplacementGardeDroit = tpGardeDroit();
                 deplacementGardeDroit = Math.abs(deplacementGardeDroit);
-                res = Math.round(deplacementGardeDroit / 3.14);
+                res = Math.round(deplacementGardeDroit / moyenneFou);
                 deplacementGardeDroit = multipliCoeff(res, deplacementGardeDroit);
                 somme += deplacementGardeDroit;
 
