@@ -8,20 +8,36 @@ import Vue.CollecteurEvenements;
 
 public class AdaptateurCommande implements ActionListener {
 
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     CollecteurEvenements collecteurEvenements;
-    String nomSonAudio = "Son_Bouton";
     String commande;
     Son son;
 
+    /////////////////////////////////////////////////////////////////////////
+
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     public AdaptateurCommande(CollecteurEvenements cEvenements, String com) {
         collecteurEvenements = cEvenements;
         commande = com;
     }
 
+    // ===========================
+    // ===== ACTION COMMANDE =====
+    // ===========================
     @Override
     public void actionPerformed(ActionEvent e) {
         collecteurEvenements.commande(commande);
+        jouerSon();
+    }
+
+    // ======================
+    // ===== SON ACTION =====
+    // ======================
+    void jouerSon() {
         son = new Son();
-        son.moyenVolume();
     }
 }

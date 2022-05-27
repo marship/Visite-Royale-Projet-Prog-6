@@ -29,6 +29,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     // String musiqueAudio = "gangstas-paradise-medieval";
 	CollecteurEvenements collecteurEvenements;
 
+    final static int VALEUR_MINIMALE_BOUTON_GLISSANT = -24;
+    final static int VALEUR_MAXIMALE_BOUTON_GLISSANT = 6;
+
     PlateauGraphique plateauGraphique;
     JSlider boutonGlissantMusique;
     JDialog victoire;
@@ -52,7 +55,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
 		jeu = j;
 		collecteurEvenements = cEvenements;
-        //musique = new Son(musiqueAudio);
+        musique = new Son(musiqueAudio);
 	}
 
 	public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
@@ -306,7 +309,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridy = 0;
         panelOptions.add(test, gbc);
 
-        boutonGlissantMusique = new JSlider(-24, 6);
+        boutonGlissantMusique = new JSlider(-24, 6, -16);
         boutonGlissantMusique.addChangeListener(new AdaptateurBoutonGlissant(musique, boutonGlissantMusique));
         boutonGlissantMusique.setOpaque(false);
         boutonGlissantMusique.setPaintLabels(true);
@@ -374,9 +377,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         historique.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
         boutonHistoriqueArriere = new DesignBoutons("←", "Texture_Petit_Bouton_Moitie", "Texture_Petit_Bouton_Moitie_Clique", 30);
-        boutonHistoriqueArriere.addActionListener(new AdaptateurCommande(collecteurEvenements, "annule"));
+        boutonHistoriqueArriere.addActionListener(new AdaptateurCommande(collecteurEvenements, "Annuler"));
         boutonHistoriqueAvant = new DesignBoutons("→", "Texture_Petit_Bouton_Moitie", "Texture_Petit_Bouton_Moitie_Clique", 30);
-        boutonHistoriqueAvant.addActionListener(new AdaptateurCommande(collecteurEvenements, "refaire"));
+        boutonHistoriqueAvant.addActionListener(new AdaptateurCommande(collecteurEvenements, "Refaire"));
         Container historiqueAvantArriere = Box.createHorizontalBox();
         historiqueAvantArriere.add(boutonHistoriqueArriere);
         historiqueAvantArriere.add(boutonHistoriqueAvant);
@@ -414,7 +417,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         panelOptionsJeu.setBorder(new EmptyBorder(borderTop, borderSides, borderBottom, borderSides));
 
         JLabel txtMusique = new JLabel("Volume musique");
-        boutonGlissantMusique = new JSlider(-24, 6);
+        boutonGlissantMusique = new JSlider(-24, 6, -16);
         boutonGlissantMusique.addChangeListener(new AdaptateurBoutonGlissant(musique, boutonGlissantMusique));
         boutonGlissantMusique.setOpaque(false);
         boutonGlissantMusique.setPaintLabels(true);

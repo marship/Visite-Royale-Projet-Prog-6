@@ -8,8 +8,17 @@ import Audio.Son;
 
 public class AdaptateurBoutonGlissant implements ChangeListener {
 
-    Son audio;
+    // ======================
+    // ===== CONSTANTES =====
+    // ======================
+    final static int VALEUR_MINIMALE_BOUTON_GLISSANT = -24;
+    final static int VALEUR_MUTE = -80;
+
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     JSlider boutonGlissantAudio;
+    Son audio;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -21,14 +30,14 @@ public class AdaptateurBoutonGlissant implements ChangeListener {
         boutonGlissantAudio = bGlissantAudio;
     }
 
-    // =========================
-    // ===== BOUGE CURSEUR =====
-    // =========================
+    // ==========================
+    // ===== BOUGER CURSEUR =====
+    // ==========================
     @Override
     public void stateChanged(ChangeEvent e) {
         audio.volumeCourant = boutonGlissantAudio.getValue();
-        if (audio.volumeCourant == -24) {
-            audio.volumeCourant = -80;
+        if (audio.volumeCourant <= VALEUR_MINIMALE_BOUTON_GLISSANT) {
+            audio.volumeCourant = VALEUR_MUTE;
         }
         audio.floatControl.setValue(audio.volumeCourant);
     }

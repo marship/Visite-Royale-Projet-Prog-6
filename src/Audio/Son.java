@@ -11,8 +11,8 @@ import javax.swing.JSlider;
 public class Son {
     
     Clip clip;
-    float volumePrecedent = -9;
-    public float volumeCourant = -9;
+    float volumePrecedent = -16;
+    public float volumeCourant = -16;
     public FloatControl floatControl;
     boolean estMuter = false;
     AudioInputStream audioInputStream;
@@ -32,6 +32,7 @@ public class Son {
     public Son() {
         setFichier("Son_Bouton");
         jouer();
+        moyenVolume();
     }
 
     public void setFichier(String nomFichierAudio) {
@@ -61,7 +62,7 @@ public class Son {
     }
 
     public void moyenVolume() {
-        volumeCourant = -9.0f;
+        volumeCourant = 0.0f;
         floatControl.setValue(volumeCourant);
     }
 

@@ -6,15 +6,26 @@ import java.awt.event.ActionListener;
 import Vue.CollecteurEvenements;
 
 public class AdaptateurTemps implements ActionListener {
-	
+
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     CollecteurEvenements collecteurEvenements;
 
-	public AdaptateurTemps(CollecteurEvenements cEvenements) {
-		collecteurEvenements = cEvenements;
-	}
+    /////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		collecteurEvenements.tictac();
-	}
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
+    public AdaptateurTemps(CollecteurEvenements cEvenements) {
+        collecteurEvenements = cEvenements;
+    }
+
+    // ========================
+    // ===== ACTION TEMPS =====
+    // ========================
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        collecteurEvenements.tictac();
+    }
 }

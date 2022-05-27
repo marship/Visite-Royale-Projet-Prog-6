@@ -400,7 +400,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "MenuEnJeu":
                 break;
-            case "pause":
+            case "Pause":
                 jeu.changerEtatPartie();
                 break;
             case "OptionsJeu":
@@ -440,13 +440,13 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changeCarteActuelle(8);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 break;
-            case "visible":
+            case "Visible":
                 jeu.mainJoueurSecondaireVisible();
                 break;
-            case "annule":
+            case "Annuler":
                 annule();
                 break;
-            case "refaire":
+            case "Refaire":
                 refaire();
                 break;
             case "AideIA":

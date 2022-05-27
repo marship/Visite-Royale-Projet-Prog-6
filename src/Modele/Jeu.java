@@ -1097,7 +1097,6 @@ public class Jeu extends Observable {
         futur.fixerPlateau(plateau());
         Coup coup = plateau().annuler(futur);
         System.out.println("Annulation !!!");
-        // plateau().afficherPlateau();
         metAJour();
         return coup;
     }
@@ -1107,7 +1106,6 @@ public class Jeu extends Observable {
         passe.fixerPlateau(plateau());
         Coup coup = plateau().refaire(passe);
         System.out.println("Refaisage !!!");
-        // plateau().afficherPlateau();
         metAJour();
         return coup;
     }

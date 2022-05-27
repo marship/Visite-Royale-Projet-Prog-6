@@ -9,37 +9,73 @@ import java.awt.event.MouseEvent;
 
 public class AdaptateurSourisMouvement implements MouseMotionListener {
 
-    PlateauGraphique plateauGraphique;
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     CollecteurEvenements collecteurEvenements;
+    PlateauGraphique plateauGraphique;
 
+    /////////////////////////////////////////////////////////////////////////
+
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     public AdaptateurSourisMouvement(PlateauGraphique pGraphique, CollecteurEvenements cEvenements) {
         plateauGraphique = pGraphique;
         collecteurEvenements = cEvenements;
     }
 
+    // ===========================
+    // ===== DEPLACER SOURIS =====
+    // ===========================
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+        int positionSourisX = e.getX();
+        int positionSourisY = e.getY();
+
+        if (survolerZone(positionSourisX, positionSourisY, false)) {
+            positionSourisX = recalculerPositionCarte(positionSourisX);
+            collecteurEvenements.passerSurCarte(positionSourisX);
+        } else {
+            collecteurEvenements.passerSurCarte(8);
+        }
+
+        if (survolerZone(positionSourisX, positionSourisY, true)) {
+            positionSourisX = recalculerPositionCase(positionSourisX);
+            collecteurEvenements.passerSurCase(positionSourisX);
+        } else {
+            collecteurEvenements.passerSurCase(-1);
+        }
+    }
+
+    // ====================
+    // ===== SURVOLER =====
+    // ====================
+    boolean survolerZone(int positionX, int positionY, boolean zonePlateau) {
+        if (zonePlateau) {
+            return ((positionX >= plateauGraphique.debutPlateauX()) && (positionX <= plateauGraphique.largeurPlateau()) && (positionY >= plateauGraphique.debutPlateauY()) && (positionY <= plateauGraphique.hauteurPlateau()));
+        } else {
+            return ((positionX >= plateauGraphique.debutZoneCartesX()) && (positionX <= plateauGraphique.finZoneCartesX()) && (positionY >= plateauGraphique.debutZoneCartesY()) && (positionY <= plateauGraphique.finZoneCartesY()));
+        }
+    }
+
+    // ======================
+    // ===== RECALCULER =====
+    // ======================
+    int recalculerPositionCarte(int posSourisX) {
+        return posSourisX / plateauGraphique.largeurCarte() - 4;
+    }
+
+    int recalculerPositionCase(int posSourisX) {
+        return posSourisX / plateauGraphique.largeurCasePlateau();
+    }
+
+    // =======================================
+    // ===== MAINTENIR + DEPLACER SOURIS =====
+    // =======================================
     @Override
     public void mouseDragged(MouseEvent e) {
         // Pas Nécéssaire
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        int coupX = e.getX();
-        int coupY = e.getY();
-        if (coupX >= plateauGraphique.debutZoneCartesX() && coupX <= plateauGraphique.finZoneCartesX()
-                    && coupY >= plateauGraphique.debutZoneCartesY() && coupY <= plateauGraphique.finZoneCartesY()) {
-                coupX = e.getX() / plateauGraphique.largeurCarte() - 4;
-                collecteurEvenements.passerSurCarte(coupX);
-        }
-        else{
-            collecteurEvenements.passerSurCarte(8);
-        }
-        if(e.getX() >= plateauGraphique.debutPlateauX() && e.getX() <= plateauGraphique.largeurPlateau() 
-            && e.getY() >= plateauGraphique.debutPlateauY() && e.getY() <= plateauGraphique.hauteurPlateau()){
-                coupX = e.getX() / plateauGraphique.largeurCasePlateau();
-                collecteurEvenements.passerSurCase(coupX);
-        }else{
-            collecteurEvenements.passerSurCase(-1);
-        }
     }
 }

@@ -3,74 +3,52 @@ package Adaptateur;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import Global.Configuration;
 import Vue.CollecteurEvenements;
 
 public class AdaptateurClavier extends KeyAdapter {
 
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     CollecteurEvenements collecteurEvenements;
 
+    /////////////////////////////////////////////////////////////////////////
+
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     public AdaptateurClavier(CollecteurEvenements cEvenements) {
         collecteurEvenements = cEvenements;
     }
 
+    // ==========================
+    // ===== PRESSER TOUCHE =====
+    // ==========================
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_S:
-                System.out.println("Sorcier");
-                collecteurEvenements.commande("Sorcier");
-                break;
-            case KeyEvent.VK_F:
-                System.out.println("Fou");
-                collecteurEvenements.commande("Fou");
-                break;
-            case KeyEvent.VK_D:
-                System.out.println("Roi");
-                collecteurEvenements.commande("Roi");
-                break;
-            case KeyEvent.VK_LEFT:
-                System.out.println("Gauche");
-                collecteurEvenements.commande("left");
-                break;
-            case KeyEvent.VK_RIGHT:
-                System.out.println("Droite");
-                collecteurEvenements.commande("right");
-                break;
-            case KeyEvent.VK_Q:
-                System.out.println("Quit");
-                collecteurEvenements.commande("quit");
-                break;
-            case KeyEvent.VK_U:
-                collecteurEvenements.commande("annule");
-                break;
-            case KeyEvent.VK_R:
-                collecteurEvenements.commande("refaire");
-                break;
             case KeyEvent.VK_ESCAPE:
-                collecteurEvenements.commande("fullscreen");
+                collecteurEvenements.commande("Quitter");
                 break;
             case KeyEvent.VK_SPACE:
-                collecteurEvenements.commande("ia");
+                collecteurEvenements.commande("Pause");
                 break;
-            case KeyEvent.VK_ENTER:
-                collecteurEvenements.commande("Fin");
+            case KeyEvent.VK_LEFT:
+                collecteurEvenements.commande("Annuler");
                 break;
-            case KeyEvent.VK_BACK_SPACE:
-                collecteurEvenements.commande("Retour");
+            case KeyEvent.VK_RIGHT:
+                collecteurEvenements.commande("Refaire");
                 break;
-            case KeyEvent.VK_W:
-                collecteurEvenements.commande("pause");
-                break;
-            case KeyEvent.VK_X:
-                collecteurEvenements.commande("visible");
+            case KeyEvent.VK_V:
+                collecteurEvenements.commande("Visible");
                 break;
             case KeyEvent.VK_A:
-                collecteurEvenements.commande("aide");
+                collecteurEvenements.commande("Aide");
                 break;
             default:
+                Configuration.instance().logger().info("Touche non assignee !");
                 break;
         }
     }
-
 }

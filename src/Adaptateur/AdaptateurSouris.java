@@ -9,6 +9,9 @@ import Vue.PlateauGraphique;
 
 public class AdaptateurSouris extends MouseAdapter {
 
+    // ======================
+    // ===== CONSTANTES =====
+    // ======================
     static final int MILIEU_PLATEAU = 8;
 
     static final int AUCUNE_OPTION = 0;
@@ -16,8 +19,11 @@ public class AdaptateurSouris extends MouseAdapter {
     static final int COORDONNEE_PLATEAU_Y = 2;
     static final int COORDONNEE_MAIN_X = 3;
 
-    PlateauGraphique plateauGraphique;
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     CollecteurEvenements collecteurEvenements;
+    PlateauGraphique plateauGraphique;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -35,36 +41,42 @@ public class AdaptateurSouris extends MouseAdapter {
     @Override
     public void mousePressed(MouseEvent e) {
 
-        int clicX = e.getX();
-        int clicY = e.getY();
+        int clicSourisX = e.getX();
+        int clicSourisY = e.getY();
 
-        if (estClicSurPlateau(clicX, clicY)) {
-            clicX = conversionCoordonnee(clicX, COORDONNEE_PLATEAU_X);
-            clicY = conversionCoordonnee(clicY, COORDONNEE_PLATEAU_Y);
-            collecteurEvenements.clicPlateau(clicX, clicY);
-            
-        } else if (estClicSurMain(clicX, clicY)) {
-            clicX = conversionCoordonnee(clicX, COORDONNEE_MAIN_X);
-            collecteurEvenements.clicCarte(clicX);
+        if (clicZone(clicSourisX, clicSourisY, true)) {
+            clicSourisX = conversionCoordonnee(clicSourisX, COORDONNEE_PLATEAU_X);
+            clicSourisY = conversionCoordonnee(clicSourisY, COORDONNEE_PLATEAU_Y);
+            collecteurEvenements.clicPlateau(clicSourisX, clicSourisY);
+
+        } else if (clicZone(clicSourisX, clicSourisY, false)) {
+            clicSourisX = conversionCoordonnee(clicSourisX, COORDONNEE_MAIN_X);
+            collecteurEvenements.clicCarte(clicSourisX);
         }
     }
 
-    boolean estClicSurPlateau(int clicX, int clicY) {
-        return (((clicX >= plateauGraphique.debutPlateauX()) && (clicX <= plateauGraphique.largeurPlateau())) && ((clicY >= plateauGraphique.debutPlateauY()) && (clicY <= plateauGraphique.hauteurPlateau())));
+    // ================
+    // ===== CLIC =====
+    // ================
+    boolean clicZone(int clicX, int clicY, boolean zonePlateau) {
+        if (zonePlateau) {
+            return ((clicX >= plateauGraphique.debutPlateauX()) && (clicX <= plateauGraphique.largeurPlateau()) && (clicY >= plateauGraphique.debutPlateauY()) && (clicY <= plateauGraphique.hauteurPlateau()));
+        } else {
+            return ((clicX >= plateauGraphique.debutZoneCartesX()) && (clicX <= plateauGraphique.finZoneCartesX()) && (clicY >= plateauGraphique.debutZoneCartesY()) && (clicY <= plateauGraphique.finZoneCartesY()));
+        }
     }
 
-    boolean estClicSurMain(int clicX, int clicY) {
-        return (((clicX >= plateauGraphique.debutZoneCartesX()) && (clicX <= plateauGraphique.finZoneCartesX())) && ((clicY >= plateauGraphique.debutZoneCartesY()) && (clicY <= plateauGraphique.finZoneCartesY())));
-    }
-
+    // ======================
+    // ===== CONVERSION =====
+    // ======================
     int conversionCoordonnee(int clic, int option) {
         switch (option) {
             case COORDONNEE_PLATEAU_X:
                 return (clic / plateauGraphique.largeurCasePlateau() - MILIEU_PLATEAU);
             case COORDONNEE_PLATEAU_Y:
-                return (clic / plateauGraphique.quartHauteurPlateau() - 1);  
+                return (clic / plateauGraphique.quartHauteurPlateau() - 1);
             case COORDONNEE_MAIN_X:
-                return (clic / plateauGraphique.largeurCarte() - 4);     
+                return (clic / plateauGraphique.largeurCarte() - 4);
             default:
                 Configuration.instance().logger().warning("Option Invalide !!");
                 return AUCUNE_OPTION;
