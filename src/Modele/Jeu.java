@@ -1116,42 +1116,42 @@ public class Jeu extends Observable {
     // ===== SAUVEGARDE =====
     // ======================
 
-    public void sauvegarderPlateau(Plateau p, BufferedWriter bw){
+    public void sauvegarderPlateau(BufferedWriter bw){
         try {
 
             // Sauvegarde du joueur du tour 
-            bw.write("" + p.joueurCourant + "\n"); 
+            bw.write("" + plateau().joueurCourant + "\n"); 
 
             // Sauvegarde des positions
-            bw.write("" + p.roi.positionPersonnage + "\n"); // On note la position du ROI
-            bw.write("" + p.gardeGauche.positionPersonnage + "\n"); // On note la position du GARDE_GAUCHE
-            bw.write("" + p.gardeDroit.positionPersonnage + "\n"); // On note la position du GARDE_DROIT
-            bw.write("" + p.fou.positionPersonnage + "\n"); // On note la position du FOU
-            bw.write("" + p.sorcier.positionPersonnage + "\n"); // On note la position du SORCIER
-            bw.write("" + p.couronne.positionCouronne + "\n"); // On note la position de la COURONNE
-            bw.write("" + p.couronne.etatCouronne + "\n"); // On note l'état
+            bw.write("" + plateau().roi.positionPersonnage + "\n"); // On note la position du ROI
+            bw.write("" + plateau().gardeGauche.positionPersonnage + "\n"); // On note la position du GARDE_GAUCHE
+            bw.write("" + plateau().gardeDroit.positionPersonnage + "\n"); // On note la position du GARDE_DROIT
+            bw.write("" + plateau().fou.positionPersonnage + "\n"); // On note la position du FOU
+            bw.write("" + plateau().sorcier.positionPersonnage + "\n"); // On note la position du SORCIER
+            bw.write("" + plateau().couronne.positionCouronne + "\n"); // On note la position de la COURONNE
+            bw.write("" + plateau().couronne.etatCouronne + "\n"); // On note l'état
 
             //Sauvegarde de la main des joueurs
             int i = 0;
             while(i < 8){
-                bw.write("" + p.paquet.mainJoueur(JOUEUR_GAUCHE)[i].personnage() + "\n");
-                bw.write("" + p.paquet.mainJoueur(JOUEUR_GAUCHE)[i].deplacement() + "\n");
-                bw.write("" + p.paquet.mainJoueur(JOUEUR_DROIT)[i].personnage() + "\n");
-                bw.write("" + p.paquet.mainJoueur(JOUEUR_DROIT)[i].deplacement() + "\n");
+                bw.write("" + plateau().paquet.mainJoueur(JOUEUR_GAUCHE)[i].personnage() + "\n");
+                bw.write("" + plateau().paquet.mainJoueur(JOUEUR_GAUCHE)[i].deplacement() + "\n");
+                bw.write("" + plateau().paquet.mainJoueur(JOUEUR_DROIT)[i].personnage() + "\n");
+                bw.write("" + plateau().paquet.mainJoueur(JOUEUR_DROIT)[i].deplacement() + "\n");
                 i++;
             }
 
             // Sauvegarde des cartes de la pioche
             Sequence<Carte> liste = Configuration.instance().nouvelleSequence();
             Carte carte = null;
-            while( !p.paquet.pioche().estVide() ){
-                carte = p.paquet.pioche().extraitTete();
+            while( !plateau().paquet.pioche().estVide() ){
+                carte = plateau().paquet.pioche().extraitTete();
                 liste.insereTete(carte);
             }
             carte = null;
             while( !liste.estVide() ){
                 carte = liste.extraitTete();
-                p.paquet.pioche().insereTete(carte);
+                plateau().paquet.pioche().insereTete(carte);
                 bw.write("" + carte.personnage() + "\n");
                 bw.write("" + carte.deplacement() + "\n");
             }
@@ -1160,14 +1160,14 @@ public class Jeu extends Observable {
             // Sauvegarde des cartes de la defausse
             liste = Configuration.instance().nouvelleSequence();
             carte = null;
-            while( !p.paquet.defausse().estVide() ){
-                carte = p.paquet.defausse().extraitTete();
+            while( !plateau().paquet.defausse().estVide() ){
+                carte = plateau().paquet.defausse().extraitTete();
                 liste.insereTete(carte);
             }
             carte = null;
             while( !liste.estVide() ){
                 carte = liste.extraitTete();
-                p.paquet.defausse().insereTete(carte);
+                plateau().paquet.defausse().insereTete(carte);
                 bw.write("" + carte.personnage() + "\n");
                 bw.write("" + carte.deplacement() + "\n");
             }
@@ -1204,22 +1204,25 @@ public class Jeu extends Observable {
             bw.write("" + type1 + "\n"); 
             bw.write("" + type2 + "\n"); 
 
-            // On note le tour actuel
-            bw.write("" + plateau().passe.taille() + "\n"); 
-
+            // On remonte dans le temps 
+            int i = 0;
             while(plateau().peutAnnuler()){
+                i++;
                 annule();
             }
+
+            // On note le tour actuel
+            bw.write("" + i + "\n"); 
 
             // On sauvegarde tous les plateaux 
 
             // On commence par le 1er
-            sauvegarderPlateau(plateau(), bw);
+            sauvegarderPlateau(bw);
 
             // Puis tous ceux du futur
             while (plateau().peutRefaire()) {
                 refaire();
-                sauvegarderPlateau(plateau(), bw);
+                sauvegarderPlateau(bw);
             }
 
             // Puis on ferme le fichier
@@ -1231,74 +1234,99 @@ public class Jeu extends Observable {
         }
     }
 
+    public void chargerPlateau(Scanner scan){
+
+        // On charge le joueur courant 
+        plateau().joueurCourant = Integer.parseInt(scan.nextLine());
+
+        // Lecture des positions des personnages
+        obtenirPersonnageElement(ROI).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
+        obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
+        obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
+        obtenirPersonnageElement(FOU).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
+        obtenirPersonnageElement(SORCIER).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
+
+        // Lecture de la couronne
+        plateau().couronne.positionnerCouronne(Integer.parseInt(scan.nextLine()));
+        plateau().couronne.definirEtatCouronne(Boolean.parseBoolean(scan.nextLine()));
+
+        // Lecture des mains des joueurs
+        String lecture = scan.nextLine();
+        String deplace = null;
+        Carte carte = null;
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while(i != 16){
+            deplace = scan.nextLine();
+            carte = creationCarte(lecture, deplace);
+            if(j == 2){
+                j = 0;
+                k++;
+            }
+            plateau().paquet.mainJoueurs[j][k] = carte;
+            j++;
+            i++;
+            lecture = scan.nextLine();
+        }
+
+        // Lecture de la pioche
+        while( !plateau().paquet.pioche().estVide() ){
+            plateau().paquet.pioche().extraitTete();
+        }
+        carte = null;
+        while(!lecture.equals("SAUVEGARDE")){
+            deplace = scan.nextLine();
+            carte = creationCarte(lecture, deplace);
+            plateau().paquet.pioche().insereTete(carte);
+            lecture = scan.nextLine();
+        }
+
+        // Lecture de la defausse
+        while( !plateau().paquet.defausse().estVide() ){
+            plateau().paquet.defausse().extraitTete();
+        }
+
+        lecture = scan.nextLine();
+        carte = null;
+        while(!lecture.equals("SAUVEGARDE")){
+            deplace = scan.nextLine();
+            carte = creationCarte(lecture, deplace);
+            plateau().paquet.defausse().insereTete(carte);
+            if(scan.hasNext()){
+                lecture = scan.nextLine();
+            }
+        }
+    }
+
     public int[] charger(String fic){
         int type[] = new int[2];
         try{
             Scanner scan = new Scanner(new File(fic));
 
-            // Lecture du type des joueurs et du joueur courant
+            // Lecture du type des joueurs 
             type[0] = Integer.parseInt(scan.nextLine()); 
             type[1] = Integer.parseInt(scan.nextLine()); 
-            plateau().joueurCourant = Integer.parseInt(scan.nextLine());
 
-            // Lecture des positions des personnages
-            obtenirPersonnageElement(ROI).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
-            obtenirPersonnageElement(GARDE_GAUCHE).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
-            obtenirPersonnageElement(GARDE_DROIT).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
-            obtenirPersonnageElement(FOU).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
-            obtenirPersonnageElement(SORCIER).positionnerPersonnage(Integer.parseInt(scan.nextLine()));
+            // Lecture du tour actuel (C'est un outil surprise qui nous servira plus tard)
+            int tourActuel = Integer.parseInt(scan.nextLine()); 
 
-            // Lecture de la couronne
-            plateau().couronne.positionnerCouronne(Integer.parseInt(scan.nextLine()));
-            plateau().couronne.definirEtatCouronne(Boolean.parseBoolean(scan.nextLine()));
+            int tourTotal = 0;
 
-            // Lecture des mains des joueurs
-            String lecture = scan.nextLine();
-            String deplace = null;
-            Carte carte = null;
-            int i = 0;
-            int j = 0;
-            int k = 0;
-            while(i != 16){
-                deplace = scan.nextLine();
-                carte = creationCarte(lecture, deplace);
-                if(j == 2){
-                    j = 0;
-                    k++;
-                }
-                plateau().paquet.mainJoueurs[j][k] = carte;
-                j++;
-                i++;
-                lecture = scan.nextLine();
-            }
+            chargerPlateau(scan);
 
-            // Lecture de la pioche
-            while( !plateau().paquet.pioche().estVide() ){
-                plateau().paquet.pioche().extraitTete();
-            }
-            carte = null;
-            while(!lecture.equals("SAUVEGARDE")){
-                deplace = scan.nextLine();
-                carte = creationCarte(lecture, deplace);
-                plateau().paquet.pioche().insereTete(carte);
-                lecture = scan.nextLine();
-            }
-
-            // Lecture de la defausse
-            while( !plateau().paquet.defausse().estVide() ){
-                plateau().paquet.defausse().extraitTete();
-            }
-
-            lecture = scan.nextLine();
-            carte = null;
             while(scan.hasNext()){
-                deplace = scan.nextLine();
-                carte = creationCarte(lecture, deplace);
-                plateau().paquet.defausse().insereTete(carte);
-                if(scan.hasNext()){
-                    lecture = scan.nextLine();
-                }
+                tourTotal++;
+                gestionHistorique();
+                chargerPlateau(scan);
             }
+
+            int voulu = tourTotal - tourActuel;
+            while(voulu != 0){
+                voulu--;
+                annule();
+            }
+
             scan.close();
             Configuration.instance().logger().info("Partie chargée !");
         }
@@ -1306,6 +1334,15 @@ public class Jeu extends Observable {
             e.printStackTrace();
         }
         return type;
+    }
+
+    void gestionHistorique() {
+        Coup coup = creerCoup(plateau());
+        if (coup != null) {
+            jouerCoup(coup);
+        } else {
+            System.out.println("Plateau d'historique null !!!");
+        }
     }
 
     Carte creationCarte(String el, String de){

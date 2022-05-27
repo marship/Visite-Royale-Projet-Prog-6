@@ -552,7 +552,10 @@ public class ControleurMediateur implements CollecteurEvenements {
             return;
         }
         int[] type = jeu.charger(chooser.getSelectedFile().getPath());
-        typeJoueur[0] = type[0];
-        typeJoueur[1] = type[1];
+        changerJoueurCourant(0, type[0]);
+        changerJoueurCourant(1, type[1]);
+        joueurCourant = jeu.joueurCourant();
+        jeu.fixerPositions();
+        plateauDebutTour = jeu.plateau().clone();
     }
 }
