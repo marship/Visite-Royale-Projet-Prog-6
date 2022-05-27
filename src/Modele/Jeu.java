@@ -1205,14 +1205,14 @@ public class Jeu extends Observable {
             bw.write("" + type2 + "\n"); 
 
             // On remonte dans le temps 
-            int i = 0;
+            int tourActuel = 0;
             while(plateau().peutAnnuler()){
-                i++;
+                tourActuel++;
                 annule();
             }
 
             // On note le tour actuel
-            bw.write("" + i + "\n"); 
+            bw.write("" + tourActuel + "\n"); 
 
             // On sauvegarde tous les plateaux 
 
@@ -1220,9 +1220,17 @@ public class Jeu extends Observable {
             sauvegarderPlateau(bw);
 
             // Puis tous ceux du futur
+            int tourTotal = 0;
             while (plateau().peutRefaire()) {
+                tourTotal++;
                 refaire();
                 sauvegarderPlateau(bw);
+            }
+
+            int voulu = tourTotal - tourActuel;
+            while(voulu != 0){
+                voulu--;
+                annule();
             }
 
             // Puis on ferme le fichier
