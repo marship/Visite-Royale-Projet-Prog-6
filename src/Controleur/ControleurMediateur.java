@@ -279,19 +279,23 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     void annule() {
+        if(jeu.actionAutoriser()){
             jeu.annule();
+            jeu.annulerTour();
             joueurCourant = jeu.joueurCourant();
             jeu.fixerPositions();
-            jeu.annulerTour();
             plateauDebutTour = jeu.plateau().clone();
+        }
     }
 
     void refaire() {
+        if(jeu.actionAutoriser()){
             jeu.refaire();
+            jeu.annulerTour();
             joueurCourant = jeu.joueurCourant();
             jeu.fixerPositions();
-            jeu.annulerTour();
             plateauDebutTour = jeu.plateau().clone();
+        }
     }
 
     @Override
