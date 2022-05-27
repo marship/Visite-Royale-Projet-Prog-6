@@ -263,7 +263,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     void gestionHistorique(Plateau plat) {
         Coup coup = jeu.creerCoup(plat);
         if (coup != null) {
-            jouerCoup(coup);
+            jeu.jouerCoup(coup);
         } else {
             System.out.println("Plateau d'historique null !!!");
         }
@@ -275,10 +275,18 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     void annule() {
         jeu.annule();
+        joueurCourant = jeu.joueurCourant();
+        jeu.fixerPositions();
+        jeu.annulerTour();
+        plateauDebutTour = jeu.plateau().clone();
     }
 
     void refaire() {
         jeu.refaire();
+        joueurCourant = jeu.joueurCourant();
+        jeu.fixerPositions();
+        jeu.annulerTour();
+        plateauDebutTour = jeu.plateau().clone();
     }
 
     @Override
@@ -353,7 +361,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "Valider":
                 if (!jeu.estPartieEnCours()) {
                     initInfoJoueurs();
-                    jeu.plateau().initialisation();
+                    //jeu.plateau().initialisation();
                     interfaceUtilisateur.afficherPanneau("Plateau");
                 }
                 jeu.changerEtatPartie();
@@ -488,10 +496,11 @@ public class ControleurMediateur implements CollecteurEvenements {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
             
             gestionHistorique(plateauDebutTour);
-            plateauDebutTour = jeu.plateau().clone();
 
             jeu.finDeTour();
             jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
+
+            plateauDebutTour = jeu.plateau().clone();
 
             ETAT_JEU = InfoJeu.DEBUT_TOUR;
             changerJoueurCourant();

@@ -279,19 +279,19 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         couronne.positionnerCouronne(p.couronne.positionCouronne());
 
         System.out.println("PIOCHE !!!!");
-        paquet.afficherPioche();
+        //paquet.afficherPioche();
         remplacerPioche(p);
-        paquet.afficherPioche();
+        //paquet.afficherPioche();
         System.out.println("DEFAUSE !!!!");
-        paquet.afficherDefausse();
+        //paquet.afficherDefausse();
         remplacerDefausse(p);
-        paquet.afficherDefausse();
+        //paquet.afficherDefausse();
         System.out.println("MAINS !!!!");
         paquet.afficherMain(JOUEUR_DROIT);
-        paquet.afficherMain(JOUEUR_GAUCHE);
+        //paquet.afficherMain(JOUEUR_GAUCHE);
         remplacerMains(p);
         paquet.afficherMain(JOUEUR_DROIT);
-        paquet.afficherMain(JOUEUR_GAUCHE);
+        //paquet.afficherMain(JOUEUR_GAUCHE);
         
         remplacerTourActuel();
     }

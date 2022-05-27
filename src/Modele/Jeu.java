@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 import Global.Configuration;
@@ -1092,7 +1093,9 @@ public class Jeu extends Observable {
     }
 
     public Coup annule() {
-        Coup coup = plateau().annuler();
+        Coup futur = creerCoup(plateau());
+        futur.fixerPlateau(plateau());
+        Coup coup = plateau().annuler(futur);
         System.out.println("Annulation !!!");
         // plateau().afficherPlateau();
         metAJour();
@@ -1100,7 +1103,9 @@ public class Jeu extends Observable {
     }
 
     public Coup refaire() {
-        Coup coup = plateau().refaire();
+        Coup passe = creerCoup(plateau());
+        passe.fixerPlateau(plateau());
+        Coup coup = plateau().refaire(passe);
         System.out.println("Refaisage !!!");
         // plateau().afficherPlateau();
         metAJour();

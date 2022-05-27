@@ -715,13 +715,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== IMAGES =====
     // ==================
     private ImagePlateau chargeImage(String nomImage) {
-        System.out.println("Chargement de l'image : " + nomImage);
+        //System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImage(in);
     }
 
     private ImagePlateau chargeImageGrise(String nomImage) {
-        System.out.println("Chargement de l'image : " + nomImage);
+        //System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImageGrise(in);
     }

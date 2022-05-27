@@ -31,11 +31,11 @@ public class Historique <E extends Commande>{
         return !passe.estVide();
     }
 
-    E annuler() {
+    E annuler(E p) {
         if (peutAnnuler()) {
             E commande = passe.extraitTete();
             commande.desexecute();
-            futur.insereTete(commande);
+            futur.insereTete(p);
             return commande;
         } else {
             return null;
@@ -46,11 +46,11 @@ public class Historique <E extends Commande>{
         return !futur.estVide();
     }
 
-    E refaire() {
+    E refaire(E p) {
         if (peutRefaire()) {
             E commande = futur.extraitTete();
             commande.execute();
-            passe.insereTete(commande);
+            passe.insereTete(p);
             return commande;
         } else {
             return null;

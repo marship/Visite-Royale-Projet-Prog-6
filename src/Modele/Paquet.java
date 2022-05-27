@@ -83,6 +83,10 @@ public class Paquet {
         trier();
     }
 
+    public Paquet(int a){
+
+    }
+
     public void afficherPioche() {
         Configuration.instance().logger().info("Debut de l'affichage de la pioche !\n");
         Sequence<Carte> tmp = Configuration.instance().nouvelleSequence();
@@ -531,9 +535,8 @@ public class Paquet {
 
     @Override
     public Paquet clone() {
-        Paquet res = null;
+        Paquet res = new Paquet();
         try {
-            res = new Paquet();
             res.pioche = copieSequence(pioche);
             res.defausse = copieSequence(defausse);
             res.tourActuel = copieSequence(tourActuel);

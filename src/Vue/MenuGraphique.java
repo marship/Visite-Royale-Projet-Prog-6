@@ -79,7 +79,7 @@ public class MenuGraphique extends JPanel {
     }
 
     private Image chargeImage(String nomImage) throws IOException {
-        System.out.println("Chargement de l'image : " + nomImage);
+        //System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         BufferedImage test = ImageIO.read(in);
         return test;
