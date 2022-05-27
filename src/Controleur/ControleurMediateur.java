@@ -280,20 +280,20 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     void annule() {
         if(jeu.actionAutoriser()){
-            jeu.annule();
             jeu.annulerTour();
-            joueurCourant = jeu.joueurCourant();
+            jeu.annule();
             jeu.fixerPositions();
+            joueurCourant = jeu.joueurCourant();
             plateauDebutTour = jeu.plateau().clone();
         }
     }
 
     void refaire() {
         if(jeu.actionAutoriser()){
-            jeu.refaire();
             jeu.annulerTour();
-            joueurCourant = jeu.joueurCourant();
+            jeu.refaire();
             jeu.fixerPositions();
+            joueurCourant = jeu.joueurCourant();
             plateauDebutTour = jeu.plateau().clone();
         }
     }
@@ -475,7 +475,6 @@ public class ControleurMediateur implements CollecteurEvenements {
         changerJoueurCourant(JOUEUR_DROIT, infoJoueurDroite);
         jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueur(JOUEUR_GAUCHE),
                 interfaceUtilisateur.getNomJoueur(JOUEUR_DROIT));
-
     }
 
     // TODO rajouter des case pour plus d'IA

@@ -1112,76 +1112,6 @@ public class Jeu extends Observable {
         plateau().viderHistorique();
     }
 
-    /*
-    void transfererPlateau(Plateau p) {
-        plateau().transfertPlateau(p);
-    }
-
-    public Plateau determinerPlateauHistorique(Plateau p) {
-        if (actionAutoriser()) {
-            return plateau().determinerPlateauHistorique(p);
-        } else {
-            System.out.println("Partie non en cours !!");
-            return null;
-        }
-    }
-
-    public void jouerPlateauHistorique(Plateau pHistorique) {
-        if (pHistorique == null) {
-            Configuration.instance().logger().warning("Plateau Historique Null !!");
-        } else {
-            plateau().jouerPlateauHistorique(pHistorique);
-            metAJour();
-        }
-    }
-    */
-
-    /*
-    private void afficherFutur() {
-        System.out.println("FUTUR : ");
-        Iterateur<Plateau> iterateur = futur.iterateur();
-        while(iterateur.aProchain()) {
-            Plateau platoo = (Plateau) iterateur.prochain();
-            platoo.afficherPlateau();
-            // plateau().transfertPlateau(platoo);
-        }
-    }
-
-    private void afficherPasse() {
-        System.out.println("PASSE : ");
-        Iterateur<Plateau> iterateur = passe.iterateur();
-        while(iterateur.aProchain()) {
-            Plateau platoo = (Plateau) iterateur.prochain();
-            platoo.afficherPlateau();
-            // plateau().transfertPlateau(platoo);
-        }
-    }
-
-    public int tailleHistoirique() {
-
-        int tailleHistorique = 0;
-        Sequence<Plateau> sequencePlateauHisto = Configuration.instance().nouvelleSequence();
-        while(!passe.estVide()) {
-            sequencePlateauHisto.insereQueue(passe.extraitTete());
-            tailleHistorique ++;
-        }
-        while(!sequencePlateauHisto.estVide()) {
-            passe.insereQueue(sequencePlateauHisto.extraitTete());
-        }
-        
-        sequencePlateauHisto = Configuration.instance().nouvelleSequence();
-        while(!futur.estVide()) {
-            sequencePlateauHisto.insereQueue(futur.extraitTete());
-            tailleHistorique ++;
-        } 
-        while(!sequencePlateauHisto.estVide()) {
-            futur.insereQueue(sequencePlateauHisto.extraitTete());
-        }
-        
-        return tailleHistorique;
-    }
-    */
-
     // ======================
     // ===== SAUVEGARDE =====
     // ======================
@@ -1273,10 +1203,26 @@ public class Jeu extends Observable {
             // On note les type de joueurs
             bw.write("" + type1 + "\n"); 
             bw.write("" + type2 + "\n"); 
-            
-            // On sauvegarde le plateau courant 
+
+            // On note le tour actuel
+            bw.write("" + plateau().passe.taille() + "\n"); 
+
+            while(plateau().peutAnnuler()){
+                annule();
+            }
+
+            // On sauvegarde tous les plateaux 
+
+            // On commence par le 1er
             sauvegarderPlateau(plateau(), bw);
 
+            // Puis tous ceux du futur
+            while (plateau().peutRefaire()) {
+                refaire();
+                sauvegarderPlateau(plateau(), bw);
+            }
+
+            // Puis on ferme le fichier
             bw.close();
             Configuration.instance().logger().info("Fichier Sauvegarde !");
         }

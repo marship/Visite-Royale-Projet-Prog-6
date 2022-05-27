@@ -230,10 +230,12 @@ public class JoueurIAmelie extends Joueur {
     }
 
     void annule() {
+        if(jeu.actionAutoriser()){
+            jeu.annulerTour();
             jeu.annule();
             jeu.fixerPositions();
-            jeu.annulerTour();
             plateauDebutTour = jeu.plateau().clone();
+        }
     }
 
     @Override
