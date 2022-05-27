@@ -15,6 +15,7 @@ import Joueur.JoueurIAAleatoireIntelligente;
 import Joueur.JoueurIARandom;
 import Joueur.JoueurIAnastasia;
 import Joueur.JoueurIAmel;
+import Joueur.JoueurIAmelie;
 import Modele.Coup;
 import Modele.Jeu;
 import Modele.Plateau;
@@ -27,7 +28,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // ===== JOUEUR =====
     // ==================
     static final int NOMBRE_JOUEUR = 2;
-    static final int NOMBRE_TYPE_JOUEUR = 6;
+    static final int NOMBRE_TYPE_JOUEUR = 7;
 
     static final int JOUEUR_GAUCHE = 0;
     static final int JOUEUR_DROIT = 1;
@@ -38,6 +39,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 3;
     static final int JOUEUR_IAEXPERTE = 4;
     static final int JOUEUR_AMEL = 5;
+    static final int JOUEUR_AMELIE = 6;
 
     // ===================
     // ===== PLATEAU =====
@@ -123,6 +125,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                     break;
                 case JOUEUR_AMEL :
                     joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAmel(numeroJoueur, jeu);
+                    break;
+                case JOUEUR_AMELIE :
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAmelie(numeroJoueur, jeu);
                     break;
             }
             
@@ -274,19 +279,19 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     void annule() {
-        jeu.annule();
-        joueurCourant = jeu.joueurCourant();
-        jeu.fixerPositions();
-        jeu.annulerTour();
-        plateauDebutTour = jeu.plateau().clone();
+            jeu.annule();
+            joueurCourant = jeu.joueurCourant();
+            jeu.fixerPositions();
+            jeu.annulerTour();
+            plateauDebutTour = jeu.plateau().clone();
     }
 
     void refaire() {
-        jeu.refaire();
-        joueurCourant = jeu.joueurCourant();
-        jeu.fixerPositions();
-        jeu.annulerTour();
-        plateauDebutTour = jeu.plateau().clone();
+            jeu.refaire();
+            joueurCourant = jeu.joueurCourant();
+            jeu.fixerPositions();
+            jeu.annulerTour();
+            plateauDebutTour = jeu.plateau().clone();
     }
 
     @Override
@@ -485,6 +490,8 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return JOUEUR_IAEXPERTE;
             case ("IAexperte"):
                 return JOUEUR_AMEL;
+            case ("IAtriche"):
+                return JOUEUR_AMELIE;
 
             default:
                 return -1;

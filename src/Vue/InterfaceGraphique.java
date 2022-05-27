@@ -174,7 +174,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
             "IA facile",
             "IA normale",
             "IA difficile",
-            "IA experte"
+            "IA experte",
+            "IA triche"
         };
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
