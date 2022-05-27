@@ -419,8 +419,6 @@ public class Jeu extends Observable {
                     .resteAssezCarteDansPioche(plateau.paquet.nombreCarteManquante(plateau().joueurCourant))) {
                 plateau.paquet.remplirMain(plateau().joueurCourant);
                 changerJoueurCourant();
-                Configuration.instance().logger()
-                        .info("Il reste " + plateau.paquet.pioche().taille() + " cartes dans la pioche");
             } else {
                 if (getEtatCouronne()) {
                     plateau.paquet.melangerDefausse();
@@ -1096,7 +1094,7 @@ public class Jeu extends Observable {
         Coup futur = creerCoup(plateau());
         futur.fixerPlateau(plateau());
         Coup coup = plateau().annuler(futur);
-        System.out.println("Annulation !!!");
+        // plateau().afficherPlateau();
         metAJour();
         return coup;
     }
@@ -1105,7 +1103,7 @@ public class Jeu extends Observable {
         Coup passe = creerCoup(plateau());
         passe.fixerPlateau(plateau());
         Coup coup = plateau().refaire(passe);
-        System.out.println("Refaisage !!!");
+        // plateau().afficherPlateau();
         metAJour();
         return coup;
     }
