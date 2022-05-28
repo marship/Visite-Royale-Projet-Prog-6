@@ -272,7 +272,6 @@ public class JoueurIAmelie extends Joueur {
             j++;
             test = liste.extraitTete();
             mettreLesPositions(test.positions());
-            poserLesCartes(test.cartes());
             int posCouronne = jeu.getPositionCouronne();
             jeu.deplacerCouronne(jeu.plateau().valeurDeplacementCouronne());
             eval = new Evaluation(jeu.plateau().clone());
@@ -290,15 +289,15 @@ public class JoueurIAmelie extends Joueur {
                         lesWINNER.extraitTete();
                     }
                     lesWINNER.insereQueue(test);
-                    note = noteAutre;
                     break;
                 }
                 mettreLesPositions(positions);
             }
             else{
-                gestionHistorique(plateauDebutTour);
-                jeu.finDeTour();
                 if(nouvelleNote > noteDeBase){
+                    gestionHistorique(plateauDebutTour);
+                    poserLesCartes(test.cartes());
+                    jeu.finDeTour();
                     noteAutre = calculJB(1);
                     if(noteAutre == note){
                         lesWINNER.insereQueue(test);
@@ -310,8 +309,11 @@ public class JoueurIAmelie extends Joueur {
                         lesWINNER.insereQueue(test);
                         note = noteAutre;
                     }
+                    annule();
                 }
-                annule();
+                else{
+                    mettreLesPositions(positions);
+                }
             }
         }
 
@@ -366,30 +368,39 @@ public class JoueurIAmelie extends Joueur {
                 i++;
                 test = liste.extraitTete();
                 mettreLesPositions(test.positions());
-                poserLesCartes(test.cartes());
                 int posCouronne = jeu.getPositionCouronne();
                 jeu.deplacerCouronne(jeu.plateau().valeurDeplacementCouronne());
                 eval = new Evaluation(jeu.plateau().clone());
                 nouvelleNote = eval.note(jeu.joueurCourant());
+                if(nouvelleNote < 0){
+                    nouvelleNote = nouvelleNote * coeffCartesNegatif(test.cartes()) * poidsDesCartesNegatif(test.cartes()) * counterStrikeNegatif(test.cartes());
+                } 
+                else{
+                    nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
+                }
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
                 if(jeu.estGagnant()){
+                    mettreLesPositions(positions);
                     if(jeu.joueurCourant() == jeu.joueurGagnant()){
                         return 10000;
                     }
                     else{
                         return -10000;
                     }
-                    
                 }
-                gestionHistorique(plateauDebutTour);
-                jeu.finDeTour();
+                poserLesCartes(test.cartes());
                 if(nouvelleNote > noteDeBase){
-                    noteAutre = calculJA(horizon - 1);
+                    gestionHistorique(plateauDebutTour);
+                    jeu.finDeTour();
+                    noteAutre = calculJB(horizon - 1);
                     if(noteAutre > noteMax){
                         noteMax = noteAutre;
                     }
+                    annule();
                 }
-                annule();
+                else{
+                    jeu.annulerTour();
+                }
             }
             return noteMax;
         }
@@ -431,33 +442,41 @@ public class JoueurIAmelie extends Joueur {
                 i++;
                 test = liste.extraitTete();
                 mettreLesPositions(test.positions());
-                poserLesCartes(test.cartes());
                 int posCouronne = jeu.getPositionCouronne();
                 jeu.deplacerCouronne(jeu.plateau().valeurDeplacementCouronne());
                 eval = new Evaluation(jeu.plateau().clone());
                 nouvelleNote = eval.note(jeu.joueurCourant());
+                if(nouvelleNote < 0){
+                    nouvelleNote = nouvelleNote * coeffCartesNegatif(test.cartes()) * poidsDesCartesNegatif(test.cartes()) * counterStrikeNegatif(test.cartes());
+                } 
+                else{
+                    nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
+                }
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
                 if(jeu.estGagnant()){
+                    mettreLesPositions(positions);
                     if(jeu.joueurCourant() == jeu.joueurGagnant()){
                         return -10000;
                     }
                     else{
                         return 10000;
                     }
-                    
                 }
-                gestionHistorique(plateauDebutTour);
-                jeu.finDeTour();
+                poserLesCartes(test.cartes());
                 if(nouvelleNote > noteDeBase){
+                    gestionHistorique(plateauDebutTour);
+                    jeu.finDeTour();
                     noteAutre = calculJA(horizon - 1);
                     if(noteAutre < noteMin){
                         noteMin = noteAutre;
                     }
+                    annule();
                 }
-                annule();
+                else{
+                    jeu.annulerTour();
+                }
             }
             return noteMin;
         }
     }
-    
 }
