@@ -368,12 +368,11 @@ public class ControleurMediateur implements CollecteurEvenements {
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
                 break;
             case "Valider":
-                if (!jeu.estPartieEnCours()) {
-                    initInfoJoueurs();
-                    //jeu.plateau().initialisation();
-                    interfaceUtilisateur.afficherPanneau("Plateau");
+                initInfoJoueurs();
+                interfaceUtilisateur.afficherPanneau("Plateau");
+                if(!jeu.estPartieEnCours()){
+                    jeu.changerEtatPartie();
                 }
-                jeu.changerEtatPartie();
                 jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 interfaceUtilisateur.afficherPanneau("Plateau");
@@ -409,7 +408,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 ETAT_JEU = InfoJeu.OPTIONS_JEU;
                 interfaceUtilisateur.afficherPanneau("OptionsJeu");
                 break;
-
             case "Recommencer":
                 jeu.plateau().initialisation();
                 jeu.fixerPositions();
@@ -426,8 +424,6 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "SauvegarderQuitter":
                 jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);
-                // ETAT_JEU = InfoJeu.MENU_PRINCIPAL;
-                // interfaceUtilisateur.afficherPanneau("MenuPrincipal");
                 break;
             case "RetourJeu":
                 jeu.changerEtatJeu(preOptions);
@@ -452,6 +448,19 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "AideIA":
                 aideIA();
                 break;
+            case "RetourArriere":
+                jeu.plateau().initialisation();
+                jeu.fixerPositions();
+                joueurCourant = jeu.joueurCourant();
+                jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
+                ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                jeu.changeCarteActuelle(8);
+                jeu.majDernierTypeDePersonnageJouer(Element.VIDE);
+                jeu.nonFinPartie();
+                if (!jeu.estPartieEnCours()) {
+                    jeu.changerEtatPartie();
+                }
+                interfaceUtilisateur.afficherPanneau("MenuPrincipal");
             default:
                 return false;
         }

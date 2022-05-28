@@ -430,8 +430,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         panelOptionsJeu.add(musiqueBox);
 
-        boutonAide = new DesignBoutons("Aide", "Texture_Bouton", "Texture_Bouton_Clique", 25);
-        boutonAide.addActionListener(new AdaptateurCommande(collecteurEvenements, "Aide"));
+        boutonAide = new DesignBoutons("Changer Joueurs", "Texture_Bouton", "Texture_Bouton_Clique", 25);
+        boutonAide.addActionListener(new AdaptateurCommande(collecteurEvenements, "Jouer"));
         panelOptionsJeu.add(boutonAide);
 
         boutonRecommencer = new DesignBoutons("Recommencer", "Texture_Bouton", "Texture_Bouton_Clique", 25);
