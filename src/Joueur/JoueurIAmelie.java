@@ -266,9 +266,9 @@ public class JoueurIAmelie extends Joueur {
         plateauDebutTour = jeu.plateau().clone();
 
         int j = 0;
-
+        
         while (!liste.estVide()) {
-            System.out.println("Boucle de base : " + j);
+            //System.out.println("Boucle de base : " + j);
             j++;
             test = liste.extraitTete();
             mettreLesPositions(test.positions());
