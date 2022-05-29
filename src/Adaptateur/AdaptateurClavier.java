@@ -46,6 +46,15 @@ public class AdaptateurClavier extends KeyAdapter {
             case KeyEvent.VK_A:
                 collecteurEvenements.commande("Aide");
                 break;
+            case KeyEvent.VK_UP:
+                collecteurEvenements.commande("AugmenterVolume");
+                break;
+            case KeyEvent.VK_DOWN:
+                collecteurEvenements.commande("DiminuerVolume");
+                break;
+            case KeyEvent.VK_M:
+                collecteurEvenements.commande("Mute");
+                break;
             default:
                 Configuration.instance().logger().info("Touche non assignee !");
                 break;

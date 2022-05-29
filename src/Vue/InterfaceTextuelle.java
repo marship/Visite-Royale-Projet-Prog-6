@@ -430,4 +430,22 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void augmenterVolume() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void diminuerVolume() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void muterVolume() {
+        // TODO Auto-generated method stub
+        
+    }
 }

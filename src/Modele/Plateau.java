@@ -2,7 +2,7 @@ package Modele;
 
 import Global.Configuration;
 import Global.Element;
-import Structures.Iterateur;
+// import Structures.Iterateur;
 // import Structures.Sequence;
 import Structures.Sequence;
 

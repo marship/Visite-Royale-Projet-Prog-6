@@ -461,10 +461,33 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
+
+            case "AugmenterVolume":
+                augmenterVolume();
+                break;
+            case "DiminuerVolume":
+                diminuerVolume();
+                break;
+            case "Mute":
+                muterVolume();
+                break;
+                
             default:
                 return false;
         }
         return true;
+    }
+
+    private void muterVolume() {
+        interfaceUtilisateur.muterVolume();
+    }
+
+    private void diminuerVolume() {
+        interfaceUtilisateur.diminuerVolume();
+    }
+
+    private void augmenterVolume() {
+        interfaceUtilisateur.augmenterVolume();
     }
 
     private void aideIA() {

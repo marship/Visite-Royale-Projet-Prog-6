@@ -55,7 +55,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 	InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
 		jeu = j;
 		collecteurEvenements = cEvenements;
-        //musique = new Son(musiqueAudio);
+        musique = new Son(musiqueAudio);
 	}
 
 	public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
@@ -507,5 +507,23 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     @Override
     public JFrame fenetre(){
         return fenetre;
+    }
+
+    @Override
+    public void augmenterVolume() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void diminuerVolume() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void muterVolume() {
+        // TODO Auto-generated method stub
+        
     }
 }

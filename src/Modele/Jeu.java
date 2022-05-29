@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Random;
+// import java.util.Random;
 import java.util.Scanner;
 
 import Global.Configuration;
@@ -15,7 +15,7 @@ import Global.Element;
 import Global.InfoJeu;
 import Global.InfoPlateau;
 import Pattern.Observable;
-import Structures.Iterateur;
+// import Structures.Iterateur;
 import Structures.Sequence;
 
 public class Jeu extends Observable {
