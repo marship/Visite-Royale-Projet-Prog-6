@@ -78,7 +78,6 @@ public class ListePlateaux {
         calculSorcier(Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
         calculRoi(Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
 
-        System.out.println(res.taille());
         remettreLesPositions(positions);
 
         return res;

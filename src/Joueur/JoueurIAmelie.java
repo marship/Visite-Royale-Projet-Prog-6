@@ -21,10 +21,24 @@ public class JoueurIAmelie extends Joueur {
     int quiDoitGagner;
     Plateau plateauDebutTour;
 
+    static final int HORIZON = 1;
+
     public JoueurIAmelie(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
         quiDoitGagner = numeroJoueurCourant; 
 	}
+
+    int nbCartes(int[] cartes){
+        int i = 0;
+        int res = 0;
+        while(i < 8){
+            if(cartes[i] == 1){
+                res++;
+            }
+            i++;
+        }
+        return res;
+    }
 
     double counterStrikePositif(int[] cartes){
         double coeff = 1;
@@ -283,13 +297,60 @@ public class JoueurIAmelie extends Joueur {
                 nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
             }
             jeu.plateau().couronne.positionnerCouronne(posCouronne);
-            if(jeu.estGagnant()){
-                if(jeu.joueurCourant() == jeu.joueurGagnant()){
-                    while(!lesWINNER.estVide()){
-                        lesWINNER.extraitTete();
+            if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                if(jeu.estGagnant()){
+                    if(jeu.joueurCourant() == jeu.joueurGagnant()){
+                        while(!lesWINNER.estVide()){
+                            lesWINNER.extraitTete();
+                        }
+                        lesWINNER.insereQueue(test);
+                        break;
                     }
-                    lesWINNER.insereQueue(test);
-                    break;
+                }
+                else{
+                    if(jeu.obtenirPositionElement(Element.ROI) == 0){
+                        if(nouvelleNote > noteDeBase){
+                            gestionHistorique(plateauDebutTour);
+                            poserLesCartes(test.cartes());
+                            jeu.finDeTour();
+                            noteAutre = calculJB(HORIZON);
+                            if(noteAutre == note){
+                                lesWINNER.insereQueue(test);
+                            }
+                            if(noteAutre > note){
+                                while(!lesWINNER.estVide()){
+                                    lesWINNER.extraitTete();
+                                }
+                                lesWINNER.insereQueue(test);
+                                note = noteAutre;
+                            }
+                            annule();
+                        }
+                        else{
+                            mettreLesPositions(positions);
+                        }
+                    }
+                    if(jeu.joueurCourant() == 1){
+                        if(jeu.obtenirPositionElement(Element.ROI) > 0){
+                            while(!lesWINNER.estVide()){
+                                lesWINNER.extraitTete();
+                            }
+                            lesWINNER.insereQueue(test);
+                            break;
+                        }
+                        else{
+
+                        }
+                    }
+                    else{
+                        if(jeu.obtenirPositionElement(Element.ROI) < 0){
+                            while(!lesWINNER.estVide()){
+                                lesWINNER.extraitTete();
+                            }
+                            lesWINNER.insereQueue(test);
+                            break;
+                        }
+                    }
                 }
                 mettreLesPositions(positions);
             }
@@ -298,7 +359,7 @@ public class JoueurIAmelie extends Joueur {
                     gestionHistorique(plateauDebutTour);
                     poserLesCartes(test.cartes());
                     jeu.finDeTour();
-                    noteAutre = calculJB(1);
+                    noteAutre = calculJB(HORIZON);
                     if(noteAutre == note){
                         lesWINNER.insereQueue(test);
                     }
@@ -317,12 +378,23 @@ public class JoueurIAmelie extends Joueur {
             }
         }
 
-        Random r = new Random();
-        int i = r.nextInt(lesWINNER.taille() + 1);
-        do {
-            winner = lesWINNER.extraitTete();
-            i--;
-        } while (i > 0);
+        if(lesWINNER.estVide()){
+            Random r = new Random();
+            liste = lP.constructionListePlateau();
+            int i = r.nextInt(liste.taille() + 1);
+            do {
+                winner = liste.extraitTete();
+                i--;
+            } while (i > 0);
+        }
+        else{
+            Random r = new Random();
+            int i = r.nextInt(lesWINNER.taille() + 1);
+            do {
+                winner = lesWINNER.extraitTete();
+                i--;
+            } while (i > 0);
+        }
 
         mettreLesPositions(winner.positions());
         poserLesCartes(winner.cartes());
@@ -379,13 +451,50 @@ public class JoueurIAmelie extends Joueur {
                     nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
                 }
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
-                if(jeu.estGagnant()){
-                    mettreLesPositions(positions);
-                    if(jeu.joueurCourant() == jeu.joueurGagnant()){
-                        return 10000;
+                if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                    if(jeu.estGagnant()){
+                        mettreLesPositions(positions);
+                        if(jeu.joueurCourant() == jeu.joueurGagnant()){
+                            return 10000;
+                        }
+                        else{
+                            return -10000;
+                        }
                     }
                     else{
-                        return -10000;
+                        if(jeu.obtenirPositionElement(Element.ROI) == 0){
+                            poserLesCartes(test.cartes());
+                            if(nouvelleNote > noteDeBase){
+                                gestionHistorique(plateauDebutTour);
+                                jeu.finDeTour();
+                                noteAutre = calculJB(horizon - 1);
+                                if(noteAutre > noteMax){
+                                    noteMax = noteAutre;
+                                }
+                                annule();
+                            }
+                            else{
+                                jeu.annulerTour();
+                            }
+                        }
+                        else{
+                            if(jeu.joueurCourant() == 1){
+                                if(jeu.obtenirPositionElement(Element.ROI) > 0){
+                                    return 10000;
+                                }
+                                else{
+                                    return -10000;
+                                }
+                            }
+                            else{
+                                if(jeu.obtenirPositionElement(Element.ROI) < 0){
+                                    return 10000;
+                                }
+                                else{
+                                    return -10000;
+                                }
+                            }
+                        }
                     }
                 }
                 poserLesCartes(test.cartes());
@@ -453,13 +562,50 @@ public class JoueurIAmelie extends Joueur {
                     nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
                 }
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
-                if(jeu.estGagnant()){
-                    mettreLesPositions(positions);
-                    if(jeu.joueurCourant() == jeu.joueurGagnant()){
-                        return -10000;
+                if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                    if(jeu.estGagnant()){
+                        mettreLesPositions(positions);
+                        if(jeu.joueurCourant() == jeu.joueurGagnant()){
+                            return -10000;
+                        }
+                        else{
+                            return 10000;
+                        }
                     }
                     else{
-                        return 10000;
+                        if(jeu.obtenirPositionElement(Element.ROI) == 0){
+                            poserLesCartes(test.cartes());
+                            if(nouvelleNote > noteDeBase){
+                                gestionHistorique(plateauDebutTour);
+                                jeu.finDeTour();
+                                noteAutre = calculJA(horizon - 1);
+                                if(noteAutre < noteMin){
+                                    noteMin = noteAutre;
+                                }
+                                annule();
+                            }
+                            else{
+                                jeu.annulerTour();
+                            }
+                        }
+                        else{
+                            if(jeu.joueurCourant() == 1){
+                                if(jeu.obtenirPositionElement(Element.ROI) > 0){
+                                    return -10000;
+                                }
+                                else{
+                                    return 10000;
+                                }
+                            }
+                            else{
+                                if(jeu.obtenirPositionElement(Element.ROI) < 0){
+                                    return -10000;
+                                }
+                                else{
+                                    return 10000;
+                                }
+                            }
+                        }
                     }
                 }
                 poserLesCartes(test.cartes());
