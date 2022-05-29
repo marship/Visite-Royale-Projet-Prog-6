@@ -10,4 +10,7 @@ public interface InterfaceUtilisateur {
 	String getInfoJoueur(int coteJoueur);
 	void miseAJourFinDeTour();
 	JFrame fenetre();
+    void augmenterVolume();
+    void diminuerVolume();
+    void muterVolume();
 }

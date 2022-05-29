@@ -1,6 +1,7 @@
 package Modele;
 
 import java.util.Arrays;
+import java.util.Hashtable;
 
 import Global.Configuration;
 import Global.Deplacement;
@@ -18,6 +19,9 @@ public class ListePlateaux {
     int baseRoi;
     Carte[] mainBase;
 
+    Sequence<CoupleAtteindrePlateau> res;
+    Hashtable<String, Boolean> hashTable;
+
     public ListePlateaux(Jeu j) {
 
         jeu = j;
@@ -26,6 +30,8 @@ public class ListePlateaux {
         baseGardeDroit = jeu.obtenirPositionElement(Element.GARDE_DROIT);
         baseFou = jeu.obtenirPositionElement(Element.FOU);
         baseSorcier = jeu.obtenirPositionElement(Element.SORCIER);
+
+        hashTable = new Hashtable<String, Boolean>();
 
     }
 
@@ -65,35 +71,30 @@ public class ListePlateaux {
 
         int[] cartesJouees = jeu.initialiserTableau(8, 0);
 
-        Sequence<CoupleAtteindrePlateau> res = Configuration.instance().nouvelleSequence();
+        res = Configuration.instance().nouvelleSequence();
 
-        res = calculSorcier(res, Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
-        res = calculFou(res, Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
-        res = calculRoi(res, Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
-        res = calculGardes(res, Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
+        calculFou(Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
+        calculGardes(Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
+        calculSorcier(Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
+        calculRoi(Arrays.copyOf(positions, 5), Arrays.copyOf(cartesJouees, 8));
 
         remettreLesPositions(positions);
 
         return res;
     }
 
-    private Sequence<CoupleAtteindrePlateau> calculGardes(Sequence<CoupleAtteindrePlateau> res, int[] positions,
-            int[] cartesJouees) {
+    private void calculGardes(int[] positions, int[] cartesJouees) {
         // Jouer les cartes des gardes
-        res = calculDeplacementGarde(res, positions, cartesJouees, 0);
-        return res;
+        newGardes(positions, cartesJouees, jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.GARDES, 0), 0, 0, "G");
     }
 
-    private Sequence<CoupleAtteindrePlateau> calculRoi(Sequence<CoupleAtteindrePlateau> res, int[] positions,
-            int[] cartesJouees) {
+    private void calculRoi(int[] positions, int[] cartesJouees) {
         // Jouer les cartes du Roi en prenant en compte le fait d'en jouer deux
         int nbRoi = jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.ROI, 0);
-        res = calculDeplaceRoi(res, positions, cartesJouees, nbRoi, 0);
-        return res;
+        calculDeplaceRoi(positions, cartesJouees, nbRoi, 0);
     }
 
-    private Sequence<CoupleAtteindrePlateau> calculSorcier(Sequence<CoupleAtteindrePlateau> res, int[] positions,
-            int[] cartesJouees) {
+    private void calculSorcier(int[] positions, int[] cartesJouees) {
 
         int[] nouv;
         // Le pouvoir du sorcier
@@ -115,99 +116,322 @@ public class ListePlateaux {
             CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(nouv, cartesJouees);
             res.insereQueue(couple);
         }
-
         // Jouer les cartes du sorcier
-        res = calculNormal(res, positions, cartesJouees, Element.SORCIER, 4);
-        return res;
+        newSorcier(positions, cartesJouees, jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.SORCIER, 0), 0, "S");
     }
 
-    private Sequence<CoupleAtteindrePlateau> calculFou(Sequence<CoupleAtteindrePlateau> res, int[] positions,
-            int[] cartesJouees) {
+    private void newSorcier(int[] positions, int[] cartesJouees, int nbSorcier, int nbJouer, String combi){
+        remettreLesPositions(positions);
+        if(nbSorcier > nbJouer){
+            int numCarte = jeu.plateau().paquet.trouverEle(jeu.joueurCourant(), Element.SORCIER, nbJouer);
+            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[numCarte];
+            int tmpS = positions[4];
+            switch (carte.deplacement()) {
+                case UN:
+                    combi = combi + "1";
+                    break;
+                case DEUX:
+                    combi = combi + "2";
+                    break;
+                case TROIS:
+                    combi = combi + "3";
+                    break;
+                default:
+                    break;
+            }
+            String tmp = combi;
+            cartesJouees[numCarte] = 1;
+            nbJouer++;
+            int[] deplacementPossibles = jeu.listeDeplacementPossiblesAvecCarte(Element.SORCIER, carte.deplacement());
+            int j = 0;
+            while (j < 17) {
+                if (deplacementPossibles[j] == 1) {
+                    if(j - 8 < positions[4]){
+                        combi = combi + "G";
+                    }
+                    else{
+                        combi = combi + "D";
+                    }
+                    if(!hashTable.containsKey(combi)){
+                        positions[4] = j - 8;
+                        CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                        res.insereQueue(couple);
+                        newSorcier(positions, cartesJouees, nbSorcier, nbJouer, combi);
+                        hashTable.put(combi, true);
+                        positions[4] = tmpS;
+                    }
+                    combi = tmp;
+                }
+                j++;
+            }
+            // On ne la joue pas
+            cartesJouees[numCarte] = 0;
+            newSorcier(positions, cartesJouees, nbSorcier, nbJouer, combi);
+        }
+    }
+
+    private void newGardes(int[] positions, int[] cartesJouees, int nbGardes, int nbJouer, int nbUnPlusUnFait, String combi){
+        remettreLesPositions(positions);
+        if(nbGardes > nbJouer){
+            int numCarte = jeu.plateau().paquet.trouverEle(jeu.joueurCourant(), Element.GARDES, nbJouer);
+            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[numCarte];
+            int tmpGG = positions[1];
+            int tmpGD = positions[2];
+            cartesJouees[numCarte] = 1;
+            nbJouer++;
+            switch (carte.deplacement()) {
+                case UN:
+                    combi = combi + "1";
+                    break;
+                case UN_PLUS_UN:
+                    combi = combi + "2";
+                    break;
+                case RAPPROCHE:
+                    combi = combi + "R";
+                    break;
+                default:
+                    break;
+            }
+            String tmp = combi;
+            int[] deplacementPossibles = jeu.listeDeplacementPossiblesAvecCarte(Element.GARDES, carte.deplacement());
+            int j = 0;
+            boolean deja = false;
+            boolean dejaD = false;
+            boolean dejaG = false;
+            while (j < 17) {
+                if (deplacementPossibles[j] == 1) {
+                    if (carte.deplacement() == Deplacement.RAPPROCHE && !deja) {
+                        if(!hashTable.containsKey(combi)){
+                            positions[1] = positions[0] - 1;
+                            positions[2] = positions[0] + 1;
+                            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                            res.insereQueue(couple);
+                            newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+                            positions[1] = tmpGG;
+                            positions[2] = tmpGD;
+                            deja = true;
+                            hashTable.put(combi, true);
+                        }
+                    }
+
+                    if (carte.deplacement() == Deplacement.UN_PLUS_UN) {
+
+                        if (nbUnPlusUnFait < 9) {
+                            nbUnPlusUnFait++;
+                            // Garde Gauche, 2 deplacement
+                            if ((positions[1] - 2 == j - 8 || positions[1] + 2 == j - 8) && (positions[0] > j - 8)) {
+                                if(positions[1] - 2 == j - 8){
+                                    combi = combi + "GG2";
+                                }
+                                else{
+                                    combi = combi + "GD2";
+                                }
+                                if(!hashTable.containsKey(combi)){
+                                    positions[1] = j - 8;
+                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                                    res.insereQueue(couple);
+                                    newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+                                    positions[1] = tmpGG;
+                                    nbUnPlusUnFait--;
+                                    hashTable.put(combi, true);
+                                }
+                                combi = tmp;
+                            }
+
+                            // Garde Droit, 2 deplacement
+                            if ((positions[2] - 2 == j - 8 || positions[2] + 2 == j - 8) && (positions[0] < j - 8)) {
+                                if(positions[2] - 2 == j - 8){
+                                    combi = combi + "DG2";
+                                }
+                                else{
+                                    combi = combi + "DD2";
+                                }
+                                if(!hashTable.containsKey(combi)){
+                                    positions[2] = j - 8;
+                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                                    res.insereQueue(couple);
+                                    newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+                                    positions[2] = tmpGD;
+                                    nbUnPlusUnFait--;
+                                    hashTable.put(combi, true);
+                                }
+                                combi = tmp;
+                            }
+
+                            // Gardes, 1+1 à gauche
+                            if ( (positions[1] - 1 == j - 8 || positions[2] - 1 == j - 8) && !dejaG) {
+                                combi = combi + "BG";
+                                if(!hashTable.containsKey(combi)){
+                                    positions[1] = positions[1] - 1;
+                                    positions[2] = positions[2] - 1;
+                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                                    res.insereQueue(couple);
+                                    newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+                                    positions[1] = tmpGG;
+                                    positions[2] = tmpGD;
+                                    nbUnPlusUnFait--;
+                                    hashTable.put(combi, true);
+                                    dejaG = true;
+                                }
+                                combi = tmp;
+                            }
+
+                            // Gardes, 1+1 à droite
+                            if ( (positions[1] + 1 == j - 8 || positions[2] + 1 == j - 8) && !dejaD ) {
+                                combi = combi + "BD";
+                                if(!hashTable.containsKey(combi)){
+                                    positions[1] = positions[1] + 1;
+                                    positions[2] = positions[2] + 1;
+                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                                    res.insereQueue(couple);
+                                    newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+                                    positions[1] = tmpGG;
+                                    positions[2] = tmpGD;
+                                    nbUnPlusUnFait--;
+                                    hashTable.put(combi, true);
+                                    dejaG = true;
+                                }
+                                combi = tmp;
+                            }
+                        }
+                    }
+                    if (carte.deplacement() == Deplacement.UN) {
+                        // Le deplacement se fait sur le garde gauche
+                        if (positions[1] - 1 == j - 8 || positions[1] + 1 == j - 8) {
+                            if(positions[1] - 1 == j - 8){
+                                combi = combi + "GG";
+                            }
+                            else{
+                                combi = combi + "GD";
+                            }
+                            if(!hashTable.containsKey(combi)){
+                                positions[1] = j - 8;
+                                CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                                res.insereQueue(couple);
+                                newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+                                hashTable.put(combi, true);
+                                positions[1] = tmpGG;
+                            }
+                            combi = tmp;
+                        }
+                        // Le déplacement se fait sur le garde droit
+                        else {
+                            if(positions[2] - 1 == j - 8){
+                                combi = combi + "DG";
+                            }
+                            else{
+                                combi = combi + "DD";
+                            }
+                            if(!hashTable.containsKey(combi)){
+                                positions[2] = j - 8;
+                                CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                                res.insereQueue(couple);
+                                newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+                                hashTable.put(combi, true);
+                                positions[2] = tmpGD;
+                            }
+                            combi = tmp;
+                        }
+                    }
+                }
+                j++;
+            }
+            // On ne la joue pas
+            cartesJouees[numCarte] = 0;
+            newGardes(positions, cartesJouees, nbGardes, nbJouer, nbUnPlusUnFait, combi);
+        }
+    }
+
+    private void newFou(int[] positions, int[] cartesJouees, int nbFou, int nbJouer, String combi){
+        remettreLesPositions(positions);
+        if(nbFou > nbJouer){
+            int numCarte = jeu.plateau().paquet.trouverEleInverse(jeu.joueurCourant(), Element.FOU, nbJouer);
+            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[numCarte];
+            cartesJouees[numCarte] = 1;
+            nbJouer++;
+            switch (carte.deplacement()) {
+                case UN:
+                    combi = combi + "1";
+                    break;
+                case DEUX:
+                    combi = combi + "2";
+                    break;
+                case TROIS:
+                    combi = combi + "3";
+                    break;
+                case QUATRE:
+                    combi = combi + "4";
+                    break;
+                case CINQ:
+                    combi = combi + "5";
+                    break;
+                case MILIEU:
+                    combi = combi + "M";
+                    break;
+                default:
+                    break;
+            }
+            String tmp = combi;
+            int[] deplacementPossibles = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU, carte.deplacement());
+            int j = 0;
+            while (j < 17) {
+                if (deplacementPossibles[j] == 1) {
+                    int numPerso = 8;
+                    if (jeu.personnageManipulerParLeFou == Element.GARDES) {
+                        if (jeu.obtenirPositionElement(Element.ROI) > j - 8) {
+                            numPerso = numeroPerso(Element.GARDE_GAUCHE);
+                            combi = combi + "G";
+                        } else {
+                            numPerso = numeroPerso(Element.GARDE_DROIT);
+                            combi = combi + "D";
+                        }
+                    } else {
+                        numPerso = numeroPerso(jeu.personnageManipulerParLeFou);
+                    }
+                    int tmpF = positions[numPerso];
+                    if(j - 8 < tmpF){
+                        combi = combi + "G";
+                    }
+                    else{
+                        combi = combi + "D";
+                    }
+                    if(!hashTable.containsKey(combi)){
+                        positions[numPerso] = j - 8;
+                        CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
+                        res.insereQueue(couple);
+                        newFou(positions, cartesJouees, nbFou, nbJouer, combi);
+                        hashTable.put(combi, true);
+                        positions[numPerso] = tmpF;
+                    }
+                    combi = tmp;
+                }
+                j++;
+            }   
+
+            // On ne joue pas la carte
+            cartesJouees[numCarte] = 0;
+            newFou(positions, cartesJouees, nbFou, nbJouer, combi);
+        }
+    }
+
+    private void calculFou(int[] positions, int[] cartesJouees) {
 
         // Le pouvoir du fou
         if (jeu.estPouvoirFouActivable()) {
             jeu.personnageManipulerParLeFou(Element.ROI);
-            res = calculPouvoirFou(res, positions, cartesJouees, Element.FOU, 3);
+            newFou(positions, cartesJouees, jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.FOU, 0), 0, "FR");
             jeu.personnageManipulerParLeFou(Element.GARDES);
-            res = calculPouvoirFou(res, positions, cartesJouees, Element.FOU, 3);
+            newFou(positions, cartesJouees, jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.FOU, 0), 0, "FG");
             jeu.personnageManipulerParLeFou(Element.SORCIER);
-            res = calculPouvoirFou(res, positions, cartesJouees, Element.FOU, 3);
+            newFou(positions, cartesJouees, jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.FOU, 0), 0, "FS");
             jeu.personnageManipulerParLeFou(Element.FOU);
         }
 
         // Jouer les cartes du fou
-        res = calculNormal(res, positions, cartesJouees, Element.FOU, 3);
-        return res;
+        newFou(positions, cartesJouees, jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.FOU, 0), 0, "FF");
     }
 
-    private Sequence<CoupleAtteindrePlateau> calculNormal(Sequence<CoupleAtteindrePlateau> res, int[] base,
-            int[] cartes, Element perso, int numPerso) {
-        int i = 0;
-        while (i < 8) {
-            remettreLesPositions(base);
-            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[i];
-            if (carte.personnage() == perso && cartes[i] != 1) {
-                int[] deplacementPossibles = jeu.listeDeplacementPossiblesAvecCarte(perso, carte.deplacement());
-                int j = 0;
-                while (j < 17) {
-                    if (deplacementPossibles[j] == 1) {
-                        int tmp = base[numPerso];
-                        base[numPerso] = j - 8;
-                        cartes[i] = 1;
-                        CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                        res.insereQueue(couple);
-                        calculNormal(res, base, cartes, perso, numPerso);
-                        base[numPerso] = tmp;
-                        cartes[i] = 0;
-                    }
-                    j++;
-                }
-            }
-            i++;
-        }
-        return res;
-    }
-
-    private Sequence<CoupleAtteindrePlateau> calculPouvoirFou(Sequence<CoupleAtteindrePlateau> res, int[] base,
-            int[] cartes, Element perso, int numPerso) {
-        int i = 0;
-        while (i < 8) {
-            remettreLesPositions(base);
-            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[i];
-            if (carte.personnage() == perso && cartes[i] != 1) {
-                int[] deplacementPossibles = jeu.listeDeplacementPossiblesAvecCarte(perso, carte.deplacement());
-                int j = 0;
-                while (j < 17) {
-                    if (deplacementPossibles[j] == 1) {
-                        int num = 8;
-                        if (jeu.personnageManipulerParLeFou == Element.GARDES) {
-                            if (jeu.obtenirPositionElement(Element.ROI) > j - 8) {
-                                num = numeroPerso(Element.GARDE_GAUCHE);
-                            } else {
-                                num = numeroPerso(Element.GARDE_DROIT);
-                            }
-                        } else {
-                            num = numeroPerso(jeu.personnageManipulerParLeFou);
-                        }
-                        int tmp = base[num];
-                        base[num] = j - 8;
-                        cartes[i] = 1;
-                        CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                        res.insereQueue(couple);
-                        calculPouvoirFou(res, base, cartes, perso, numPerso);
-                        base[num] = tmp;
-                        cartes[i] = 0;
-                    }
-                    j++;
-                }
-            }
-            i++;
-        }
-        return res;
-    }
-
-    private Sequence<CoupleAtteindrePlateau> calculDeplaceRoi(Sequence<CoupleAtteindrePlateau> res, int[] base,
-            int[] cartes, int nbRoi, int nbJouee) {
+    private void calculDeplaceRoi(int[] base, int[] cartes, int nbRoi, int nbJouee) {
         remettreLesPositions(base);
         int tmpR = base[0];
         int tmpGG = base[1];
@@ -243,7 +467,7 @@ public class ListePlateaux {
                     res.insereQueue(couple);
 
                     // On va tester de continuer les déplacements
-                    calculDeplaceRoi(res, base, cartes, nbRoi, nbJouee);
+                    calculDeplaceRoi(base, cartes, nbRoi, nbJouee);
 
                     // On remet comme avant
                     base[0] = tmpR;
@@ -277,7 +501,7 @@ public class ListePlateaux {
                     res.insereQueue(couple);
 
                     // On va tester de continuer les déplacements
-                    calculDeplaceRoi(res, base, cartes, nbRoi, nbJouee);
+                    calculDeplaceRoi(base, cartes, nbRoi, nbJouee);
 
                     // On remet comme avant
                     base[0] = tmpR;
@@ -311,7 +535,7 @@ public class ListePlateaux {
                 res.insereQueue(couple);
 
                 // On va tester de continuer les déplacements
-                calculDeplaceRoi(res, base, cartes, nbRoi, nbJouee);
+                calculDeplaceRoi(base, cartes, nbRoi, nbJouee);
 
                 // On remet comme avant
                 base[0] = tmpR;
@@ -337,7 +561,7 @@ public class ListePlateaux {
                 res.insereQueue(couple);
 
                 // On va tester de continuer les déplacements
-                calculDeplaceRoi(res, base, cartes, nbRoi, nbJouee);
+                calculDeplaceRoi(base, cartes, nbRoi, nbJouee);
 
                 // On remet comme avant
                 base[0] = tmpR;
@@ -346,126 +570,5 @@ public class ListePlateaux {
                 nbRoi++;
             }
         }
-        return res;
-    }
-
-    private Sequence<CoupleAtteindrePlateau> calculDeplacementGarde(Sequence<CoupleAtteindrePlateau> res, int[] base,
-            int[] cartes, int nbUnPlusUnFait) {
-        int i = 0;
-        int tmpGG = base[1];
-        int tmpGD = base[2];
-        while (i < 8) {
-            remettreLesPositions(base);
-            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[i];
-            if (carte.personnage() == Element.GARDES && cartes[i] != 1) {
-                int[] deplacementPossibles = jeu.listeDeplacementPossiblesAvecCarte(Element.GARDES,
-                        carte.deplacement());
-                int j = 0;
-                while (j < 17) {
-                    if (deplacementPossibles[j] == 1) {
-                        if (carte.deplacement() == Deplacement.RAPPROCHE) {
-                            base[1] = base[0] - 1;
-                            base[2] = base[0] + 1;
-                            cartes[i] = 1;
-                            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                            res.insereQueue(couple);
-                            calculDeplacementGarde(res, base, cartes, nbUnPlusUnFait);
-                            base[1] = tmpGG;
-                            base[2] = tmpGD;
-                            cartes[i] = 0;
-                        }
-                        if (carte.deplacement() == Deplacement.UN_PLUS_UN) {
-
-                            if (nbUnPlusUnFait < 3) {
-
-                                // Garde Gauche, 2 deplacement
-                                if ((base[1] - 2 == j - 8 || base[1] + 2 == j - 8) && (base[0] > j - 8)) {
-                                    base[1] = j - 8;
-                                    cartes[i] = 1;
-                                    nbUnPlusUnFait++;
-                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                                    res.insereQueue(couple);
-                                    calculDeplacementGarde(res, base, cartes, nbUnPlusUnFait);
-                                    base[1] = tmpGG;
-                                    cartes[i] = 0;
-                                    nbUnPlusUnFait--;
-                                }
-
-                                // Garde Droit, 2 deplacement
-                                if ((base[2] - 2 == j - 8 || base[2] + 2 == j - 8) && (base[0] < j - 8)) {
-                                    base[2] = j - 8;
-                                    cartes[i] = 1;
-                                    nbUnPlusUnFait++;
-                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                                    res.insereQueue(couple);
-                                    calculDeplacementGarde(res, base, cartes, nbUnPlusUnFait);
-                                    base[2] = tmpGD;
-                                    cartes[i] = 0;
-                                    nbUnPlusUnFait--;
-                                }
-
-                                // Gardes, 1+1 à gauche
-                                if (base[1] - 1 == j - 8 || base[2] - 1 == j - 8) {
-                                    base[1] = base[1] - 1;
-                                    base[2] = base[2] - 1;
-                                    cartes[i] = 1;
-                                    nbUnPlusUnFait++;
-                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                                    res.insereQueue(couple);
-                                    calculDeplacementGarde(res, base, cartes, nbUnPlusUnFait);
-                                    base[1] = tmpGG;
-                                    base[2] = tmpGD;
-                                    cartes[i] = 0;
-                                    nbUnPlusUnFait--;
-                                }
-
-                                // Gardes, 1+1 à droite
-                                if (base[1] + 1 == j - 8 || base[2] + 1 == j - 8) {
-                                    base[1] = base[1] + 1;
-                                    base[2] = base[2] + 1;
-                                    cartes[i] = 1;
-                                    nbUnPlusUnFait++;
-                                    CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                                    res.insereQueue(couple);
-                                    calculDeplacementGarde(res, base, cartes, nbUnPlusUnFait);
-                                    base[1] = tmpGG;
-                                    base[2] = tmpGD;
-                                    cartes[i] = 0;
-                                    nbUnPlusUnFait--;
-                                }
-                            }
-                            else{
-                                cartes[i] = 1;
-                            }
-                        }
-                        if (carte.deplacement() == Deplacement.UN) {
-                            // Le deplacement se fait sur le garde gauche
-                            if (base[1] - 1 == j - 8 || base[1] + 1 == j - 8) {
-                                base[1] = j - 8;
-                                cartes[i] = 1;
-                                CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                                res.insereQueue(couple);
-                                calculDeplacementGarde(res, base, cartes, nbUnPlusUnFait);
-                                base[1] = tmpGG;
-                                cartes[i] = 0;
-                            }
-                            // Le déplacement se fait sur le garde droit
-                            else {
-                                base[2] = j - 8;
-                                cartes[i] = 1;
-                                CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(base, cartes);
-                                res.insereQueue(couple);
-                                calculDeplacementGarde(res, base, cartes, nbUnPlusUnFait);
-                                base[2] = tmpGD;
-                                cartes[i] = 0;
-                            }
-                        }
-                    }
-                    j++;
-                }
-            }
-            i++;
-        }
-        return res;
     }
 }

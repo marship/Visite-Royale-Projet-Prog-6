@@ -30,8 +30,8 @@ public class AdaptateurCommande implements ActionListener {
     // ===========================
     @Override
     public void actionPerformed(ActionEvent e) {
-        collecteurEvenements.commande(commande);
         jouerSon();
+        collecteurEvenements.commande(commande);
     }
 
     // ======================

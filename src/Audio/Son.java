@@ -1,6 +1,7 @@
 package Audio;
 
 import java.io.File;
+// import java.io.ObjectInputFilter.Config;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -8,46 +9,75 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.swing.JSlider;
 
+import Global.Configuration;
+
 public class Son {
     
-    Clip clip;
-    float volumePrecedent = -16;
-    public float volumeCourant = -16;
-    public FloatControl floatControl;
-    boolean estMuter = false;
-    AudioInputStream audioInputStream;
+    // ======================
+    // ===== CONSTANTES =====
+    // ======================
 
-    String nomFichierAudio = "gangstas-paradise-medieval";
-    // String nomFichierAudio = "the-weeknd-medieval";
+    // static final String GANGSTAS = "gangstas-paradise-medieval";
+    // static final String WEEKND = "the-weeknd-medieval";
+    static final String SON = "Son_Bouton";
 
     static final String CHEMIN_FICHIER_AUDIO = "res/Audios/";
     static final String EXTENSION_FICHIER_AUDIO = ".wav";
+    static final float VOLUME_PAR_DEFAUT = -16;
 
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
+    AudioInputStream audioInputStream;
+    public FloatControl floatControl;
+    Clip clip;
+
+    // =====================
+    // ===== VARIABLES =====
+    // =====================
+    public float volumeCourant = VOLUME_PAR_DEFAUT;
+
+    float volumePrecedentMute = VOLUME_PAR_DEFAUT;
+    boolean estMuter = false;
+
+    /////////////////////////////////////////////////////////////////////////
+
+    // =========================
+    // ===== CONSTRUCTEURS =====
+    // =========================
     public Son(String nomFichierAudio) {
-        setFichier(nomFichierAudio);
+        recupererFichierAudio(nomFichierAudio);
+        if (nomFichierAudio == SON) {
+            ajusterVolumeEffetSonnore();
+        }
         jouer();
-        boucle();
+        if (nomFichierAudio != SON) {
+            boucle();
+        }
     }
 
     public Son() {
-        setFichier("Son_Bouton");
-        jouer();
-        moyenVolume();
+        new Son(SON);
     }
 
-    public void setFichier(String nomFichierAudio) {
+    // =============================
+    // ===== RECUPERER FICHIER =====
+    // =============================
+    public void recupererFichierAudio(String nomFichierAudio) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         } catch (Exception e) {
-            // Catch !!
+            Configuration.instance().logger().severe("Echec de recuperation du fichier audio : " + nomFichierAudio + EXTENSION_FICHIER_AUDIO);
         }
     }
 
+    // =========================
+    // ===== ACTIONS AUDIO =====
+    // =========================
     public void jouer() {
-
         floatControl.setValue(volumeCourant);
         clip.setFramePosition(0);
         clip.start();
@@ -59,11 +89,6 @@ public class Son {
 
     public void stop() {
         clip.stop();
-    }
-
-    public void moyenVolume() {
-        volumeCourant = 0.0f;
-        floatControl.setValue(volumeCourant);
     }
 
     public void augmenterVolume() {
@@ -84,17 +109,22 @@ public class Son {
 
     public void muterVolume(JSlider boutonGlissant) {
         if (estMuter == false) {
-            volumePrecedent = volumeCourant;
+            volumePrecedentMute = volumeCourant;
             volumeCourant = - 80.0f;
             floatControl.setValue(volumeCourant);
             estMuter = true;
 
             boutonGlissant.setValue(boutonGlissant.getMinimum());
         } else if (estMuter == true) {
-            volumeCourant = volumePrecedent;
+            volumeCourant = volumePrecedentMute;
             boutonGlissant.setValue((int) volumeCourant);
             floatControl.setValue(volumeCourant);
             estMuter = false;
         }
+    }
+
+    public void ajusterVolumeEffetSonnore() {
+        volumeCourant = 1.0f;
+        floatControl.setValue(volumeCourant);
     }
 }

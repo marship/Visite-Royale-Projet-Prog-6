@@ -278,6 +278,34 @@ public class Paquet {
         return 10;
     }
 
+    public int trouverEle(int joueur, Element voulu, int ignore){
+        for (int i = 0; i < NOMBRE_CARTE_EN_MAIN; i++) {
+            Carte main = (Carte) mainJoueurs[joueur][i];
+            if (main.personnage() == voulu) {
+                if(ignore == 0){
+                    return i;
+                }else{
+                    ignore = ignore - 1;
+                }
+            }
+        }
+        return 10;
+    }
+
+    public int trouverEleInverse(int joueur, Element voulu, int ignore){
+        for (int i = 7; i >= 0; i--) {
+            Carte main = (Carte) mainJoueurs[joueur][i];
+            if (main.personnage() == voulu) {
+                if(ignore == 0){
+                    return i;
+                }else{
+                    ignore = ignore - 1;
+                }
+            }
+        }
+        return 10;
+    }
+
     public Carte[] carteSelonPerso(int joueur, Element voulu){
         Carte[] res = new Carte[NOMBRE_CARTE_EN_MAIN];
         Carte vide = new Carte(VIDE_ELEMENT, VIDE_DEPLACEMENT);

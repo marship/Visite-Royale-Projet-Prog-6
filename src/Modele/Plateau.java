@@ -2,7 +2,7 @@ package Modele;
 
 import Global.Configuration;
 import Global.Element;
-import Structures.Iterateur;
+// import Structures.Iterateur;
 // import Structures.Sequence;
 import Structures.Sequence;
 
@@ -278,20 +278,9 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         
         couronne.positionnerCouronne(p.couronne.positionCouronne());
 
-        System.out.println("PIOCHE !!!!");
-        //paquet.afficherPioche();
         remplacerPioche(p);
-        //paquet.afficherPioche();
-        System.out.println("DEFAUSE !!!!");
-        //paquet.afficherDefausse();
         remplacerDefausse(p);
-        //paquet.afficherDefausse();
-        System.out.println("MAINS !!!!");
-        paquet.afficherMain(JOUEUR_DROIT);
-        //paquet.afficherMain(JOUEUR_GAUCHE);
         remplacerMains(p);
-        paquet.afficherMain(JOUEUR_DROIT);
-        //paquet.afficherMain(JOUEUR_GAUCHE);
         
         remplacerTourActuel();
     }
