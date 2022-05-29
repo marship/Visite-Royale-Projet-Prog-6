@@ -239,7 +239,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 if (d == 1 || d == 0) {
                     dessinable.setColor(new Color(255, 255, 0));
                     dessinable.fillOval(
-                            positionJeton(jeu.obtenirPositionElement(Element.ROI)) - largeurCasePlateau
+                            positionJeton(Element.ROI, true) - largeurCasePlateau
                                     + largeurCasePlateau / 3,
                             quartHauteurPlateau * 4,
                             30, 30);
@@ -247,7 +247,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 if (d == 2 || d == 0) {
                     dessinable.setColor(new Color(255, 255, 0));
                     dessinable.fillOval(
-                            positionJeton(jeu.obtenirPositionElement(Element.ROI)) + largeurCasePlateau
+                            positionJeton(Element.ROI, true) + largeurCasePlateau
                                     + largeurCasePlateau / 3,
                             quartHauteurPlateau * 4,
                             30, 30);
@@ -286,8 +286,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
             Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
             int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(),
                     carte.deplacement());
+            
             int i = 0;
-            while (i < 17) {
+            while (i < taillePlateau) {
                 if (listeDeplacementPossiblesAvecCarte[i] == 1) {
                     ImagePlateau image = imageJetonFouGrise;
                     switch(carte.personnage()){
@@ -297,10 +298,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
                         case SORCIER:
                             image = imageJetonSorcier;
                             break;
-                        //TODO afficher le/les bons gardes à deplacer
-                        case GARDES:
-                            image = imageJetonGardeDroit;
-                            break;
                         case ROI:
                             image = imageJetonRoi;
                             break;
@@ -309,11 +306,59 @@ public class PlateauGraphique extends JPanel implements Observateur {
                             break;
                     }
                     if(jeu.casePassee() == i){
-                        tracerJeton(carte.personnage(), image, jeu.casePassee());
+                        if(carte.personnage() == Element.GARDES){
+                            int positionGardeGauche = positionJeton(Element.GARDE_GAUCHE, false);
+                            int positionGardeDroit = positionJeton(Element.GARDE_DROIT, false);
+                            int positionRoi = positionJeton(Element.ROI, false);
+                            switch(carte.deplacement()){
+                                case RAPPROCHE:
+                                    if(i == positionRoi-1 || i == positionRoi+1){
+                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, positionRoi-1);
+                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, positionRoi+1);
+                                    }
+                                    break;
+                                case UN:
+                                    if(i == positionGardeGauche-1 || i == positionGardeGauche+1){
+                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, jeu.casePassee());
+                                    }
+                                    if(i == positionGardeDroit-1 || i == positionGardeDroit+1){
+                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, jeu.casePassee());
+                                    }
+                                    break;
+                                case UN_PLUS_UN:
+                                    if(i >= positionGardeGauche-2 && i <= positionGardeGauche+2){
+                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, jeu.casePassee());
+                                        System.out.println("Je veux bouger le garde gauche");
+                                        if(i == positionGardeGauche-1){
+                                            System.out.println("Un petit pas à gauche !!!");
+                                            tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit-1);
+                                        }else if(i == positionGardeGauche+1){
+                                            System.out.println("Un petit pas à droite !!!");
+                                            tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit+1);
+                                        }
+        
+                                    }else if(i >= positionGardeDroit-2 && i <= positionGardeDroit+2 ){
+                                        System.out.println("Je veux bouger le garde droit");
+                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, jeu.casePassee());
+                                        
+                                        if(i == positionGardeDroit-1){
+                                            tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche-1);
+                                        }else if(i == positionGardeDroit+1){
+                                            tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche+1);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            
+                        }else{
+                            tracerJeton(carte.personnage(), image, jeu.casePassee());
+                        }
                     }
                     else{
                         //TODO remplacer fouGrise par jetonPointille une fois image créée
-                        tracerJeton(carte.personnage(), imageJetonFouGrise, i);
+                        tracerJeton(carte.personnage(), image, i);
                         //dessinable.setColor(new Color(0, 150, 255));
                         //dessinable.setStroke(new BasicStroke(5f));
                         //dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
@@ -364,7 +409,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             default:
                 break;
         }
-            tracerImage(imageElement, positionJeton(jeu.obtenirPositionElement(element)), hauteurElement,
+            tracerImage(imageElement, positionJeton(element, true), hauteurElement,
                 largeurCasePlateau, quartHauteurPlateau);
     }
 
@@ -707,8 +752,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     }
 
-    public int positionJeton(int positionElement) {
-        return (positionElement + taillePlateau / 2) * largeurCasePlateau;
+    public int positionJeton(Element element, boolean enPixel) {
+        if(enPixel){
+            return (jeu.obtenirPositionElement(element) + taillePlateau / 2) * largeurCasePlateau;
+        }
+        return (jeu.obtenirPositionElement(element) + taillePlateau / 2);
     }
 
     // ==================
