@@ -19,6 +19,7 @@ public class JoueurIAmelie extends Joueur {
     Element jouee = Element.VIDE;
     int baseCouronne;
     int quiDoitGagner;
+    int win = -1;
     Plateau plateauDebutTour;
 
     static final int HORIZON = 1;
@@ -243,6 +244,26 @@ public class JoueurIAmelie extends Joueur {
         }
     }
 
+    boolean victoire(){
+        if(jeu.plateau().couronne.positionCouronne() >= 7){
+            win = 1;
+            return true;
+        }
+        if(jeu.plateau().couronne.positionCouronne() <= -7){
+            win = 0;
+            return true;
+        }
+        if(jeu.plateau().roi.positionPersonnage() >= 7){
+            win = 1;
+            return true;
+        }
+        if(jeu.plateau().roi.positionPersonnage() <= -7){
+            win = 0;
+            return true;
+        }
+        return false;
+    }
+
     void annule() {
         if(jeu.actionAutoriser()){
             jeu.annulerTour();
@@ -297,13 +318,14 @@ public class JoueurIAmelie extends Joueur {
                 nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
             }
             jeu.plateau().couronne.positionnerCouronne(posCouronne);
-            if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
-                if(jeu.estGagnant()){
-                    if(jeu.joueurCourant() == jeu.joueurGagnant()){
+            if(victoire() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                if(victoire()){
+                    if(jeu.joueurCourant() == win){
                         while(!lesWINNER.estVide()){
                             lesWINNER.extraitTete();
                         }
                         lesWINNER.insereQueue(test);
+                        win = -1;
                         break;
                     }
                 }
@@ -446,12 +468,14 @@ public class JoueurIAmelie extends Joueur {
                     nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
                 }
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
-                if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
-                    if(jeu.estGagnant()){
-                        if(jeu.joueurCourant() == jeu.joueurGagnant()){
+                if(victoire()|| !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                    if(victoire()){
+                        if(jeu.joueurCourant() == win){
+                            win = -1;
                             return 10000;
                         }
                         else{
+                            win = -1;
                             return -10000;
                         }
                     }
@@ -552,12 +576,14 @@ public class JoueurIAmelie extends Joueur {
                     nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
                 }
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
-                if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
-                    if(jeu.estGagnant()){
-                        if(jeu.joueurCourant() == jeu.joueurGagnant()){
+                if(victoire() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                    if(victoire()){
+                        if(jeu.joueurCourant() == win){
+                            win = -1;
                             return -10000;
                         }
                         else{
+                            win = -1;
                             return 10000;
                         }
                     }
