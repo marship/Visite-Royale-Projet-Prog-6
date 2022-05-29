@@ -448,6 +448,7 @@ public class Jeu extends Observable {
         typeDePersonnageJouerAuDernierTour = dernierTypeDePersonnageJouer;
         initialiserDernierTypeDePersonnageJouer();
         teleportationFaite = false;
+        carteActuelle = 8;
         fixerPositions();
         metAJour();
     }
