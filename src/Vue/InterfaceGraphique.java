@@ -36,10 +36,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     JSlider boutonGlissantMusique;
     JDialog victoire;
     DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits,
-            boutonConfirmer, boutonRetourAccueil, boutonValider, boutonAnnuler,
+            boutonConfirmer, boutonRetourAccueil, boutonValiderSelection, boutonAnnulerSelection, boutonMainAdverse,
             boutonHistoriqueArriere, boutonHistoriqueAvant, boutonOptionsJeu, boutonFinDeTour,
-            boutonRetourMenu, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu,
-            boutonRecommencerVictoire, boutonRetourMenuVictoire, boutonQuitterVictoire;
+            boutonRetourMenu, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
 
     CardLayout layout;
     JPanel panelCourant, panelMenuPrincipal, panelOptions, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
@@ -47,7 +46,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     JComboBox<String> comboBoxJoueurGauche, comboBoxJoueurDroite;
     JTextField valeurNomJoueurGauche, valeurNomJoueurDroite;
 
-    public JFrame fenetre;
+    public static JFrame fenetre;
 
     private int hauteurFenetre;
     private int largeurFenetre;
@@ -157,7 +156,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
     }
 
-    public void creerSelectionJoueurs() throws IOException {
+    public void creerSelectionJoueurs() throws IOException{
 
         int borderTop = hauteurFenetre / 3;
         int borderBottom = hauteurFenetre / 3;
@@ -169,88 +168,111 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         GridBagConstraints gbc = new GridBagConstraints();
 
         String[] choixComboBox = {
-                "Humain",
-                "IA très facile",
-                "IA facile",
-                "IA normale",
-                "IA difficile",
-                "IA experte",
-                "IA triche"
+            "Humain",
+            "IA très facile",
+            "IA facile",
+            "IA normale",
+            "IA difficile",
+            "IA experte",
+            "IA triche"
         };
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 0.33;
-        gbc.insets = new Insets(10, 0, 0, 10); // top padding
+        gbc.insets = new Insets(10,0,0,10);  //top padding
 
         JLabel nomJoueurGauche = new JLabel("Joueur Gauche");
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 0;  
         panelSelectionJoueurs.add(nomJoueurGauche, gbc);
 
         gbc.ipady = 10;
-        valeurNomJoueurGauche = new JTextField();
+        valeurNomJoueurGauche = new JTextField(20);
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        valeurNomJoueurGauche.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+        gbc.gridy = 1;  
+        valeurNomJoueurGauche.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
         valeurNomJoueurGauche.setText("Joueur 1");
         panelSelectionJoueurs.add(valeurNomJoueurGauche, gbc);
 
         comboBoxJoueurGauche = new JComboBox<>();
-        for (int i = 0; i < choixComboBox.length; i++) {
+        for(int i = 0; i < choixComboBox.length; i++){
             comboBoxJoueurGauche.addItem(choixComboBox[i]);
         }
         comboBoxJoueurGauche.setFocusable(false);
-        comboBoxJoueurGauche.addActionListener(
-                new AdaptateurCommande(collecteurEvenements, comboBoxJoueurGauche.getSelectedItem().toString()));
-
+        comboBoxJoueurGauche.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueurGauche.getSelectedItem().toString()));
+        
         gbc.gridx = 0;
         gbc.gridy = 2;
         panelSelectionJoueurs.add(comboBoxJoueurGauche, gbc);
 
-        gbc.insets = new Insets(10, 30, 0, 0); // padding elements Joueur2
+        gbc.gridwidth = 2;
+
+        JRadioButton prioJoueurGauche = new JRadioButton("Joue en premier", false);
+        prioJoueurGauche.setContentAreaFilled(false);
+        prioJoueurGauche.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 12));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panelSelectionJoueurs.add(prioJoueurGauche, gbc);
+
+        JRadioButton prioJoueurDroite = new JRadioButton("Joue en premier", false);
+        prioJoueurDroite.setContentAreaFilled(false);
+        prioJoueurDroite.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 12));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        panelSelectionJoueurs.add(prioJoueurDroite, gbc);
+
+        JRadioButton joueurAleatoire = new JRadioButton("Choix aléatoire", false);
+        joueurAleatoire.setContentAreaFilled(false);
+        joueurAleatoire.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 12));
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        panelSelectionJoueurs.add(joueurAleatoire, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(10,30,0,0);  //padding elements Joueur2
 
         gbc.ipady = 0;
         JLabel nomJoueurDroite = new JLabel("Joueur Droite");
         gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridy = 0; 
         panelSelectionJoueurs.add(nomJoueurDroite, gbc);
 
         gbc.ipady = 10;
         valeurNomJoueurDroite = new JTextField();
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 1;  
         valeurNomJoueurDroite.setText("Joueur 2");
-        valeurNomJoueurDroite.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+        valeurNomJoueurDroite.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 15));
         panelSelectionJoueurs.add(valeurNomJoueurDroite, gbc);
 
+
         comboBoxJoueurDroite = new JComboBox<>();
-        for (int i = 0; i < choixComboBox.length; i++) {
+        for(int i = 0; i < choixComboBox.length; i++){
             comboBoxJoueurDroite.addItem(choixComboBox[i]);
         }
         comboBoxJoueurDroite.setFocusable(false);
-        comboBoxJoueurDroite.setSelectedIndex(5);
-        comboBoxJoueurDroite.addActionListener(
-                new AdaptateurCommande(collecteurEvenements, comboBoxJoueurDroite.getSelectedItem().toString()));
-
+        comboBoxJoueurDroite.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueurDroite.getSelectedItem().toString()));
+        
         gbc.gridx = 1;
         gbc.gridy = 2;
         panelSelectionJoueurs.add(comboBoxJoueurDroite, gbc);
 
-        gbc.insets = new Insets(70, 0, 0, 0);
+        gbc.insets = new Insets(30,0,0,0); 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 6; 
 
-        DesignBoutons valider = new DesignBoutons("Valider", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        valider.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
-        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelSelectionJoueurs.add(valider, gbc);
+        boutonValiderSelection = new DesignBoutons("Valider", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonValiderSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
+        boutonValiderSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSelectionJoueurs.add(boutonValiderSelection, gbc);
 
         gbc.gridx = 1;
-        DesignBoutons annuler = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
-        valider.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelSelectionJoueurs.add(annuler, gbc);
+        boutonAnnulerSelection = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonAnnulerSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
+        boutonAnnulerSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSelectionJoueurs.add(boutonAnnulerSelection, gbc);
 
+        
     }
 
     public String getInfoJoueur(int coteJoueur) {
@@ -300,12 +322,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.weighty = 0.25;
         gbc.insets = new Insets(50, 0, 0, 0);
 
-        JButton test = new JButton("test");
-        test.setVisible(false);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelOptions.add(test, gbc);
-
         boutonGlissantMusique = new JSlider(-24, 6, -16);
         boutonGlissantMusique.addChangeListener(new AdaptateurBoutonGlissant(musique, boutonGlissantMusique));
         boutonGlissantMusique.setOpaque(false);
@@ -338,7 +354,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     // TODO Faire l'affichage du plateau de jeu
     public void creerPlateauJeu() throws IOException {
 
-        plateauGraphique = new PlateauGraphique(jeu);
+        plateauGraphique = new PlateauGraphique(jeu, collecteurEvenements);
         plateauGraphique.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -387,10 +403,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        DesignBoutons boutonAnnulerJeu = new DesignBoutons("Annuler", "Texture_Petit_Bouton",
-                "Texture_Petit_Bouton_Clique", 15);
-        boutonAnnulerJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "AnnulerTour"));
-        plateauGraphique.add(boutonAnnulerJeu, gbc);
+        boutonMainAdverse = new DesignBoutons("Révéler main adverse", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 11);
+        boutonMainAdverse.addActionListener(new AdaptateurCommande(collecteurEvenements, "Visible"));
+        plateauGraphique.add(boutonMainAdverse, gbc);
 
         gbc.anchor = GridBagConstraints.SOUTHWEST;
         gbc.insets = new Insets(0, 220, 0, 0);
@@ -445,41 +460,6 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         boutonRetourJeu = new DesignBoutons("Retour au jeu", "Texture_Bouton", "Texture_Bouton_Clique", 25);
         boutonRetourJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
         panelOptionsJeu.add(boutonRetourJeu);
-    }
-
-    public void AfficherEcranVictoire() throws IOException {
-        victoire = new JDialog(fenetre);
-        victoire.setBounds(500, 300, 400, 300);
-        victoire.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        victoire.setAlwaysOnTop(true);
-
-        victoire.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        JLabel AnnonceVictoire = new JLabel(jeu.traiterGagnant());
-        victoire.add(AnnonceVictoire, gbc);
-
-        gbc.weighty = 0.33;
-        gbc.anchor = GridBagConstraints.PAGE_END;
-
-        gbc.gridy++;
-        gbc.gridx++;
-        boutonRecommencerVictoire = new DesignBoutons("Recommencer", "Texture_Moyen_Bouton",
-                "Texture_Moyen_Bouton_Clique", 20);
-        boutonRecommencerVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Recommencer"));
-        victoire.add(boutonRecommencerVictoire, gbc);
-
-        gbc.gridx++;
-        boutonRetourMenuVictoire = new DesignBoutons("Retour au menu", "Texture_Moyen_Bouton",
-                "Texture_Moyen_Bouton_Clique", 12);
-        boutonRetourMenuVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
-        victoire.add(boutonRetourMenuVictoire, gbc);
-
-        gbc.gridx++;
-        boutonQuitterVictoire = new DesignBoutons("Quitter le jeu", "Texture_Moyen_Bouton",
-                "Texture_Moyen_Bouton_Clique", 12);
-        boutonQuitterVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
-        victoire.add(boutonQuitterVictoire, gbc);
     }
 
     @Override

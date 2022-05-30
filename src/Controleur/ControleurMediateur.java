@@ -20,7 +20,9 @@ import Modele.Coup;
 import Modele.Jeu;
 import Modele.Plateau;
 import Vue.CollecteurEvenements;
+import Vue.InterfaceGraphique;
 import Vue.InterfaceUtilisateur;
+import Vue.PlateauGraphique;
 
 public class ControleurMediateur implements CollecteurEvenements {
 
@@ -374,6 +376,8 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
+                PlateauGraphique.victoire.dispose();
+                InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "Valider":
                 initInfoJoueurs();
@@ -434,6 +438,8 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("Plateau");
+                PlateauGraphique.victoire.dispose();
+                InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "SauvegarderQuitter":
                 jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);

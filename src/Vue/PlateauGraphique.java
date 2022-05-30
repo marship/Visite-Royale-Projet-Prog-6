@@ -8,6 +8,7 @@ import Structures.Sequence;
 
 import javax.swing.*;
 
+import Adaptateur.AdaptateurCommande;
 import Global.Configuration;
 import Global.Deplacement;
 import Global.Element;
@@ -16,6 +17,7 @@ import Global.InfoPlateau;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class PlateauGraphique extends JPanel implements Observateur {
@@ -25,6 +27,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
     Jeu jeu;
     Plateau plateau;
     Graphics2D dessinable;
+    public static JDialog victoire;
+    CollecteurEvenements collecteurEvenements;
+    boolean affichageEcranVictoire;
+
+    // ==================================
+    // ===== BOUTONS ECRAN VICTOIRE =====
+    // ==================================
+    DesignBoutons boutonRecommencerVictoire, boutonRetourMenuVictoire, boutonQuitterVictoire;
 
     // ==========================
     // ===== IMAGES PLATEAU =====
@@ -86,10 +96,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ========================
     // ===== CONSTRUCTEUR =====
     // ========================
-    public PlateauGraphique(Jeu j) {
+    public PlateauGraphique(Jeu j, CollecteurEvenements cEvenements) {
         chargementDesImages();
         jeu = j;
+        collecteurEvenements = cEvenements;
         jeu.ajouteObservateur(this);
+        
         // plateau = jeu.plateau();
     }
 
@@ -122,22 +134,76 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.fillRect(0, 0, largeurFenetre, hauteurFenetre);
 
         tracerPlateau();
+        affichageEcranVictoire = false;
 
-        if (!jeu.estPartieTerminee()) {
+        
+        if(!jeu.estPartieTerminee() && affichageEcranVictoire == false){
 
             afficherCartesAutreJoueur();
             afficherZoneCartesJouees();
-            afficherBoutonAnnuler();
+            //afficherInfoTour();
             afficherPioche();
             afficherDefausse();
-            if (jeu.actionAutoriser()) {
+            if(jeu.actionAutoriser()){
                 afficherCartesJoueurCourant();
             }
 
         } else {
-            // Affichage de la pop-up "Ecran de victoire"
+            
+
+            afficherEcranVictoire();
+            affichageEcranVictoire = true;
+
+            InterfaceGraphique.fenetre.setEnabled(false);
         }
+
     }
+
+    private void afficherEcranVictoire() {
+        victoire = new JDialog(new JFrame("Victoire !"));
+        victoire.setBounds(500, 500, 800, 200);
+        victoire.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        victoire.setAlwaysOnTop(true);
+        
+
+        victoire.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 1;
+        JLabel annonceVictoire = new JLabel(jeu.traiterGagnant());
+        annonceVictoire.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 20));
+        victoire.add(annonceVictoire, gbc);
+
+        gbc.weighty = 0.33;
+        gbc.anchor = GridBagConstraints.PAGE_END;
+
+        gbc.gridy++;
+        DesignBoutons boutonRecommencerVictoire;
+        try {
+            gbc.gridx = 0;
+            boutonRecommencerVictoire = new DesignBoutons("Recommencer", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+            boutonRecommencerVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Recommencer"));
+            victoire.add(boutonRecommencerVictoire, gbc);
+
+            gbc.gridx++;
+            boutonRetourMenuVictoire = new DesignBoutons("Retour au menu", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+            boutonRetourMenuVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+            victoire.add(boutonRetourMenuVictoire, gbc);
+            
+            gbc.gridx++;
+            boutonQuitterVictoire = new DesignBoutons("Quitter le jeu", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+            boutonQuitterVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
+            victoire.add(boutonQuitterVictoire, gbc);
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        victoire.setVisible(true);
+        jeu.nonFinPartie();
+    }
+
 
     // =======================
     // ===== MISE A JOUR =====
