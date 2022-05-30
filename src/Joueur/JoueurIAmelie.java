@@ -22,7 +22,7 @@ public class JoueurIAmelie extends Joueur {
     int win = -1;
     Plateau plateauDebutTour;
 
-    static final int HORIZON = 2;
+    static final int HORIZON = 1;
 
     public JoueurIAmelie(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
