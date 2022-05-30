@@ -378,11 +378,14 @@ public class ControleurMediateur implements CollecteurEvenements {
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Charger":
-                charge();
-                jeu.changerEtatPartie();
-                jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
-                ETAT_JEU = InfoJeu.DEBUT_TOUR;
-                interfaceUtilisateur.afficherPanneau("Plateau");
+                if(charge()){
+                    if(!jeu.estPartieEnCours()){
+                        jeu.changerEtatPartie();
+                    }
+                    jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
+                    ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                    interfaceUtilisateur.afficherPanneau("Plateau");
+                }
                 break;
             case "Regles":
                 break;
@@ -457,7 +460,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changeCarteActuelle(8);
                 jeu.majDernierTypeDePersonnageJouer(Element.VIDE);
                 jeu.nonFinPartie();
-                if (!jeu.estPartieEnCours()) {
+                if (jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
@@ -491,7 +494,8 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     private void aideIA() {
-        if(jeu.actionAutoriser()){
+        int type = typeJoueur[joueurCourant];
+        if(jeu.actionAutoriser() && type == JOUEUR_HUMAIN){
             jeu.annulerTour();
             changerJoueurCourant(jeu.joueurCourant(), JOUEUR_AMEL);
             joueurs[joueurCourant][JOUEUR_AMEL].tempsEcoule();
@@ -576,12 +580,12 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
     }
 
-    public void charge() {
+    public boolean charge() {
         JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes");
         int returnVal = chooser.showOpenDialog(interfaceUtilisateur.fenetre());
         if (returnVal != JFileChooser.APPROVE_OPTION) {
             JOptionPane.showMessageDialog(null, "Vous n'avez rien selectionne");
-            return;
+            return false;
         }
         int[] type = jeu.charger(chooser.getSelectedFile().getPath());
         changerJoueurCourant(0, type[0]);
@@ -589,5 +593,6 @@ public class ControleurMediateur implements CollecteurEvenements {
         joueurCourant = jeu.joueurCourant();
         jeu.fixerPositions();
         plateauDebutTour = jeu.plateau().clone();
+        return true;
     }
 }
