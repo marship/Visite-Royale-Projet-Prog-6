@@ -10,12 +10,13 @@ import Modele.CoupleAtteindrePlateau;
 import Modele.Evaluation;
 import Structures.Sequence;
 
-public class JoueurIAnastasia extends Joueur {
+// Anastasia
+public class JoueurIADifficile extends Joueur {
 
     Element jouee = Element.VIDE;
     int baseCouronne;
 
-    public JoueurIAnastasia(int numeroJoueurCourant, Jeu jeu) {
+    public JoueurIADifficile(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
 	}
 

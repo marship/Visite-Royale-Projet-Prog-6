@@ -1089,7 +1089,7 @@ public class Jeu extends Observable {
 
     public void jouerCoup(Coup coup) {
         if (coup == null) {
-            System.out.println("Coup Vide !!");
+            System.out.println("Coup Vide !!!");
         } else {
             plateau().jouerCoup(coup);
             metAJour();
@@ -1191,7 +1191,10 @@ public class Jeu extends Observable {
             annulerTour();
             // On récupère la date pour le nom de la sauvegarde
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
-            String fic = System.getProperty("user.dir") + File.separator + "Sauvegardes" + File.separator + dtf.format(LocalDateTime.now()) + ".txt";
+            File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal"); 
+            dossier.mkdir();
+
+            String fic = System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal" + File.separator + dtf.format(LocalDateTime.now()) + ".txt";
             File f = new File(fic);
 
             // On fait le fichier
@@ -1355,7 +1358,7 @@ public class Jeu extends Observable {
         if (coup != null) {
             jouerCoup(coup);
         } else {
-            System.out.println("Plateau d'historique null !!!");
+            System.out.println("Creation d'un coup null !!!");
         }
     }
 

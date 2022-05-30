@@ -14,16 +14,18 @@ import Modele.CoupleAtteindrePlateau;
 import Modele.Evaluation;
 import Structures.Sequence;
 
-public class JoueurIAmelie extends Joueur {
+// Amélie
+public class JoueurIATriche extends Joueur {
 
     Element jouee = Element.VIDE;
     int baseCouronne;
     int quiDoitGagner;
+    int win = -1;
     Plateau plateauDebutTour;
 
     static final int HORIZON = 1;
 
-    public JoueurIAmelie(int numeroJoueurCourant, Jeu jeu) {
+    public JoueurIATriche(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
         quiDoitGagner = numeroJoueurCourant; 
 	}
@@ -239,8 +241,28 @@ public class JoueurIAmelie extends Joueur {
         if (coup != null) {
             jeu.jouerCoup(coup);
         } else {
-            System.out.println("Plateau d'historique null !!!");
+            System.out.println("Creation d'un coup null !!!");
         }
+    }
+
+    boolean victoire(){
+        if(jeu.plateau().couronne.positionCouronne() >= 7){
+            win = 1;
+            return true;
+        }
+        if(jeu.plateau().couronne.positionCouronne() <= -7){
+            win = 0;
+            return true;
+        }
+        if(jeu.plateau().roi.positionPersonnage() >= 7){
+            win = 1;
+            return true;
+        }
+        if(jeu.plateau().roi.positionPersonnage() <= -7){
+            win = 0;
+            return true;
+        }
+        return false;
     }
 
     void annule() {
@@ -278,12 +300,8 @@ public class JoueurIAmelie extends Joueur {
         double nouvelleNote = 0;
 
         plateauDebutTour = jeu.plateau().clone();
-
-        int j = 0;
         
         while (!liste.estVide()) {
-            //System.out.println("Boucle de base : " + j);
-            j++;
             test = liste.extraitTete();
             mettreLesPositions(test.positions());
             int posCouronne = jeu.getPositionCouronne();
@@ -296,14 +314,16 @@ public class JoueurIAmelie extends Joueur {
             else{
                 nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
             }
+            boolean vic = victoire();
             jeu.plateau().couronne.positionnerCouronne(posCouronne);
-            if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
-                if(jeu.estGagnant()){
-                    if(jeu.joueurCourant() == jeu.joueurGagnant()){
+            if(vic || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                if(vic){
+                    if(jeu.joueurCourant() == win){
                         while(!lesWINNER.estVide()){
                             lesWINNER.extraitTete();
                         }
                         lesWINNER.insereQueue(test);
+                        win = -1;
                         break;
                     }
                 }
@@ -429,10 +449,7 @@ public class JoueurIAmelie extends Joueur {
 
             plateauDebutTour = jeu.plateau().clone();
 
-            int i = 0;
             while (!liste.estVide()) {
-                //System.out.println("Joueur A : " + i);
-                i++;
                 test = liste.extraitTete();
                 mettreLesPositions(test.positions());
                 int posCouronne = jeu.getPositionCouronne();
@@ -445,18 +462,21 @@ public class JoueurIAmelie extends Joueur {
                 else{
                     nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
                 }
+                boolean vic = victoire();
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
-                if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
-                    if(jeu.estGagnant()){
-                        if(jeu.joueurCourant() == jeu.joueurGagnant()){
+                if(vic|| !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                    if(vic){
+                        if(jeu.joueurCourant() == win){
+                            win = -1;
                             return 10000;
                         }
                         else{
+                            win = -1;
                             return -10000;
                         }
                     }
                     else{
-                        if(jeu.obtenirPositionElement(Element.ROI) == 0){
+                        if(jeu.obtenirPositionElement(Element.ROI) == 0 || jeu.plateau().couronne.etatCouronne()){
                             if(nouvelleNote > noteDeBase){
                                 poserLesCartes(test.cartes());
                                 gestionHistorique(plateauDebutTour);
@@ -508,9 +528,7 @@ public class JoueurIAmelie extends Joueur {
     public double calculJB(int horizon){
         if(horizon == 0){
             Evaluation eval = new Evaluation(jeu.plateau().clone());
-            jeu.changerJoueurCourant();
             double note = eval.note(jeu.joueurCourant());
-            jeu.changerJoueurCourant();
             return note;
         }
         else{
@@ -535,10 +553,7 @@ public class JoueurIAmelie extends Joueur {
 
             plateauDebutTour = jeu.plateau().clone();
 
-            int i = 0;
             while (!liste.estVide()) {
-                //System.out.println("Joueur B : " + i);
-                i++;
                 test = liste.extraitTete();
                 mettreLesPositions(test.positions());
                 int posCouronne = jeu.getPositionCouronne();
@@ -551,18 +566,21 @@ public class JoueurIAmelie extends Joueur {
                 else{
                     nouvelleNote = nouvelleNote * coeffCartesPositif(test.cartes()) * poidsDesCartesPositif(test.cartes()) * counterStrikePositif(test.cartes());
                 }
+                Boolean vic = victoire();
                 jeu.plateau().couronne.positionnerCouronne(posCouronne);
-                if(jeu.estGagnant() || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
-                    if(jeu.estGagnant()){
-                        if(jeu.joueurCourant() == jeu.joueurGagnant()){
+                if(vic || !jeu.plateau().paquet.resteAssezCarteDansPioche(nbCartes(test.cartes()))){
+                    if(vic){
+                        if(jeu.joueurCourant() == win){
+                            win = -1;
                             return -10000;
                         }
                         else{
+                            win = -1;
                             return 10000;
                         }
                     }
                     else{
-                        if(jeu.obtenirPositionElement(Element.ROI) == 0){
+                        if(jeu.obtenirPositionElement(Element.ROI) == 0 || jeu.plateau().couronne.etatCouronne()){
                             if(nouvelleNote > noteDeBase){
                                 poserLesCartes(test.cartes());
                                 gestionHistorique(plateauDebutTour);

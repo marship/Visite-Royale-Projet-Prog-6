@@ -95,7 +95,7 @@ public class Paquet {
         }
         while (!tmp.estVide()) {
             Carte carte = tmp.extraitTete();
-            System.out.println(carte.toString());
+            afficher(carte.toString());
             pioche.insereTete(carte);
         }
         Configuration.instance().logger().info("Fin de l'affichage de la pioche !\n");
@@ -109,7 +109,7 @@ public class Paquet {
         }
         while (!tmp.estVide()) {
             Carte carte = tmp.extraitTete();
-            System.out.println(carte.toString());
+            afficher(carte.toString());
             defausse.insereTete(carte);
         }
         Configuration.instance().logger().info("Fin de l'affichage de la defausse !\n");
@@ -119,10 +119,10 @@ public class Paquet {
         int i = 0;
         while (i < NOMBRE_CARTE_EN_MAIN) {
             Carte carte = (Carte) mainJoueurs[joueur][i];
-            System.out.print("|" + carte.toString() + "|");
+            affiche("|" + carte.toString() + "|");
             i++;
         }
-        System.out.println("\n");
+        afficher("\n");
     }
 
     public void completerCartesEnMain(int joueur) {
@@ -575,5 +575,13 @@ public class Paquet {
             Configuration.instance().logger().severe("Echec du clone du paquet !!!!!!!!");
         }
         return res;
+    }
+
+    private void affiche(String string) {
+        System.out.print(string);
+    }
+
+    private void afficher(String string) {
+        System.out.println(string);
     }
 }

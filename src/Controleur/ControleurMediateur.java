@@ -10,12 +10,12 @@ import Global.Element;
 import Global.InfoJeu;
 import Joueur.Joueur;
 import Joueur.JoueurHumain;
-import Joueur.JoueurIAAleatoire;
-import Joueur.JoueurIAAleatoireIntelligente;
-import Joueur.JoueurIARandom;
-import Joueur.JoueurIAnastasia;
-import Joueur.JoueurIAmel;
-import Joueur.JoueurIAmelie;
+import Joueur.JoueurIATresFacile;
+import Joueur.JoueurIANormale;
+import Joueur.JoueurIAFacile;
+import Joueur.JoueurIADifficile;
+import Joueur.JoueurIAExperte;
+import Joueur.JoueurIATriche;
 import Modele.Coup;
 import Modele.Jeu;
 import Modele.Plateau;
@@ -34,12 +34,12 @@ public class ControleurMediateur implements CollecteurEvenements {
     static final int JOUEUR_DROIT = 1;
 
     static final int JOUEUR_HUMAIN = 0;
-    static final int JOUEUR_IAALEATOIRE = 1;
-    static final int JOUEUR_IAALEATOIRE_TOTALE = 2;
-    static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 3;
-    static final int JOUEUR_IAEXPERTE = 4;
-    static final int JOUEUR_AMEL = 5;
-    static final int JOUEUR_AMELIE = 6;
+    static final int JOUEUR_IATRESFACILE = 1;
+    static final int JOUEUR_IAFACILE = 2;
+    static final int JOUEUR_IANORMALE = 3;
+    static final int JOUEUR_IADIFFICILE = 4;
+    static final int JOUEUR_IAEXPERTE = 5;
+    static final int JOUEUR_IATRICHE = 6;
 
     // ===================
     // ===== PLATEAU =====
@@ -90,6 +90,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         plateauDebutTour = jeu.plateau().clone();
 
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
+
         // String nomFichierAudio = "gangstas-paradise-medieval";
         // String nomFichierAudio = "the-weeknd-medieval";
         // lancerAudioMusique(nomFichierAudio);
@@ -107,30 +110,29 @@ public class ControleurMediateur implements CollecteurEvenements {
             Configuration.instance().logger().info("Type de joueur : " + typeJoueur + " | Joueur : " + numeroJoueur);
             typeJoueur[numeroJoueur] = typeDuJoueur;
 
-            switch(typeDuJoueur){
-                case JOUEUR_HUMAIN :
+            switch (typeDuJoueur) {
+                case JOUEUR_HUMAIN:
                     joueurs[numeroJoueur][typeDuJoueur] = new JoueurHumain(numeroJoueur, jeu);
                     break;
-                case JOUEUR_IAALEATOIRE :
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAAleatoire(numeroJoueur, jeu);
+                case JOUEUR_IATRESFACILE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIATresFacile(numeroJoueur, jeu);
                     break;
-                case JOUEUR_IAALEATOIRE_TOTALE :
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIARandom(numeroJoueur, jeu);
+                case JOUEUR_IAFACILE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAFacile(numeroJoueur, jeu);
                     break;
-                case JOUEUR_IAALEATOIRE_INTELLIGENTE :
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAAleatoireIntelligente(numeroJoueur, jeu);
+                case JOUEUR_IANORMALE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIANormale(numeroJoueur, jeu);
                     break;
-                case JOUEUR_IAEXPERTE :
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAnastasia(numeroJoueur, jeu);
+                case JOUEUR_IADIFFICILE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIADifficile(numeroJoueur, jeu);
                     break;
-                case JOUEUR_AMEL :
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAmel(numeroJoueur, jeu);
+                case JOUEUR_IAEXPERTE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAExperte(numeroJoueur, jeu);
                     break;
-                case JOUEUR_AMELIE :
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAmelie(numeroJoueur, jeu);
+                case JOUEUR_IATRICHE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIATriche(numeroJoueur, jeu);
                     break;
             }
-            
         }
     }
 
@@ -270,7 +272,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         if (coup != null) {
             jeu.jouerCoup(coup);
         } else {
-            System.out.println("Plateau d'historique null !!!");
+            System.out.println("Creation d'un coup null !!!");
         }
     }
 
@@ -279,7 +281,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     void annule() {
-        if(jeu.actionAutoriser()){
+        if (jeu.actionAutoriser()) {
             jeu.annulerTour();
             jeu.annule();
             jeu.fixerPositions();
@@ -289,7 +291,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     void refaire() {
-        if(jeu.actionAutoriser()){
+        if (jeu.actionAutoriser()) {
             jeu.annulerTour();
             jeu.refaire();
             jeu.fixerPositions();
@@ -362,15 +364,21 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (commande) {
             case "Jouer":
                 ETAT_JEU = InfoJeu.SELECTION_JOUEURS;
+                if (!jeu.estPartieEnCours()) {
+                    jeu.changerEtatPartie();
+                }
                 interfaceUtilisateur.afficherPanneau("SelectionJoueur");
                 break;
             case "MenuPrincipal":
+                if (jeu.estPartieEnCours()) {
+                    jeu.changerEtatPartie();
+                }
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
                 break;
             case "Valider":
                 initInfoJoueurs();
                 interfaceUtilisateur.afficherPanneau("Plateau");
-                if(!jeu.estPartieEnCours()){
+                if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
                 jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
@@ -378,11 +386,14 @@ public class ControleurMediateur implements CollecteurEvenements {
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Charger":
-                charge();
-                jeu.changerEtatPartie();
-                jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
-                ETAT_JEU = InfoJeu.DEBUT_TOUR;
-                interfaceUtilisateur.afficherPanneau("Plateau");
+                if (charge()) {
+                    if (!jeu.estPartieEnCours()) {
+                        jeu.changerEtatPartie();
+                    }
+                    jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
+                    ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                    interfaceUtilisateur.afficherPanneau("Plateau");
+                }
                 break;
             case "Regles":
                 break;
@@ -406,6 +417,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 preOptions = ETAT_JEU;
                 jeu.changerEtatJeu(InfoJeu.OPTIONS_JEU);
                 ETAT_JEU = InfoJeu.OPTIONS_JEU;
+                jeu.changerEtatPartie();
                 interfaceUtilisateur.afficherPanneau("OptionsJeu");
                 break;
             case "Recommencer":
@@ -417,6 +429,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changeCarteActuelle(8);
                 jeu.majDernierTypeDePersonnageJouer(Element.VIDE);
                 jeu.nonFinPartie();
+                jeu.viderHistorique();
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
@@ -426,6 +439,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);
                 break;
             case "RetourJeu":
+                if(!jeu.estPartieEnCours()){
+                    jeu.changerEtatPartie();
+                }
                 jeu.changerEtatJeu(preOptions);
                 ETAT_JEU = preOptions;
                 interfaceUtilisateur.afficherPanneau("Plateau");
@@ -457,7 +473,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changeCarteActuelle(8);
                 jeu.majDernierTypeDePersonnageJouer(Element.VIDE);
                 jeu.nonFinPartie();
-                if (!jeu.estPartieEnCours()) {
+                if (jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
@@ -471,7 +487,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "Mute":
                 muterVolume();
                 break;
-                
+
             default:
                 return false;
         }
@@ -491,10 +507,11 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     private void aideIA() {
-        if(jeu.actionAutoriser()){
+        int type = typeJoueur[joueurCourant];
+        if (jeu.actionAutoriser() && type == JOUEUR_HUMAIN) {
             jeu.annulerTour();
-            changerJoueurCourant(jeu.joueurCourant(), JOUEUR_AMEL);
-            joueurs[joueurCourant][JOUEUR_AMEL].tempsEcoule();
+            changerJoueurCourant(jeu.joueurCourant(), JOUEUR_IAEXPERTE);
+            joueurs[joueurCourant][JOUEUR_IAEXPERTE].tempsEcoule();
             changerJoueurCourant(jeu.joueurCourant(), JOUEUR_HUMAIN);
         }
     }
@@ -516,17 +533,17 @@ public class ControleurMediateur implements CollecteurEvenements {
             case ("Humain"):
                 return JOUEUR_HUMAIN;
             case ("IAtrèsfacile"):
-                return JOUEUR_IAALEATOIRE;
+                return JOUEUR_IATRESFACILE;
             case ("IAfacile"):
-                return JOUEUR_IAALEATOIRE_TOTALE;
+                return JOUEUR_IAFACILE;
             case ("IAnormale"):
-                return JOUEUR_IAALEATOIRE_INTELLIGENTE;
+                return JOUEUR_IANORMALE;
             case ("IAdifficile"):
-                return JOUEUR_IAEXPERTE;
+                return JOUEUR_IADIFFICILE;
             case ("IAexperte"):
-                return JOUEUR_AMEL;
+                return JOUEUR_IAEXPERTE;
             case ("IAtriche"):
-                return JOUEUR_AMELIE;
+                return JOUEUR_IATRICHE;
 
             default:
                 return -1;
@@ -536,7 +553,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     private void finDeTour() {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
-            
+
             gestionHistorique(plateauDebutTour);
 
             jeu.finDeTour();
@@ -561,7 +578,7 @@ public class ControleurMediateur implements CollecteurEvenements {
 
     }
 
-    public void passerSurCase(int coupX){
+    public void passerSurCase(int coupX) {
         jeu.choisirPasserSurCase(coupX);
     }
 
@@ -570,18 +587,19 @@ public class ControleurMediateur implements CollecteurEvenements {
         int type = typeJoueur[joueurCourant];
         if (type == JOUEUR_HUMAIN) {
             jeu.choisirPasserSurCarte(coupX);
-        }
-        else{
+        } else {
             jeu.choisirPasserSurCarte(8);
         }
     }
 
-    public void charge() {
-        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes");
+    public boolean charge() {
+        File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal"); 
+        dossier.mkdir();
+        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
         int returnVal = chooser.showOpenDialog(interfaceUtilisateur.fenetre());
         if (returnVal != JFileChooser.APPROVE_OPTION) {
             JOptionPane.showMessageDialog(null, "Vous n'avez rien selectionne");
-            return;
+            return false;
         }
         int[] type = jeu.charger(chooser.getSelectedFile().getPath());
         changerJoueurCourant(0, type[0]);
@@ -589,5 +607,6 @@ public class ControleurMediateur implements CollecteurEvenements {
         joueurCourant = jeu.joueurCourant();
         jeu.fixerPositions();
         plateauDebutTour = jeu.plateau().clone();
+        return true;
     }
 }

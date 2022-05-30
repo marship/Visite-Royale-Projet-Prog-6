@@ -9,6 +9,7 @@ import Structures.Sequence;
 import javax.swing.*;
 
 import Global.Configuration;
+import Global.Deplacement;
 import Global.Element;
 import Global.InfoJeu;
 import Global.InfoPlateau;
@@ -36,11 +37,15 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // =========================
     ImagePlateau imageJetonGrandeCouronne, imageJetonPetiteCouronne;
     ImagePlateau imageJetonGardeGauche, imageJetonGardeDroit, imageJetonRoi, imageJetonFou, imageJetonSorcier;
+    ImagePlateau imageJetonGardeGaucheTransparent, imageJetonGardeDroitTransparent, imageJetonRoiTransparent,
+            imageJetonFouTransparent, imageJetonSorcierTransparent;
     ImagePlateau imageJetonGardeGaucheSelection, imageJetonGardeDroitSelection, imageJetonRoiSelection,
             imageJetonFouSelection, imageJetonSorcierSelection;
     ImagePlateau imageJetonFouPouvoir, imageJetonSorcierPouvoir, imageJetonRoiPouvoir;
     ImagePlateau imageJetonGardeGaucheGrise, imageJetonGardeDroitGrise, imageJetonRoiGrise, imageJetonFouGrise,
             imageJetonSorcierGrise;
+    ImagePlateau imageJetonGardeGaucheGriseTransparent, imageJetonGardeDroitGriseTransparent,
+            imageJetonRoiGriseTransparent, imageJetonFouGriseTransparent, imageJetonSorcierGriseTransparent;
 
     // =========================
     // ===== IMAGES CARTES =====
@@ -118,14 +123,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         tracerPlateau();
 
-        if(!jeu.estPartieTerminee()){
+        if (!jeu.estPartieTerminee()) {
 
             afficherCartesAutreJoueur();
             afficherZoneCartesJouees();
             afficherBoutonAnnuler();
             afficherPioche();
             afficherDefausse();
-            if(jeu.actionAutoriser()){
+            if (jeu.actionAutoriser()) {
                 afficherCartesJoueurCourant();
             }
 
@@ -188,6 +193,25 @@ public class PlateauGraphique extends JPanel implements Observateur {
                             tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGrise);
                             tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
                             tracerJeton(Element.SORCIER, imageJetonSorcierGrise);
+                            tracerJeton(Element.FOU, imageJetonFouGrise);
+                            switch (jeu.personnageManipulerParLeFou) {
+                                case FOU:
+                                    tracerJeton(Element.FOU, imageJetonFou);
+                                    break;
+                                case GARDES:
+                                    tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche);
+                                    tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit);
+                                    break;
+                                case SORCIER:
+                                    tracerJeton(Element.SORCIER, imageJetonSorcier);
+                                    break;
+                                case ROI:
+                                    tracerJeton(Element.ROI, imageJetonRoi);
+                                    break;
+                            
+                                default:
+                                    break;
+                            }
                             break;
 
                         case SORCIER:
@@ -281,75 +305,207 @@ public class PlateauGraphique extends JPanel implements Observateur {
             Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
             int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(),
                     carte.deplacement());
-            
             int i = 0;
-            while (i < taillePlateau) {
+            while (i < 17) {
                 if (listeDeplacementPossiblesAvecCarte[i] == 1) {
                     ImagePlateau image = imageJetonFouGrise;
-                    switch(carte.personnage()){
+                    ImagePlateau pass = imageJetonFouGrise;
+                    ImagePlateau ancien = imageJetonFouGrise;
+                    switch (carte.personnage()) {
                         case FOU:
-                            image = imageJetonFou;
+                            switch (jeu.personnageManipulerParLeFou) {
+                                case FOU:
+                                    image = imageJetonFouTransparent;
+                                    pass = imageJetonFou;
+                                    ancien = imageJetonFouGriseTransparent;
+                                    break;
+                                case SORCIER:
+                                    image = imageJetonSorcierTransparent;
+                                    pass = imageJetonSorcier;
+                                    ancien = imageJetonSorcierGriseTransparent;
+                                    break;
+                                case ROI:
+                                    image = imageJetonRoiTransparent;
+                                    pass = imageJetonRoi;
+                                    ancien = imageJetonRoiGriseTransparent;
+                                    break;
+                                default:
+                                    break;
+                            }
                             break;
                         case SORCIER:
-                            image = imageJetonSorcier;
+                            image = imageJetonSorcierTransparent;
+                            pass = imageJetonSorcier;
+                            ancien = imageJetonSorcierGriseTransparent;
+                            break;
+                        // TODO afficher le/les bons gardes à deplacer
+                        case GARDES:
+                            image = imageJetonGardeDroitTransparent;
+                            pass = imageJetonGardeDroit;
+                            ancien = imageJetonGardeDroitGriseTransparent;
                             break;
                         case ROI:
-                            image = imageJetonRoi;
+                            image = imageJetonRoiTransparent;
+                            pass = imageJetonRoi;
+                            ancien = imageJetonRoiGriseTransparent;
                             break;
                         default:
                             image = imageJetonFouGrise;
                             break;
                     }
-                    if(jeu.casePassee() == i){
-                        if(carte.personnage() == Element.GARDES){
-                            int positionGardeGauche = positionJeton(Element.GARDE_GAUCHE, false);
-                            int positionGardeDroit = positionJeton(Element.GARDE_DROIT, false);
-                            int positionRoi = positionJeton(Element.ROI, false);
-                            switch(carte.deplacement()){
-                                case RAPPROCHE:
-                                    if(i == positionRoi-1 || i == positionRoi+1){
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, positionRoi-1);
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, positionRoi+1);
-                                    }
-                                    break;
-                                case UN:
-                                    if(i == positionGardeGauche-1 || i == positionGardeGauche+1){
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, jeu.casePassee());
-                                    }
-                                    if(i == positionGardeDroit-1 || i == positionGardeDroit+1){
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, jeu.casePassee());
-                                    }
-                                    break;
-                                case UN_PLUS_UN:
-                                    if(i >= positionGardeGauche-2 && i <= positionGardeGauche+2){
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, jeu.casePassee());
-                                        if(i == positionGardeGauche-1){
-                                            tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit-1);
-                                        }else if(i == positionGardeGauche+1){
-                                            tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit+1);
-                                        }
-        
-                                    }else if(i >= positionGardeDroit-2 && i <= positionGardeDroit+2 ){
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, jeu.casePassee());
-                                        
-                                        if(i == positionGardeDroit-1){
-                                            tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche-1);
-                                        }else if(i == positionGardeDroit+1){
-                                            tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche+1);
-                                        }
-                                    }
-                                    break;
-                                default:
-                                    break;
+                    if (carte.personnage() == Element.GARDES) {
+                        if (jeu.casePassee() == i) {
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
+
+                            if (carte.deplacement() == Deplacement.RAPPROCHE) {
+                                tracerJeton(carte.personnage(), imageJetonGardeGauche,
+                                        jeu.obtenirPositionElement(Element.ROI) - 1 + 8);
+                                tracerJeton(carte.personnage(), imageJetonGardeDroit,
+                                        jeu.obtenirPositionElement(Element.ROI) + 1 + 8);
                             }
-                            
-                        }else{
-                            tracerJeton(carte.personnage(), image, jeu.casePassee());
+
+                            if (carte.deplacement() == Deplacement.UN) {
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1 ||
+                                        i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                } else {
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                }
+                            }
+
+                            if (carte.deplacement() == Deplacement.UN_PLUS_UN) {
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 2) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                }
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) + 2) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                }
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 2
+                                        && jeu.obtenirPositionElement(Element.ROI) > i - 8) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                }
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) - 2
+                                        && jeu.obtenirPositionElement(Element.ROI) < i - 8) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                }
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroit,
+                                            jeu.obtenirPositionElement(Element.GARDE_DROIT) - 1 + 8);
+                                }
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) - 1) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                    tracerJeton(carte.personnage(), imageJetonGardeGauche,
+                                            jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1 + 8);
+                                }
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroit,
+                                            jeu.obtenirPositionElement(Element.GARDE_DROIT) + 1 + 8);
+                                }
+
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) + 1) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                    tracerJeton(carte.personnage(), imageJetonGardeGauche,
+                                            jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1 + 8);
+                                }
+                            }
+                        } else {
+                            if (carte.deplacement() == Deplacement.RAPPROCHE) {
+                                if (i - 8 == jeu.obtenirPositionElement(Element.ROI) - 1) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                                }
+                                if (i - 8 == jeu.obtenirPositionElement(Element.ROI) + 1) {
+                                    tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                                }
+                            }
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 2) {
+                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                            }
+
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) + 2) {
+                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                            }
+
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 2
+                                    && jeu.obtenirPositionElement(Element.ROI) > i - 8) {
+                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                            }
+
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) - 2
+                                    && jeu.obtenirPositionElement(Element.ROI) < i - 8) {
+                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                            }
+
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1) {
+                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                            }
+
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) - 1) {
+                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                            }
+
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1) {
+                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                            }
+
+                            if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_DROIT) + 1) {
+                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                            }
                         }
-                    }
-                    else{
-                        //TODO remplacer fouGrise par jetonPointille une fois image créée
-                        tracerJeton(carte.personnage(), imageJetonFouGrise, i);
+                    } else {
+                        if(carte.personnage() == Element.FOU){
+                            if(jeu.personnageManipulerParLeFou == Element.GARDES){
+                                if (jeu.casePassee() == i) {
+                                    tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
+                                    tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
+                                    tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
+                                    tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
+                                    if(i < jeu.obtenirPositionElement(Element.ROI) + 8){
+                                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche, jeu.casePassee());
+                                    }
+                                    else{
+                                        tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit, jeu.casePassee());
+                                    }
+                                }
+                                else{
+                                    if(i < jeu.obtenirPositionElement(Element.ROI) + 8){
+                                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, i);
+                                    }
+                                    else{
+                                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeDroitTransparent, i);
+                                    }
+                                }
+                            }
+                            else{
+                                if (jeu.casePassee() == i) {
+                                    tracerJeton(jeu.personnageManipulerParLeFou, pass, jeu.casePassee());
+                                    tracerJeton(jeu.personnageManipulerParLeFou, ancien);
+                                    tracerJeton(jeu.personnageManipulerParLeFou, ancien);
+                                } else {
+                                    tracerJeton(jeu.personnageManipulerParLeFou, image, i);
+                                }
+                            }
+                        }
+                        else{
+                            if (jeu.casePassee() == i) {
+                                tracerJeton(carte.personnage(), pass, jeu.casePassee());
+                                tracerJeton(carte.personnage(), ancien);
+                                tracerJeton(carte.personnage(), ancien);
+                            } else {
+                                tracerJeton(carte.personnage(), image, i);
+                            }
+                        }
                     }
                 }
                 i++;
@@ -397,7 +553,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             default:
                 break;
         }
-            tracerImage(imageElement, positionJeton(element, true), hauteurElement,
+        tracerImage(imageElement, positionJeton(element, true), hauteurElement,
                 largeurCasePlateau, quartHauteurPlateau);
     }
 
@@ -421,7 +577,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             default:
                 break;
         }
-            tracerImage(imageElement, casePlateau * largeurCasePlateau, hauteurElement,
+        tracerImage(imageElement, casePlateau * largeurCasePlateau, hauteurElement,
                 largeurCasePlateau, quartHauteurPlateau);
     }
 
@@ -436,13 +592,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
         ImagePlateau imageGrise = imageCarteErreur;
 
         debutCartesX = largeurFenetre / 16;
-        
 
         for (int i = 0; i < cartesJoueurCourant.length; i++) {
-            if(i != jeu.carteActuelle()){
+            if (i != jeu.carteActuelle()) {
                 debutCartesY = 6 * hauteurFenetre / 7;
-            }
-            else{
+            } else {
                 debutCartesY = 11 * hauteurFenetre / 14;
             }
             switch (cartesJoueurCourant[i].personnage()) {
@@ -551,7 +705,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerImage(image, (4 + i) * debutCartesX, 0, largeurCarte, hauteurCarte);
             }
         } else {
-            Carte[] cartesJoueurSecondaire = jeu.recupererMainJoueur(0);
+            Carte[] cartesJoueurSecondaire = jeu.recupererMainJoueur((jeu.joueurCourant() + 1) % 2);
             for (int i = 0; i < cartesJoueurSecondaire.length; i++) {
                 switch (cartesJoueurSecondaire[i].personnage()) {
                     case ROI:
@@ -622,7 +776,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
 
     }
-    
+
     public void afficherZoneCartesJouees() {
 
         ImagePlateau image;
@@ -758,13 +912,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== IMAGES =====
     // ==================
     private ImagePlateau chargeImage(String nomImage) {
-        //System.out.println("Chargement de l'image : " + nomImage);
+        // System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImage(in);
     }
 
     private ImagePlateau chargeImageGrise(String nomImage) {
-        //System.out.println("Chargement de l'image : " + nomImage);
+        // System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImageGrise(in);
     }
@@ -799,6 +953,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageJetonFou = chargeImage("Jeton_Fou");
         imageJetonSorcier = chargeImage("Jeton_Sorcier");
 
+        imageJetonGardeGaucheTransparent = chargeImage("Jeton_Garde_Gauche_Transparent");
+        imageJetonGardeDroitTransparent = chargeImage("Jeton_Garde_Droit_Transparent");
+        imageJetonRoiTransparent = chargeImage("Jeton_Roi_Transparent");
+        imageJetonFouTransparent = chargeImage("Jeton_Fou_Transparent");
+        imageJetonSorcierTransparent = chargeImage("Jeton_Sorcier_Transparent");
+
         imageJetonGardeGaucheSelection = chargeImage("Jeton_Garde_Gauche_Selection");
         imageJetonGardeDroitSelection = chargeImage("Jeton_Garde_Droit_Selection");
         imageJetonRoiSelection = chargeImage("Jeton_Roi_Selection");
@@ -814,6 +974,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageJetonRoiGrise = chargeImageGrise("Jeton_Roi");
         imageJetonFouGrise = chargeImageGrise("Jeton_Fou");
         imageJetonSorcierGrise = chargeImageGrise("Jeton_Sorcier");
+
+        imageJetonGardeGaucheGriseTransparent = chargeImageGrise("Jeton_Garde_Gauche_Transparent");
+        imageJetonGardeDroitGriseTransparent = chargeImageGrise("Jeton_Garde_Droit_Transparent");
+        imageJetonRoiGriseTransparent = chargeImageGrise("Jeton_Roi_Transparent");
+        imageJetonFouGriseTransparent = chargeImageGrise("Jeton_Fou_Transparent");
+        imageJetonSorcierGriseTransparent = chargeImageGrise("Jeton_Sorcier_Transparent");
 
         imageCarteErreur = chargeImage("Carte_Erreur");
         imageCarteVide = chargeImage("Carte_Vide");

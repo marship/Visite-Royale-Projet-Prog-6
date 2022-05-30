@@ -2,7 +2,10 @@ package Audio;
 
 import java.io.File;
 // import java.io.ObjectInputFilter.Config;
+import java.io.InputStream;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -65,7 +68,18 @@ public class Son {
     // =============================
     public void recupererFichierAudio(String nomFichierAudio) {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
+            InputStream inputStream = Configuration.charge("Audios" + File.separator + nomFichierAudio + ".wav");
+
+            AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(inputStream);
+            AudioFormat audioFormat = fileFormat.getFormat();
+
+            long length = (long) (1000 * fileFormat.getFrameLength() / fileFormat.getFormat().getFrameRate());
+            int bitrate = Math.round(audioFormat.getFrameSize() * audioFormat.getFrameRate() / 1000);
+
+            AudioInputStream audioInputStream = new AudioInputStream(inputStream, audioFormat, length * bitrate);
+            
+            // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
+            
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
