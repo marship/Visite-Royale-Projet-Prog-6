@@ -144,7 +144,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
             afficherCartesAutreJoueur();
             afficherZoneCartesJouees();
-            //afficherInfoTour();
             afficherBoutonAnnuler();
             afficherPioche();
             afficherDefausse();
@@ -1022,10 +1021,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
         debutBoutonAnnulerY = 19 * hauteurFenetre / 28;
         largeurBoutonAnnuler = largeurCarte()/2;
         hauteurBoutonAnnuler = hauteurCarte()/2;
-        if (jeu.plateau().paquet.tourActuel().estVide()) {
-            tracerImage(imageBoutonAnnulerGrise, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler);
-        } else {
+        if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite) {
             tracerImage(imageBoutonAnnuler, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler);
+        } else{
+            tracerImage(imageBoutonAnnulerGrise, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler);
         }
     }
 
@@ -1040,13 +1039,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== IMAGES =====
     // ==================
     private ImagePlateau chargeImage(String nomImage) {
-        // System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImage(in);
     }
 
     private ImagePlateau chargeImageGrise(String nomImage) {
-        // System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImageGrise(in);
     }
