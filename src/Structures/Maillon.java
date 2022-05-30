@@ -1,6 +1,10 @@
 package Structures;
 
 public class Maillon<Tutu> {
-    Tutu element;
+    
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     Maillon<Tutu> suivant;
+    Tutu element;
 }

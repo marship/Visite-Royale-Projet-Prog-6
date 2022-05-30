@@ -2,14 +2,25 @@ package Structures;
 
 public class IterateurListe<Riri> extends Iterateur<Riri> {
 
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     Maillon<Riri> courant, precedent, arrierePrecedent;
     SequenceListe<Riri> sequenceEnListe;
 
+    /////////////////////////////////////////////////////////////////////////
+
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     IterateurListe(SequenceListe<Riri> sequenceListe) {
         courant = sequenceListe.tete;
         sequenceEnListe = sequenceListe;
     }
 
+    // ===================
+    // ===== SUIVANT =====
+    // ===================
     @Override
     public boolean aProchain() {
         return courant != null;
@@ -25,6 +36,9 @@ public class IterateurListe<Riri> extends Iterateur<Riri> {
         return resultat;
     }
 
+    // =====================
+    // ===== SUPPRIMER =====
+    // =====================
     @Override
     public void supprime() {
         super.prochain();

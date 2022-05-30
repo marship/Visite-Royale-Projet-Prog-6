@@ -2,13 +2,24 @@ package Structures;
 
 public class FAPListe<Bill extends Comparable<Bill>> extends FAP<Bill> {
 
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     SequenceListe<Bill> sequenceListe;
 
+    /////////////////////////////////////////////////////////////////////////
+
+    // ========================
+    // ===== CONSTRUCTEUR =====
+    // ========================
     public FAPListe() {
         sequenceListe = new SequenceListe<>();
         super.sequence = sequenceListe;
     }
 
+    // ===================
+    // ===== INSERER =====
+    // ===================
     public void insere(Bill element) {
 
         Maillon<Bill> courant;

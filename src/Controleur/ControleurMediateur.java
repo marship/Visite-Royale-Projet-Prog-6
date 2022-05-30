@@ -1,6 +1,11 @@
 package Controleur;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Random;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -19,8 +24,11 @@ import Joueur.JoueurIATriche;
 import Modele.Coup;
 import Modele.Jeu;
 import Modele.Plateau;
+import Telechargement.TelechargementFichier;
 import Vue.CollecteurEvenements;
+import Vue.InterfaceGraphique;
 import Vue.InterfaceUtilisateur;
+import Vue.PlateauGraphique;
 
 public class ControleurMediateur implements CollecteurEvenements {
 
@@ -374,9 +382,14 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
+                PlateauGraphique.victoire.dispose();
+                InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "Valider":
-                initInfoJoueurs();
+                jeu.plateau().initialisation();
+                plateauDebutTour = jeu.plateau().clone();
+                initInfoJoueursInit();
+                choixJoueurCommence();
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
@@ -396,6 +409,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 }
                 break;
             case "Regles":
+                telechargerReglesDuJeu();
                 break;
             case "Options":
                 jeu.changerEtatJeu(InfoJeu.OPTIONS_MENU);
@@ -420,6 +434,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changerEtatPartie();
                 interfaceUtilisateur.afficherPanneau("OptionsJeu");
                 break;
+            case "ChangeJou" :
+                interfaceUtilisateur.afficherPanneau("ChangementJoueur");
+                break;
             case "Recommencer":
                 jeu.plateau().initialisation();
                 jeu.fixerPositions();
@@ -434,12 +451,15 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("Plateau");
+                PlateauGraphique.victoire.dispose();
+                InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "SauvegarderQuitter":
                 jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);
                 break;
             case "RetourJeu":
-                if(!jeu.estPartieEnCours()){
+                initInfoJoueursChang();
+                if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
                 jeu.changerEtatJeu(preOptions);
@@ -494,6 +514,33 @@ public class ControleurMediateur implements CollecteurEvenements {
         return true;
     }
 
+    private void choixJoueurCommence(){
+        switch (InterfaceGraphique.getJoueurPrioritaire()) {
+            case 0:
+                jeu.choixPremierJoueur(JOUEUR_GAUCHE);
+                break;
+            case 1:
+                jeu.choixPremierJoueur(JOUEUR_DROIT);
+                break;
+            case 2:
+                Random r = new Random();
+                jeu.choixPremierJoueur(r.nextInt(2));
+                break;
+            default:
+                break;
+        }
+        joueurCourant = jeu.joueurCourant();
+    }
+
+    private void telechargerReglesDuJeu() {
+        try {
+            new TelechargementFichier();
+        } catch (IOException e) {
+            Configuration.instance().logger().warning("Erreur du telechargement !!!");
+            e.printStackTrace();
+        }
+    }
+
     private void muterVolume() {
         interfaceUtilisateur.muterVolume();
     }
@@ -516,20 +563,28 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
     }
 
-    private void initInfoJoueurs() {
-        int infoJoueurGauche = getInfoJoueur(JOUEUR_GAUCHE);
+    private void initInfoJoueursInit() {
+        int infoJoueurGauche = getInfoJoueurInit(JOUEUR_GAUCHE);
         System.out.println("Joueur de gauche : " + infoJoueurGauche + " | Joueur de droite : " + infoJoueurGauche);
-        int infoJoueurDroite = getInfoJoueur(JOUEUR_DROIT);
+        int infoJoueurDroite = getInfoJoueurInit(JOUEUR_DROIT);
         changerJoueurCourant(JOUEUR_GAUCHE, infoJoueurGauche);
         changerJoueurCourant(JOUEUR_DROIT, infoJoueurDroite);
-        jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueur(JOUEUR_GAUCHE),
-                interfaceUtilisateur.getNomJoueur(JOUEUR_DROIT));
+        jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueurInit(JOUEUR_GAUCHE),
+                interfaceUtilisateur.getNomJoueurInit(JOUEUR_DROIT));
     }
 
-    // TODO rajouter des case pour plus d'IA
-    private int getInfoJoueur(int coteJoueur) {
-        System.out.println(interfaceUtilisateur.getInfoJoueur(coteJoueur));
-        switch (interfaceUtilisateur.getInfoJoueur(coteJoueur)) {
+    private void initInfoJoueursChang() {
+        int infoJoueurGauche = getInfoJoueurChang(JOUEUR_GAUCHE);
+        System.out.println("Joueur de gauche : " + infoJoueurGauche + " | Joueur de droite : " + infoJoueurGauche);
+        int infoJoueurDroite = getInfoJoueurChang(JOUEUR_DROIT);
+        changerJoueurCourant(JOUEUR_GAUCHE, infoJoueurGauche);
+        changerJoueurCourant(JOUEUR_DROIT, infoJoueurDroite);
+        jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueurChang(JOUEUR_GAUCHE),
+                interfaceUtilisateur.getNomJoueurChang(JOUEUR_DROIT));
+    }
+
+    private int getInfoJoueurInit(int coteJoueur) {
+        switch (interfaceUtilisateur.getInfoJoueurInit(coteJoueur)) {
             case ("Humain"):
                 return JOUEUR_HUMAIN;
             case ("IAtrèsfacile"):
@@ -544,12 +599,31 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return JOUEUR_IAEXPERTE;
             case ("IAtriche"):
                 return JOUEUR_IATRICHE;
-
             default:
                 return -1;
         }
+    }
 
-    };
+    private int getInfoJoueurChang(int coteJoueur) {
+        switch (interfaceUtilisateur.getInfoJoueurChang(coteJoueur)) {
+            case ("Humain"):
+                return JOUEUR_HUMAIN;
+            case ("IAtrèsfacile"):
+                return JOUEUR_IATRESFACILE;
+            case ("IAfacile"):
+                return JOUEUR_IAFACILE;
+            case ("IAnormale"):
+                return JOUEUR_IANORMALE;
+            case ("IAdifficile"):
+                return JOUEUR_IADIFFICILE;
+            case ("IAexperte"):
+                return JOUEUR_IAEXPERTE;
+            case ("IAtriche"):
+                return JOUEUR_IATRICHE;
+            default:
+                return -1;
+        }
+    }
 
     private void finDeTour() {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
@@ -593,9 +667,10 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     public boolean charge() {
-        File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal"); 
+        File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
         dossier.mkdir();
-        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
+        JFileChooser chooser = new JFileChooser(
+                System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
         int returnVal = chooser.showOpenDialog(interfaceUtilisateur.fenetre());
         if (returnVal != JFileChooser.APPROVE_OPTION) {
             JOptionPane.showMessageDialog(null, "Vous n'avez rien selectionne");
