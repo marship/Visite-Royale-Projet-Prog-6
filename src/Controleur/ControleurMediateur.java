@@ -1,6 +1,10 @@
 package Controleur;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -19,6 +23,7 @@ import Joueur.JoueurIATriche;
 import Modele.Coup;
 import Modele.Jeu;
 import Modele.Plateau;
+import Telechargement.TelechargementFichier;
 import Vue.CollecteurEvenements;
 import Vue.InterfaceGraphique;
 import Vue.InterfaceUtilisateur;
@@ -400,6 +405,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 }
                 break;
             case "Regles":
+                telechargerReglesDuJeu();
                 break;
             case "Options":
                 jeu.changerEtatJeu(InfoJeu.OPTIONS_MENU);
@@ -445,7 +451,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);
                 break;
             case "RetourJeu":
-                if(!jeu.estPartieEnCours()){
+                if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
                 jeu.changerEtatJeu(preOptions);
@@ -498,6 +504,15 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return false;
         }
         return true;
+    }
+
+    private void telechargerReglesDuJeu() {
+        try {
+            new TelechargementFichier();
+        } catch (IOException e) {
+            Configuration.instance().logger().warning("Erreur du telechargement !!!");
+            e.printStackTrace();
+        }
     }
 
     private void muterVolume() {
@@ -599,9 +614,10 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     public boolean charge() {
-        File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal"); 
+        File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
         dossier.mkdir();
-        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
+        JFileChooser chooser = new JFileChooser(
+                System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
         int returnVal = chooser.showOpenDialog(interfaceUtilisateur.fenetre());
         if (returnVal != JFileChooser.APPROVE_OPTION) {
             JOptionPane.showMessageDialog(null, "Vous n'avez rien selectionne");

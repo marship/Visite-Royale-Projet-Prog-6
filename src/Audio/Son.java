@@ -1,7 +1,6 @@
 package Audio;
 
 import java.io.File;
-// import java.io.ObjectInputFilter.Config;
 import java.io.InputStream;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -68,6 +67,10 @@ public class Son {
     // =============================
     public void recupererFichierAudio(String nomFichierAudio) {
         try {
+            /*
+            AudioInputStream audioInputStream = Configuration.instance().chargeAudio(nomFichierAudio);
+            */
+
             InputStream inputStream = Configuration.charge("Audios" + File.separator + nomFichierAudio + ".wav");
 
             AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(inputStream);
@@ -75,10 +78,8 @@ public class Son {
 
             long length = (long) (1000 * fileFormat.getFrameLength() / fileFormat.getFormat().getFrameRate());
             int bitrate = Math.round(audioFormat.getFrameSize() * audioFormat.getFrameRate() / 1000);
-
-            AudioInputStream audioInputStream = new AudioInputStream(inputStream, audioFormat, length * bitrate);
             
-            // AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(CHEMIN_FICHIER_AUDIO + nomFichierAudio + EXTENSION_FICHIER_AUDIO));
+            audioInputStream = new AudioInputStream(inputStream, audioFormat, length * bitrate);
             
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -138,7 +139,7 @@ public class Son {
     }
 
     public void ajusterVolumeEffetSonnore() {
-        volumeCourant = 1.0f;
+        volumeCourant = -1.0f;
         floatControl.setValue(volumeCourant);
     }
 }
