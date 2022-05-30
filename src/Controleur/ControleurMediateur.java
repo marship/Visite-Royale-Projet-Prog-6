@@ -270,7 +270,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         if (coup != null) {
             jeu.jouerCoup(coup);
         } else {
-            System.out.println("Plateau d'historique null !!!");
+            System.out.println("Creation d'un coup null !!!");
         }
     }
 

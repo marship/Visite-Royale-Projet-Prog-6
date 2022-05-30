@@ -240,7 +240,7 @@ public class JoueurIAmelie extends Joueur {
         if (coup != null) {
             jeu.jouerCoup(coup);
         } else {
-            System.out.println("Plateau d'historique null !!!");
+            System.out.println("Creation d'un coup null !!!");
         }
     }
 
@@ -299,12 +299,8 @@ public class JoueurIAmelie extends Joueur {
         double nouvelleNote = 0;
 
         plateauDebutTour = jeu.plateau().clone();
-
-        int j = 0;
         
         while (!liste.estVide()) {
-            //System.out.println("Boucle de base : " + j);
-            j++;
             test = liste.extraitTete();
             mettreLesPositions(test.positions());
             int posCouronne = jeu.getPositionCouronne();
@@ -451,10 +447,7 @@ public class JoueurIAmelie extends Joueur {
 
             plateauDebutTour = jeu.plateau().clone();
 
-            int i = 0;
             while (!liste.estVide()) {
-                //System.out.println("Joueur A : " + i);
-                i++;
                 test = liste.extraitTete();
                 mettreLesPositions(test.positions());
                 int posCouronne = jeu.getPositionCouronne();
@@ -559,10 +552,7 @@ public class JoueurIAmelie extends Joueur {
 
             plateauDebutTour = jeu.plateau().clone();
 
-            int i = 0;
             while (!liste.estVide()) {
-                //System.out.println("Joueur B : " + i);
-                i++;
                 test = liste.extraitTete();
                 mettreLesPositions(test.positions());
                 int posCouronne = jeu.getPositionCouronne();

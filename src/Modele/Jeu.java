@@ -1084,7 +1084,7 @@ public class Jeu extends Observable {
 
     public void jouerCoup(Coup coup) {
         if (coup == null) {
-            System.out.println("Coup Vide !!");
+            System.out.println("Coup Vide !!!");
         } else {
             plateau().jouerCoup(coup);
             metAJour();
@@ -1350,7 +1350,7 @@ public class Jeu extends Observable {
         if (coup != null) {
             jouerCoup(coup);
         } else {
-            System.out.println("Plateau d'historique null !!!");
+            System.out.println("Creation d'un coup null !!!");
         }
     }
 

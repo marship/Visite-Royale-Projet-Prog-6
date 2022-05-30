@@ -8,7 +8,6 @@ import Global.Configuration;
 import Global.Deplacement;
 import Global.Element;
 import Modele.Carte;
-import Modele.Evaluation;
 import Modele.Jeu;
 import Pattern.Observateur;
 import Structures.Sequence;
@@ -82,18 +81,8 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     } else {
                         options = 0;
                         jeu.finDeTour();
-                        System.out.println("#################################################################\n");
+                        afficher("#################################################################\n");
                     }
-                    break;
-                case 666:
-                    // TODO DELETE Cas de test Paul
-                    selonPerso(Element.FOU);
-                    break;
-                case 999:
-                    // TODO DELETE Cas de test Paul
-                    Evaluation eval = new Evaluation(jeu.plateau());
-                    System.out.println(eval.note(jeu.plateau().joueurCourant));
-                    System.out.println(eval.note(0));
                     break;
                 default:
                     Configuration.instance().logger().info("Erreur lors du choix des options !");
@@ -113,14 +102,14 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
 
         switch (direction) {
             case 1:
-                System.out.println("1 : Droite");
+                afficher("1 : Droite");
                 break;
             case 2:
-                System.out.println("2 : Gauche");
+                afficher("2 : Gauche");
                 break;
             default:
-                System.out.println("1 : Droite");
-                System.out.println("2 : Gauche");
+                afficher("1 : Droite");
+                afficher("2 : Gauche");
                 break;
         }
 
@@ -153,10 +142,10 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
 
             Configuration.instance().logger().info("Selectionner le personnage a controler :");
 
-            System.out.println("1 : ROI");
-            System.out.println("2 : GARDES");
-            System.out.println("3 : SORCIER");
-            System.out.println("4 : FOU");
+            afficher("1 : ROI");
+            afficher("2 : GARDES");
+            afficher("3 : SORCIER");
+            afficher("4 : FOU");
 
             int fou = sc.nextInt();
 
@@ -192,9 +181,9 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
 
         Configuration.instance().logger().info("Selectionner le personnage a teleporter :");
 
-        System.out.println("1 : ROI (" + jeu.estPouvoirSorcierActivable(Element.ROI) + ")");
-        System.out.println("2 : GARDE GAUCHE (" + jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE) + ")");
-        System.out.println("3 : GARDE DROIT (" + jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT) + ")");
+        afficher("1 : ROI (" + jeu.estPouvoirSorcierActivable(Element.ROI) + ")");
+        afficher("2 : GARDE GAUCHE (" + jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE) + ")");
+        afficher("3 : GARDE DROIT (" + jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT) + ")");
         
         int sorcier = sc.nextInt();
 
@@ -228,7 +217,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     // =======================
     private static void jouerCarte(int choix) {
         if (jeu.listeCarteJouable()[choix] == 0) {
-            System.out.println("Carte non identique");
+            Configuration.instance().logger().warning("Type de carte non identique !!!");
         } else {
             Carte carte = jeu.recupererMainJoueur(jeu.plateau().joueurCourant)[choix];
             Element el = jeu.plateau().paquet.mainJoueur(jeu.plateau().joueurCourant)[choix].personnage();
@@ -236,7 +225,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
             if ((el == Element.GARDES) || ((jeu.personnageManipulerParLeFou == Element.GARDES)
                     || (jeu.personnageManipulerParLeFou == Element.GARDE_GAUCHE)
                     || (jeu.personnageManipulerParLeFou == Element.GARDE_DROIT))) {
-                System.out.println("Quel garde voulez vous bouger ?");
+                afficher("Quel garde voulez vous bouger ?");
                 Configuration.instance().logger().info("1 : Gauche");
                 Configuration.instance().logger().info("2 : Droite");
                 int garde = sc.nextInt();
@@ -244,7 +233,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     el = Element.GARDE_GAUCHE;
                     if (jeu.personnageManipulerParLeFou == Element.GARDES) {
                         jeu.personnageManipulerParLeFou(Element.GARDE_GAUCHE);
-                        System.out.println(jeu.personnageManipulerParLeFou);
+                        afficher(jeu.personnageManipulerParLeFou);
                     }
                 } else {
                     el = Element.GARDE_DROIT;
@@ -266,21 +255,21 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
             
             while (i <= 8) {
                 if (i >= 0) {
-                    System.out.print(" ");
+                    affiche(" ");
                 }
-                System.out.print(i + " ");
+                affiche(i + " ");
                 i++;
             }
-            System.out.println(" ");
+            afficher(" ");
             i = 0;
             while (i != 17) {
-                System.out.print(" " + a[i] + " ");
+                affiche(" " + a[i] + " ");
                 i++;
             }
-            System.out.println("Que jouez vous ?");
+            afficher("Que jouez vous ?");
             int jouer = sc.nextInt();
             if (a[jouer + 8] == 0) {
-                System.out.println("Deplacement impossible !");
+                Configuration.instance().logger().warning("Deplacement impossible !");
             } else {
                 jeu.majDernierTypeDePersonnageJouer(carte.personnage());
                 if (carte.personnage() == Element.FOU) {
@@ -345,45 +334,48 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     // ============================
     private static void afficherPlateauMainOptions(int options) {
 
-        System.out.println("Au tour du joueur " + jeu.joueurCourant() + " de jouer !");
+        afficher("Au tour du joueur " + jeu.joueurCourant() + " de jouer !");
         
         jeu.plateau().afficherPlateau();
         jeu.plateau().paquet.afficherMain(jeu.joueurCourant());
 
-        System.out.println("1/8 : Selection de la carte a jouer");
+        afficher("1/8 : Selection de la carte a jouer");
 
         if (options == 0) {
-            System.out.println("9   : Activer le pouvoir du sorcier");
-            System.out.println("0   : Activer le pouvoir du fou");
+            afficher("9   : Activer le pouvoir du sorcier");
+            afficher("0   : Activer le pouvoir du fou");
         }
 
         if (jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.ROI, 0) >= 2
             && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
-            System.out.println("11  : Jouer deux cartes Roi (Deplacement de la cour)");
+            afficher("11  : Jouer deux cartes Roi (Deplacement de la cour)");
         }
 
-        System.out.println("10  : Terminer le tour\n");
+        afficher("10  : Terminer le tour\n");
     }
 
-    // =====================
-    // ===== TEST PAUL ===== //TODO DELETE
-    // =====================
-    private static void selonPerso(Element fou) {
-        int[] a = jeu.listeDeplacementPossiblesAvecPerso(Element.GARDE_GAUCHE);
-        int i = -8;
-        while (i <= 8) {
-            if (i >= 0) {
-                System.out.print(" ");
-            }
-            System.out.print(i + " ");
-            i++;
-        }
-        System.out.println(" ");
-        i = 0;
-        while (i != 17) {
-            System.out.print(" " + a[i] + " ");
-            i++;
-        }
+    private static void affiche(String string) {
+        System.out.print(string);
+    }
+
+    private static void afficher(String string) {
+        System.out.println(string);
+    }
+
+    private static void afficher(Element element) {
+        System.out.println(element);
+    }
+
+    @Override
+    public String getNomJoueur(int coteJoueur) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public String getInfoJoueur(int coteJoueur) {
+        // TODO
+        return null;
     }
 
     // ==================================
@@ -394,9 +386,6 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         // Inutile dans l'interfaceTextuelle !!
     }
 
-    // ==================================
-    // ===== IMPLEMENTATION INUTILE =====
-    // ==================================
     @Override
     public void miseAJourFinDeTour() {
         // Inutile dans l'interfaceTextuelle !!
@@ -409,43 +398,27 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
 
     @Override
     public void previsualisation(int coupX, int coupY, int largeurPreselection, int hauteurPreselection) {
-        // TODO Auto-generated method stub
-        
+        // Inutile dans l'interfaceTextuelle !!
     }
 
     @Override
     public JFrame fenetre() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getNomJoueur(int coteJoueur) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String getInfoJoueur(int coteJoueur) {
-        // TODO Auto-generated method stub
+        // Inutile dans l'interfaceTextuelle !!
         return null;
     }
 
     @Override
     public void augmenterVolume() {
-        // TODO Auto-generated method stub
-        
+        // Inutile dans l'interfaceTextuelle !!
     }
 
     @Override
     public void diminuerVolume() {
-        // TODO Auto-generated method stub
-        
+        // Inutile dans l'interfaceTextuelle !!
     }
 
     @Override
     public void muterVolume() {
-        // TODO Auto-generated method stub
-        
+        // Inutile dans l'interfaceTextuelle !!
     }
 }

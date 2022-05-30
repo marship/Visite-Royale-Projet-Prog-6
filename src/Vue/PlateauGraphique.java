@@ -28,7 +28,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ==========================
     // ===== IMAGES PLATEAU =====
     // ==========================
-    ImagePlateau imagePlateau, imagePlateauGauche, imagePlateauDroit, imageBandeauTour, imageCadreCartesPosees,
+    ImagePlateau imagePlateau, imageBandeauTour, imageCadreCartesPosees,
             imageCadrePiocheDefausse;
 
     // =========================
@@ -763,13 +763,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== IMAGES =====
     // ==================
     private ImagePlateau chargeImage(String nomImage) {
-        //System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImage(in);
     }
 
     private ImagePlateau chargeImageGrise(String nomImage) {
-        //System.out.println("Chargement de l'image : " + nomImage);
         InputStream in = Configuration.charge("Images" + File.separator + nomImage + ".png");
         return ImagePlateau.getImageGrise(in);
     }
@@ -791,9 +789,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         imageTorcheAllumee = chargeImage("Torche_On");
         imageTorcheEteint = chargeImage("Torche_Off");
-
-        imagePlateauDroit = chargeImage("Previsualisation_Droite");
-        imagePlateauGauche = chargeImage("Previsualisation_Gauche");
 
         imageJetonGrandeCouronne = chargeImage("Jeton_Grande_CouronneV2");
         imageJetonPetiteCouronne = chargeImage("Jeton_Petite_CouronneV2");

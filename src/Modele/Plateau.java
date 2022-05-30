@@ -366,10 +366,10 @@ public class Plateau extends Historique<Coup> implements Cloneable {
     // ===== AFFICHER  =====
     // =====================
     public void afficherPlateau() {
-        System.out.println("");
+        afficher("");
 
         // CHIFFRES
-        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
+        afficher("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         String ligneChiffre = "";
         for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
             if (i < 0) {
@@ -380,10 +380,10 @@ public class Plateau extends Historique<Coup> implements Cloneable {
 
         }
         ligneChiffre = ligneChiffre + "|";
-        System.out.println(ligneChiffre);
+        afficher(ligneChiffre);
 
         // COUR
-        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
+        afficher("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         String ligneElement = "";
         for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
             if (i == gardeGauche.positionPersonnage()) {
@@ -397,7 +397,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
             }
         }
         ligneElement = ligneElement + "|";
-        System.out.println(ligneElement);
+        afficher(ligneElement);
 
         // FOU
         String ligneFou = "";
@@ -409,7 +409,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
             }
         }
         ligneFou = ligneFou + "|";
-        System.out.println(ligneFou);
+        afficher(ligneFou);
 
         // SORCIER
         String ligneSorcier = "";
@@ -421,10 +421,10 @@ public class Plateau extends Historique<Coup> implements Cloneable {
             }
         }
         ligneSorcier = ligneSorcier + "|";
-        System.out.println(ligneSorcier);
+        afficher(ligneSorcier);
 
         // COURONNE
-        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
+        afficher("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         String ligneCouronne = "";
         for (int i = EXTREMITE_GAUCHE_DU_PLATEAU; i < EXTREMITE_DROITE_DU_PLATEAU + 1; i++) {
             if (i == couronne.positionCouronne()) {
@@ -440,8 +440,12 @@ public class Plateau extends Historique<Coup> implements Cloneable {
             }
         }
         ligneCouronne = ligneCouronne + "|";
-        System.out.println(ligneCouronne);
-        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
-        System.out.println("");
+        afficher(ligneCouronne);
+        afficher("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
+        afficher("");
+    }
+
+    private void afficher(String string) {
+        System.out.println(string);
     }
 }

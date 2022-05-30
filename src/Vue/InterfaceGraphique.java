@@ -16,6 +16,7 @@ import Adaptateur.AdaptateurSouris;
 import Adaptateur.AdaptateurSourisMouvement;
 import Adaptateur.AdaptateurTemps;
 import Audio.Son;
+import Global.Configuration;
 import Global.InfoJeu;
 
 
@@ -98,7 +99,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
 
         } catch (IOException e) {
-            System.out.println("Erreur d'affichage des menus ou de l'écran de victoire !!");
+            Configuration.instance().logger().severe("Erreur d'affichage des menus ou de l'ecran de victoire !!!");
             e.printStackTrace();
         }
 		
@@ -511,19 +512,16 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
     @Override
     public void augmenterVolume() {
-        // TODO Auto-generated method stub
-        
+        musique.augmenterVolume();
     }
 
     @Override
     public void diminuerVolume() {
-        // TODO Auto-generated method stub
-        
+        musique.diminuerVolume();
     }
 
     @Override
     public void muterVolume() {
-        // TODO Auto-generated method stub
-        
+        musique.muterVolume(boutonGlissantMusique);
     }
 }
