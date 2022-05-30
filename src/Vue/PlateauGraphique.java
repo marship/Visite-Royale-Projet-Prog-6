@@ -29,7 +29,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     Graphics2D dessinable;
     public static JDialog victoire;
     CollecteurEvenements collecteurEvenements;
-    boolean affichageEcranVictoire;
+    public static boolean affichageEcranVictoire;
 
     // ==================================
     // ===== BOUTONS ECRAN VICTOIRE =====

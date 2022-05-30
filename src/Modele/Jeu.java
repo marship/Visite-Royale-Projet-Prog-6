@@ -387,17 +387,24 @@ public class Jeu extends Observable {
     }
 
     public String traiterGagnant() {
+        String nomWin;
+        if(joueurGagnant() == JOUEUR_GAUCHE){
+            nomWin = nomJoueurGauche;
+        }
+        else{
+            nomWin = nomJoueurDroite;
+        }
         switch (plateau().estGagnant()) {
             case COURONNE_GAGNANTE:
                 partieTerminee = true;
                 partieEnCours = false;
                 metAJour();
-                return "Victoire du joueur " +  plateau().joueurGagnant + " avec la couronne !!";
+                return "Victoire de " + nomWin + " avec la couronne !!";
             case ROI_GAGNANT:
                 partieTerminee = true;
                 partieEnCours = false;
                 metAJour();
-                return "Victoire du joueur " +  plateau().joueurGagnant + " avec le roi !!";
+                return "Victoire de " + nomWin + " avec le roi !!";
             default:
                 break;
         }
@@ -405,9 +412,8 @@ public class Jeu extends Observable {
             partieTerminee = true;
             partieEnCours = false;
             metAJour();
-            return "Victoire du joueur " +  plateau().joueurGagnant + " à la pioche !!";
+            return "Victoire de " + nomWin + " à la pioche !!";
         }
-
         return "";
     }
 
@@ -1209,6 +1215,10 @@ public class Jeu extends Observable {
             FileWriter fw = new FileWriter(f);
             BufferedWriter bw = new BufferedWriter(fw);
 
+            // On note les noms des joueurs
+            bw.write("" + nomJoueurGauche + "\n");
+            bw.write("" + nomJoueurDroite + "\n");
+
             // On note les type de joueurs
             bw.write("" + type1 + "\n"); 
             bw.write("" + type2 + "\n"); 
@@ -1320,6 +1330,10 @@ public class Jeu extends Observable {
         int type[] = new int[2];
         try{
             Scanner scan = new Scanner(new File(fic));
+
+            // Lecture des noms des joueurs
+            nomJoueurGauche = scan.nextLine();
+            nomJoueurDroite = scan.nextLine();
 
             // Lecture du type des joueurs 
             type[0] = Integer.parseInt(scan.nextLine()); 
