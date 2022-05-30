@@ -250,7 +250,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         gbc.gridx = 1;
         DesignBoutons annuler = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        annuler.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
         valider.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(annuler, gbc);
 
@@ -334,7 +334,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         gbc.insets = new Insets(20,0,0,0); 
         boutonRetourAccueil = new DesignBoutons("Retour à l'accueil", "Texture_Bouton", "Texture_Bouton_Clique", 25);
-        boutonRetourAccueil.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        boutonRetourAccueil.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
         gbc.gridy++;
         panelOptions.add(boutonRetourAccueil, gbc);
     }
