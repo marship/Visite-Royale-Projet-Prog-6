@@ -90,6 +90,9 @@ public class ControleurMediateur implements CollecteurEvenements {
 
         plateauDebutTour = jeu.plateau().clone();
 
+        changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+        changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
+
         // String nomFichierAudio = "gangstas-paradise-medieval";
         // String nomFichierAudio = "the-weeknd-medieval";
         // lancerAudioMusique(nomFichierAudio);
