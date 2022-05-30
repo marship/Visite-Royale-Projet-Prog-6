@@ -44,26 +44,34 @@ public class AdaptateurSouris extends MouseAdapter {
         int clicSourisX = e.getX();
         int clicSourisY = e.getY();
 
-        if (clicZone(clicSourisX, clicSourisY, true)) {
+        if (clicZone(clicSourisX, clicSourisY, 1)) {
             clicSourisX = conversionCoordonnee(clicSourisX, COORDONNEE_PLATEAU_X);
             clicSourisY = conversionCoordonnee(clicSourisY, COORDONNEE_PLATEAU_Y);
             collecteurEvenements.clicPlateau(clicSourisX, clicSourisY);
 
-        } else if (clicZone(clicSourisX, clicSourisY, false)) {
+        } else if (clicZone(clicSourisX, clicSourisY, 2)) {
             clicSourisX = conversionCoordonnee(clicSourisX, COORDONNEE_MAIN_X);
             collecteurEvenements.clicCarte(clicSourisX);
+
+        } else if (clicZone(clicSourisX, clicSourisY, 3)) {
+            collecteurEvenements.commande("AnnulerTour");
         }
     }
 
     // ================
     // ===== CLIC =====
     // ================
-    boolean clicZone(int clicX, int clicY, boolean zonePlateau) {
-        if (zonePlateau) {
+    boolean clicZone(int clicX, int clicY, int zonePlateau) {
+        if (zonePlateau == 1) {
             return ((clicX >= plateauGraphique.debutPlateauX()) && (clicX <= plateauGraphique.largeurPlateau()) && (clicY >= plateauGraphique.debutPlateauY()) && (clicY <= plateauGraphique.hauteurPlateau()));
-        } else {
+        } 
+        if (zonePlateau == 2) {
             return ((clicX >= plateauGraphique.debutZoneCartesX()) && (clicX <= plateauGraphique.finZoneCartesX()) && (clicY >= plateauGraphique.debutZoneCartesY()) && (clicY <= plateauGraphique.finZoneCartesY()));
         }
+        if (zonePlateau == 3) {
+            return ((clicX >= plateauGraphique.debutZoneBoutonX()) && (clicX <= plateauGraphique.finZoneBoutonX()) && (clicY >= plateauGraphique.debutZoneBoutonY()) && (clicY <= plateauGraphique.finZoneBoutonY()));
+        }
+        return false;
     }
 
     // ======================

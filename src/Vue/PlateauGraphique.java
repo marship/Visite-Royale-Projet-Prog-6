@@ -86,10 +86,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== INFO POSITIONS ELEMENTS GRAPHIQUE =====
     // =============================================
     int taillePlateau = 0;
-    int largeurFenetre, hauteurFenetre = 0;
+    public int largeurFenetre;
+
+    public int hauteurFenetre = 0;
     int largeurCasePlateau, hauteurCasePlateau = 0;
     int debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau, quartHauteurPlateau = 0;
     int debutCartesX, debutCartesY, largeurCarte, hauteurCarte = 0;
+    int debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton = 0;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -956,14 +959,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     private void afficherBoutonAnnuler() { 
-        int debutBoutonX = largeurFenetre / 16;
-        int debutBoutonY = 18 * hauteurFenetre / 28;
-        int largeurBouton = largeurCarte()/2;
-        int hauteurBouton = hauteurCarte()/2;
+        debutBoutonX = 3 * (largeurFenetre / 16 + (largeurCarte / 8));
+        debutBoutonY = 18 * hauteurFenetre / 28 + (hauteurCarte / 4);
+        largeurBouton = largeurCarte()/2;
+        hauteurBouton = hauteurCarte()/2;
         if (jeu.plateau().paquet.tourActuel().estVide()) {
-            tracerImage(imageBoutonAnnulerGrise, 3 * debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
+            tracerImage(imageBoutonAnnulerGrise, debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
         } else {
-            tracerImage(imageBoutonAnnuler, 3 * debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
+            tracerImage(imageBoutonAnnuler, debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
         }
     }
 
@@ -1149,6 +1152,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     public int hauteurPlateau() {
         return hauteurPlateau + debutPlateauY;
+    }
+
+    public int debutZoneBoutonX() {
+        return debutBoutonX;
+    }
+
+    public int finZoneBoutonX() {
+        return debutBoutonX + largeurBouton;
+    }
+
+    public int debutZoneBoutonY() {
+        return debutBoutonY;
+    }
+
+    public int finZoneBoutonY() {
+        return debutBoutonY + hauteurBouton;
     }
 
     public int debutZoneCartesX() {
