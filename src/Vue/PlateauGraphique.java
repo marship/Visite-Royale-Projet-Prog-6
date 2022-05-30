@@ -62,6 +62,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
     ImagePlateau imageCarteSorcierUnGrise, imageCarteSorcierDeuxGrise, imageCarteSorcierTroisGrise;
     ImagePlateau imageCarteGardesUnGrise, imageCarteGardesUnPlusUnGrise, imageCarteGardesRaprocheGrise;
 
+    // =========================
+    // ===== IMAGES BOUTONS ====
+    // =========================
+    ImagePlateau imageBoutonAnnuler, imageBoutonAnnulerGrise;
+
     // =============================================
     // ===== INFO POSITIONS ELEMENTS GRAPHIQUE =====
     // =============================================
@@ -117,7 +122,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
             afficherCartesAutreJoueur();
             afficherZoneCartesJouees();
-            //afficherInfoTour();
+            afficherBoutonAnnuler();
             afficherPioche();
             afficherDefausse();
             if(jeu.actionAutoriser()){
@@ -262,19 +267,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     private void tracerTorches(ImagePlateau imageTorcheGauche, ImagePlateau imageTorcheDroite) {
-        //debutPlateauY = 4 * hauteurFenetre / 28;
-        //largeurPlateau = largeurFenetre;
-        //hauteurPlateau = 3 * hauteurFenetre / 7;
-
-        //largeurCarte = largeurFenetre / 16;
-        //hauteurCarte = hauteurFenetre / 7;
-
-
         tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
         tracerLabel(jeu.nomJoueurGauche(), largeurCasePlateau(), 5 * hauteurFenetre / 30);
         tracerImage(imageTorcheDroite, 15*largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
         tracerLabel(jeu.nomJoueurDroite(), 15*largeurCasePlateau(), 5 * hauteurFenetre / 30);
-
     }
 
     void tracerChoix() {
@@ -354,9 +350,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     else{
                         //TODO remplacer fouGrise par jetonPointille une fois image créée
                         tracerJeton(carte.personnage(), imageJetonFouGrise, i);
-                        //dessinable.setColor(new Color(0, 150, 255));
-                        //dessinable.setStroke(new BasicStroke(5f));
-                        //dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
                     }
                 }
                 i++;
@@ -742,6 +735,18 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     }
 
+    private void afficherBoutonAnnuler() { 
+        int debutBoutonX = largeurFenetre / 16;
+        int debutBoutonY = 18 * hauteurFenetre / 28;
+        int largeurBouton = largeurCarte()/2;
+        int hauteurBouton = hauteurCarte()/2;
+        if (jeu.plateau().paquet.tourActuel().estVide()) {
+            tracerImage(imageBoutonAnnulerGrise, 3 * debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
+        } else {
+            tracerImage(imageBoutonAnnuler, 3 * debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
+        }
+    }
+
     public int positionJeton(Element element, boolean enPixel) {
         if(enPixel){
             return (jeu.obtenirPositionElement(element) + taillePlateau / 2) * largeurCasePlateau;
@@ -852,6 +857,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageCarteGardesUnGrise = chargeImageGrise("Garde_1");
         imageCarteGardesUnPlusUnGrise = chargeImageGrise("Garde_1plus1");
         imageCarteGardesRaprocheGrise = chargeImageGrise("Garde_Rapproche");
+
+        imageBoutonAnnuler = chargeImage("Bouton_Annuler");
+        imageBoutonAnnulerGrise = chargeImageGrise("Bouton_Annuler");
 
     }
 
