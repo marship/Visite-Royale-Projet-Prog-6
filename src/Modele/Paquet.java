@@ -145,7 +145,7 @@ public class Paquet {
             fap.insere(new Couple<Carte, Integer>(pioche.extraitTete(), r.nextInt(10000)));
         }
         while (!fap.estVide()) {
-            pioche.insereTete(fap.extrait().e());
+            pioche.insereTete(fap.extrait().element());
         }
     }
 

@@ -31,7 +31,7 @@ public class JoueurIANormale extends Joueur {
             fap.insere(new Couple<CoupleAtteindrePlateau,Integer>(liste.extraitTete(), r.nextInt(10000)));
         }
         while (!fap.estVide()) {
-            liste.insereTete(fap.extrait().e());
+            liste.insereTete(fap.extrait().element());
         }
         return liste;
     }

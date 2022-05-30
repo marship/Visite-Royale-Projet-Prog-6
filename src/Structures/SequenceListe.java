@@ -2,9 +2,14 @@ package Structures;
 
 public class SequenceListe<Titi> implements Sequence<Titi> {
 
+    // =====================
+    // ===== ATTRIBUTS =====
+    // =====================
     Maillon<Titi> tete, queue;
 
-    // Insère élément en début de séquence (en première position)
+    // ===================
+    // ===== INSERER =====
+    // ===================
     public void insereTete(Titi element) {
 
         Maillon<Titi> nouveau = new Maillon<>();
@@ -19,7 +24,6 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
         }
     }
 
-    // Insère element en fin de séquence (en dernière position)
     public void insereQueue(Titi element) {
 
         Maillon<Titi> nouveau = new Maillon<>();
@@ -35,7 +39,9 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
         }
     }
 
-    // Extrait + Renvoie la valeur de l'élement situé en début de séquence (en première position)
+    // ====================
+    // ===== EXTRAIRE =====
+    // ====================
     public Titi extraitTete() {
 
         if (tete == null) {
@@ -46,15 +52,36 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
         return resultat;
     }
 
-    // Renvoie vrai ssi la séquence est vide
+    // =================
+    // ===== VIDER =====
+    // =================
     public boolean estVide() {
         return tete == null;
     }
 
+    // ==================
+    // ===== TAILLE =====
+    // ==================
+    public int taille() {
+        int resultat = 0;
+        Maillon<Titi> courant = tete;
+        while (courant != null) {
+            resultat = resultat + 1;
+            courant = courant.suivant;
+        }
+        return resultat;
+    }
+
+    // =====================
+    // ===== ITERATEUR =====
+    // =====================
     public Iterateur<Titi> iterateur() {
         return new IterateurListe<>(this);
     }
 
+    // =====================
+    // ===== AFFICHAGE =====
+    // =====================
     public String toString() {
 
         String resultat = "Sequence liste : [ ";
@@ -66,16 +93,6 @@ public class SequenceListe<Titi> implements Sequence<Titi> {
         }
         resultat = resultat + "]";
         
-        return resultat;
-    }
-    
-    public int taille(){
-        int resultat = 0;
-        Maillon<Titi> courant = tete;
-        while (courant != null) {
-            resultat = resultat + 1;
-            courant = courant.suivant;
-        }
         return resultat;
     }
 }
