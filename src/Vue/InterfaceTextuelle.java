@@ -370,18 +370,6 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         System.out.println(element);
     }
 
-    @Override
-    public String getNomJoueur(int coteJoueur) {
-        // TODO
-        return null;
-    }
-
-    @Override
-    public String getInfoJoueur(int coteJoueur) {
-        // TODO
-        return null;
-    }
-
     // ==================================
     // ===== IMPLEMENTATION INUTILE =====
     // ==================================
@@ -424,5 +412,29 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     @Override
     public void muterVolume() {
         // Inutile dans l'interfaceTextuelle !!
+    }
+
+    @Override
+    public String getInfoJoueurInit(int coteJoueur) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getNomJoueurChang(int coteJoueur) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getInfoJoueurChang(int coteJoueur) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getNomJoueurInit(int coteJoueur) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

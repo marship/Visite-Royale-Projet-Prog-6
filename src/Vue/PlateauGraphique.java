@@ -939,20 +939,19 @@ public class PlateauGraphique extends JPanel implements Observateur {
             tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         }
         String msg = jeu.plateau().paquet.pioche().taille() + " cartes restantes";
-        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte);
-
+        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte + (hauteurCarte / 5));
     }
 
     private void afficherDefausse() {
         int debutPiocheX = largeurFenetre / 32;
         int debutPiocheY = 23 * hauteurFenetre / 28;
-        if (jeu.plateau().paquet.pioche().taille() != 0) {
+        if (jeu.plateau().paquet.defausse().taille() != 0) {
             tracerImage(imageDosCarte, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         } else {
             tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         }
         String msg = "Défausse";
-        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte);
+        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte + (hauteurCarte / 5));
 
     }
 

@@ -386,7 +386,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                 InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "Valider":
-                initInfoJoueurs();
+                jeu.plateau().initialisation();
+                plateauDebutTour = jeu.plateau().clone();
+                initInfoJoueursInit();
                 choixJoueurCommence();
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 if (!jeu.estPartieEnCours()) {
@@ -432,6 +434,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changerEtatPartie();
                 interfaceUtilisateur.afficherPanneau("OptionsJeu");
                 break;
+            case "ChangeJou" :
+                interfaceUtilisateur.afficherPanneau("ChangementJoueur");
+                break;
             case "Recommencer":
                 jeu.plateau().initialisation();
                 jeu.fixerPositions();
@@ -453,6 +458,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);
                 break;
             case "RetourJeu":
+                initInfoJoueursChang();
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
@@ -557,20 +563,28 @@ public class ControleurMediateur implements CollecteurEvenements {
         }
     }
 
-    private void initInfoJoueurs() {
-        int infoJoueurGauche = getInfoJoueur(JOUEUR_GAUCHE);
+    private void initInfoJoueursInit() {
+        int infoJoueurGauche = getInfoJoueurInit(JOUEUR_GAUCHE);
         System.out.println("Joueur de gauche : " + infoJoueurGauche + " | Joueur de droite : " + infoJoueurGauche);
-        int infoJoueurDroite = getInfoJoueur(JOUEUR_DROIT);
+        int infoJoueurDroite = getInfoJoueurInit(JOUEUR_DROIT);
         changerJoueurCourant(JOUEUR_GAUCHE, infoJoueurGauche);
         changerJoueurCourant(JOUEUR_DROIT, infoJoueurDroite);
-        jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueur(JOUEUR_GAUCHE),
-                interfaceUtilisateur.getNomJoueur(JOUEUR_DROIT));
+        jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueurInit(JOUEUR_GAUCHE),
+                interfaceUtilisateur.getNomJoueurInit(JOUEUR_DROIT));
     }
 
-    // TODO rajouter des case pour plus d'IA
-    private int getInfoJoueur(int coteJoueur) {
-        System.out.println(interfaceUtilisateur.getInfoJoueur(coteJoueur));
-        switch (interfaceUtilisateur.getInfoJoueur(coteJoueur)) {
+    private void initInfoJoueursChang() {
+        int infoJoueurGauche = getInfoJoueurChang(JOUEUR_GAUCHE);
+        System.out.println("Joueur de gauche : " + infoJoueurGauche + " | Joueur de droite : " + infoJoueurGauche);
+        int infoJoueurDroite = getInfoJoueurChang(JOUEUR_DROIT);
+        changerJoueurCourant(JOUEUR_GAUCHE, infoJoueurGauche);
+        changerJoueurCourant(JOUEUR_DROIT, infoJoueurDroite);
+        jeu.initNomJoueurs(interfaceUtilisateur.getNomJoueurChang(JOUEUR_GAUCHE),
+                interfaceUtilisateur.getNomJoueurChang(JOUEUR_DROIT));
+    }
+
+    private int getInfoJoueurInit(int coteJoueur) {
+        switch (interfaceUtilisateur.getInfoJoueurInit(coteJoueur)) {
             case ("Humain"):
                 return JOUEUR_HUMAIN;
             case ("IAtrèsfacile"):
@@ -585,12 +599,31 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return JOUEUR_IAEXPERTE;
             case ("IAtriche"):
                 return JOUEUR_IATRICHE;
-
             default:
                 return -1;
         }
+    }
 
-    };
+    private int getInfoJoueurChang(int coteJoueur) {
+        switch (interfaceUtilisateur.getInfoJoueurChang(coteJoueur)) {
+            case ("Humain"):
+                return JOUEUR_HUMAIN;
+            case ("IAtrèsfacile"):
+                return JOUEUR_IATRESFACILE;
+            case ("IAfacile"):
+                return JOUEUR_IAFACILE;
+            case ("IAnormale"):
+                return JOUEUR_IANORMALE;
+            case ("IAdifficile"):
+                return JOUEUR_IADIFFICILE;
+            case ("IAexperte"):
+                return JOUEUR_IAEXPERTE;
+            case ("IAtriche"):
+                return JOUEUR_IATRICHE;
+            default:
+                return -1;
+        }
+    }
 
     private void finDeTour() {
         if (jeu.dernierTypeDePersonnageJouer != Element.VIDE || jeu.teleportationFaite == true) {
