@@ -374,8 +374,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
                             }
 
                             if (carte.deplacement() == Deplacement.UN) {
-                                if (i + 8 - 1 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) ||
-                                        i + 8 + 1 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE)) {
+                                if (i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) - 1 ||
+                                        i - 8 == jeu.obtenirPositionElement(Element.GARDE_GAUCHE) + 1) {
                                     tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
                                 } else {
                                     tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
