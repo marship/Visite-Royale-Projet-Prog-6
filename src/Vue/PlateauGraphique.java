@@ -29,7 +29,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     Graphics2D dessinable;
     public static JDialog victoire;
     CollecteurEvenements collecteurEvenements;
-    boolean affichageEcranVictoire;
+    public static boolean affichageEcranVictoire;
 
     // ==================================
     // ===== BOUTONS ECRAN VICTOIRE =====
@@ -86,7 +86,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== INFO POSITIONS ELEMENTS GRAPHIQUE =====
     // =============================================
     int taillePlateau = 0;
-    int largeurFenetre, hauteurFenetre = 0;
+    public int largeurFenetre;
+
+    public int hauteurFenetre = 0;
     int largeurCasePlateau, hauteurCasePlateau = 0;
     int debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau, quartHauteurPlateau = 0;
     int debutCartesX, debutCartesY, largeurCarte, hauteurCarte = 0;

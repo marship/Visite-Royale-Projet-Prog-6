@@ -451,7 +451,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("Plateau");
-                PlateauGraphique.victoire.dispose();
+                if(!PlateauGraphique.affichageEcranVictoire){
+                    PlateauGraphique.victoire.dispose();
+                }
                 InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "SauvegarderQuitter":
@@ -467,10 +469,13 @@ public class ControleurMediateur implements CollecteurEvenements {
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "AnnulerTour":
-                jeu.annulerTour();
-                jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
-                jeu.changeCarteActuelle(8);
-                ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                int type = typeJoueur[joueurCourant];
+                if(type == JOUEUR_HUMAIN){
+                    jeu.annulerTour();
+                    jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
+                    jeu.changeCarteActuelle(8);
+                    ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                }
                 break;
             case "Visible":
                 jeu.mainJoueurSecondaireVisible();
@@ -561,6 +566,7 @@ public class ControleurMediateur implements CollecteurEvenements {
             joueurs[joueurCourant][JOUEUR_IAEXPERTE].tempsEcoule();
             changerJoueurCourant(jeu.joueurCourant(), JOUEUR_HUMAIN);
         }
+        jeu.carteActuelle = 8;
     }
 
     private void initInfoJoueursInit() {

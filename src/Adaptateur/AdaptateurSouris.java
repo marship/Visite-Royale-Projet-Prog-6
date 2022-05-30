@@ -52,9 +52,10 @@ public class AdaptateurSouris extends MouseAdapter {
         } else if (clicZone(clicSourisX, clicSourisY, "carte")) {
             clicSourisX = conversionCoordonnee(clicSourisX, COORDONNEE_MAIN_X);
             collecteurEvenements.clicCarte(clicSourisX);
+
         }
         else if (clicZone(clicSourisX, clicSourisY, "annuler")) {
-            collecteurEvenements.commande("Annuler");
+            collecteurEvenements.commande("AnnulerTour");
         }
     }
 
