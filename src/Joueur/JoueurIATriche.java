@@ -14,7 +14,8 @@ import Modele.CoupleAtteindrePlateau;
 import Modele.Evaluation;
 import Structures.Sequence;
 
-public class JoueurIAmelie extends Joueur {
+// Amélie
+public class JoueurIATriche extends Joueur {
 
     Element jouee = Element.VIDE;
     int baseCouronne;
@@ -24,7 +25,7 @@ public class JoueurIAmelie extends Joueur {
 
     static final int HORIZON = 1;
 
-    public JoueurIAmelie(int numeroJoueurCourant, Jeu jeu) {
+    public JoueurIATriche(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
         quiDoitGagner = numeroJoueurCourant; 
 	}

@@ -10,12 +10,12 @@ import Global.Element;
 import Global.InfoJeu;
 import Joueur.Joueur;
 import Joueur.JoueurHumain;
-import Joueur.JoueurIAAleatoire;
-import Joueur.JoueurIAAleatoireIntelligente;
-import Joueur.JoueurIARandom;
-import Joueur.JoueurIAnastasia;
-import Joueur.JoueurIAmel;
-import Joueur.JoueurIAmelie;
+import Joueur.JoueurIATresFacile;
+import Joueur.JoueurIANormale;
+import Joueur.JoueurIAFacile;
+import Joueur.JoueurIADifficile;
+import Joueur.JoueurIAExperte;
+import Joueur.JoueurIATriche;
 import Modele.Coup;
 import Modele.Jeu;
 import Modele.Plateau;
@@ -34,12 +34,12 @@ public class ControleurMediateur implements CollecteurEvenements {
     static final int JOUEUR_DROIT = 1;
 
     static final int JOUEUR_HUMAIN = 0;
-    static final int JOUEUR_IAALEATOIRE = 1;
-    static final int JOUEUR_IAALEATOIRE_TOTALE = 2;
-    static final int JOUEUR_IAALEATOIRE_INTELLIGENTE = 3;
-    static final int JOUEUR_IAEXPERTE = 4;
-    static final int JOUEUR_AMEL = 5;
-    static final int JOUEUR_AMELIE = 6;
+    static final int JOUEUR_IATRESFACILE = 1;
+    static final int JOUEUR_IAFACILE = 2;
+    static final int JOUEUR_IANORMALE = 3;
+    static final int JOUEUR_IADIFFICILE = 4;
+    static final int JOUEUR_IAEXPERTE = 5;
+    static final int JOUEUR_IATRICHE = 6;
 
     // ===================
     // ===== PLATEAU =====
@@ -114,26 +114,25 @@ public class ControleurMediateur implements CollecteurEvenements {
                 case JOUEUR_HUMAIN:
                     joueurs[numeroJoueur][typeDuJoueur] = new JoueurHumain(numeroJoueur, jeu);
                     break;
-                case JOUEUR_IAALEATOIRE:
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAAleatoire(numeroJoueur, jeu);
+                case JOUEUR_IATRESFACILE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIATresFacile(numeroJoueur, jeu);
                     break;
-                case JOUEUR_IAALEATOIRE_TOTALE:
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIARandom(numeroJoueur, jeu);
+                case JOUEUR_IAFACILE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAFacile(numeroJoueur, jeu);
                     break;
-                case JOUEUR_IAALEATOIRE_INTELLIGENTE:
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAAleatoireIntelligente(numeroJoueur, jeu);
+                case JOUEUR_IANORMALE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIANormale(numeroJoueur, jeu);
+                    break;
+                case JOUEUR_IADIFFICILE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIADifficile(numeroJoueur, jeu);
                     break;
                 case JOUEUR_IAEXPERTE:
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAnastasia(numeroJoueur, jeu);
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAExperte(numeroJoueur, jeu);
                     break;
-                case JOUEUR_AMEL:
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAmel(numeroJoueur, jeu);
-                    break;
-                case JOUEUR_AMELIE:
-                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIAmelie(numeroJoueur, jeu);
+                case JOUEUR_IATRICHE:
+                    joueurs[numeroJoueur][typeDuJoueur] = new JoueurIATriche(numeroJoueur, jeu);
                     break;
             }
-
         }
     }
 
@@ -511,8 +510,8 @@ public class ControleurMediateur implements CollecteurEvenements {
         int type = typeJoueur[joueurCourant];
         if (jeu.actionAutoriser() && type == JOUEUR_HUMAIN) {
             jeu.annulerTour();
-            changerJoueurCourant(jeu.joueurCourant(), JOUEUR_AMEL);
-            joueurs[joueurCourant][JOUEUR_AMEL].tempsEcoule();
+            changerJoueurCourant(jeu.joueurCourant(), JOUEUR_IAEXPERTE);
+            joueurs[joueurCourant][JOUEUR_IAEXPERTE].tempsEcoule();
             changerJoueurCourant(jeu.joueurCourant(), JOUEUR_HUMAIN);
         }
     }
@@ -534,17 +533,17 @@ public class ControleurMediateur implements CollecteurEvenements {
             case ("Humain"):
                 return JOUEUR_HUMAIN;
             case ("IAtrèsfacile"):
-                return JOUEUR_IAALEATOIRE;
+                return JOUEUR_IATRESFACILE;
             case ("IAfacile"):
-                return JOUEUR_IAALEATOIRE_TOTALE;
+                return JOUEUR_IAFACILE;
             case ("IAnormale"):
-                return JOUEUR_IAALEATOIRE_INTELLIGENTE;
+                return JOUEUR_IANORMALE;
             case ("IAdifficile"):
-                return JOUEUR_IAEXPERTE;
+                return JOUEUR_IADIFFICILE;
             case ("IAexperte"):
-                return JOUEUR_AMEL;
+                return JOUEUR_IAEXPERTE;
             case ("IAtriche"):
-                return JOUEUR_AMELIE;
+                return JOUEUR_IATRICHE;
 
             default:
                 return -1;

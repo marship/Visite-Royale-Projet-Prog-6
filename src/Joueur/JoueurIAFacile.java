@@ -5,7 +5,6 @@ import java.util.Random;
 import Global.Element;
 import Global.Deplacement;
 import Modele.CoupleAtteindrePlateau;
-import Modele.Evaluation;
 import Modele.Jeu;
 import Modele.ListePlateaux;
 import Structures.Couple;
@@ -13,12 +12,14 @@ import Structures.FAP;
 import Structures.FAPListe;
 import Structures.Sequence;
 
-public class JoueurIAAleatoireIntelligente extends Joueur {
+// Albane
+public class JoueurIAFacile extends Joueur {
 
 	Random random;
-	Element jouee = Element.VIDE;
 
-	public JoueurIAAleatoireIntelligente(int numeroJoueurCourant, Jeu jeu) {
+    Element jouee = Element.VIDE;
+
+	public JoueurIAFacile(int numeroJoueurCourant, Jeu jeu) {
 		super(numeroJoueurCourant, jeu);
 		random = new Random();
 	}
@@ -74,26 +75,18 @@ public class JoueurIAAleatoireIntelligente extends Joueur {
 
         Random r = new Random();
 
-		Evaluation eval = new Evaluation(jeu.plateau());
-		double note = eval.note(jeu.joueurCourant());
+        int choix = r.nextInt(liste.taille());
 
-		double nouvelleNote = note;
-		do {
-            jeu.annulerTour();
-			int choix = r.nextInt(liste.taille());
+        CoupleAtteindrePlateau fin = liste.extraitTete();
+        while(choix != 0){
+            fin = liste.extraitTete();
+            choix--;
+        }
 
-			CoupleAtteindrePlateau fin = liste.extraitTete();
-			while(choix != 0){
-				fin = liste.extraitTete();
-				liste.insereQueue(fin);
-				choix--;
-			}
+        poserLesCartes(fin.cartes());
+        mettreLesPositions(fin.positions());
 
-			poserLesCartes(fin.cartes());
-			mettreLesPositions(fin.positions());
-			eval = new Evaluation(jeu.plateau());
-			nouvelleNote = eval.note(jeu.joueurCourant());
-		} while (note > nouvelleNote);
+        jeu.majDernierTypeDePersonnageJouer(Element.ROI);
 
         return true;
     }
