@@ -716,7 +716,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerImage(image, (4 + i) * debutCartesX, 0, largeurCarte, hauteurCarte);
             }
         } else {
-            Carte[] cartesJoueurSecondaire = jeu.recupererMainJoueur(0);
+            Carte[] cartesJoueurSecondaire = jeu.recupererMainJoueur((jeu.joueurCourant() + 1) % 2);
             for (int i = 0; i < cartesJoueurSecondaire.length; i++) {
                 switch (cartesJoueurSecondaire[i].personnage()) {
                     case ROI:

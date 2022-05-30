@@ -57,19 +57,22 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     if (options == 0) {
                         pouvoirSorcier();
                     } else {
-                        Configuration.instance().logger().warning("Vous avez deja fait un autre type de deplacement ce tour !");
+                        Configuration.instance().logger()
+                                .warning("Vous avez deja fait un autre type de deplacement ce tour !");
                     }
                     break;
                 case 0:
                     if (options == 0) {
                         pouvoirFou();
                     } else {
-                        Configuration.instance().logger().warning("Vous avez deja fait un autre type de deplacement ce tour !");
+                        Configuration.instance().logger()
+                                .warning("Vous avez deja fait un autre type de deplacement ce tour !");
                     }
                     break;
                 case 11:
                     if (jeu.plateau().paquet.nombreCartesElement(jeu.plateau().joueurCourant, Element.ROI, 0) >= 2
-                        && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                            && (jeu.dernierTypeDePersonnageJouer == Element.ROI
+                                    || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
                         deplacerCour();
                     } else {
                         Configuration.instance().logger().info("Vous ne pouvez pas deplacer la cour !");
@@ -77,7 +80,8 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     break;
                 case 10:
                     if (options == 0) {
-                        Configuration.instance().logger().info("Vous ne pouvez pas finir votre tour sans faire un deplacement !");
+                        Configuration.instance().logger()
+                                .info("Vous ne pouvez pas finir votre tour sans faire un deplacement !");
                     } else {
                         options = 0;
                         jeu.finDeTour();
@@ -184,7 +188,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         afficher("1 : ROI (" + jeu.estPouvoirSorcierActivable(Element.ROI) + ")");
         afficher("2 : GARDE GAUCHE (" + jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE) + ")");
         afficher("3 : GARDE DROIT (" + jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT) + ")");
-        
+
         int sorcier = sc.nextInt();
 
         switch (sorcier) {
@@ -241,18 +245,17 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                         jeu.personnageManipulerParLeFou(Element.GARDE_DROIT);
                     }
                 }
-                if(jeu.plateau().paquet.mainJoueur(jeu.plateau().joueurCourant)[choix].personnage() == Element.GARDES){
+                if (jeu.plateau().paquet.mainJoueur(jeu.plateau().joueurCourant)[choix]
+                        .personnage() == Element.GARDES) {
                     a = jeu.listeDeplacementPossiblesAvecCarte(el, carte.deplacement());
-                }
-                else{
+                } else {
                     a = jeu.listeDeplacementPossiblesAvecCarte(Element.FOU, carte.deplacement());
                 }
-            }
-            else{
+            } else {
                 a = jeu.listeDeplacementPossiblesAvecCarte(Element.GARDES, carte.deplacement());
             }
             int i = -8;
-            
+
             while (i <= 8) {
                 if (i >= 0) {
                     affiche(" ");
@@ -335,7 +338,7 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
     private static void afficherPlateauMainOptions(int options) {
 
         afficher("Au tour du joueur " + jeu.joueurCourant() + " de jouer !");
-        
+
         jeu.plateau().afficherPlateau();
         jeu.plateau().paquet.afficherMain(jeu.joueurCourant());
 
@@ -347,7 +350,8 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         }
 
         if (jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.ROI, 0) >= 2
-            && (jeu.dernierTypeDePersonnageJouer == Element.ROI || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
+                && (jeu.dernierTypeDePersonnageJouer == Element.ROI
+                        || jeu.dernierTypeDePersonnageJouer == Element.VIDE)) {
             afficher("11  : Jouer deux cartes Roi (Deplacement de la cour)");
         }
 
