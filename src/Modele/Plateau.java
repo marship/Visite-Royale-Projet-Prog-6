@@ -277,6 +277,7 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         sorcier.positionnerPersonnage(p.sorcier.positionPersonnage());
         
         couronne.positionnerCouronne(p.couronne.positionCouronne());
+        couronne.definirEtatCouronne(p.couronne.etatCouronne());
 
         remplacerPioche(p);
         remplacerDefausse(p);

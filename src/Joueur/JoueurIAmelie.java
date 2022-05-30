@@ -480,7 +480,7 @@ public class JoueurIAmelie extends Joueur {
                         }
                     }
                     else{
-                        if(jeu.obtenirPositionElement(Element.ROI) == 0){
+                        if(jeu.obtenirPositionElement(Element.ROI) == 0 || jeu.plateau().couronne.etatCouronne()){
                             if(nouvelleNote > noteDeBase){
                                 poserLesCartes(test.cartes());
                                 gestionHistorique(plateauDebutTour);
@@ -588,7 +588,7 @@ public class JoueurIAmelie extends Joueur {
                         }
                     }
                     else{
-                        if(jeu.obtenirPositionElement(Element.ROI) == 0){
+                        if(jeu.obtenirPositionElement(Element.ROI) == 0 || jeu.plateau().couronne.etatCouronne()){
                             if(nouvelleNote > noteDeBase){
                                 poserLesCartes(test.cartes());
                                 gestionHistorique(plateauDebutTour);
