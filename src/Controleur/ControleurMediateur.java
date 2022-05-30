@@ -594,7 +594,9 @@ public class ControleurMediateur implements CollecteurEvenements {
     }
 
     public boolean charge() {
-        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes");
+        File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal"); 
+        dossier.mkdir();
+        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal");
         int returnVal = chooser.showOpenDialog(interfaceUtilisateur.fenetre());
         if (returnVal != JFileChooser.APPROVE_OPTION) {
             JOptionPane.showMessageDialog(null, "Vous n'avez rien selectionne");
