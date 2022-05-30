@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Random;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -386,8 +387,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "Valider":
                 initInfoJoueurs();
-                System.out.println(InterfaceGraphique.getJoueurPrioritaire());
-                
+                choixJoueurCommence();
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
@@ -506,6 +506,24 @@ public class ControleurMediateur implements CollecteurEvenements {
                 return false;
         }
         return true;
+    }
+
+    private void choixJoueurCommence(){
+        switch (InterfaceGraphique.getJoueurPrioritaire()) {
+            case 0:
+                jeu.choixPremierJoueur(JOUEUR_GAUCHE);
+                break;
+            case 1:
+                jeu.choixPremierJoueur(JOUEUR_DROIT);
+                break;
+            case 2:
+                Random r = new Random();
+                jeu.choixPremierJoueur(r.nextInt(2));
+                break;
+            default:
+                break;
+        }
+        joueurCourant = jeu.joueurCourant();
     }
 
     private void telechargerReglesDuJeu() {

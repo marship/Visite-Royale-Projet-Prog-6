@@ -305,15 +305,15 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
     }
 
-    public static String getJoueurPrioritaire(){
+    public static int getJoueurPrioritaire(){
         if(prioJoueurGauche.isSelected()){
-            return "Joueur Gauche en premier";
+            return 0;
         } else if(prioJoueurDroite.isSelected()){
-            return "Joueur Droite en premier";
+            return 1;
         } else if(joueurAleatoire.isSelected()){
-            return "Choix aléatoire";
+            return 2;
         } else {
-            return "erreur dans la sélection, ne devrait jamais arriver";
+            return -1;
         }
     }
 
