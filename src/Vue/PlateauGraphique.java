@@ -963,10 +963,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
         debutBoutonY = 18 * hauteurFenetre / 28 + (hauteurCarte / 4);
         largeurBouton = largeurCarte()/2;
         hauteurBouton = hauteurCarte()/2;
-        if (jeu.plateau().paquet.tourActuel().estVide()) {
-            tracerImage(imageBoutonAnnulerGrise, debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
-        } else {
+        if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite) {
             tracerImage(imageBoutonAnnuler, debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
+        } else {
+            tracerImage(imageBoutonAnnulerGrise, debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
         }
     }
 
