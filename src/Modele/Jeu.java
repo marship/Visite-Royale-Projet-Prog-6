@@ -1186,7 +1186,10 @@ public class Jeu extends Observable {
             annulerTour();
             // On récupère la date pour le nom de la sauvegarde
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
-            String fic = System.getProperty("user.dir") + File.separator + "Sauvegardes" + File.separator + dtf.format(LocalDateTime.now()) + ".txt";
+            File dossier = new File(System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal"); 
+            dossier.mkdir();
+
+            String fic = System.getProperty("user.dir") + File.separator + "Sauvegardes Visite Royal" + File.separator + dtf.format(LocalDateTime.now()) + ".txt";
             File f = new File(fic);
 
             // On fait le fichier
