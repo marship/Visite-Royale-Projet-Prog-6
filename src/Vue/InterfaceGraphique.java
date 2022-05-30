@@ -251,6 +251,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
             comboBoxJoueurDroite.addItem(choixComboBox[i]);
         }
         comboBoxJoueurDroite.setFocusable(false);
+        comboBoxJoueurDroite.setSelectedIndex(5);
         comboBoxJoueurDroite.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueurDroite.getSelectedItem().toString()));
         
         gbc.gridx = 1;

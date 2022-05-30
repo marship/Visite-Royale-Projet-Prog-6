@@ -142,6 +142,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             afficherCartesAutreJoueur();
             afficherZoneCartesJouees();
             //afficherInfoTour();
+            afficherBoutonAnnuler();
             afficherPioche();
             afficherDefausse();
             if(jeu.actionAutoriser()){
