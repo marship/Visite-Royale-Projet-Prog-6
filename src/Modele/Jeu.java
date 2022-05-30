@@ -987,6 +987,9 @@ public class Jeu extends Observable {
         }
         metAJour();
     }
+    public Element personnageManipulerParLeFou() {
+        return personnageManipulerParLeFou;
+    }
 
     public boolean estPouvoirFouActivable() {
         if (actionAutoriser()) {

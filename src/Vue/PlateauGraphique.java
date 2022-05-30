@@ -90,6 +90,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     int largeurCasePlateau, hauteurCasePlateau = 0;
     int debutPlateauX, debutPlateauY, largeurPlateau, hauteurPlateau, quartHauteurPlateau = 0;
     int debutCartesX, debutCartesY, largeurCarte, hauteurCarte = 0;
+    int debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler;
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -145,6 +146,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             afficherBoutonAnnuler();
             afficherPioche();
             afficherDefausse();
+            afficherPouvoirActif();
             if(jeu.actionAutoriser()){
                 afficherCartesJoueurCourant();
             }
@@ -362,6 +364,70 @@ public class PlateauGraphique extends JPanel implements Observateur {
         tracerLabel(jeu.nomJoueurGauche(), largeurCasePlateau(), 5 * hauteurFenetre / 30);
         tracerImage(imageTorcheDroite, 15*largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
         tracerLabel(jeu.nomJoueurDroite(), 15*largeurCasePlateau(), 5 * hauteurFenetre / 30);
+    }
+
+    private void afficherPouvoirActif() {
+        int debutPiocheX = largeurFenetre / 32;
+        int debutPiocheY = 18 * hauteurFenetre / 28;
+        String msg;
+        switch(jeu.getEtatJeu()) {
+            case DEBUT_TOUR:
+                switch(jeu.personnageManipulerParLeFou()){
+                    case ROI:
+                        tracerImage(imageJetonRoiSelection, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                        msg = "Pouvoir Fou :";
+                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                        msg = "Déplacer Roi";
+                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                        break;
+                    case GARDES:
+                        tracerImage(imageJetonGardeGaucheSelection, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                        msg = "Pouvoir fou :";
+                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                        msg = "Déplacer Gardes";
+                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                        break;
+                    case SORCIER:
+                        tracerImage(imageJetonSorcierSelection, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                        msg = "Pouvoir Fou :";
+                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                        msg = "Déplacer Sorcier";
+                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                        break;                          
+                    default:
+                        break;
+                }
+                break;
+            case CHOIX_FOU:
+                tracerImage(imageJetonFou, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                msg = "Pouvoir Fou :";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                msg = "Choisir un";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                msg = "personnage";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 3 *(hauteurCarte / 5));
+                break;
+            case CHOIX_ROI:
+                tracerImage(imageJetonRoi, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                msg = "Pouvoir Roi";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                msg = "Déplacer le ";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                msg = "cortège";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 3 *(hauteurCarte / 5));
+                break;
+            case CHOIX_SORCIER:
+                tracerImage(imageJetonSorcier, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                msg = "Pouvoir Sorcier :";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                msg = "Attirer un";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                msg = "personnage";
+                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 3 *(hauteurCarte / 5));
+                break;
+            default :
+                break;
+        }
     }
 
     void tracerChoix() {
@@ -950,14 +1016,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     private void afficherBoutonAnnuler() { 
-        int debutBoutonX = largeurFenetre / 16;
-        int debutBoutonY = 18 * hauteurFenetre / 28;
-        int largeurBouton = largeurCarte()/2;
-        int hauteurBouton = hauteurCarte()/2;
+        debutBoutonAnnulerX = 13 * largeurFenetre / 64;
+        debutBoutonAnnulerY = 19 * hauteurFenetre / 28;
+        largeurBoutonAnnuler = largeurCarte()/2;
+        hauteurBoutonAnnuler = hauteurCarte()/2;
         if (jeu.plateau().paquet.tourActuel().estVide()) {
-            tracerImage(imageBoutonAnnulerGrise, 3 * debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
+            tracerImage(imageBoutonAnnulerGrise, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler);
         } else {
-            tracerImage(imageBoutonAnnuler, 3 * debutBoutonX, debutBoutonY, largeurBouton, hauteurBouton);
+            tracerImage(imageBoutonAnnuler, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler);
         }
     }
 
@@ -1172,4 +1238,21 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public int quartHauteurPlateau() {
         return quartHauteurPlateau;
     }
+
+    public int debutBoutonAnnulerX() {
+        return debutBoutonAnnulerX;
+    }
+
+    public int debutBoutonAnnulerY() {
+        return debutBoutonAnnulerY;
+    }
+
+    public int largeurBoutonAnnuler() {
+        return debutBoutonAnnulerX() + largeurBoutonAnnuler;
+    }
+
+    public int hauteurBoutonAnnuler() {
+        return debutBoutonAnnulerY() + hauteurBoutonAnnuler;
+    }
+
 }
