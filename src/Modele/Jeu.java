@@ -140,12 +140,17 @@ public class Jeu extends Observable {
         return ETAT_JEU;
     }
 
-    public String nomJoueurCourant(){
-        return "";
+    public String nomJoueurGauche(){
+        return nomJoueurGauche;
     }
+
+    public String nomJoueurDroite(){
+        return nomJoueurDroite;
+    }
+
     public void initNomJoueurs(String joueurGauche, String joueurDroite){
         nomJoueurGauche = joueurGauche;
-        nomJoueurDroite = joueurGauche;
+        nomJoueurDroite = joueurDroite;
     }
 
     // ====================

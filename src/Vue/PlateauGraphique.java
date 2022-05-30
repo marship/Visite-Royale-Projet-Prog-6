@@ -127,7 +127,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         } else {
             // Affichage de la pop-up "Ecran de victoire"
         }
-
     }
 
     // =======================
@@ -272,9 +271,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
 
         tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
-        tracerLabel("Joueur Gauche", largeurCasePlateau(), 5 * hauteurFenetre / 30);
+        tracerLabel(jeu.nomJoueurGauche(), largeurCasePlateau(), 5 * hauteurFenetre / 30);
         tracerImage(imageTorcheDroite, 15*largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
-        tracerLabel("Joueur Droit", 15*largeurCasePlateau(), 5 * hauteurFenetre / 30);
+        tracerLabel(jeu.nomJoueurDroite(), 15*largeurCasePlateau(), 5 * hauteurFenetre / 30);
 
     }
 
@@ -328,17 +327,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                 case UN_PLUS_UN:
                                     if(i >= positionGardeGauche-2 && i <= positionGardeGauche+2){
                                         tracerJeton(carte.personnage(), imageJetonGardeGauche, jeu.casePassee());
-                                        System.out.println("Je veux bouger le garde gauche");
                                         if(i == positionGardeGauche-1){
-                                            System.out.println("Un petit pas à gauche !!!");
                                             tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit-1);
                                         }else if(i == positionGardeGauche+1){
-                                            System.out.println("Un petit pas à droite !!!");
                                             tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit+1);
                                         }
         
                                     }else if(i >= positionGardeDroit-2 && i <= positionGardeDroit+2 ){
-                                        System.out.println("Je veux bouger le garde droit");
                                         tracerJeton(carte.personnage(), imageJetonGardeDroit, jeu.casePassee());
                                         
                                         if(i == positionGardeDroit-1){
@@ -358,7 +353,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     }
                     else{
                         //TODO remplacer fouGrise par jetonPointille une fois image créée
-                        tracerJeton(carte.personnage(), image, i);
+                        tracerJeton(carte.personnage(), imageJetonFouGrise, i);
                         //dessinable.setColor(new Color(0, 150, 255));
                         //dessinable.setStroke(new BasicStroke(5f));
                         //dessinable.drawRect(i * largeurCasePlateau, debutPlateauY, largeurCasePlateau, hauteurPlateau);
@@ -435,11 +430,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         }
             tracerImage(imageElement, casePlateau * largeurCasePlateau, hauteurElement,
                 largeurCasePlateau, quartHauteurPlateau);
-    }
-
-    public void afficherInfoTour() {
-        String msg = "Tour de " + jeu.nomJoueurCourant();
-        tracerLabel(msg, 100, hauteurCarte);
     }
 
     public void afficherCartesJoueurCourant() {
