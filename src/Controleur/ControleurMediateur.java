@@ -386,6 +386,8 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "Valider":
                 initInfoJoueurs();
+                System.out.println(InterfaceGraphique.getJoueurPrioritaire());
+                
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();

@@ -45,6 +45,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
     JComboBox<String> comboBoxJoueurGauche, comboBoxJoueurDroite;
     JTextField valeurNomJoueurGauche, valeurNomJoueurDroite;
+    static JRadioButton prioJoueurGauche;
+    static JRadioButton prioJoueurDroite;
+    static JRadioButton joueurAleatoire;
 
     public static JFrame fenetre;
 
@@ -207,25 +210,30 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         gbc.gridwidth = 2;
 
-        JRadioButton prioJoueurGauche = new JRadioButton("Joue en premier", false);
+        ButtonGroup G1 = new ButtonGroup();
+
+        prioJoueurGauche = new JRadioButton("Joueur gauche commence", false);
         prioJoueurGauche.setContentAreaFilled(false);
         prioJoueurGauche.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 3;
+        G1.add(prioJoueurGauche);
         panelSelectionJoueurs.add(prioJoueurGauche, gbc);
 
-        JRadioButton prioJoueurDroite = new JRadioButton("Joue en premier", false);
+        prioJoueurDroite = new JRadioButton("Joueur droit commence", false);
         prioJoueurDroite.setContentAreaFilled(false);
         prioJoueurDroite.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 4;
+        G1.add(prioJoueurDroite);
         panelSelectionJoueurs.add(prioJoueurDroite, gbc);
 
-        JRadioButton joueurAleatoire = new JRadioButton("Choix aléatoire", false);
+        joueurAleatoire = new JRadioButton("Choix aléatoire", true);
         joueurAleatoire.setContentAreaFilled(false);
         joueurAleatoire.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 5;
+        G1.add(joueurAleatoire);
         panelSelectionJoueurs.add(joueurAleatoire, gbc);
 
         gbc.gridwidth = 1;
@@ -296,6 +304,20 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         }
 
     }
+
+    public static String getJoueurPrioritaire(){
+        if(prioJoueurGauche.isSelected()){
+            return "Joueur Gauche en premier";
+        } else if(prioJoueurDroite.isSelected()){
+            return "Joueur Droite en premier";
+        } else if(joueurAleatoire.isSelected()){
+            return "Choix aléatoire";
+        } else {
+            return "erreur dans la sélection, ne devrait jamais arriver";
+        }
+    }
+
+
 
     public void miseAJourFinDeTour() {
         fenetre.repaint();
