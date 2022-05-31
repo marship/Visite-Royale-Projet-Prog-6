@@ -15,7 +15,7 @@ public class TelechargementFichier {
     // ========================
     public TelechargementFichier() throws IOException {
 
-        String cheminVersBureau = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "VisiteRoyal_RegleDuJeu.pdf";
+        String cheminVersBureau = System.getProperty("user.dir") + File.separator + "VisiteRoyal_RegleDuJeu.pdf";
         File telechargementRegles = new File(cheminVersBureau);
         OutputStream fluxDeSortie = null;
 

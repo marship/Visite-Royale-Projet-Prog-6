@@ -59,7 +59,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     InterfaceGraphique(Jeu j, CollecteurEvenements cEvenements) {
         jeu = j;
         collecteurEvenements = cEvenements;
-        //musique = new Son(musiqueAudio);
+        musique = new Son(musiqueAudio);
     }
 
     public static void demarrer(Jeu jeu, CollecteurEvenements cEvenements) {
@@ -547,7 +547,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        boutonMainAdverse = new DesignBoutons("Révéler main adverse", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 11);
+        boutonMainAdverse = new DesignBoutons("Révéler main", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 16);
         boutonMainAdverse.addActionListener(new AdaptateurCommande(collecteurEvenements, "Visible"));
         plateauGraphique.add(boutonMainAdverse, gbc);
 

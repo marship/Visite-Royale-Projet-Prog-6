@@ -1,10 +1,7 @@
 package Controleur;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Random;
 
 import javax.swing.JFileChooser;
@@ -434,7 +431,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changerEtatPartie();
                 interfaceUtilisateur.afficherPanneau("OptionsJeu");
                 break;
-            case "ChangeJou" :
+            case "ChangeJou":
                 interfaceUtilisateur.afficherPanneau("ChangementJoueur");
                 break;
             case "Recommencer":
@@ -451,7 +448,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("Plateau");
-                if(!PlateauGraphique.affichageEcranVictoire){
+                if (!PlateauGraphique.affichageEcranVictoire) {
                     PlateauGraphique.victoire.dispose();
                 }
                 InterfaceGraphique.fenetre.setEnabled(true);
@@ -470,7 +467,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "AnnulerTour":
                 int type = typeJoueur[joueurCourant];
-                if(type == JOUEUR_HUMAIN){
+                if (type == JOUEUR_HUMAIN) {
                     jeu.annulerTour();
                     jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                     jeu.changeCarteActuelle(8);
@@ -519,7 +516,7 @@ public class ControleurMediateur implements CollecteurEvenements {
         return true;
     }
 
-    private void choixJoueurCommence(){
+    private void choixJoueurCommence() {
         switch (InterfaceGraphique.getJoueurPrioritaire()) {
             case 0:
                 jeu.choixPremierJoueur(JOUEUR_GAUCHE);

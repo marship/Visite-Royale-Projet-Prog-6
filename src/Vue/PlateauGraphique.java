@@ -16,6 +16,10 @@ import Global.InfoJeu;
 import Global.InfoPlateau;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -104,7 +108,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         jeu = j;
         collecteurEvenements = cEvenements;
         jeu.ajouteObservateur(this);
-        
+
         // plateau = jeu.plateau();
     }
 
@@ -139,8 +143,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         tracerPlateau();
         affichageEcranVictoire = false;
 
-        
-        if(!jeu.estPartieTerminee() && affichageEcranVictoire == false){
+        if (!jeu.estPartieTerminee() && affichageEcranVictoire == false) {
 
             afficherCartesAutreJoueur();
             afficherZoneCartesJouees();
@@ -148,12 +151,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
             afficherPioche();
             afficherDefausse();
             afficherPouvoirActif();
-            if(jeu.actionAutoriser()){
+            if (jeu.actionAutoriser()) {
                 afficherCartesJoueurCourant();
             }
 
         } else {
-            
 
             afficherEcranVictoire();
             affichageEcranVictoire = true;
@@ -168,14 +170,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
         victoire.setBounds(500, 500, 800, 200);
         victoire.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         victoire.setAlwaysOnTop(true);
-        
 
         victoire.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridx = 1;
         JLabel annonceVictoire = new JLabel(jeu.traiterGagnant());
-        annonceVictoire.setFont(new Font(Font.SANS_SERIF,  Font.BOLD, 20));
+        annonceVictoire.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
         victoire.add(annonceVictoire, gbc);
 
         gbc.weighty = 0.33;
@@ -185,17 +186,20 @@ public class PlateauGraphique extends JPanel implements Observateur {
         DesignBoutons boutonRecommencerVictoire;
         try {
             gbc.gridx = 0;
-            boutonRecommencerVictoire = new DesignBoutons("Recommencer", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+            boutonRecommencerVictoire = new DesignBoutons("Recommencer", "Texture_Moyen_Bouton",
+                    "Texture_Moyen_Bouton_Clique", 12);
             boutonRecommencerVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Recommencer"));
             victoire.add(boutonRecommencerVictoire, gbc);
 
             gbc.gridx++;
-            boutonRetourMenuVictoire = new DesignBoutons("Retour au menu", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+            boutonRetourMenuVictoire = new DesignBoutons("Retour au menu", "Texture_Moyen_Bouton",
+                    "Texture_Moyen_Bouton_Clique", 12);
             boutonRetourMenuVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
             victoire.add(boutonRetourMenuVictoire, gbc);
-            
+
             gbc.gridx++;
-            boutonQuitterVictoire = new DesignBoutons("Quitter le jeu", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 12);
+            boutonQuitterVictoire = new DesignBoutons("Quitter le jeu", "Texture_Moyen_Bouton",
+                    "Texture_Moyen_Bouton_Clique", 12);
             boutonQuitterVictoire.addActionListener(new AdaptateurCommande(collecteurEvenements, "Quitter"));
             victoire.add(boutonQuitterVictoire, gbc);
 
@@ -207,7 +211,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
         victoire.setVisible(true);
         jeu.nonFinPartie();
     }
-
 
     // =======================
     // ===== MISE A JOUR =====
@@ -278,7 +281,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                 case ROI:
                                     tracerJeton(Element.ROI, imageJetonRoi);
                                     break;
-                            
+
                                 default:
                                     break;
                             }
@@ -361,72 +364,80 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     private void tracerTorches(ImagePlateau imageTorcheGauche, ImagePlateau imageTorcheDroite) {
-        tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
+        tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(),
+                hauteurCasePlateau() / 3);
         tracerLabel(jeu.nomJoueurGauche(), largeurCasePlateau(), 5 * hauteurFenetre / 30);
-        tracerImage(imageTorcheDroite, 15*largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(), hauteurCasePlateau()/3);
-        tracerLabel(jeu.nomJoueurDroite(), 15*largeurCasePlateau(), 5 * hauteurFenetre / 30);
+        tracerImage(imageTorcheDroite, 15 * largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(),
+                hauteurCasePlateau() / 3);
+        tracerLabel(jeu.nomJoueurDroite(), 15 * largeurCasePlateau(), 5 * hauteurFenetre / 30);
     }
 
     private void afficherPouvoirActif() {
         int debutPiocheX = largeurFenetre / 32;
         int debutPiocheY = 18 * hauteurFenetre / 28;
         String msg;
-        switch(jeu.getEtatJeu()) {
+        switch (jeu.getEtatJeu()) {
             case DEBUT_TOUR:
-                switch(jeu.personnageManipulerParLeFou()){
+                switch (jeu.personnageManipulerParLeFou()) {
                     case ROI:
-                        tracerImage(imageJetonRoiSelection, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                        tracerImage(imageJetonRoiSelection, 25 * debutPiocheX, debutPiocheY, largeurCarte,
+                                hauteurCasePlateau / 4);
                         msg = "Pouvoir Fou :";
-                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                        tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
                         msg = "Déplacer Roi";
-                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                        tracerLabel(msg, 25 * debutPiocheX,
+                                debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         break;
                     case GARDES:
-                        tracerImage(imageJetonGardeGaucheSelection, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                        tracerImage(imageJetonGardeGaucheSelection, 25 * debutPiocheX, debutPiocheY, largeurCarte,
+                                hauteurCasePlateau / 4);
                         msg = "Pouvoir fou :";
-                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                        tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
                         msg = "Déplacer Gardes";
-                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                        tracerLabel(msg, 25 * debutPiocheX,
+                                debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         break;
                     case SORCIER:
-                        tracerImage(imageJetonSorcierSelection, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                        tracerImage(imageJetonSorcierSelection, 25 * debutPiocheX, debutPiocheY, largeurCarte,
+                                hauteurCasePlateau / 4);
                         msg = "Pouvoir Fou :";
-                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                        tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
                         msg = "Déplacer Sorcier";
-                        tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
-                        break;                          
+                        tracerLabel(msg, 25 * debutPiocheX,
+                                debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
+                        break;
                     default:
                         break;
                 }
                 break;
             case CHOIX_FOU:
-                tracerImage(imageJetonFou, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                tracerImage(imageJetonFou, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
                 msg = "Pouvoir Fou :";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
                 msg = "Choisir un";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                 msg = "personnage";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 3 *(hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 3 * (hauteurCarte / 5));
                 break;
             case CHOIX_ROI:
-                tracerImage(imageJetonRoi, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                tracerImage(imageJetonRoi, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
                 msg = "Pouvoir Roi";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
                 msg = "Déplacer le ";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                 msg = "cortège";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 3 *(hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 3 * (hauteurCarte / 5));
                 break;
             case CHOIX_SORCIER:
-                tracerImage(imageJetonSorcier, 25*debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau/4);
+                tracerImage(imageJetonSorcier, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
                 msg = "Pouvoir Sorcier :";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + (hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
                 msg = "Attirer un";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 2 *(hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                 msg = "personnage";
-                tracerLabel(msg, 25*debutPiocheX, debutPiocheY + hauteurCasePlateau/4 + 3 *(hauteurCarte / 5));
+                tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 3 * (hauteurCarte / 5));
                 break;
-            default :
+            default:
                 break;
         }
     }
@@ -494,12 +505,12 @@ public class PlateauGraphique extends JPanel implements Observateur {
                         if (jeu.casePassee() == i) {
                             tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
                             tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
-                            switch(carte.deplacement()){
+                            switch (carte.deplacement()) {
                                 case RAPPROCHE:
                                     tracerJeton(carte.personnage(), imageJetonGardeGauche,
-                                    positionRoi - 1);
+                                            positionRoi - 1);
                                     tracerJeton(carte.personnage(), imageJetonGardeDroit,
-                                    positionRoi + 1);
+                                            positionRoi + 1);
                                     break;
                                 case UN:
                                     if (i == positionGardeGauche - 1 ||
@@ -553,32 +564,32 @@ public class PlateauGraphique extends JPanel implements Observateur {
                             }
                         } else {
                             if (carte.deplacement() == Deplacement.RAPPROCHE) {
-                                if (i== positionRoi - 1) {
+                                if (i == positionRoi - 1) {
                                     tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                                 }
-                                if (i== positionRoi + 1) {
+                                if (i == positionRoi + 1) {
                                     tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                                 }
                             }
-                            if (i== positionGardeGauche - 2) {
+                            if (i == positionGardeGauche - 2) {
                                 tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                             }
 
-                            if (i== positionGardeDroit + 2) {
+                            if (i == positionGardeDroit + 2) {
                                 tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                             }
 
-                            if (i== positionGardeGauche + 2
+                            if (i == positionGardeGauche + 2
                                     && positionRoi > i) {
                                 tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                             }
 
-                            if (i== positionGardeDroit - 2
+                            if (i == positionGardeDroit - 2
                                     && positionRoi < i) {
                                 tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                             }
 
-                            if (i== positionGardeGauche - 1) {
+                            if (i == positionGardeGauche - 1) {
                                 tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                             }
 
@@ -595,29 +606,25 @@ public class PlateauGraphique extends JPanel implements Observateur {
                             }
                         }
                     } else {
-                        if(carte.personnage() == Element.FOU){
+                        if (carte.personnage() == Element.FOU) {
                             int positionRoi = positionJeton(Element.ROI, false);
-                            if(jeu.personnageManipulerParLeFou == Element.GARDES){
+                            if (jeu.personnageManipulerParLeFou == Element.GARDES) {
                                 if (jeu.casePassee() == i) {
                                     tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
                                     tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
-                                    if(i < positionRoi){
+                                    if (i < positionRoi) {
                                         tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche, jeu.casePassee());
-                                    }
-                                    else{
+                                    } else {
                                         tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit, jeu.casePassee());
                                     }
-                                }
-                                else{
-                                    if(i < positionRoi){
+                                } else {
+                                    if (i < positionRoi) {
                                         tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, i);
-                                    }
-                                    else{
+                                    } else {
                                         tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeDroitTransparent, i);
                                     }
                                 }
-                            }
-                            else{
+                            } else {
                                 if (jeu.casePassee() == i) {
                                     tracerJeton(jeu.personnageManipulerParLeFou, pass, jeu.casePassee());
                                     tracerJeton(jeu.personnageManipulerParLeFou, ancien);
@@ -625,8 +632,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                     tracerJeton(jeu.personnageManipulerParLeFou, image, i);
                                 }
                             }
-                        }
-                        else{
+                        } else {
                             if (jeu.casePassee() == i) {
                                 tracerJeton(carte.personnage(), pass, jeu.casePassee());
                                 tracerJeton(carte.personnage(), ancien);
@@ -815,11 +821,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 dessinable.setStroke(new BasicStroke(5f));
                 dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             }
-            if (jeu.carteActuelle() == i) {
-                dessinable.setColor(new Color(0, 150, 255));
-                dessinable.setStroke(new BasicStroke(5f));
-                dessinable.drawRect((4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
-            }
         }
     }
 
@@ -996,11 +997,17 @@ public class PlateauGraphique extends JPanel implements Observateur {
         int debutPiocheY = 18 * hauteurFenetre / 28;
         if (jeu.plateau().paquet.pioche().taille() != 0) {
             tracerImage(imageDosCarte, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
+            String msg = "" + jeu.plateau().paquet.pioche().taille();
+            if (jeu.plateau().paquet.pioche().taille() < 10) {
+                tracerLabelChiffres(msg, debutPiocheX + (largeurCarte / 3),
+                        debutPiocheY + hauteurCarte - (hauteurCarte / 10));
+            } else {
+                tracerLabelChiffres(msg, debutPiocheX + (largeurCarte / 6),
+                        debutPiocheY + hauteurCarte - (hauteurCarte / 10));
+            }
         } else {
             tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         }
-        String msg = jeu.plateau().paquet.pioche().taille() + " cartes restantes";
-        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte + (hauteurCarte / 5));
     }
 
     private void afficherDefausse() {
@@ -1016,20 +1023,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     }
 
-    private void afficherBoutonAnnuler() { 
+    private void afficherBoutonAnnuler() {
         debutBoutonAnnulerX = 13 * largeurFenetre / 64;
         debutBoutonAnnulerY = 19 * hauteurFenetre / 28;
-        largeurBoutonAnnuler = largeurCarte()/2;
-        hauteurBoutonAnnuler = hauteurCarte()/2;
+        largeurBoutonAnnuler = largeurCarte() / 2;
+        hauteurBoutonAnnuler = hauteurCarte() / 2;
         if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite) {
-            tracerImage(imageBoutonAnnuler, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler);
-        } else{
-            tracerImage(imageBoutonAnnulerGrise, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler, hauteurBoutonAnnuler);
+            tracerImage(imageBoutonAnnuler, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler,
+                    hauteurBoutonAnnuler);
+        } else {
+            tracerImage(imageBoutonAnnulerGrise, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler,
+                    hauteurBoutonAnnuler);
         }
     }
 
     public int positionJeton(Element element, boolean enPixel) {
-        if(enPixel){
+        if (enPixel) {
             return (jeu.obtenirPositionElement(element) + taillePlateau / 2) * largeurCasePlateau;
         }
         return (jeu.obtenirPositionElement(element) + taillePlateau / 2);
@@ -1056,6 +1065,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
         Font fonte = new Font(" TimesRoman ", Font.BOLD, 16);
         dessinable.setFont(fonte);
         dessinable.setColor(Color.white);
+        dessinable.drawString(texte, x, y);
+    }
+
+    public void tracerLabelChiffres(String texte, int x, int y) {
+        Font fonte = new Font(" TimesRoman ", Font.BOLD, 38);
+        dessinable.setFont(fonte);
+        dessinable.setColor(Color.BLACK);
         dessinable.drawString(texte, x, y);
     }
 
