@@ -76,6 +76,21 @@ public class AdaptateurSourisMouvement implements MouseMotionListener {
     // =======================================
     @Override
     public void mouseDragged(MouseEvent e) {
-        // Pas Nécéssaire
+        int positionSourisX = e.getX();
+        int positionSourisY = e.getY();
+
+        if (survolerZone(positionSourisX, positionSourisY, false)) {
+            positionSourisX = recalculerPositionCarte(positionSourisX);
+            collecteurEvenements.passerSurCarte(positionSourisX);
+        } else {
+            collecteurEvenements.passerSurCarte(8);
+        }
+
+        if (survolerZone(positionSourisX, positionSourisY, true)) {
+            positionSourisX = recalculerPositionCase(positionSourisX);
+            collecteurEvenements.passerSurCase(positionSourisX);
+        } else {
+            collecteurEvenements.passerSurCase(-1);
+        }
     }
 }
