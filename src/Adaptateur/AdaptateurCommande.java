@@ -8,12 +8,17 @@ import Vue.CollecteurEvenements;
 
 public class AdaptateurCommande implements ActionListener {
 
+    // ======================
+    // ===== CONSTANTES =====
+    // ======================
+    static final String SON = "Son";
+
     // =====================
     // ===== ATTRIBUTS =====
     // =====================
     CollecteurEvenements collecteurEvenements;
     String commande;
-    Son son;
+    Son son = new Son(SON);
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -38,6 +43,6 @@ public class AdaptateurCommande implements ActionListener {
     // ===== SON ACTION =====
     // ======================
     void jouerSon() {
-        son = new Son();
+        son.jouer();
     }
 }

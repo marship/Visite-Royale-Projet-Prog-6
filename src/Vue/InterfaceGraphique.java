@@ -22,9 +22,7 @@ import Global.InfoJeu;
 public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUtilisateur, Observateur {
 
     Jeu jeu;
-    Son son;
     Son musique;
-    String sonAudio = "Son_Bouton";
     String musiqueAudio = "the-weeknd-medieval";
     // String musiqueAudio = "gangstas-paradise-medieval";
     CollecteurEvenements collecteurEvenements;
@@ -273,14 +271,14 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridx = 0;
         gbc.gridy = 6; 
 
-        boutonValiderSelection = new DesignBoutons("Valider", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        boutonValiderSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
+        boutonValiderSelection = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonValiderSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
         boutonValiderSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(boutonValiderSelection, gbc);
 
         gbc.gridx = 1;
-        boutonAnnulerSelection = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        boutonAnnulerSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
+        boutonAnnulerSelection = new DesignBoutons("Valider", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonAnnulerSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "Valider"));
         boutonAnnulerSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(boutonAnnulerSelection, gbc);
 
@@ -372,18 +370,18 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridx = 0;
         gbc.gridy = 6; 
 
-        boutonValiderSelection = new DesignBoutons("Valider", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        boutonValiderSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
+        boutonValiderSelection = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonValiderSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
         boutonValiderSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(boutonValiderSelection, gbc);
 
         gbc.gridx = 1;
-        boutonAnnulerSelection = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        boutonAnnulerSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
+        boutonAnnulerSelection = new DesignBoutons("Valider", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonAnnulerSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
         boutonAnnulerSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(boutonAnnulerSelection, gbc);
     }
-
+    
     @Override
     public String getInfoJoueurInit(int coteJoueur) {
         String joueur;
