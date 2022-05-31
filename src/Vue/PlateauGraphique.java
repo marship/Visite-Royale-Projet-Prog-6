@@ -85,6 +85,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== IMAGES BOUTONS ====
     // =========================
     ImagePlateau imageBoutonAnnuler, imageBoutonAnnulerGrise;
+    ImagePlateau imageFlecheGauche, imageFlecheDroite;
 
     // =============================================
     // ===== INFO POSITIONS ELEMENTS GRAPHIQUE =====
@@ -336,40 +337,21 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
                 tracerJeton(Element.FOU, imageJetonFouGrise);
                 tracerJeton(Element.SORCIER, imageJetonSorcierGrise);
-                int d = jeu.positionsPourCour();
-                if (d == 1 || d == 0) {
-                    dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(
-                            positionJeton(Element.ROI, true) - largeurCasePlateau
-                                    + largeurCasePlateau / 3,
-                            quartHauteurPlateau * 4,
-                            30, 30);
-                }
-                if (d == 2 || d == 0) {
-                    dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(
-                            positionJeton(Element.ROI, true) + largeurCasePlateau
-                                    + largeurCasePlateau / 3,
-                            quartHauteurPlateau * 4,
-                            30, 30);
-                }
 
             default:
                 break;
         }
-
         tracerChoixPreView();
         tracerChoix();
-
     }
 
     private void tracerTorches(ImagePlateau imageTorcheGauche, ImagePlateau imageTorcheDroite) {
-        tracerImage(imageTorcheGauche, largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(),
+        tracerImage(imageTorcheGauche, largeurCasePlateau() * 2, 2 * hauteurFenetre / 40, largeurCasePlateau(),
                 hauteurCasePlateau() / 3);
-        tracerLabel(jeu.nomJoueurGauche(), largeurCasePlateau(), 5 * hauteurFenetre / 30);
-        tracerImage(imageTorcheDroite, 15 * largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(),
+        tracerLabelJoueur(jeu.nomJoueurGauche(), largeurCasePlateau(), (int) ((5 * hauteurFenetre / 30) / 1.3));
+        tracerImage(imageTorcheDroite, 14 * largeurCasePlateau(), 2 * hauteurFenetre / 40, largeurCasePlateau(),
                 hauteurCasePlateau() / 3);
-        tracerLabel(jeu.nomJoueurDroite(), 15 * largeurCasePlateau(), 5 * hauteurFenetre / 30);
+        tracerLabelJoueur(jeu.nomJoueurDroite(), 15 * largeurCasePlateau(), (int) ((5 * hauteurFenetre / 30) / 1.3));
     }
 
     private void afficherPouvoirActif() {
@@ -427,6 +409,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                 msg = "cortège";
                 tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 3 * (hauteurCarte / 5));
+                int d = jeu.positionsPourCour();
+                if (d == 1 || d == 0) {
+                    tracerImage(imageFlecheGauche, ((jeu.obtenirPositionElement(Element.ROI) + 8 - 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                }
+                if (d == 2 || d == 0) {
+                    tracerImage(imageFlecheDroite, ((jeu.obtenirPositionElement(Element.ROI) + 8 + 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                }
                 break;
             case CHOIX_SORCIER:
                 tracerImage(imageJetonSorcier, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
@@ -1075,6 +1064,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.drawString(texte, x, y);
     }
 
+    public void tracerLabelJoueur(String texte, int x, int y) {
+        Font fonte = new Font("Serif", Font.BOLD, 20);
+        dessinable.setFont(fonte);
+        dessinable.setColor(Color.WHITE);
+        dessinable.drawString(texte, x, y);
+    }
+
     // TODO charger images depuis le fichier de configuration
     private void chargementDesImages() {
         imagePlateau = chargeImage("Plateau");
@@ -1167,6 +1163,9 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         imageBoutonAnnuler = chargeImage("Bouton_Annuler");
         imageBoutonAnnulerGrise = chargeImageGrise("Bouton_Annuler");
+
+        imageFlecheGauche = chargeImage("Fleche_Gauche");
+        imageFlecheDroite = chargeImage("Fleche_Droite");
 
     }
 
