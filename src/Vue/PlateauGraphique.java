@@ -1044,7 +1044,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         debutBoutonAnnulerY = 19 * hauteurFenetre / 28;
         largeurBoutonAnnuler = largeurCarte() / 2;
         hauteurBoutonAnnuler = hauteurCarte() / 2;
-        if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite) {
+        if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite || jeu.personnageManipulerParLeFou() != Element.FOU) {
             tracerImage(imageBoutonAnnuler, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler,
                     hauteurBoutonAnnuler);
         } else {
