@@ -385,7 +385,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                 debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         break;
                     default:
-                        if(jeu.estPouvoirFouActivable() && jeu.plateau().paquet.tourActuel().estVide()){
+                        if(jeu.estPouvoirFouActivable() && jeu.plateau().paquet.tourActuel().estVide() && !jeu.teleportationFaite){
                             tracerImage(imageJetonFouTransparent, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
                             msg = "Pouvoir Fou";
                             tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
