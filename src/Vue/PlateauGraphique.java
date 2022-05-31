@@ -388,6 +388,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                 debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         break;
                     default:
+                        if(jeu.estPouvoirFouActivable()){
+                            tracerImage(imageJetonFou, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
+                            msg = "Pouvoir Fou";
+                            tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
+                            msg = "activable !!!";
+                            tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
+                        }
                         break;
                 }
                 break;
@@ -1011,16 +1018,20 @@ public class PlateauGraphique extends JPanel implements Observateur {
     private void afficherPioche() {
         int debutPiocheX = largeurFenetre / 32;
         int debutPiocheY = 18 * hauteurFenetre / 28;
+        int debutLabelX = debutPiocheX + (largeurCarte / 6);
+        int debutLabelY = debutPiocheY + hauteurCarte - (hauteurCarte / 10);
+        Color couleur = Color.BLACK;
         if (jeu.plateau().paquet.pioche().taille() != 0) {
             tracerImage(imageDosCarte, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
             String msg = "" + jeu.plateau().paquet.pioche().taille();
-            if (jeu.plateau().paquet.pioche().taille() < 10) {
-                tracerLabelChiffres(msg, debutPiocheX + (largeurCarte / 3),
-                        debutPiocheY + hauteurCarte - (hauteurCarte / 10));
-            } else {
-                tracerLabelChiffres(msg, debutPiocheX + (largeurCarte / 6),
-                        debutPiocheY + hauteurCarte - (hauteurCarte / 10));
+            if (jeu.plateau().paquet.pioche().taille() < 15 && !jeu.getEtatCouronne()) {
+                couleur = Color.RED;
+                tracerLabel("pioche bientôt vide !", debutPiocheX, debutPiocheY);
             }
+            if (jeu.plateau().paquet.pioche().taille() < 10) {
+                debutLabelX = debutPiocheX + (largeurCarte / 3);
+            }
+            tracerLabelChiffres(msg, debutLabelX, debutLabelY, couleur);
         } else {
             tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         }
@@ -1084,10 +1095,10 @@ public class PlateauGraphique extends JPanel implements Observateur {
         dessinable.drawString(texte, x, y);
     }
 
-    public void tracerLabelChiffres(String texte, int x, int y) {
+    public void tracerLabelChiffres(String texte, int x, int y, Color couleur) {
         Font fonte = new Font(" TimesRoman ", Font.BOLD, 38);
         dessinable.setFont(fonte);
-        dessinable.setColor(Color.BLACK);
+        dessinable.setColor(couleur);
         dessinable.drawString(texte, x, y);
     }
 
