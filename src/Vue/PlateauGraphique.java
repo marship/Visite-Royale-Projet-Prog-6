@@ -166,7 +166,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         victoire = new JDialog(new JFrame("Victoire !"));
         victoire.setBounds(500, 500, 800, 200);
         victoire.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         victoire.setAlwaysOnTop(true);
 
         victoire.setLayout(new GridBagLayout());
@@ -407,10 +407,18 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 3 * (hauteurCarte / 5));
                 int d = jeu.positionsPourCour();
                 if (d == 1 || d == 0) {
-                    tracerImage(imageFlecheGauche, ((jeu.obtenirPositionElement(Element.ROI) + 8 - 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                    tracerImage(imageFlecheGauche,
+                            ((jeu.obtenirPositionElement(Element.ROI) + 8 - 1) * largeurCasePlateau)
+                                    + (largeurCasePlateau / 4),
+                            (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4),
+                            largeurCasePlateau / 2, quartHauteurPlateau / 2);
                 }
                 if (d == 2 || d == 0) {
-                    tracerImage(imageFlecheDroite, ((jeu.obtenirPositionElement(Element.ROI) + 8 + 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                    tracerImage(imageFlecheDroite,
+                            ((jeu.obtenirPositionElement(Element.ROI) + 8 + 1) * largeurCasePlateau)
+                                    + (largeurCasePlateau / 4),
+                            (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4),
+                            largeurCasePlateau / 2, quartHauteurPlateau / 2);
                 }
                 break;
             case CHOIX_SORCIER:
@@ -432,13 +440,14 @@ public class PlateauGraphique extends JPanel implements Observateur {
             int positionGardeGauche = positionJeton(Element.GARDE_GAUCHE, false);
             int positionGardeDroit = positionJeton(Element.GARDE_DROIT, false);
             int positionRoi = positionJeton(Element.ROI, false);
-            switch(jeu.getEtatJeu()){
+            switch (jeu.getEtatJeu()) {
                 case DEBUT_TOUR:
                     if (jeu.carteActuelle() == 8) {
                         break;
                     }
                     Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
-                    int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(),
+                    int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(
+                            carte.personnage(),
                             carte.deplacement());
                     int i = 0;
                     while (i < taillePlateau) {
@@ -510,39 +519,43 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                             if (i == positionGardeGauche - 2) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
                                             }
-        
+
                                             if (i == positionGardeDroit + 2) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
                                             }
-        
+
                                             if (i == positionGardeGauche + 2
                                                     && positionRoi > i) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
                                             }
-        
+
                                             if (i == positionGardeDroit - 2
                                                     && positionRoi < i) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
                                             }
-        
+
                                             if (i == positionGardeGauche - 1) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
-                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit - 1);
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit,
+                                                        positionGardeDroit - 1);
                                             }
-        
+
                                             if (i == positionGardeDroit - 1) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
-                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche - 1);
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche,
+                                                        positionGardeGauche - 1);
                                             }
-        
+
                                             if (i == positionGardeGauche + 1) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
-                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit + 1);
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit,
+                                                        positionGardeDroit + 1);
                                             }
-        
+
                                             if (i == positionGardeDroit + 1) {
                                                 tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
-                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche + 1);
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche,
+                                                        positionGardeGauche + 1);
                                             }
                                             break;
                                         default:
@@ -560,33 +573,33 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                     if (i == positionGardeGauche - 2) {
                                         tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                                     }
-        
+
                                     if (i == positionGardeDroit + 2) {
                                         tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                                     }
-        
+
                                     if (i == positionGardeGauche + 2
                                             && positionRoi > i) {
                                         tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                                     }
-        
+
                                     if (i == positionGardeDroit - 2
                                             && positionRoi < i) {
                                         tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                                     }
-        
+
                                     if (i == positionGardeGauche - 1) {
                                         tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                                     }
-        
+
                                     if (i == positionGardeDroit - 1) {
                                         tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                                     }
-        
+
                                     if (i == positionGardeGauche + 1) {
                                         tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
                                     }
-        
+
                                     if (i == positionGardeDroit + 1) {
                                         tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                                     }
@@ -598,9 +611,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                             tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
                                             tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
                                             if (i < positionRoi) {
-                                                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche, jeu.casePassee());
+                                                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche,
+                                                        jeu.casePassee());
                                             } else {
-                                                tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit, jeu.casePassee());
+                                                tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit,
+                                                        jeu.casePassee());
                                             }
                                         } else {
                                             if (i < positionRoi) {
@@ -632,38 +647,48 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     break;
                 case CHOIX_ROI:
                     int d = jeu.positionsPourCour();
-                    if(jeu.casePassee() == positionRoi-1){
+                    if (jeu.casePassee() == positionRoi - 1) {
                         if (d == 1 || d == 0) {
-                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche-1);
-                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit-1);
-                            tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi-1);
-                            tracerImage(imageFlecheGauche, ((jeu.obtenirPositionElement(Element.ROI) + 8 - 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent,
+                                    positionGardeGauche - 1);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit - 1);
+                            tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi - 1);
+                            tracerImage(imageFlecheGauche,
+                                    ((jeu.obtenirPositionElement(Element.ROI) + 8 - 1) * largeurCasePlateau)
+                                            + (largeurCasePlateau / 4),
+                                    (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4),
+                                    largeurCasePlateau / 2, quartHauteurPlateau / 2);
                         }
                     }
-                    if(jeu.casePassee() == positionRoi+1){
+                    if (jeu.casePassee() == positionRoi + 1) {
                         if (d == 2 || d == 0) {
-                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche+1);
-                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit+1);
-                            tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi+1);
-                            tracerImage(imageFlecheDroite, ((jeu.obtenirPositionElement(Element.ROI) + 8 + 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent,
+                                    positionGardeGauche + 1);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit + 1);
+                            tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi + 1);
+                            tracerImage(imageFlecheDroite,
+                                    ((jeu.obtenirPositionElement(Element.ROI) + 8 + 1) * largeurCasePlateau)
+                                            + (largeurCasePlateau / 4),
+                                    (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4),
+                                    largeurCasePlateau / 2, quartHauteurPlateau / 2);
                         }
                     }
                     break;
                 case CHOIX_SORCIER:
                     int positionSorcier = positionJeton(Element.SORCIER, false);
-                    if(jeu.casePassee() == positionGardeGauche){
-                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionSorcier);
+                    if (jeu.casePassee() == positionGardeGauche) {
+                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionSorcier);
                     }
-                    if(jeu.casePassee() == positionGardeDroit){
-                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionSorcier);
+                    if (jeu.casePassee() == positionGardeDroit) {
+                        tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionSorcier);
                     }
-                    if(jeu.casePassee() == positionRoi){
+                    if (jeu.casePassee() == positionRoi) {
                         tracerJeton(Element.ROI, imageJetonRoiTransparent, positionSorcier);
-                    }   
-                default: 
+                    }
+                default:
                     break;
             }
-            
+
         }
     }
 
@@ -736,7 +761,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public void afficherCartesJoueurCourant() {
-
         if (jeu.estPartieTerminee()) {
             return;
         }
@@ -831,7 +855,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     break;
             }
             InfoJeu etat = jeu.getEtatJeu();
-            if (jeu.carteJouable(cartesJoueurCourant[i]) && etat == InfoJeu.DEBUT_TOUR) {
+            if (jeu.carteJouable(cartesJoueurCourant[i]) && etat == InfoJeu.DEBUT_TOUR && !jeu.teleportationFaite) {
                 tracerImage(image, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
             } else {
                 tracerImage(imageGrise, (4 + i) * debutCartesX, debutCartesY, largeurCarte, hauteurCarte);
@@ -1048,7 +1072,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
         debutBoutonAnnulerY = 19 * hauteurFenetre / 28;
         largeurBoutonAnnuler = largeurCarte() / 2;
         hauteurBoutonAnnuler = hauteurCarte() / 2;
-        if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite || jeu.personnageManipulerParLeFou() != Element.FOU) {
+        if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite
+                || jeu.personnageManipulerParLeFou() != Element.FOU) {
             tracerImage(imageBoutonAnnuler, debutBoutonAnnulerX, debutBoutonAnnulerY, largeurBoutonAnnuler,
                     hauteurBoutonAnnuler);
         } else {
