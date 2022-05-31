@@ -671,7 +671,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
         gbc.gridy++;
         boutonRetourJeu = new DesignBoutons("Retour au jeu", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
-        boutonRetourJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
+        boutonRetourJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "QuitterMenuJeu"));
         panelOptionsJeu.add(boutonRetourJeu, gbc);
     }
 

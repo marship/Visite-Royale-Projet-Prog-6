@@ -82,7 +82,7 @@ public class MenuGraphique extends JPanel {
         imageOptionsJeu = chargeImage("Background_Options");
         imageReglesJeu = chargeImage("Background_Regles");
         imageCredits = chargeImage("Background_Credits");
-        //imageChangementJoueur = chargeImage("Background_Changer_Joueurs");
+        imageChangementJoueur = chargeImage("Background_Changer_Joueurs");
 
     }
 
