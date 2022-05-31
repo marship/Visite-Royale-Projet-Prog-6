@@ -336,24 +336,6 @@ public class PlateauGraphique extends JPanel implements Observateur {
                 tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGrise);
                 tracerJeton(Element.FOU, imageJetonFouGrise);
                 tracerJeton(Element.SORCIER, imageJetonSorcierGrise);
-                int d = jeu.positionsPourCour();
-                if (d == 1 || d == 0) {
-                    dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(
-                            positionJeton(Element.ROI, true) - largeurCasePlateau
-                                    + largeurCasePlateau / 3,
-                            quartHauteurPlateau * 4,
-                            30, 30);
-                }
-                if (d == 2 || d == 0) {
-                    dessinable.setColor(new Color(255, 255, 0));
-                    dessinable.fillOval(
-                            positionJeton(Element.ROI, true) + largeurCasePlateau
-                                    + largeurCasePlateau / 3,
-                            quartHauteurPlateau * 4,
-                            30, 30);
-                }
-
             default:
                 break;
         }
@@ -444,30 +426,54 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
     void tracerChoix() {
         if (jeu.actionAutoriser()) {
-            if (jeu.carteActuelle() == 8) {
-                return;
-            }
-            Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
-            int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(),
-                    carte.deplacement());
-            int i = 0;
-            while (i < taillePlateau) {
-                if (listeDeplacementPossiblesAvecCarte[i] == 1) {
-                    ImagePlateau image = imageJetonFouGrise;
-                    ImagePlateau pass = imageJetonFouGrise;
-                    ImagePlateau ancien = imageJetonFouGrise;
-                    switch (carte.personnage()) {
-                        case FOU:
-                            switch (jeu.personnageManipulerParLeFou) {
+            int positionGardeGauche = positionJeton(Element.GARDE_GAUCHE, false);
+            int positionGardeDroit = positionJeton(Element.GARDE_DROIT, false);
+            int positionRoi = positionJeton(Element.ROI, false);
+            switch(jeu.getEtatJeu()){
+                case DEBUT_TOUR:
+                    if (jeu.carteActuelle() == 8) {
+                        break;
+                    }
+                    Carte carte = jeu.recupererMainJoueur(jeu.joueurCourant())[jeu.carteActuelle];
+                    int[] listeDeplacementPossiblesAvecCarte = jeu.listeDeplacementPossiblesAvecCarte(carte.personnage(),
+                            carte.deplacement());
+                    int i = 0;
+                    while (i < taillePlateau) {
+                        if (listeDeplacementPossiblesAvecCarte[i] == 1) {
+                            ImagePlateau image = imageJetonFouGrise;
+                            ImagePlateau pass = imageJetonFouGrise;
+                            ImagePlateau ancien = imageJetonFouGrise;
+                            switch (carte.personnage()) {
                                 case FOU:
-                                    image = imageJetonFouTransparent;
-                                    pass = imageJetonFou;
-                                    ancien = imageJetonFouGriseTransparent;
+                                    switch (jeu.personnageManipulerParLeFou) {
+                                        case FOU:
+                                            image = imageJetonFouTransparent;
+                                            pass = imageJetonFou;
+                                            ancien = imageJetonFouGriseTransparent;
+                                            break;
+                                        case SORCIER:
+                                            image = imageJetonSorcierTransparent;
+                                            pass = imageJetonSorcier;
+                                            ancien = imageJetonSorcierGriseTransparent;
+                                            break;
+                                        case ROI:
+                                            image = imageJetonRoiTransparent;
+                                            pass = imageJetonRoi;
+                                            ancien = imageJetonRoiGriseTransparent;
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                     break;
                                 case SORCIER:
                                     image = imageJetonSorcierTransparent;
                                     pass = imageJetonSorcier;
                                     ancien = imageJetonSorcierGriseTransparent;
+                                    break;
+                                case GARDES:
+                                    image = imageJetonGardeDroitTransparent;
+                                    pass = imageJetonGardeDroit;
+                                    ancien = imageJetonGardeDroitGriseTransparent;
                                     break;
                                 case ROI:
                                     image = imageJetonRoiTransparent;
@@ -475,175 +481,179 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                     ancien = imageJetonRoiGriseTransparent;
                                     break;
                                 default:
+                                    image = imageJetonFouGrise;
                                     break;
                             }
-                            break;
-                        case SORCIER:
-                            image = imageJetonSorcierTransparent;
-                            pass = imageJetonSorcier;
-                            ancien = imageJetonSorcierGriseTransparent;
-                            break;
-                        // TODO afficher le/les bons gardes à deplacer
-                        case GARDES:
-                            image = imageJetonGardeDroitTransparent;
-                            pass = imageJetonGardeDroit;
-                            ancien = imageJetonGardeDroitGriseTransparent;
-                            break;
-                        case ROI:
-                            image = imageJetonRoiTransparent;
-                            pass = imageJetonRoi;
-                            ancien = imageJetonRoiGriseTransparent;
-                            break;
-                        default:
-                            image = imageJetonFouGrise;
-                            break;
-                    }
-                    if (carte.personnage() == Element.GARDES) {
-                        int positionGardeGauche = positionJeton(Element.GARDE_GAUCHE, false);
-                        int positionGardeDroit = positionJeton(Element.GARDE_DROIT, false);
-                        int positionRoi = positionJeton(Element.ROI, false);
-                        if (jeu.casePassee() == i) {
-                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
-                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
-                            switch (carte.deplacement()) {
-                                case RAPPROCHE:
-                                    tracerJeton(carte.personnage(), imageJetonGardeGauche,
-                                            positionRoi - 1);
-                                    tracerJeton(carte.personnage(), imageJetonGardeDroit,
-                                            positionRoi + 1);
-                                    break;
-                                case UN:
-                                    if (i == positionGardeGauche - 1 ||
-                                            i == positionGardeGauche + 1) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
-                                    } else {
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
-                                    }
-                                    break;
-                                case UN_PLUS_UN:
-                                    if (i == positionGardeGauche - 2) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
-                                    }
-
-                                    if (i == positionGardeDroit + 2) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
-                                    }
-
-                                    if (i == positionGardeGauche + 2
-                                            && positionRoi > i) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
-                                    }
-
-                                    if (i == positionGardeDroit - 2
-                                            && positionRoi < i) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
-                                    }
-
-                                    if (i == positionGardeGauche - 1) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit - 1);
-                                    }
-
-                                    if (i == positionGardeDroit - 1) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche - 1);
-                                    }
-
-                                    if (i == positionGardeGauche + 1) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit + 1);
-                                    }
-
-                                    if (i == positionGardeDroit + 1) {
-                                        tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
-                                        tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche + 1);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        } else {
-                            if (carte.deplacement() == Deplacement.RAPPROCHE) {
-                                if (i == positionRoi - 1) {
-                                    tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
-                                }
-                                if (i == positionRoi + 1) {
-                                    tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
-                                }
-                            }
-                            if (i == positionGardeGauche - 2) {
-                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
-                            }
-
-                            if (i == positionGardeDroit + 2) {
-                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
-                            }
-
-                            if (i == positionGardeGauche + 2
-                                    && positionRoi > i) {
-                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
-                            }
-
-                            if (i == positionGardeDroit - 2
-                                    && positionRoi < i) {
-                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
-                            }
-
-                            if (i == positionGardeGauche - 1) {
-                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
-                            }
-
-                            if (i == positionGardeDroit - 1) {
-                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
-                            }
-
-                            if (i == positionGardeGauche + 1) {
-                                tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
-                            }
-
-                            if (i == positionGardeDroit + 1) {
-                                tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
-                            }
-                        }
-                    } else {
-                        if (carte.personnage() == Element.FOU) {
-                            int positionRoi = positionJeton(Element.ROI, false);
-                            if (jeu.personnageManipulerParLeFou == Element.GARDES) {
+                            if (carte.personnage() == Element.GARDES) {
                                 if (jeu.casePassee() == i) {
                                     tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
                                     tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
-                                    if (i < positionRoi) {
-                                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche, jeu.casePassee());
-                                    } else {
-                                        tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit, jeu.casePassee());
+                                    switch (carte.deplacement()) {
+                                        case RAPPROCHE:
+                                            tracerJeton(carte.personnage(), imageJetonGardeGauche,
+                                                    positionRoi - 1);
+                                            tracerJeton(carte.personnage(), imageJetonGardeDroit,
+                                                    positionRoi + 1);
+                                            break;
+                                        case UN:
+                                            if (i == positionGardeGauche - 1 ||
+                                                    i == positionGardeGauche + 1) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                            } else {
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                            }
+                                            break;
+                                        case UN_PLUS_UN:
+                                            if (i == positionGardeGauche - 2) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                            }
+        
+                                            if (i == positionGardeDroit + 2) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                            }
+        
+                                            if (i == positionGardeGauche + 2
+                                                    && positionRoi > i) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                            }
+        
+                                            if (i == positionGardeDroit - 2
+                                                    && positionRoi < i) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                            }
+        
+                                            if (i == positionGardeGauche - 1) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit - 1);
+                                            }
+        
+                                            if (i == positionGardeDroit - 1) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche - 1);
+                                            }
+        
+                                            if (i == positionGardeGauche + 1) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, i);
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, positionGardeDroit + 1);
+                                            }
+        
+                                            if (i == positionGardeDroit + 1) {
+                                                tracerJeton(carte.personnage(), imageJetonGardeDroit, i);
+                                                tracerJeton(carte.personnage(), imageJetonGardeGauche, positionGardeGauche + 1);
+                                            }
+                                            break;
+                                        default:
+                                            break;
                                     }
                                 } else {
-                                    if (i < positionRoi) {
-                                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, i);
-                                    } else {
-                                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeDroitTransparent, i);
+                                    if (carte.deplacement() == Deplacement.RAPPROCHE) {
+                                        if (i == positionRoi - 1) {
+                                            tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                                        }
+                                        if (i == positionRoi + 1) {
+                                            tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                                        }
+                                    }
+                                    if (i == positionGardeGauche - 2) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                                    }
+        
+                                    if (i == positionGardeDroit + 2) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                                    }
+        
+                                    if (i == positionGardeGauche + 2
+                                            && positionRoi > i) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                                    }
+        
+                                    if (i == positionGardeDroit - 2
+                                            && positionRoi < i) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                                    }
+        
+                                    if (i == positionGardeGauche - 1) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                                    }
+        
+                                    if (i == positionGardeDroit - 1) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
+                                    }
+        
+                                    if (i == positionGardeGauche + 1) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeGaucheTransparent, i);
+                                    }
+        
+                                    if (i == positionGardeDroit + 1) {
+                                        tracerJeton(carte.personnage(), imageJetonGardeDroitTransparent, i);
                                     }
                                 }
                             } else {
-                                if (jeu.casePassee() == i) {
-                                    tracerJeton(jeu.personnageManipulerParLeFou, pass, jeu.casePassee());
-                                    tracerJeton(jeu.personnageManipulerParLeFou, ancien);
+                                if (carte.personnage() == Element.FOU) {
+                                    if (jeu.personnageManipulerParLeFou == Element.GARDES) {
+                                        if (jeu.casePassee() == i) {
+                                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheGriseTransparent);
+                                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitGriseTransparent);
+                                            if (i < positionRoi) {
+                                                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGauche, jeu.casePassee());
+                                            } else {
+                                                tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroit, jeu.casePassee());
+                                            }
+                                        } else {
+                                            if (i < positionRoi) {
+                                                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, i);
+                                            } else {
+                                                tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeDroitTransparent, i);
+                                            }
+                                        }
+                                    } else {
+                                        if (jeu.casePassee() == i) {
+                                            tracerJeton(jeu.personnageManipulerParLeFou, pass, jeu.casePassee());
+                                            tracerJeton(jeu.personnageManipulerParLeFou, ancien);
+                                        } else {
+                                            tracerJeton(jeu.personnageManipulerParLeFou, image, i);
+                                        }
+                                    }
                                 } else {
-                                    tracerJeton(jeu.personnageManipulerParLeFou, image, i);
+                                    if (jeu.casePassee() == i) {
+                                        tracerJeton(carte.personnage(), pass, jeu.casePassee());
+                                        tracerJeton(carte.personnage(), ancien);
+                                    } else {
+                                        tracerJeton(carte.personnage(), image, i);
+                                    }
                                 }
-                            }
-                        } else {
-                            if (jeu.casePassee() == i) {
-                                tracerJeton(carte.personnage(), pass, jeu.casePassee());
-                                tracerJeton(carte.personnage(), ancien);
-                            } else {
-                                tracerJeton(carte.personnage(), image, i);
                             }
                         }
+                        i++;
                     }
-                }
-                i++;
+                    break;
+                case CHOIX_ROI:
+                    if(jeu.casePassee() == positionRoi-1){
+                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche-1);
+                        tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit-1);
+                        tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi-1);
+                    }
+                    if(jeu.casePassee() == positionRoi+1){
+                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche+1);
+                        tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit+1);
+                        tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi+1);
+                    }
+                    break;
+                case CHOIX_SORCIER:
+                    int positionSorcier = positionJeton(Element.SORCIER, false);
+                    if(jeu.casePassee() == positionGardeGauche){
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionSorcier);
+                    }
+                    if(jeu.casePassee() == positionGardeDroit){
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionSorcier);
+                    }
+                    if(jeu.casePassee() == positionRoi){
+                        tracerJeton(Element.ROI, imageJetonRoiTransparent, positionSorcier);
+                    }   
+                default: 
+                    break;
             }
+            
         }
     }
 
