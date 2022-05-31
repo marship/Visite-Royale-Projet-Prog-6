@@ -142,13 +142,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
 
         if (!jeu.estPartieTerminee() && affichageEcranVictoire == false) {
 
-            afficherCartesAutreJoueur();
             afficherZoneCartesJouees();
             afficherBoutonAnnuler();
             afficherPioche();
             afficherDefausse();
             afficherPouvoirActif();
             if (jeu.actionAutoriser()) {
+                afficherCartesAutreJoueur();
                 afficherCartesJoueurCourant();
             }
 
