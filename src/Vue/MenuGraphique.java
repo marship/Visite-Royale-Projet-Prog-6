@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 public class MenuGraphique extends JPanel {
     
-    Image imageMenuPrincipal, imageOptions, imageOptionsJeu, imageSelectionJoueurs, imageRegles, imageCredits, imageCharger;
+    Image imageMenuPrincipal, imageOptions, imageOptionsJeu, imageReglesJeu, imageSelectionJoueurs, imageRegles, imageCredits, imageCharger;
     
     Graphics2D dessinable;
     int largeurFenetre;
@@ -54,6 +54,12 @@ public class MenuGraphique extends JPanel {
             case OPTIONS_JEU :
                 tracerImage(imageOptionsJeu, 0, 0, largeurFenetre, hauteurFenetre);
                 break;
+            case REGLES_JEU :
+                tracerImage(imageReglesJeu, 0, 0, largeurFenetre, hauteurFenetre);
+                break;
+            case CREDITS :
+                tracerImage(imageCredits, 0, 0, largeurFenetre, hauteurFenetre);
+                break;
             default :
                 break;
 
@@ -71,6 +77,8 @@ public class MenuGraphique extends JPanel {
         imageOptions = chargeImage("Background_Options");
         imageSelectionJoueurs = chargeImage("Background_Selection");
         imageOptionsJeu = chargeImage("Background_Options");
+        imageReglesJeu = chargeImage("Background_Regles");
+        imageCredits = chargeImage("Background_Credits");
 
         //imageRegles = chargeImage("Jeton_Petite_CouronneV2");
         //imageCredits = chargeImage("Jeton_Petite_CouronneV2");

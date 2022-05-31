@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.IOException;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.InsetsUIResource;
 
 import Adaptateur.AdaptateurBoutonGlissant;
 import Adaptateur.AdaptateurClavier;
@@ -34,12 +35,12 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     JSlider boutonGlissantMusique;
     JDialog victoire;
     DesignBoutons boutonJouer, boutonCharger, boutonRegles, boutonOptions, boutonQuitter, boutonCredits,
-            boutonConfirmer, boutonRetourAccueil, boutonValiderSelection, boutonAnnulerSelection, boutonMainAdverse,
+            boutonConfirmer, boutonRetourAccueil, boutonTelechargement, boutonValiderSelection, boutonAnnulerSelection, boutonMainAdverse,
             boutonHistoriqueArriere, boutonHistoriqueAvant, boutonOptionsJeu, boutonFinDeTour,
             boutonRetourMenu, boutonAide, boutonRecommencer, boutonSauvegarderEtQuitter, boutonRetourJeu;
 
     CardLayout layout;
-    JPanel panelCourant, panelMenuPrincipal, panelOptions, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
+    JPanel panelCourant, panelMenuPrincipal, panelOptions, panelRegles, panelCredits, panelSelectionJoueurs, panelPlateau, panelOptionsJeu;
 
     JComboBox<String> comboBoxJoueurGaucheInit, comboBoxJoueurDroiteInit;
     JComboBox<String> comboBoxJoueurGaucheChang, comboBoxJoueurDroiteChang;
@@ -89,6 +90,10 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
             panelCourant.add(panelMenuPrincipal, "MenuPrincipal");
             creerOptions();
             panelCourant.add(panelOptions, "Options");
+            creerRegles();
+            panelCourant.add(panelRegles, "ReglesJeu");
+            creerCredits();
+            panelCourant.add(panelCredits, "Credits");
             creerPlateauJeu();
             panelCourant.add(plateauGraphique, "Plateau");
             creerChangementJoueurs();
@@ -116,6 +121,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fenetre.setVisible(true);
     }
+
 
     // Crée le JPanel du menu principal
     public void creerMenuPrincipal() throws IOException {
@@ -436,20 +442,75 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         }
     }
 
-
-
     public void miseAJourFinDeTour() {
         fenetre.repaint();
     }
 
     // Crée le JPanel des regles
     // TODO Faire l'affichage des regles
-    public void creerRegles() {
+    public void creerRegles() throws IOException {
 
+        panelRegles = new MenuGraphique(InfoJeu.REGLES_JEU);
+        panelRegles.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.weightx = 0.5;
+        gbc.weighty = 0.5;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(40,40,40,0); 
+        boutonRetourMenu = new DesignBoutons("Retour", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonRetourMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        panelRegles.add(boutonRetourMenu, gbc);
+
+
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        boutonTelechargement = new DesignBoutons("Télécharger les règles", "Texture_Bouton", "Texture_Bouton_Clique", 20);
+        boutonTelechargement.addActionListener(new AdaptateurCommande(collecteurEvenements, "TelechargerRegles"));
+        panelRegles.add(boutonTelechargement, gbc);
+
+        gbc.gridx++;
+        gbc.anchor = GridBagConstraints.SOUTHEAST;
+        DesignBoutons remplissage = new DesignBoutons("remplissage", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        remplissage.setVisible(false);
+        panelRegles.add(remplissage, gbc);
+    }
+
+    public void creerCredits() throws IOException {
+
+        panelCredits = new MenuGraphique(InfoJeu.CREDITS);
+        panelCredits.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.weightx = 0.5;
+        gbc.weighty = 0.5;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(40,40,40,0); 
+        boutonRetourMenu = new DesignBoutons("Retour", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        boutonRetourMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "MenuPrincipal"));
+        panelCredits.add(boutonRetourMenu, gbc);
+
+
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        DesignBoutons remplissage = new DesignBoutons("remplissage", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        remplissage.setVisible(false);
+        panelRegles.add(remplissage, gbc);
+
+        gbc.gridx++;
+        gbc.anchor = GridBagConstraints.SOUTHEAST;
+        DesignBoutons remplissage2 = new DesignBoutons("remplissage", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
+        remplissage2.setVisible(false);
+        panelRegles.add(remplissage2, gbc);
     }
 
     // Crée le JPanel des options
-    // TODO Faire l'affichage des options
     public void creerOptions() throws IOException {
 
         int borderTop = hauteurFenetre / 5;

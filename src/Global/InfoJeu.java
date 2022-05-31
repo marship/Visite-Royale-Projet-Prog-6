@@ -17,7 +17,7 @@ public enum InfoJeu {
     REGLES_JEU (12),
 
     SELECTION_JOUEURS (11),
-    AIDE_JEU (13);
+    CREDITS (13);
 
     int valeurElement;
 
