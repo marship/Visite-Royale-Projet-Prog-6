@@ -480,9 +480,25 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "SauvegarderQuitter":
                 jeu.sauvegarder(typeJoueur[0], typeJoueur[1]);
+                plateauDebutTour = jeu.plateau().clone();
+                if (!jeu.estPartieEnCours()) {
+                    jeu.changerEtatPartie();
+                }
+                jeu.changerEtatJeu(preOptions);
+                ETAT_JEU = preOptions;
+                interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "RetourJeu":
                 initInfoJoueursChang();
+                plateauDebutTour = jeu.plateau().clone();
+                if (!jeu.estPartieEnCours()) {
+                    jeu.changerEtatPartie();
+                }
+                jeu.changerEtatJeu(preOptions);
+                ETAT_JEU = preOptions;
+                interfaceUtilisateur.afficherPanneau("Plateau");
+                break;
+            case "QuitterMenuJeu":
                 plateauDebutTour = jeu.plateau().clone();
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();

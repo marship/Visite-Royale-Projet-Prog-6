@@ -622,7 +622,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
     public void creerOptionsJeu() throws IOException {
 
         int borderTop = hauteurFenetre / 3;
-        int borderBottom = hauteurFenetre / 10;
+        int borderBottom = hauteurFenetre / 20;
         int borderSides = largeurFenetre / 3;
 
         panelOptionsJeu = new MenuGraphique(InfoJeu.OPTIONS_JEU);
@@ -648,15 +648,12 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         panelOptionsJeu.add(musiqueBox, gbc);
 
         gbc.gridy++;
-        gbc.insets = new Insets(10, 0, 0, 0);
-        boutonAide = new DesignBoutons("Changer Joueurs", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
-        boutonAide.addActionListener(new AdaptateurCommande(collecteurEvenements, "ChangeJou"));
-        panelOptionsJeu.add(boutonAide, gbc);
+        gbc.insets = new Insets(5, 0, 0, 0);
 
-        gbc.gridy++;
-        boutonRecommencer = new DesignBoutons("Recommencer", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
-        boutonRecommencer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Recommencer"));
-        panelOptionsJeu.add(boutonRecommencer, gbc);
+        
+        boutonRetourJeu = new DesignBoutons("Reprendre", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
+        boutonRetourJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
+        panelOptionsJeu.add(boutonRetourJeu, gbc);
 
         gbc.gridy++;
         boutonSauvegarderEtQuitter = new DesignBoutons("Sauvegarder", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
@@ -664,15 +661,23 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
                 .addActionListener(new AdaptateurCommande(collecteurEvenements, "SauvegarderQuitter"));
         panelOptionsJeu.add(boutonSauvegarderEtQuitter, gbc);
 
+        
+        gbc.gridy++;
+        boutonAide = new DesignBoutons("Changer Joueurs", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
+        boutonAide.addActionListener(new AdaptateurCommande(collecteurEvenements, "ChangeJou"));
+        panelOptionsJeu.add(boutonAide, gbc);
+
+
+        gbc.gridy++;
+        boutonRecommencer = new DesignBoutons("Recommencer", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
+        boutonRecommencer.addActionListener(new AdaptateurCommande(collecteurEvenements, "Recommencer"));
+        panelOptionsJeu.add(boutonRecommencer, gbc);
+
         gbc.gridy++;
         boutonRetourMenu = new DesignBoutons("Retour au menu ", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
         boutonRetourMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
         panelOptionsJeu.add(boutonRetourMenu, gbc);
 
-        gbc.gridy++;
-        boutonRetourJeu = new DesignBoutons("Retour au jeu", "Texture_Grand_Bouton", "Texture_Grand_Bouton_Clique", 15);
-        boutonRetourJeu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
-        panelOptionsJeu.add(boutonRetourJeu, gbc);
     }
 
     @Override
