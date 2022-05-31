@@ -385,11 +385,11 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                 debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         break;
                     default:
-                        if(jeu.estPouvoirFouActivable()){
-                            tracerImage(imageJetonFou, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
+                        if(jeu.estPouvoirFouActivable() && jeu.plateau().paquet.tourActuel().estVide()){
+                            tracerImage(imageJetonFouTransparent, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
                             msg = "Pouvoir Fou";
                             tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
-                            msg = "activable !!!";
+                            msg = "activable !";
                             tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         }
                         break;
@@ -770,6 +770,13 @@ public class PlateauGraphique extends JPanel implements Observateur {
     public void afficherCartesJoueurCourant() {
         if (jeu.estPartieTerminee()) {
             return;
+        }
+
+        if(!jeu.getEtatCouronne() && jeu.plateau().paquet.defausse().estVide() && jeu.carteActuelle() == 8 && jeu.plateau().paquet.tourActuel().estVide()){
+            String msg = "Pioche rechargée ! On passe en petite couronne !";
+            int debutMessageX = 5 * debutCartesX;
+            int debutMessageY = 47 * hauteurFenetre / 56;
+            tracerLabel(msg, debutMessageX, debutMessageY);
         }
 
         Carte[] cartesJoueurCourant = jeu.recupererMainJoueur(jeu.joueurCourant());
