@@ -1061,7 +1061,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             String msg = "" + jeu.plateau().paquet.pioche().taille();
             if (jeu.plateau().paquet.pioche().taille() < 15 && !jeu.getEtatCouronne()) {
                 couleur = Color.RED;
-                tracerLabel("pioche bientôt vide !", debutPiocheX, debutPiocheY);
+                tracerLabel("Pioche bientôt vide !", debutPiocheX, 71 * hauteurFenetre / 112);
             }
             if (jeu.plateau().paquet.pioche().taille() < 10) {
                 debutLabelX = debutPiocheX + (largeurCarte / 3);
@@ -1081,7 +1081,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         }
         String msg = "Défausse";
-        tracerLabel(msg, debutPiocheX + (largeurCarte / 6), debutPiocheY + hauteurCarte + (hauteurCarte / 5));
+        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte + (hauteurCarte / 5));
 
     }
 
@@ -1125,21 +1125,21 @@ public class PlateauGraphique extends JPanel implements Observateur {
     }
 
     public void tracerLabel(String texte, int x, int y) {
-        Font fonte = new Font(" TimesRoman ", Font.BOLD, 16);
+        Font fonte = new Font(" TimesRoman ", Font.BOLD, hauteurFenetre/45);
         dessinable.setFont(fonte);
         dessinable.setColor(Color.white);
         dessinable.drawString(texte, x, y);
     }
 
     public void tracerLabelChiffres(String texte, int x, int y, Color couleur) {
-        Font fonte = new Font(" TimesRoman ", Font.BOLD, 38);
+        Font fonte = new Font(" TimesRoman ", Font.BOLD, 2 * hauteurFenetre/45);
         dessinable.setFont(fonte);
         dessinable.setColor(couleur);
         dessinable.drawString(texte, x, y);
     }
 
     public void tracerLabelJoueur(String texte, int x, int y) {
-        Font fonte = new Font("Serif", Font.BOLD, 20);
+        Font fonte = new Font("Serif", Font.BOLD, hauteurFenetre/36);
         dessinable.setFont(fonte);
         dessinable.setColor(Color.WHITE);
         dessinable.drawString(texte, x, y);
