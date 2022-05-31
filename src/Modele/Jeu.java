@@ -621,10 +621,19 @@ public class Jeu extends Observable {
     }
 
     public boolean carteJouable(Carte carteCourante) {
-        if (carteCourante.personnage() == dernierTypeDePersonnageJouer || dernierTypeDePersonnageJouer == VIDE) {
-            return true;
+        if(personnageManipulerParLeFou() != Element.FOU){
+            if(carteCourante.personnage() == personnageManipulerParLeFou() || carteCourante.personnage() == Element.FOU){
+                return true;
+            }else{
+                return false;
+            }
         }
-        return false;
+        else{
+            if (carteCourante.personnage() == dernierTypeDePersonnageJouer || dernierTypeDePersonnageJouer == VIDE) {
+                return true;
+            }
+            return false;
+        } 
     }
 
     public int[] initialiserTableau(int taille, int valeurDefaut) {
