@@ -249,11 +249,6 @@ public class TestPlateau {
         jeu.finDeTour();
         assertEquals(Element.GARDE_DROIT, jeu.obtenirElementPosition(5));
 
-        /*jeu.deplacerElement(Element.GARDE_DROIT,2);
-        jeu.finDeTour();
-        assertEquals(Element.GARDE_DROIT, jeu.obtenirElementPosition(4));
-        Bug si plusieurs pieces sur la meme case */
-
     }
 
     @Test
@@ -302,20 +297,6 @@ public class TestPlateau {
         jeu.echangerFouSorcier();
         assertEquals(-1,jeu.obtenirPositionElement(Element.SORCIER));
         assertEquals(1,jeu.obtenirPositionElement(Element.FOU));
-
-    }
-
-    @Test
-    public void testAnnulerTour() {
-        // NON
-
-        /*Carte[] cartes = jeu.recupererMainJoueur(jeu.joueurCourant());
-        jeu.jouerCarte(Element.GARDE_GAUCHE,jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[0].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[0].deplacement().getValeurDeplacement(), 0);
-        jeu.annulerTour();
-        assertEquals(jeu.obtenirPositionElement(Element.GARDE_GAUCHE) , jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[0].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[0].deplacement().getValeurDeplacement());
-        assertEquals(Element.FOU, jeu.personnageManipulerParLeFou);
-        assertEquals(Element.VIDE, jeu.dernierTypeDePersonnageJouer);
-        assertEquals(cartes[0],jeu.recupererMainJoueur(jeu.joueurCourant())[0]);*/
 
     }
 
@@ -509,11 +490,7 @@ public class TestPlateau {
 
     @Test
     public void testJouerCarte() {
-        // (à revoir)
-
-        
-        //jeu.jouerCarte(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage(), jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[3].deplacement().getValeurDeplacement(), 3);
-        //assertEquals(jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage()) - jeu.recupererMainJoueur(jeu.joueurCourant())[3].deplacement().getValeurDeplacement(), jeu.obtenirPositionElement(jeu.recupererMainJoueur(jeu.joueurCourant())[3].personnage()));
+        // Fonctionne
         
         jeu.jouerCarte(Element.SORCIER, 4, 5);
         assertEquals(4, jeu.obtenirPositionElement(Element.SORCIER)); 
@@ -531,14 +508,7 @@ public class TestPlateau {
         assertEquals(-4, jeu.obtenirPositionElement(Element.GARDE_DROIT)); 
 
     }
-     
-    @Test
-    public void testJouerSequenceCarte() {
-        // (à revoir)
-
-        jeu.recupererMainJoueur(jeu.joueurCourant());
-
-    }
+	
 
     @Test
     public void testDeplacerCour() {
@@ -590,22 +560,6 @@ public class TestPlateau {
 
     }
 
-    @Test
-    public void testPoserCarte() {
-        // (à revoir)
-
-        //jeu.recupererMainJoueur(jeu.joueurCourant())[1];
-
-
-    }
-
-    @Test
-    public void testRecupererMainJoueur() {
-
-        /*jeu.recupererMainJoueur(jeu.joueurCourant());
-        assertEquals(jeu.plateau().paquet.mainJoueur(jeu.joueurCourant()),);*/
-        
-    }
 
     @Test
     public void testInitialiserDernierTypeDePersonnageJouer() {
@@ -620,9 +574,6 @@ public class TestPlateau {
     public void testMajDernierTypeDePersonnageJouer() {
         // Fonctionne
 
-        //jeu.jouerCarte(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage(), 3, 5);
-        //jeu.majDernierTypeDePersonnageJouer(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage());
-        //assertEquals(jeu.recupererMainJoueur(jeu.joueurCourant())[5].personnage(), jeu.dernierTypeDePersonnageJouer);
         jeu.majDernierTypeDePersonnageJouer(Element.SORCIER);
         assertEquals(Element.SORCIER, jeu.dernierTypeDePersonnageJouer);
 
@@ -637,41 +588,6 @@ public class TestPlateau {
 
         jeu.majDernierTypeDePersonnageJouer(Element.GARDE_GAUCHE);
         assertEquals(Element.GARDE_GAUCHE, jeu.dernierTypeDePersonnageJouer);
-
-    }
-
-    @Test
-    public void testListeCarteJouable() {
-
-
-
-    }
-
-    @Test
-    public void testInitialiserTableau() {
-
-
-
-    }
-
-    @Test
-    public void testListeDeplacementPossiblesAvecPerso() {
-
-
-
-    }
-
-    @Test
-    public void testSelonLePersoMaisEnRecurcifPersoBase() {
-
-
-
-    }
-
-    @Test
-    public void testSelonLePersoMaisEnRecurcifPersoGardes() {
-
-
 
     }
 
@@ -709,14 +625,6 @@ public class TestPlateau {
         jeu.deplacerElement(Element.GARDE_DROIT,-3);
         jeu.finDeTour();
         assertEquals(2, jeu.positionsPourCour());
-
-    }
-
-
-    @Test
-    public void testListeDeplacementPossiblesAvecCarte() {
-
-        
 
     }
 

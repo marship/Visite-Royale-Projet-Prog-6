@@ -256,6 +256,10 @@ public class Plateau extends Historique<Coup> implements Cloneable {
         }
     }
 
+    public void aucunGagnant(){
+        joueurGagnant = AUCUN_GAGNANT;
+    }
+
     public void jouerCoup(Coup coup) {
         coup.fixerPlateau(this);
         nouveau(coup);
