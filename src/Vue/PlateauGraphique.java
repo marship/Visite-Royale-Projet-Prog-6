@@ -1088,7 +1088,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     private void afficherBoutonAnnuler() {
         debutBoutonAnnulerX = 13 * largeurFenetre / 64;
         debutBoutonAnnulerY = 19 * hauteurFenetre / 28;
-        largeurBoutonAnnuler = largeurCarte() / 2;
+        largeurBoutonAnnuler = hauteurCarte() / 2;
         hauteurBoutonAnnuler = hauteurCarte() / 2;
         if (!jeu.plateau().paquet.tourActuel().estVide() || jeu.teleportationFaite
                 || jeu.personnageManipulerParLeFou() != Element.FOU) {
