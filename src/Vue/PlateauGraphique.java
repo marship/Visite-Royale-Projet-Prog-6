@@ -1008,7 +1008,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
             tracerImage(imageCadrePiocheDefausse, debutPiocheX, debutPiocheY, largeurCarte, hauteurCarte);
         }
         String msg = "Défausse";
-        tracerLabel(msg, debutPiocheX, debutPiocheY + hauteurCarte + (hauteurCarte / 5));
+        tracerLabel(msg, debutPiocheX + (largeurCarte / 6), debutPiocheY + hauteurCarte + (hauteurCarte / 5));
 
     }
 

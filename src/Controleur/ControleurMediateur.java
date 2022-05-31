@@ -436,6 +436,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "Recommencer":
                 jeu.plateau().initialisation();
+                choixJoueurCommence();
                 jeu.fixerPositions();
                 joueurCourant = jeu.joueurCourant();
                 jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
