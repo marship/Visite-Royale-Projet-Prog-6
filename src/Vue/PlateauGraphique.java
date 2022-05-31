@@ -16,10 +16,6 @@ import Global.InfoJeu;
 import Global.InfoPlateau;
 
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -170,6 +166,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
         victoire = new JDialog(new JFrame("Victoire !"));
         victoire.setBounds(500, 500, 800, 200);
         victoire.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
         victoire.setAlwaysOnTop(true);
 
         victoire.setLayout(new GridBagLayout());
@@ -634,15 +631,22 @@ public class PlateauGraphique extends JPanel implements Observateur {
                     }
                     break;
                 case CHOIX_ROI:
+                    int d = jeu.positionsPourCour();
                     if(jeu.casePassee() == positionRoi-1){
-                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche-1);
-                        tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit-1);
-                        tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi-1);
+                        if (d == 1 || d == 0) {
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche-1);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit-1);
+                            tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi-1);
+                            tracerImage(imageFlecheGauche, ((jeu.obtenirPositionElement(Element.ROI) + 8 - 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                        }
                     }
                     if(jeu.casePassee() == positionRoi+1){
-                        tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche+1);
-                        tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit+1);
-                        tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi+1);
+                        if (d == 2 || d == 0) {
+                            tracerJeton(Element.GARDE_GAUCHE, imageJetonGardeGaucheTransparent, positionGardeGauche+1);
+                            tracerJeton(Element.GARDE_DROIT, imageJetonGardeDroitTransparent, positionGardeDroit+1);
+                            tracerJeton(Element.ROI, imageJetonRoiTransparent, positionRoi+1);
+                            tracerImage(imageFlecheDroite, ((jeu.obtenirPositionElement(Element.ROI) + 8 + 1) * largeurCasePlateau) + (largeurCasePlateau / 4), (debutPlateauY + 2 * quartHauteurPlateau) + (quartHauteurPlateau / 4), largeurCasePlateau / 2, quartHauteurPlateau / 2);
+                        }
                     }
                     break;
                 case CHOIX_SORCIER:

@@ -379,14 +379,18 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
-                PlateauGraphique.victoire.dispose();
+                if (!PlateauGraphique.affichageEcranVictoire) {
+                    PlateauGraphique.victoire.dispose();
+                }
                 InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "Valider":
                 jeu.plateau().initialisation();
-                plateauDebutTour = jeu.plateau().clone();
                 initInfoJoueursInit();
                 choixJoueurCommence();
+                plateauDebutTour = jeu.plateau().clone();
+                jeu.fixerPositions();
+                jeu.viderHistorique();
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
@@ -450,6 +454,8 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.changeCarteActuelle(8);
                 jeu.majDernierTypeDePersonnageJouer(Element.VIDE);
                 jeu.nonFinPartie();
+                jeu.plateau().aucunGagnant();
+                plateauDebutTour = jeu.plateau().clone();
                 jeu.viderHistorique();
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
@@ -465,6 +471,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "RetourJeu":
                 initInfoJoueursChang();
+                plateauDebutTour = jeu.plateau().clone();
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }

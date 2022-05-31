@@ -8,7 +8,6 @@ import java.awt.*;
 import java.io.IOException;
 
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.InsetsUIResource;
 
 import Adaptateur.AdaptateurBoutonGlissant;
 import Adaptateur.AdaptateurClavier;
