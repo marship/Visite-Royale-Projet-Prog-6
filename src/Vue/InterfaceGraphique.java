@@ -22,9 +22,7 @@ import Global.InfoJeu;
 public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUtilisateur, Observateur {
 
     Jeu jeu;
-    Son son;
     Son musique;
-    String sonAudio = "Son_Bouton";
     String musiqueAudio = "the-weeknd-medieval";
     // String musiqueAudio = "gangstas-paradise-medieval";
     CollecteurEvenements collecteurEvenements;
