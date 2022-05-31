@@ -406,6 +406,12 @@ public class ControleurMediateur implements CollecteurEvenements {
                 }
                 break;
             case "Regles":
+                interfaceUtilisateur.afficherPanneau("ReglesJeu");
+                break;
+            case "Credits":
+                interfaceUtilisateur.afficherPanneau("Credits");
+                break;
+            case "TelechargerRegles":
                 telechargerReglesDuJeu();
                 break;
             case "Options":
