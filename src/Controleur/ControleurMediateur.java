@@ -317,7 +317,19 @@ public class ControleurMediateur implements CollecteurEvenements {
                             jeu.changeCarteActuelle(8);
                         } else {
                             if (jeu.listeCarteJouable()[coupX] != 0) {
-                                jeu.changeCarteActuelle(coupX);
+                                if (jeu.personnageManipulerParLeFou() != Element.FOU) {
+                                    if (jeu.recupererMainJoueur(jeu.joueurCourant())[coupX].personnage() == Element.FOU
+                                            || jeu.recupererMainJoueur(jeu.joueurCourant())[coupX]
+                                                    .personnage() == jeu.personnageManipulerParLeFou) {
+                                        if (jeu.recupererMainJoueur(jeu.joueurCourant())[coupX]
+                                                .personnage() == jeu.personnageManipulerParLeFou) {
+                                            jeu.personnageManipulerParLeFou = Element.FOU;
+                                        }
+                                        jeu.changeCarteActuelle(coupX);
+                                    }
+                                } else {
+                                    jeu.changeCarteActuelle(coupX);
+                                }
                             } else {
                                 Configuration.instance().logger().info("Carte non identique");
                             }
