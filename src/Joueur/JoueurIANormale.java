@@ -3,7 +3,6 @@ package Joueur;
 import java.util.Random;
 
 import Global.Element;
-import Global.Deplacement;
 import Modele.CoupleAtteindrePlateau;
 import Modele.Evaluation;
 import Modele.Jeu;

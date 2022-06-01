@@ -483,8 +483,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                 ETAT_JEU = preOptions;
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
-            case "RetourJeu":
+            case "miseAJour":
                 initInfoJoueursChang();
+            case "RetourJeu":
                 plateauDebutTour = jeu.plateau().clone();
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
