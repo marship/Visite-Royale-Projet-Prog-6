@@ -23,8 +23,8 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
     Jeu jeu;
     Son musique;
-    String musiqueAudio = "the-weeknd-medieval";
-    // String musiqueAudio = "gangstas-paradise-medieval";
+    // String musiqueAudio = "the-weeknd-medieval";
+    String musiqueAudio = "gangstas-paradise-medieval";
     CollecteurEvenements collecteurEvenements;
 
     final static int VALEUR_MINIMALE_BOUTON_GLISSANT = -24;

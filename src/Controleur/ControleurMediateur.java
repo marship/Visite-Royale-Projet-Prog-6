@@ -98,10 +98,6 @@ public class ControleurMediateur implements CollecteurEvenements {
         changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
         changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
 
-        // String nomFichierAudio = "gangstas-paradise-medieval";
-        // String nomFichierAudio = "the-weeknd-medieval";
-        // lancerAudioMusique(nomFichierAudio);
-
         joueurCourant = jeu.joueurCourant();
         attenteCarte = false;
     }
