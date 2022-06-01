@@ -590,9 +590,11 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         boutonHistoriqueArriere = new DesignBoutons("←", "Texture_Petit_Bouton_Moitie",
                 "Texture_Petit_Bouton_Moitie_Clique", 30);
         boutonHistoriqueArriere.addActionListener(new AdaptateurCommande(collecteurEvenements, "Annuler"));
+        boutonHistoriqueArriere.setEnabled(false);
         boutonHistoriqueAvant = new DesignBoutons("→", "Texture_Petit_Bouton_Moitie",
                 "Texture_Petit_Bouton_Moitie_Clique", 30);
         boutonHistoriqueAvant.addActionListener(new AdaptateurCommande(collecteurEvenements, "Refaire"));
+        boutonHistoriqueAvant.setEnabled(false);
         Container historiqueAvantArriere = Box.createHorizontalBox();
         historiqueAvantArriere.add(boutonHistoriqueArriere);
         historiqueAvantArriere.add(boutonHistoriqueAvant);
@@ -678,6 +680,14 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         boutonRetourMenu.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
         panelOptionsJeu.add(boutonRetourMenu, gbc);
 
+    }
+
+    public void setBoutonHistoriqueArriere(boolean visible){
+        boutonHistoriqueArriere.setEnabled(visible);
+    }
+
+    public void setBoutonHistoriqueAvant(boolean visible){
+        boutonHistoriqueAvant.setEnabled(visible);
     }
 
     @Override

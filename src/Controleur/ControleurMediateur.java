@@ -292,6 +292,16 @@ public class ControleurMediateur implements CollecteurEvenements {
             jeu.fixerPositions();
             joueurCourant = jeu.joueurCourant();
             plateauDebutTour = jeu.plateau().clone();
+            if(jeu.plateau().peutAnnuler()){
+                interfaceUtilisateur.setBoutonHistoriqueArriere(true);
+            }else{
+                interfaceUtilisateur.setBoutonHistoriqueArriere(false);
+            }
+            if(jeu.plateau().peutRefaire()){
+                interfaceUtilisateur.setBoutonHistoriqueAvant(true);
+            }else{
+                interfaceUtilisateur.setBoutonHistoriqueAvant(false);
+            }
         }
     }
 
@@ -302,7 +312,22 @@ public class ControleurMediateur implements CollecteurEvenements {
             jeu.fixerPositions();
             joueurCourant = jeu.joueurCourant();
             plateauDebutTour = jeu.plateau().clone();
+            if(jeu.plateau().peutAnnuler()){
+                interfaceUtilisateur.setBoutonHistoriqueArriere(true);
+            }else{
+                interfaceUtilisateur.setBoutonHistoriqueArriere(false);
+            }
+            if(jeu.plateau().peutRefaire()){
+                interfaceUtilisateur.setBoutonHistoriqueAvant(true);
+            }else{
+                interfaceUtilisateur.setBoutonHistoriqueAvant(false);
+            }
         }
+    }
+    public void viderHistorique(){
+        jeu.viderHistorique();
+        interfaceUtilisateur.setBoutonHistoriqueArriere(false);
+        interfaceUtilisateur.setBoutonHistoriqueAvant(false);
     }
 
     @Override
@@ -402,7 +427,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 choixJoueurCommence();
                 plateauDebutTour = jeu.plateau().clone();
                 jeu.fixerPositions();
-                jeu.viderHistorique();
+                viderHistorique();
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
@@ -468,7 +493,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 jeu.nonFinPartie();
                 jeu.plateau().aucunGagnant();
                 plateauDebutTour = jeu.plateau().clone();
-                jeu.viderHistorique();
+                viderHistorique();
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
@@ -682,6 +707,16 @@ public class ControleurMediateur implements CollecteurEvenements {
 
             ETAT_JEU = InfoJeu.DEBUT_TOUR;
             changerJoueurCourant();
+            if(jeu.plateau().peutAnnuler()){
+                interfaceUtilisateur.setBoutonHistoriqueArriere(true);
+            }else{
+                interfaceUtilisateur.setBoutonHistoriqueArriere(false);
+            }
+            if(jeu.plateau().peutRefaire()){
+                interfaceUtilisateur.setBoutonHistoriqueAvant(true);
+            }else{
+                interfaceUtilisateur.setBoutonHistoriqueAvant(false);
+            }
             interfaceUtilisateur.miseAJourFinDeTour();
         }
     }

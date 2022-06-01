@@ -437,4 +437,16 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void setBoutonHistoriqueArriere(boolean visible) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setBoutonHistoriqueAvant(boolean visible) {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -10,6 +10,8 @@ public interface InterfaceUtilisateur {
 	String getInfoJoueurInit(int coteJoueur);
 	String getNomJoueurChang(int coteJoueur);
 	String getInfoJoueurChang(int coteJoueur);
+	void setBoutonHistoriqueArriere(boolean visible);
+	void setBoutonHistoriqueAvant(boolean visible);
 	void miseAJourFinDeTour();
 	JFrame fenetre();
     void augmenterVolume();
