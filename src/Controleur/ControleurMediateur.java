@@ -766,6 +766,16 @@ public class ControleurMediateur implements CollecteurEvenements {
         joueurCourant = jeu.joueurCourant();
         jeu.fixerPositions();
         plateauDebutTour = jeu.plateau().clone();
+        if(jeu.plateau().peutAnnuler()){
+            interfaceUtilisateur.setBoutonHistoriqueArriere(true);
+        }else{
+            interfaceUtilisateur.setBoutonHistoriqueArriere(false);
+        }
+        if(jeu.plateau().peutRefaire()){
+            interfaceUtilisateur.setBoutonHistoriqueAvant(true);
+        }else{
+            interfaceUtilisateur.setBoutonHistoriqueAvant(false);
+        }
         return true;
     }
 }

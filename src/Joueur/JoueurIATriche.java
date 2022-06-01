@@ -527,8 +527,10 @@ public class JoueurIATriche extends Joueur {
 
     public double calculJB(int horizon){
         if(horizon == 0){
+            jeu.changerJoueurCourant();
             Evaluation eval = new Evaluation(jeu.plateau().clone());
             double note = eval.note(jeu.joueurCourant());
+            jeu.changerJoueurCourant();
             return note;
         }
         else{
