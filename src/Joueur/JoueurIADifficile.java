@@ -38,6 +38,9 @@ public class JoueurIADifficile extends Joueur {
             }
             i++;
         }
+        if(jouee == Element.VIDE){
+            jeu.teleportationFaite = true;
+        }
     }
 
     @Override

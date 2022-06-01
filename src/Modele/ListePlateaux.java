@@ -96,25 +96,27 @@ public class ListePlateaux {
 
     private void calculSorcier(int[] positions, int[] cartesJouees) {
 
-        int[] nouv;
         // Le pouvoir du sorcier
         if (jeu.estPouvoirSorcierActivable(Element.GARDE_GAUCHE)) {
-            nouv = Arrays.copyOf(positions, 5);
-            nouv[1] = positions[4];
-            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(nouv, cartesJouees);
+            int tmpGG = positions[1];
+            positions[1] = positions[4];
+            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
             res.insereQueue(couple);
+            positions[1] = tmpGG;
         }
         if (jeu.estPouvoirSorcierActivable(Element.ROI)) {
-            nouv = Arrays.copyOf(positions, 5);
-            nouv[0] = positions[4];
-            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(nouv, cartesJouees);
+            int tmpRoi = positions[0];
+            positions[0] = positions[4];
+            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
             res.insereQueue(couple);
+            positions[0] = tmpRoi;
         }
         if (jeu.estPouvoirSorcierActivable(Element.GARDE_DROIT)) {
-            nouv = Arrays.copyOf(positions, 5);
-            nouv[2] = positions[4];
-            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(nouv, cartesJouees);
+            int tmpGD = positions[2];
+            positions[2] = positions[4];
+            CoupleAtteindrePlateau couple = new CoupleAtteindrePlateau(positions, cartesJouees);
             res.insereQueue(couple);
+            positions[2] = tmpGD;
         }
         // Jouer les cartes du sorcier
         newSorcier(positions, cartesJouees, jeu.plateau().paquet.nombreCartesElement(jeu.joueurCourant(), Element.SORCIER, 0), 0, "S");
