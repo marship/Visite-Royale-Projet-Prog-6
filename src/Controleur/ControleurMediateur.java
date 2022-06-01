@@ -62,7 +62,7 @@ public class ControleurMediateur implements CollecteurEvenements {
     // =================
     // ===== TIMER =====
     // =================
-    static final int LENTEUR_ATTENTE = 0;
+    static final int LENTEUR_ATTENTE = 100;
 
     // ====================
     // ===== ETAT JEU =====
@@ -381,20 +381,8 @@ public class ControleurMediateur implements CollecteurEvenements {
         switch (commande) {
             case "Jouer":
                 ETAT_JEU = InfoJeu.SELECTION_JOUEURS;
-                if (!jeu.estPartieEnCours()) {
-                    jeu.changerEtatPartie();
-                }
+                jeu.changerEtatPartie();
                 interfaceUtilisateur.afficherPanneau("SelectionJoueur");
-                break;
-            case "MenuPrincipal":
-                if (jeu.estPartieEnCours()) {
-                    jeu.changerEtatPartie();
-                }
-                interfaceUtilisateur.afficherPanneau("MenuPrincipal");
-                if (!PlateauGraphique.affichageEcranVictoire) {
-                    PlateauGraphique.victoire.dispose();
-                }
-                InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "Valider":
                 jeu.plateau().initialisation();
@@ -403,12 +391,16 @@ public class ControleurMediateur implements CollecteurEvenements {
                 plateauDebutTour = jeu.plateau().clone();
                 jeu.fixerPositions();
                 jeu.viderHistorique();
-                interfaceUtilisateur.afficherPanneau("Plateau");
                 if (!jeu.estPartieEnCours()) {
                     jeu.changerEtatPartie();
                 }
                 jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
+                try {
+                    PlateauGraphique.victoire.dispose();
+                } catch (Exception e) {
+                }
+                InterfaceGraphique.fenetre.setEnabled(true);
                 interfaceUtilisateur.afficherPanneau("Plateau");
                 break;
             case "Charger":
@@ -420,6 +412,11 @@ public class ControleurMediateur implements CollecteurEvenements {
                     ETAT_JEU = InfoJeu.DEBUT_TOUR;
                     interfaceUtilisateur.afficherPanneau("Plateau");
                 }
+                try {
+                    PlateauGraphique.victoire.dispose();
+                } catch (Exception e) {
+                }
+                InterfaceGraphique.fenetre.setEnabled(true);
                 break;
             case "Regles":
                 interfaceUtilisateur.afficherPanneau("ReglesJeu");
@@ -473,8 +470,9 @@ public class ControleurMediateur implements CollecteurEvenements {
                     jeu.changerEtatPartie();
                 }
                 interfaceUtilisateur.afficherPanneau("Plateau");
-                if (!PlateauGraphique.affichageEcranVictoire) {
+                try {
                     PlateauGraphique.victoire.dispose();
+                } catch (Exception e) {
                 }
                 InterfaceGraphique.fenetre.setEnabled(true);
                 break;
@@ -528,20 +526,27 @@ public class ControleurMediateur implements CollecteurEvenements {
             case "AideIA":
                 aideIA();
                 break;
-            case "RetourArriere":
+            case "MenuPrincipal":
                 jeu.plateau().initialisation();
                 jeu.fixerPositions();
-                joueurCourant = jeu.joueurCourant();
+                plateauDebutTour = jeu.plateau().clone();
                 jeu.changerEtatJeu(InfoJeu.DEBUT_TOUR);
                 ETAT_JEU = InfoJeu.DEBUT_TOUR;
                 jeu.changeCarteActuelle(8);
                 jeu.majDernierTypeDePersonnageJouer(Element.VIDE);
                 jeu.nonFinPartie();
-                if (jeu.estPartieEnCours()) {
-                    jeu.changerEtatPartie();
+                jeu.plateau().aucunGagnant();
+                jeu.viderHistorique();
+                changerJoueurCourant(JOUEUR_GAUCHE, JOUEUR_HUMAIN);
+                changerJoueurCourant(JOUEUR_DROIT, JOUEUR_HUMAIN);
+                joueurCourant = jeu.joueurCourant();
+                attenteCarte = false;
+                try {
+                    PlateauGraphique.victoire.dispose();
+                } catch (Exception e) {
                 }
+                InterfaceGraphique.fenetre.setEnabled(true);
                 interfaceUtilisateur.afficherPanneau("MenuPrincipal");
-
             case "AugmenterVolume":
                 augmenterVolume();
                 break;
