@@ -265,7 +265,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
             comboBoxJoueurDroiteInit.addItem(choixComboBox[i]);
         }
         comboBoxJoueurDroiteInit.setFocusable(false);
-        comboBoxJoueurDroiteInit.setSelectedIndex(5);
+        comboBoxJoueurDroiteInit.setSelectedIndex(3);
         comboBoxJoueurDroiteInit.addActionListener(new AdaptateurCommande(collecteurEvenements, comboBoxJoueurDroiteInit.getSelectedItem().toString()));
         
         gbc.gridx = 1;
@@ -376,7 +376,7 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
         gbc.gridy = 6; 
 
         boutonValiderSelection = new DesignBoutons("Annuler", "Texture_Moyen_Bouton", "Texture_Moyen_Bouton_Clique", 15);
-        boutonValiderSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourArriere"));
+        boutonValiderSelection.addActionListener(new AdaptateurCommande(collecteurEvenements, "RetourJeu"));
         boutonValiderSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSelectionJoueurs.add(boutonValiderSelection, gbc);
 
