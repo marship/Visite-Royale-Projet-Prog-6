@@ -174,7 +174,6 @@ public class InterfaceTextuelle implements InterfaceUtilisateur, Observateur {
                     break;
             }
         } else {
-            Configuration.instance().logger().warning("Pouvoir du fou impossible à utiliser !");
         }
     }
 

@@ -1016,7 +1016,6 @@ public class Jeu extends Observable {
                     metAJour();
                     return true;
                 } else {
-                    Configuration.instance().logger().info("Pouvoir du Fou inutilisable pour le joueur de droite !!");
                     metAJour();
                     return false;
                 }
@@ -1025,7 +1024,6 @@ public class Jeu extends Observable {
                     metAJour();
                     return true;
                 } else {
-                    Configuration.instance().logger().info("Pouvoir du Fou inutilisable pour le joueur de gauche !!");
                     metAJour();
                     return false;
                 }
