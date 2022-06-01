@@ -46,7 +46,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
     // ===== IMAGES JETONS =====
     // =========================
     ImagePlateau imageJetonGrandeCouronne, imageJetonPetiteCouronne;
-    ImagePlateau imageJetonGardeGauche, imageJetonGardeDroit, imageJetonRoi, imageJetonFou, imageJetonSorcier;
+    ImagePlateau imageJetonGardeGauche, imageJetonGardeDroit, imageJetonRoi, imageJetonFou, imageJetonSorcier, imageJetonGardes;
     ImagePlateau imageJetonGardeGaucheTransparent, imageJetonGardeDroitTransparent, imageJetonRoiTransparent,
             imageJetonFouTransparent, imageJetonSorcierTransparent;
     ImagePlateau imageJetonGardeGaucheSelection, imageJetonGardeDroitSelection, imageJetonRoiSelection,
@@ -367,7 +367,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                 debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         break;
                     case GARDES:
-                        tracerImage(imageJetonGardeGaucheSelection, 25 * debutPiocheX, debutPiocheY, largeurCarte,
+                        tracerImage(imageJetonGardes, 25 * debutPiocheX, debutPiocheY, largeurCarte,
                                 hauteurCasePlateau / 4);
                         msg = "Pouvoir fou :";
                         tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
@@ -385,7 +385,7 @@ public class PlateauGraphique extends JPanel implements Observateur {
                                 debutPiocheY + hauteurCasePlateau / 4 + 2 * (hauteurCarte / 5));
                         break;
                     default:
-                        if(jeu.estPouvoirFouActivable() && jeu.plateau().paquet.tourActuel().estVide()){
+                        if(jeu.estPouvoirFouActivable() && jeu.plateau().paquet.tourActuel().estVide() && !jeu.teleportationFaite){
                             tracerImage(imageJetonFouTransparent, 25 * debutPiocheX, debutPiocheY, largeurCarte, hauteurCasePlateau / 4);
                             msg = "Pouvoir Fou";
                             tracerLabel(msg, 25 * debutPiocheX, debutPiocheY + hauteurCasePlateau / 4 + (hauteurCarte / 5));
@@ -1175,6 +1175,8 @@ public class PlateauGraphique extends JPanel implements Observateur {
         imageJetonRoiSelection = chargeImage("Jeton_Roi_Selection");
         imageJetonFouSelection = chargeImage("Jeton_Fou_Selection");
         imageJetonSorcierSelection = chargeImage("Jeton_Sorcier_Selection");
+
+        imageJetonGardes = chargeImage("Jetons_Gardes");
 
         imageJetonRoiPouvoir = chargeImage("Jeton_Roi_Pouvoir");
         imageJetonFouPouvoir = chargeImage("Jeton_Fou_Pouvoir");

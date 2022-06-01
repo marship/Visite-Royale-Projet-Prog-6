@@ -136,3 +136,50 @@ Les différents écrans de jeu sont reliés (écran d'accueil, options, ...)
     JOUR 14 (20/05)
 ----------------------
 Après le rendez-vous avec le tuteur, la priorité se pose clairement sur l'IA intelligente (arbre MinMax) ainsi que sur l'historique et sur la sauvegarde d'une partie.
+
+----------------------
+    JOUR 15 (23/05)
+----------------------
+
+Le but est de préparer au mieux les deux audits qui se préparent.
+Lors de l'audit d'IHM, le fond est globalement correct, il est cepednant nécessaire de corriger des détails qui ne paraissaient pas clair aux yeux des examinateurs : Pile de défausse absente, non présence d'un écran de séléction de joueur, surbrillance du chateau du joueur courant, prévisualisation moyenne des déplacements des jetons des personnages
+En général, la trop grande présence de couleurs rendait le résultat un peu illisible, il était donc nécessaire de modifier cela
+Les modifications principales ont été réalisées le soir même (ajout de torches au lieu de la surbrillance des chateaux, ajout de la pile de défausse)  
+
+----------------------
+    JOUR 16 (24/05)
+----------------------
+
+Pour l'audit d'IA, le but était de présenter les IA développées à partir du clacul du plateau que nous avons mis en place et de montrer son efficacité
+Le jury a conseillé de réaliser une IA Minmax à partir de cette évaluation de plateau, et de réaliser des tirages aléatoires pour essayer d'anticiper la main de l'adversaire et ainsi anticiper une probailité sur un potentiel coup possible
+
+----------------------
+    JOUR 17 (25/05)
+----------------------
+
+Amphi de présentation de la soutenance, nous avons décider de suivre globalement les temps indiqués dans la présentation à savoir :
+2' Introduction, 7' IHM, 7' Fonctionnalités, 7'IA et 2' Conclusion. Les personnes qui parleront n'ont pas encore étés décidés.
+Pour préparer au mieux la semaine suivante, la fin de semaine est concentrée sur les principaux éléments manquants,  savoir l'IA MinMax et l'historique, aisni que sur des éléments manquants en IHM
+
+--------------------------------------------
+    PONT DE L'ASCENSION (26/05 & 27/05)
+--------------------------------------------
+
+Pendant le pont, l'IA MinMax a posé problème, puisque les fait d'anticiper des mains aléatoires de l'adversaire n'avait finalement pas grand sens, l'IA devient donc un IA qui triche, et fait un MinMax sur la main de l'adversaire qu'elle connait. Elle a également plusieurs horizons, où elle peut prévoir ce qu'elle va piocher et ainsi préparer son prochain coup
+Coté IHM, la prévisualitaion de déplacement des jetons est réalisée. Ajout des règles du jeu dans les options, ainsi que de potentiels crédits
+
+----------------------
+    JOUR 18 (30/05)
+----------------------
+
+Le but est désormais de finaliser le code pour pouvoir uniquement se concentrer sur les dossiers rapidement. 
+Coté IHM, Ajustement du bouton annuler Tour, pop-up pour l'écran de victoire. 
+Finalisation de l'IA et des derniers bugs encore présents
+
+----------------------
+    JOUR 19 (31/05)
+----------------------
+
+Dans l'optique de boucler le code, la priorité est de gérer les derniers bugs connus et les derniers petits défauts présents
+Pour l'IHM, Ajout de flèches pour le déplacement du Roi. Le déplacement des gardes est également visible en prévisualisation lors du déplacement de la cour 
+Pour l'IA, des jeux d'essais seront effectués pour déterminer quelle IA est meilleure qu'une autre.

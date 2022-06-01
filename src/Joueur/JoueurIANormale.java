@@ -3,7 +3,6 @@ package Joueur;
 import java.util.Random;
 
 import Global.Element;
-import Global.Deplacement;
 import Modele.CoupleAtteindrePlateau;
 import Modele.Evaluation;
 import Modele.Jeu;
@@ -44,24 +43,17 @@ public class JoueurIANormale extends Joueur {
         jeu.obtenirPersonnageElement(Element.SORCIER).positionnerPersonnage(positions[4]);
     }
 
-    void poserLesCartes(int[] cartes) {
+    void poserLesCartes(int[] cartes){
         int i = 0;
-        int nbUnPlusUn = 0;
-        while (i < 8) {
-            if (cartes[i] == 1) {
-                if(jeu.recupererMainJoueur(jeu.joueurCourant())[i].deplacement() == Deplacement.UN_PLUS_UN){
-                    if(nbUnPlusUn < 3){
-                        nbUnPlusUn++;
-                        jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
-                        jeu.poserCarte(i);
-                    }
-                }
-                else{
-                    jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
-                    jeu.poserCarte(i);
-                }
+        while(i < 8){
+            if(cartes[i] == 1){
+                jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
+                jeu.poserCarte(i);
             }
             i++;
+        }
+        if(jouee == Element.VIDE){
+            jeu.teleportationFaite = true;
         }
     }
 
