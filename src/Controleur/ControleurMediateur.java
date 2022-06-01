@@ -386,6 +386,7 @@ public class ControleurMediateur implements CollecteurEvenements {
                 break;
             case "Valider":
                 jeu.plateau().initialisation();
+                jeu.mainJoueurSecondaireVisible = false;
                 initInfoJoueursInit();
                 choixJoueurCommence();
                 plateauDebutTour = jeu.plateau().clone();
