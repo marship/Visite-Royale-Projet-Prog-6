@@ -413,10 +413,20 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
     @Override
     public String getNomJoueurInit(int coteJoueur) {
+        int nbMaxCaracteres = 8;
         if (coteJoueur == 1) {
-            return valeurNomJoueurDroiteInit.getText();
+            String nomBrut = valeurNomJoueurDroiteInit.getText();
+            if(nomBrut.length() > nbMaxCaracteres){
+                return nomBrut.substring(0, nbMaxCaracteres);
+            }
+            return nomBrut;
+
         } else {
-            return valeurNomJoueurGaucheInit.getText();
+            String nomBrut = valeurNomJoueurGaucheInit.getText();
+            if(nomBrut.length() > nbMaxCaracteres){
+                return nomBrut.substring(0, nbMaxCaracteres);
+            }
+            return nomBrut;
         }
     }
 
@@ -466,8 +476,9 @@ public class InterfaceGraphique extends JPanel implements Runnable, InterfaceUti
 
 
         gbc.gridy++;
-        gbc.anchor = GridBagConstraints.SOUTHWEST;
-        boutonTelechargement = new DesignBoutons("Télécharger les règles", "Texture_Bouton", "Texture_Bouton_Clique", 20);
+        gbc.insets = new Insets(40,0,45,40); 
+        gbc.anchor = GridBagConstraints.SOUTHEAST;
+        boutonTelechargement = new DesignBoutons("Télécharger", "Texture_Petit_Bouton", "Texture_Petit_Bouton_Clique", 12);
         boutonTelechargement.addActionListener(new AdaptateurCommande(collecteurEvenements, "TelechargerRegles"));
         panelRegles.add(boutonTelechargement, gbc);
 
