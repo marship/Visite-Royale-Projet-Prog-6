@@ -227,12 +227,16 @@ public class JoueurIATriche extends Joueur {
 
     void poserLesCartes(int[] cartes){
         int i = 0;
+        jouee = Element.VIDE;
         while(i < 8){
             if(cartes[i] == 1){
                 jouee = jeu.recupererMainJoueur(jeu.joueurCourant())[i].personnage();
                 jeu.poserCarte(i);
             }
             i++;
+        }
+        if(jouee == Element.VIDE){
+            jeu.teleportationFaite = true;
         }
     }
 
